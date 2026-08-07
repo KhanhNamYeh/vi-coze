@@ -1,511 +1,373 @@
-# Báo cáo kỹ thuật — pipeline RAG cho schema database
+# Báo cáo kỹ thuật pipeline truy hồi hiện tại
 
-Tài liệu này đi theo đúng đường dữ liệu chạy, từ file `.docx` gốc tới top-5 chunk
-trả về. Mỗi tham số đều ghi giá trị, nguồn gốc (đo được hay đặt tay), và hệ quả
-khi đổi.
+## 1. Phạm vi tài liệu
 
-Số liệu đo trên tài liệu `Mô tả bảng BĐS (NEW).docx`, ngày 2026-08-07.
+Tài liệu này mô tả trạng thái triển khai hiện tại của mã nguồn trong repository. Mọi nội dung bên dưới đều tương ứng với cấu hình, lớp, hàm hoặc luồng xử lý đang có trong code.
 
----
+Phạm vi hiện tại là pipeline lập chỉ mục và truy hồi tài liệu gồm:
 
-## 0. Tổng quan
+1. Chuyển tài liệu sang Markdown.
+2. Chuẩn hóa nội dung.
+3. Chia nội dung thành chunk theo cấu trúc heading.
+4. Sinh vector dense và sparse BM25.
+5. Lưu vector cùng metadata vào Qdrant.
+6. Truy hồi dense và sparse.
+7. Hợp nhất kết quả bằng Reciprocal Rank Fusion.
+8. Xếp hạng lại bằng cross-encoder.
 
-```
-OFFLINE  (src/offline_sql.py)
-  .docx ──markitdown──> md thô ──restructure──> md có cấu trúc ──sanitize──> md sạch
-        ──MarkdownHeaderTextSplitter──> 18 chunk
-        ──┬─ dense  (Vietnamese_Embedding, 1024d) ─┬──> Qdrant collection
-          └─ sparse (BM25)                        ─┘
+Mã nguồn hiện tại chưa gọi mô hình sinh câu trả lời, chưa sinh câu SQL và chưa thực thi truy vấn SQL. Tên các entry point có hậu tố `sql`, nhưng chức năng được triển khai trong các file này hiện là xử lý và truy hồi tài liệu.
 
-ONLINE   (src/online_sql.py)
-  query ──┬─ dense retriever  (20 ứng viên) ─┬── RRF k=40 ──> rerank ──> top 5
-          └─ sparse retriever (20 ứng viên) ─┘   (client)     (cross-encoder)
-```
+## 2. Thành phần mã nguồn
 
-Ranh giới: **offline không cần API, online không gọi LLM.** Cả hai luồng dùng
-chung `embeddings.py` và `sparse.py` — nếu tách đôi, index và query sẽ lệch model
-hoặc lệch tham số mà không có lỗi nào báo.
-
-### Môi trường
-
-| Thành phần | Version |
+| File | Trách nhiệm đang được triển khai |
 |---|---|
-| Python | 3.12 (ghim `<3.14`: onnxruntime chưa có wheel cp314) |
-| Qdrant | 1.19.0 (docker, `qdrant/qdrant:latest`) |
-| torch | 2.13.0 — bản CPU-only qua index `pytorch-cpu` |
-| transformers / sentence-transformers | 5.14.1 / 5.7.0 |
-| langchain-core / -text-splitters / -classic / -huggingface | 1.5.3 / 1.1.2 / 1.0.8 / 1.2.2 |
-| qdrant-client / fastembed | ≥1.12 / 0.8.0 |
-| markitdown | 0.1.7 |
+| `src/config_sql.py` | Khai báo đường dẫn, tên model, tham số chunking, Qdrant và retrieval |
+| `src/schemas.py` | Định nghĩa metadata của chunk và cách tạo định danh |
+| `src/retrieval/parse.py` | Chuyển tài liệu sang Markdown và chuẩn hóa nội dung |
+| `src/retrieval/chunking.py` | Chia Markdown theo heading và tạo chunk |
+| `src/retrieval/embeddings.py` | Sinh embedding dense cho tài liệu và truy vấn |
+| `src/retrieval/sparse.py` | Sinh vector sparse BM25 cho tài liệu và truy vấn |
+| `src/retrieval/store.py` | Tạo collection và ghi point vào Qdrant |
+| `src/retrieval/retriever.py` | Truy hồi dense, sparse hoặc hybrid từ Qdrant |
+| `src/retrieval/rerank.py` | Xếp hạng lại kết quả bằng cross-encoder |
+| `src/offline_sql.py` | Điều phối pipeline parse, chunk và index |
+| `src/online_sql.py` | Điều phối hybrid retrieval và reranking |
+| `docker-compose.yml` | Khởi chạy dịch vụ Qdrant cục bộ |
 
-`.venv` 924 MB. Không cài repo như package (`[tool.uv] package = false`), chạy
-bằng `python -m src.<module>`.
+## 3. Cấu hình tập trung
 
----
+Các tham số chính được khai báo trong `src/config_sql.py`.
 
-## 1. Đầu vào
+### 3.1. Đường dẫn dữ liệu
 
-| | |
-|---|---|
-| File | `data/uploads/sql/docs/Mô tả bảng BĐS (NEW).docx` |
-| Kích thước | 223.974 byte |
-| Cấu trúc | 196 đoạn văn, 18 bảng, 1 khối `sdt` (mục lục), 7 `Heading 1` |
-| Nội dung | 18 bảng/view Oracle, mỗi khối gồm: tên bảng → ý nghĩa → bảng cột → mối liên kết → ghi chú |
+- Thư mục tài liệu đầu vào: `data/sql/docs`.
+- Thư mục upload: `data/sql/docs/uploads`.
+- Thư mục artifact: `data/sql/docs/artifacts`.
+- Đường dẫn được chuẩn hóa bằng `Path.resolve()` trước khi sử dụng.
 
-Trong 18 "bảng" có **3 cái không phải bảng** mà là Oracle pipelined function:
-`TABLE(pck_report_chatbox.get_*_by_precinct(:date, :user_name))`. Chúng nhận
-tham số bind, nên tầng SQL sau này phải xử lý khác bảng thường.
+Code có khai báo danh sách phần mở rộng tài liệu gồm DOCX, DOC, PDF, PPTX, XLSX, HTML và HTM. Danh sách này hiện chưa được dùng để chặn đầu vào trong `parse.py`; tài liệu được chuyển đổi trực tiếp thông qua MarkItDown.
 
----
+### 3.2. Chunking
 
-## 2. Parse — `src/retrieval/parse.py`
-
-### 2.1 Convert
-
-`markitdown` đọc `.docx`, giữ nguyên bảng dưới dạng markdown table. Ba việc
-markitdown **không** làm được, phải xử lý thêm:
+- Heading cấp một được ánh xạ sang metadata `section`.
+- Heading cấp hai được ánh xạ sang metadata `table`.
+- Heading được giữ lại trong nội dung chunk.
+- Ngưỡng cảnh báo chiều dài tối đa: `6000` ký tự.
+- Ngưỡng cảnh báo chiều dài tối thiểu: `200` ký tự.
 
-| Vấn đề | Đo được | Cách xử lý |
-|---|---|---|
-| Mục lục lọt vào output | 28 dòng `[...](#_heading=...)` | Bỏ toàn bộ phần trước heading `#` đầu tiên |
-| Tên bảng không phải Heading | 7 dòng `#`, **0 dòng `##`** | Nâng `* 1. **Bảng X**` → `## Bảng X` |
-| Escape ký tự | 427 chỗ `\_` | Unescape `\\([_*\[\]()#+\-.!\`])` |
+Hai ngưỡng trên chỉ được dùng để sinh cảnh báo. Code hiện không tự chia tiếp chunk quá dài và không tự gộp chunk quá ngắn.
 
-**Điểm quan trọng nhất của cả pipeline nằm ở dòng thứ hai.** Trong docx nguồn, 7
-dòng nhóm nghiệp vụ dùng style `Heading 1`, nhưng 18 dòng tên bảng dùng style
-`normal` — giống hệt đoạn văn thường. Không converter nào đoán được chúng là tiêu
-đề. Nếu để nguyên, splitter chỉ cắt được thành **7 chunk theo nhóm**, chunk lớn
-nhất gộp 6 bảng khác nhau — hỏi về `LOCATION_GROUP` sẽ trả về cục có cả `PROJECT`,
-`V_MAN_TASK`, `V_CAT_STAFF`.
-
-Quy tắc khôi phục là quy tắc nghiệp vụ, khớp **18/18**:
-
-```python
-TABLE_HEADING = re.compile(r"^\*\s+\d+\.\s+\*\*Bảng\s+(?P<name>.+?)\*\*\s*$")
-```
-
-`\d+\.` là bắt buộc: nó phân biệt dòng tên bảng với 3 dòng ghi chú cũng in đậm
-(`* **Bảng này đã có sẵn phân quyền...**`).
+Biến `CHUNK_OVERLAP` được khai báo bằng `0`, nhưng không được truyền vào bộ chia Markdown hiện tại.
 
-### 2.2 Sanitize
-
-| Bước | Tham số | Lý do |
-|---|---|---|
-| Chuẩn hoá unicode | NFC | Tiếng Việt có dạng tổ hợp dấu; NFD làm lệch cả token lẫn `content_hash` giữa hai lần chạy |
-| Bỏ ký tự vô hình | `U+200B–200F`, `202A–202E`, `2060–2064`, `FEFF`, `00AD` | Zero-width, BOM, soft hyphen, bidi |
-| Bỏ HTML sót | thẻ ≤200 ký tự + comment | |
-| Chặn câu mệnh lệnh | 5 mẫu regex | **Hạn chế lớn — xem §9** |
-| Sửa header gõ sai | `Cột\d+` → `Tên cột` | 1 chỗ trong tài liệu; để nguyên thì "Cột2" thành token rác |
-| Gộp khoảng trắng | chỉ giữa chữ (`(?<=\S)`) | Thụt đầu dòng là cú pháp markdown, không được đụng |
-
-### 2.3 Kết quả
-
-| | |
-|---|---|
-| Output | `data/artifacts/sql/docs/mo_ta_bang_bds_new.md` |
-| Kích thước | 26.474 byte (~21.811 ký tự) |
-| Cấu trúc | 7 `#` (nhóm) + 18 `##` (bảng) |
-| `doc_id` | `mo_ta_bang_bds_new` (slugify: bỏ dấu, `đ`→`d`, non-alnum→`_`) |
-
-Có chốt chặn: markdown < 50 ký tự thì ném lỗi (dấu hiệu PDF scan chưa OCR);
-0 heading `##` thì cảnh báo.
-
----
-
-## 3. Chunking — `src/retrieval/chunking.py`
+### 3.3. Dense embedding
 
-### 3.1 Chiến lược
+- Model: `AITeamVN/Vietnamese_Embedding`.
+- Kích thước vector cấu hình: `1024`.
+- Batch size: `16`.
+- Vector được chuẩn hóa.
+- Query và passage prefix hiện là chuỗi rỗng.
 
-**Một bảng = một chunk, overlap = 0.** Không dùng fixed-size splitter.
+Biến `EMBED_MAX_TOKENS` được khai báo trong cấu hình nhưng chưa được code truyền vào lớp embedding để áp dụng giới hạn token.
 
-Ranh giới `##` là ranh giới ngữ nghĩa do người viết tài liệu đặt, không phải máy
-đoán — không có gì bị cắt ngang câu, nên overlap chỉ tạo trùng lặp làm nhiễu
-top-k. Đơn vị truy vấn (một bảng) trùng đơn vị tài liệu.
-
-Nếu cắt theo độ dài: p50 chỉ 1.112 ký tự, một chunk 512 token (~1.200–1.500 ký
-tự) sẽ rơi vào giữa bảng markdown — nửa số cột nằm ở chunk sau, mất dòng header,
-`| USER_ID | NUMBER | Mã định danh |` không còn biết thuộc bảng nào.
+### 3.4. Sparse BM25
 
-### 3.2 Tham số
+- Model: `Qdrant/bm25`.
+- `k = 1.2`.
+- `b = 0.0`.
+- Stemmer bị tắt.
+- IDF được Qdrant áp dụng ở cấp collection thông qua `Modifier.IDF`.
 
-| Tham số | Giá trị | Nguồn |
-|---|---|---|
-| `splitter` | `MarkdownHeaderTextSplitter` | LangChain |
-| `HEADERS_TO_SPLIT_ON` | `[("#","section"), ("##","table")]` | cấu trúc tài liệu |
-| `STRIP_HEADERS` | `False` — giữ dòng tiêu đề trong chunk | |
-| `CHUNK_OVERLAP` | `0` | ranh giới ngữ nghĩa |
-| `MAX_CHARS` | `6000` | lưới cảnh báo thô, không cần model |
-| `MIN_CHARS` | `200` | phát hiện chunk mồ côi |
-
-`check()` tách khỏi `split()` để tune tham số không phải chạy lại cả pipeline.
-Nó **chỉ cảnh báo, không tự sửa**: vượt trần, dưới sàn, hoặc trùng `content_hash`.
-
-### 3.3 Kết quả đo
-
-| Chỉ số | Giá trị |
-|---|---|
-| Số chunk | **18** |
-| Kích thước | min 465 · p50 1.112 · p90 2.764 · max 3.498 ký tự |
-| Tổng | 21.840 ký tự |
-| Có `table_name` | 18/18 |
-| Chunk mồ côi / trùng lặp | 0 |
-
-Phân bố theo nhóm nghiệp vụ:
-
-| Nhóm | Số bảng |
-|---|---|
-| Danh mục dùng chung | 2 |
-| Dữ liệu điểm bán | 4 |
-| Dữ liệu kinh doanh | 2 |
-| Vùng phủ địa lý | 1 |
-| Vùng phủ kỹ thuật | 1 |
-| Báo cáo doanh thu TKC và VLR | 2 |
-| Quản lý công việc và dự án | 6 |
-
-Đánh số `1.1 … 7.6` khớp chính xác mục lục gốc của tài liệu.
-
-### 3.4 Metadata mỗi chunk
-
-Validate qua `ChunkMeta` (pydantic, `extra="forbid"`) — thêm field sau khi đã
-index thì phải index lại toàn bộ.
+Code không lưu hoặc truyền `avg_len` và không truyền tham số ngôn ngữ vào sparse encoder.
 
-| Field | Ví dụ | Dùng để |
-|---|---|---|
-| `doc_id` | `mo_ta_bang_bds_new` | truy nguồn |
-| `section` | `Báo cáo doanh thu TKC và VLR` | filter theo nhóm |
-| `table_name` | `V_BDS_SITE` | **khoá nối sang tầng SQL** — allowlist bảng lấy từ đây |
-| `no` | `5.1` | thứ tự trong tài liệu |
-| `part` | `1/1` | đánh dấu khối bị tách (hiện chưa dùng) |
-| `n_chars` | `1426` | chẩn đoán |
-| `chunk_id` | `sha256(doc_id\|no\|part)[:16]` | tất định |
-| `content_hash` | `sha256(text)` | phát hiện trùng, bỏ qua re-embed |
-| `source_path` | đường dẫn tương đối | payload không được chứa path máy build |
-
----
-
-## 4. Embedding dense — `src/retrieval/embeddings.py`
-
-| Tham số | Giá trị | Ghi chú |
-|---|---|---|
-| `EMBED_MODEL` | `AITeamVN/Vietnamese_Embedding` | fine-tune từ `BAAI/bge-m3` cho tiếng Việt |
-| `EMBED_DIM` | `1024` | đã verify khớp bằng probe lúc nạp model |
-| `EMBED_MAX_TOKENS` | `2048` | trần của model |
-| `EMBED_BATCH` | `16` | |
-| `NORMALIZE_EMBEDDINGS` | `True` | cosine similarity cần vector đã chuẩn hoá |
-| `QUERY_PREFIX` / `PASSAGE_PREFIX` | `""` / `""` | họ bge-m3 không cần; **họ E5 thì bắt buộc** |
+### 3.5. Retrieval và reranking
 
-Kích thước model ~2,2 GB, chạy CPU.
-
-### Trần 2048 quyết định có phải tách chunk hay không
-
-| Model cân nhắc | Trần token | Hệ quả |
-|---|---|---|
-| `intfloat/multilingual-e5-large` | 512 | phải tách 6/18 khối — mất tính "một bảng một chunk" |
-| **`AITeamVN/Vietnamese_Embedding`** ← chọn | **2048** | **tách 0/18** |
-| `BAAI/bge-m3` | 8192 | tách 0/18, dư thừa |
+- Số ứng viên mỗi retriever: `20`.
+- Trọng số dense và sparse: `0.5 / 0.5`.
+- Hằng số RRF phía client: `40`.
+- Model rerank: `AITeamVN/Vietnamese_Reranker`.
+- Số kết quả sau rerank: `5`.
 
-Khối lớn nhất 3.498 ký tự ≈ 1.160–1.580 token (ước lượng theo tỷ lệ 2,2–3 ký
-tự/token) → còn dư 25–45%. **Chưa đo bằng tokenizer thật** — xem §9.
+## 4. Pipeline offline
 
-Prefix để rỗng nhưng vẫn giữ trong code: đổi sang model họ E5 thì chỉ sửa config,
-không phải sửa chỗ gọi. Thiếu prefix khi model cần là mất điểm số mà không báo lỗi.
+Entry point của pipeline offline là `src/offline_sql.py`.
 
----
+### 4.1. Chuyển đổi tài liệu
 
-## 5. Sparse BM25 — `src/retrieval/sparse.py`
+`parse_document()` nhận đường dẫn tài liệu và gọi MarkItDown để chuyển nội dung sang Markdown.
 
-| Tham số | Giá trị | Nguồn |
-|---|---|---|
-| `SPARSE_MODEL` | `Qdrant/bm25` (fastembed) | |
-| `BM25_DISABLE_STEMMER` | `True` | **bắt buộc, xem dưới** |
-| `BM25_LANGUAGE` | `"english"` | chỉ còn tác dụng chọn stopwords |
-| `BM25_AVG_LEN` | `96.0` | **đo trên corpus thật** |
-| `BM25_K` | `1.2` | mặc định, bão hoà tần suất từ |
-| `BM25_B` | `0.75` | mặc định, mức phạt theo độ dài |
+Sau chuyển đổi, code thực hiện các bước chuẩn hóa sau:
 
-### Hai tham số phải chỉnh khỏi mặc định
+- Loại phần mục lục đứng trước heading cấp một đầu tiên.
+- Loại liên kết mục lục Markdown.
+- Loại dòng phân cách.
+- Chuyển mẫu tiêu đề bảng phù hợp regex sang heading cấp hai `## Bảng ...`.
+- Bỏ ký hiệu bullet ở một số dòng.
+- Giải escape Markdown.
+- Chuẩn hóa Unicode về NFC.
+- Loại ký tự vô hình, HTML comment và HTML tag.
+- Loại một số mẫu câu chỉ dẫn được định nghĩa cố định trong regex `INJECTION`.
+- Chuẩn hóa khoảng trắng và số dòng trống liên tiếp.
+- Sửa mẫu heading cột phù hợp regex `BAD_HEADER`.
 
-**`disable_stemmer=True`.** Snowball chỉ hỗ trợ 18 ngôn ngữ:
+Parser từ chối kết quả có ít hơn `50` ký tự. Nếu không tìm thấy heading cấp hai, parser vẫn trả kết quả nhưng kèm cảnh báo.
 
-```
-arabic danish dutch english finnish french german greek hungarian italian
-norwegian portuguese romanian russian spanish swedish tamil turkish
-```
+Kết quả parse gồm nội dung Markdown và metadata:
 
-**Không có tiếng Việt.** Để mặc định thì stemmer tiếng Anh chạy trên text tiếng
-Việt và trên định danh SQL viết hoa — cắt sai token, giảm điểm khớp mà không có
-lỗi nào báo.
+- `doc_id`.
+- `title`.
+- `source_name`.
+- Số section.
+- Số bảng.
+- Danh sách cảnh báo.
 
-**`avg_len=96.0`, mặc định fastembed là `256`.** Đo trên chính 18 chunk:
+Markdown sau chuẩn hóa được ghi vào thư mục artifact.
 
-| | token BM25 |
-|---|---|
-| min | 60 |
-| p50 | 98 |
-| max | 146 |
-| trung bình | **96** |
+### 4.2. Chia chunk
 
-Sai gần 3 lần thì phần chuẩn hoá độ dài (tham số `b`) trong công thức BM25 lệch
-theo. Phải đo lại khi corpus đổi đáng kể.
+`chunk_document()` sử dụng `MarkdownHeaderTextSplitter` với hai cấp heading đã cấu hình.
 
-### BM25 không đối xứng
+Mỗi phần chỉ được tạo thành chunk khi metadata có trường `table`. Tên bảng được lấy từ heading cấp hai và bỏ tiền tố `Bảng` nếu có. Số thứ tự `no` tăng dần trong từng section.
 
-| Hàm | Dùng khi | Nội dung |
-|---|---|---|
-| `encode_passages()` | index | trọng số tần suất + chuẩn hoá độ dài |
-| `encode_query()` | search | chỉ liệt kê term |
+Mỗi chunk chứa:
 
-Đo thực tế: cùng một cặp, document sinh 7 token có trọng số, query sinh 2 token
-với trọng số khác hẳn. Dùng nhầm `encode_passages` cho query là sai công thức mà
-vẫn chạy, không báo lỗi.
+- Nội dung văn bản.
+- `doc_id`.
+- `section`.
+- `table_name`.
+- `no`.
+- `part`, hiện mặc định là `1/1`.
+- `source_path`.
+- `n_chars`.
+- `chunk_id`.
+- `content_hash`.
 
-**IDF không tính ở client.** Collection bật `Modifier.IDF` để Qdrant tính trên
-toàn bộ dữ liệu — tính sẵn lúc index thì mỗi lần nạp thêm tài liệu là IDF cũ đi.
+`chunk_id` là SHA-256 rút gọn từ khóa `doc_id|no|part`. `content_hash` là SHA-256 của nội dung chunk sau khi loại khoảng trắng đầu và cuối.
 
----
+Schema metadata dùng Pydantic với `extra="forbid"`, vì vậy field ngoài định nghĩa sẽ bị từ chối khi validate.
 
-## 6. Vector store — `src/retrieval/store.py`
+### 4.3. Kiểm tra chunk
 
-### 6.1 Collection
+`check_chunks()` sinh cảnh báo cho các trường hợp:
 
-```
-sqldocs__vnemb_1024__c1
-         │      │      └── CHUNKING_VERSION
-         │      └── EMBED_DIM
-         └── model
-```
+- Không có chunk.
+- Chunk dài hơn ngưỡng cấu hình.
+- Chunk ngắn hơn ngưỡng cấu hình.
+- Nhiều chunk có cùng `content_hash`.
 
-Tên mang theo model + số chiều + version chunking. Đổi bất kỳ thành phần nào cũng
-phải đổi tên, nếu không vector khác thế hệ lẫn vào nhau trong cùng một chỗ.
+Các cảnh báo không dừng pipeline.
 
-| Cấu hình | Giá trị (đọc từ Qdrant) |
-|---|---|
-| points | 18, status `green` |
-| dense | `{"dense": {"size": 1024, "distance": "Cosine"}}` |
-| sparse | `{"bm25": {"modifier": "idf"}}` |
-| payload index | `doc_id`, `table_name`, `section` — đều `keyword` |
+Danh sách chunk được ghi thành JSONL trong thư mục artifact.
 
-`ensure_collection()` **ném lỗi** nếu số chiều collection ≠ số chiều model, thay
-vì lặng lẽ ghi vector sai không gian.
+### 4.4. Sinh vector và lập chỉ mục
 
-### 6.2 Ba chi tiết bắt buộc
+Khi không dùng tùy chọn `--no-index`, pipeline gọi `index()` để:
 
-**Point ID phải là uint64 hoặc UUID.** `chunk_id` (hex 16 ký tự) dùng thẳng sẽ bị
-Qdrant từ chối. Giải pháp:
+1. Tạo hoặc kiểm tra collection Qdrant.
+2. Chia chunk thành batch.
+3. Sinh dense embedding bằng `embed_passages()`.
+4. Sinh sparse vector bằng `encode_passages()`.
+5. Tạo point ID dạng UUID5 xác định từ `doc_id|no|part`.
+6. Upsert vector và payload vào Qdrant.
 
-```python
-NAMESPACE = uuid.UUID("6f9619ff-8b86-d011-b42d-00c04fc964ff")
-point_id = uuid5(NAMESPACE, f"{doc_id}|{no}|{part}")
-```
+Point ID xác định giúp việc index lại cùng một chunk ghi đè đúng point thay vì tạo point mới có ID ngẫu nhiên.
 
-Tất định nên upsert lại không nhân đôi — **đã kiểm chứng**: chạy hai lần liên
-tiếp, collection vẫn đúng 18 điểm.
+## 5. Dense embedding
 
-**Payload index.** Thiếu thì filter theo `table_name` là quét toàn bộ collection.
+`src/retrieval/embeddings.py` khởi tạo `HuggingFaceEmbeddings` và cache instance bằng `lru_cache`.
 
-**Dense và sparse cùng một collection**, dưới hai vector có tên. Tách hai store là
-tự chuốc lệch dữ liệu khi re-index.
+Hai đường xử lý được tách riêng:
 
-### 6.3 Payload
+- `embed_passages()` dùng `embed_documents()` cho nội dung tài liệu.
+- `embed_query()` dùng `embed_query()` cho câu truy vấn.
 
-Ngoài metadata của chunk, thêm: `text` (search phải trả nội dung, không chỉ id),
-`embed_model`, `sparse_model`.
+Prefix tương ứng được nối vào văn bản trước khi gọi model; với cấu hình hiện tại cả hai prefix đều rỗng.
 
----
+## 6. Sparse BM25
 
-## 7. Luồng online — `src/online_sql.py`
+`src/retrieval/sparse.py` dùng `fastembed.SparseTextEmbedding` và cache model bằng `lru_cache`.
 
-### 7.1 Tham số
+### 6.1. Cách mã hóa
 
-| Tham số | Giá trị | Nguồn |
-|---|---|---|
-| `CANDIDATE_K` | `20` mỗi nhánh | **đặt tay, chưa đo** |
-| `RRF_K` | `40` | yêu cầu |
-| `RRF_WEIGHTS` | `[0.5, 0.5]` (dense, sparse) | **đặt tay, chưa đo** |
-| `RERANK_MODEL` | `AITeamVN/Vietnamese_Reranker` | |
-| `RERANK_TOP_N` | `5` | yêu cầu |
+- `encode_passages()` gọi API `embed()` cho tài liệu.
+- `encode_query()` gọi API `query_embed()` cho truy vấn.
+- Kết quả được chuyển sang cấu trúc `Sparse` gồm danh sách `indices` và `values`.
 
-### 7.2 Vì sao RRF chạy ở client
+Việc tách đường mã hóa tài liệu và truy vấn giữ đúng giao diện bất đối xứng do thư viện sparse embedding cung cấp.
 
-`qdrant_client.models.FusionQuery` chỉ có **đúng một field `fusion`** — không có
-tham số `k`. Hằng số RRF cố định phía server. Muốn `k=40` thì phải fuse ở client,
-và `EnsembleRetriever.c` của LangChain chính là hằng số đó:
+### 6.2. Cấu hình chiều dài
 
-```
-score(d) = Σ  weight_i / (RRF_K + rank_i(d))
-```
+`BM25_B` hiện bằng `0.0`. Vì vậy thành phần chuẩn hóa theo chiều dài tài liệu bị vô hiệu hóa trong công thức BM25 của sparse encoder.
 
-Đây là đánh đổi có thật: mất fusion server-side (một round-trip) để đổi lấy quyền
-chỉnh `k`.
+Hệ quả trực tiếp trong implementation hiện tại:
 
-### 7.3 Thành phần LangChain dùng lại
+- Không cần cung cấp độ dài trung bình của corpus cho sparse encoder.
+- Không có hằng số `BM25_AVG_LEN` trong cấu hình.
+- Không có tham số `avg_len` trong hàm tạo sparse model.
+- Thay đổi độ dài trung bình của tập tài liệu không yêu cầu cập nhật một giá trị cấu hình BM25 riêng.
 
-| Việc | Class | Package |
-|---|---|---|
-| Bọc `search()` thành retriever | `BaseRetriever` | `langchain-core` |
-| Fusion RRF | `EnsembleRetriever(c=40)` | `langchain-classic` |
-| Ghép rerank | `ContextualCompressionRetriever` | `langchain-classic` |
-| Rerank | `CrossEncoderReranker` | `langchain-classic` |
-| Interface cross-encoder | `BaseCrossEncoder` | `langchain-core` |
+`BM25_K = 1.2` vẫn điều khiển mức bão hòa tần suất từ trong tài liệu.
 
-**Không dùng `langchain-community`** (đang bị sunset). `HuggingFaceCrossEncoder`
-nằm ở đó, nhưng `BaseCrossEncoder` lại ở `langchain-core`, nên tự implement bằng
-`sentence-transformers` — 8 dòng.
+### 6.3. IDF
 
-### 7.4 Sửa `CrossEncoderReranker`
+Sparse vector được khai báo trong Qdrant với `Modifier.IDF`. Encoder tạo trọng số sparse phía tài liệu và truy vấn; Qdrant áp dụng IDF khi tính điểm dựa trên collection đang lưu.
 
-Bản gốc của LangChain vứt điểm đi:
+## 7. Lưu trữ Qdrant
 
-```python
-result = sorted(docs_with_scores, key=operator.itemgetter(1), reverse=True)
-return [doc for doc, _ in result[: self.top_n]]   # score biến mất
-```
+`src/retrieval/store.py` kết nối tới URL Qdrant từ biến môi trường `QDRANT_URL`, mặc định là `http://localhost:6333`.
 
-Không có điểm thì không phân biệt được hit mạnh với hit yếu, cũng không đặt được
-ngưỡng cắt. `ScoringReranker` kế thừa và ghi vào `metadata["rerank_score"]`.
+### 7.1. Collection
 
-### 7.5 Kết quả
+Tên collection được tạo từ:
 
-Query: `"Bảng nào lưu doanh thu tài khoản chính theo phường xã?"`
+- Tiền tố cố định `sqldocs`.
+- Kích thước dense embedding.
+- Phiên bản chunking.
 
-| # | rerank_score | Bảng |
-|---|---|---|
-| 1 | **+0.9333** | `TABLE(pck_report_chatbox.get_rev_data_by_precinct(...))` |
-| 2 | +0.0964 | `V_USER_PRECINCT_PERMISSION` |
-| 3 | +0.0180 | `TABLE(pck_report_chatbox.get_vlr_data_by_precinct(...))` |
-| 4 | +0.0110 | `PRECINCT` |
-| 5 | +0.0110 | `V_BDS_SITE` |
+Collection có hai named vector:
 
-Khoảng cách 0.933 → 0.096 (gần 10 lần) cho thấy reranker tách bạch dứt khoát:
-hạng 1 đúng là bảng doanh thu theo phường/xã, phần còn lại chỉ là ngữ cảnh phụ.
+- `dense`: vector kích thước `1024`, khoảng cách cosine.
+- `bm25`: sparse vector có `Modifier.IDF`.
 
-### 7.6 Hybrid có đáng không
+Ba payload index kiểu keyword được tạo cho:
 
-Query `"V_BDS_SITE"` (định danh SQL chính xác):
+- `doc_id`.
+- `table_name`.
+- `section`.
 
-| | Hạng 1 | Hạng 2 | Hạng 3 |
-|---|---|---|---|
-| dense | V_BDS_SITE `0.470` | V_BDS_NEW_SUB_SHOP `0.386` | V_BDS_NEW_SUB_SALE_POINT `0.385` |
-| sparse | V_BDS_SITE `1.647` | — | — |
+Nếu collection đã tồn tại, code hiện kiểm tra sự tồn tại và kích thước của dense vector. Code chưa kiểm tra lại cấu hình sparse vector hoặc modifier của collection hiện hữu.
 
-Dense xếp ba bảng `V_BDS_*` cách nhau 0.001–0.084 điểm — suýt lẫn. Sparse tách
-bạch hẳn. Corpus này đầy định danh SQL nên hybrid có giá trị thật, không phải
-thêm cho đủ.
+Tùy chọn `recreate=True` xóa collection hiện tại rồi tạo lại trước khi upsert.
 
----
+### 7.2. Payload
 
-## 8. Thời gian chạy
+Mỗi point lưu:
 
-Đo trên máy hiện tại, model đã có trong cache:
+- Toàn bộ metadata của chunk.
+- Nội dung chunk trong field `text`.
+- Tên model dense trong field `embed_model`.
+- Tên model sparse trong field `sparse_model`.
 
-| Lệnh | Thời gian | Ghi chú |
-|---|---|---|
-| `offline_sql --no-index` | **8 giây** | parse + chunk, không nạp model |
-| `offline_sql` (đầy đủ) | **62 giây** | phần lớn là nạp model 2,2 GB |
-| `online_sql` (1 query) | **82 giây** | nạp cả embedding lẫn reranker |
+## 8. Pipeline online
 
-Gần như toàn bộ thời gian là nạp model, không phải tính toán — 18 chunk là khối
-lượng không đáng kể. Khi bọc thành service, model nạp một lần lúc khởi động thì
-mỗi query chỉ còn phần inference.
+Entry point của luồng truy hồi kết hợp là `src/online_sql.py`.
 
-`--no-index` tồn tại chính vì lý do này: tune tham số chunking không cần đụng tới
-model.
+### 8.1. Hai retriever đầu vào
 
----
+Code tạo hai instance `QdrantRetriever`:
 
-## 9. Hạn chế và những gì chưa kiểm chứng
+- Một retriever ở chế độ `dense`.
+- Một retriever ở chế độ `sparse`.
 
-### Tham số đặt tay, chưa đo
+Mỗi retriever lấy tối đa số ứng viên bằng `CANDIDATE_K`.
 
-| Tham số | Giá trị | Vấn đề |
-|---|---|---|
-| `RRF_WEIGHTS` | `[0.5, 0.5]` | Chưa biết `[0.7, 0.3]` có tốt hơn không |
-| `CANDIDATE_K` | `20` | Chưa biết 10 có đủ hay 50 có tốt hơn |
-| `BM25_K` / `BM25_B` | `1.2` / `0.75` | Mặc định của công thức, chưa tune |
+### 8.2. Hợp nhất kết quả
 
-**Nguyên nhân gốc: chưa có eval recall@k / MRR.** Không có nó thì mọi thay đổi
-tham số đều là đoán. Đây là việc đáng làm nhất tiếp theo.
+Hai danh sách được đưa vào `EnsembleRetriever` của LangChain với:
 
-### Chưa đo bằng tokenizer thật
+- Trọng số bằng nhau.
+- Hằng số RRF lấy từ `RRF_K`.
 
-Cột "ước lượng token" ở §4 tính theo tỷ lệ 2,2–3 ký tự/token. Định danh SQL viết
-hoa (`V_BDS_NEW_SUB_SALE_POINT`) tokenize tệ hơn văn xuôi nên số thật có thể cao
-hơn. Trần 2048 còn dư nhiều nên chưa gấp, nhưng nên biết số chính xác.
+Việc hợp nhất trong `online_sql.py` được thực hiện phía client dựa trên thứ hạng, không cộng trực tiếp raw score của dense và sparse.
 
-### Regex chặn prompt injection là phòng thủ hình thức
+Ngoài luồng trên, `src/retrieval/retriever.py` còn cung cấp chế độ `hybrid` dùng `Prefetch` và `FusionQuery(RRF)` của Qdrant để hợp nhất phía server. Chế độ này được gọi trực tiếp qua `search(mode="hybrid")`; `online_sql.py` hiện dùng hai retriever riêng và hợp nhất phía client.
 
-`INJECTION` trong `sanitize()` chặn 5 chuỗi cố định. Nó **không** cản được
-injection thật, mà lại có thể xoá nhầm nội dung hợp lệ — một dòng bắt đầu bằng
-`System:` trong tài liệu kỹ thuật là bình thường. Phòng thủ thật nằm ở tầng
-prompt và tầng quyền của tool, không phải ở regex lúc ingest. Nên cân nhắc bỏ.
+### 8.3. Reranking
 
-### Không có test
+Kết quả hợp nhất được chuyển vào `ContextualCompressionRetriever` với `ScoringReranker`.
 
-`tests/` rỗng. Chỗ dễ vỡ nhất là `restructure()` trong `parse.py`: nó là regex
-bám vào format docx cụ thể. Tài liệu mới đặt tên bảng khác kiểu sẽ cho ra 0 heading
-`##`, và pipeline sẽ tạo 0 chunk — có cảnh báo nhưng không có test nào chặn từ đầu.
+Reranker:
 
-### Khác
+1. Tạo cặp `(query, page_content)` cho từng tài liệu.
+2. Gọi `CrossEncoder.predict()` để tính điểm.
+3. Sắp xếp giảm dần theo điểm.
+4. Giữ tối đa `RERANK_TOP_N` kết quả.
+5. Ghi điểm vào metadata `rerank_score`.
 
-- `print` thay vì `logging` — production không tắt/lọc được theo level.
-- Chưa có `.env` loader; chỉ `QDRANT_URL` đọc từ biến môi trường.
-- `qdrant/qdrant:latest` chưa ghim version.
-- Chưa có Postgres cho sổ ghi trạng thái document (`doc status`, resume) — hiện
-  trạng thái chỉ nằm ở file trong `data/artifacts/`.
-- 5 khối `main()` gần giống nhau (~60 dòng lặp), gộp được thành một CLI.
+Model cross-encoder cũng được cache bằng `lru_cache`.
 
----
+## 9. Bộ lọc truy hồi
 
-## 10. Bảng tổng hợp toàn bộ tham số
+`search()` và `QdrantRetriever` hiện hỗ trợ bộ lọc tùy chọn theo `section`.
 
-| Nhóm | Tham số | Giá trị | Đo được? |
-|---|---|---|---|
-| Chunking | `HEADERS_TO_SPLIT_ON` | `[("#","section"),("##","table")]` | theo cấu trúc tài liệu |
-| | `STRIP_HEADERS` | `False` | |
-| | `CHUNK_OVERLAP` | `0` | suy ra từ chiến lược |
-| | `MAX_CHARS` / `MIN_CHARS` | `6000` / `200` | lưới cảnh báo |
-| Dense | `EMBED_MODEL` | `AITeamVN/Vietnamese_Embedding` | |
-| | `EMBED_DIM` | `1024` | ✅ verify bằng probe |
-| | `EMBED_MAX_TOKENS` | `2048` | theo model |
-| | `EMBED_BATCH` | `16` | |
-| | `NORMALIZE_EMBEDDINGS` | `True` | |
-| | `QUERY_PREFIX` / `PASSAGE_PREFIX` | `""` / `""` | theo họ model |
-| Sparse | `SPARSE_MODEL` | `Qdrant/bm25` | |
-| | `BM25_DISABLE_STEMMER` | `True` | ✅ snowball không có tiếng Việt |
-| | `BM25_LANGUAGE` | `"english"` | chỉ chọn stopwords |
-| | `BM25_AVG_LEN` | `96.0` | ✅ đo trên 18 chunk |
-| | `BM25_K` / `BM25_B` | `1.2` / `0.75` | mặc định |
-| Store | `COLLECTION` | `sqldocs__vnemb_1024__c1` | |
-| | `DENSE_VECTOR` / `SPARSE_VECTOR` | `dense` / `bm25` | |
-| | distance | `Cosine` | |
-| | sparse modifier | `IDF` | |
-| | `PAYLOAD_INDEX_FIELDS` | `doc_id`, `table_name`, `section` | |
-| Online | `CANDIDATE_K` | `20` | ❌ đặt tay |
-| | `RRF_K` | `40` | yêu cầu |
-| | `RRF_WEIGHTS` | `[0.5, 0.5]` | ❌ đặt tay |
-| | `RERANK_MODEL` | `AITeamVN/Vietnamese_Reranker` | |
-| | `RERANK_TOP_N` | `5` | yêu cầu |
+Khi có giá trị `section`, code tạo Qdrant filter với điều kiện keyword match chính xác. Các payload index khác đã được tạo cho `doc_id` và `table_name`, nhưng giao diện retriever hiện chưa nhận hai loại filter này.
 
----
+## 10. Cách chạy hiện có
 
-## Phụ lục — lệnh chạy
+### 10.1. Khởi chạy Qdrant
 
-```bash
-uv sync
+```powershell
 docker compose up -d
-
-# offline
-uv run python -m src.offline_sql "Mô tả bảng BĐS (NEW).docx"
-uv run python -m src.offline_sql "Mô tả bảng BĐS (NEW).docx" --no-index
-uv run python -m src.offline_sql "..." --recreate     # dựng lại collection
-
-# từng bước
-uv run python -m src.retrieval.parse     "Mô tả bảng BĐS (NEW).docx"
-uv run python -m src.retrieval.chunking  mo_ta_bang_bds_new.md
-uv run python -m src.retrieval.store     mo_ta_bang_bds_new.chunks.jsonl
-
-# online
-uv run python -m src.online_sql
-uv run python -m src.online_sql "câu hỏi khác"
-uv run python -m src.retrieval.retriever "V_BDS_SITE"   # so dense/sparse/hybrid
 ```
+
+`docker-compose.yml` khai báo một service Qdrant, mở cổng HTTP `6333`, gRPC `6334`, dùng named volume và có healthcheck.
+
+Image hiện được khai báo là `qdrant/qdrant:latest`.
+
+### 10.2. Parse, chunk và index
+
+```powershell
+uv run python -m src.offline_sql <ten-tai-lieu>
+```
+
+Chỉ tạo artifact mà không ghi Qdrant:
+
+```powershell
+uv run python -m src.offline_sql <ten-tai-lieu> --no-index
+```
+
+Tạo lại collection trước khi index:
+
+```powershell
+uv run python -m src.offline_sql <ten-tai-lieu> --recreate
+```
+
+Entry point hỗ trợ nhận nhiều tên tài liệu và xử lý bằng `chain.batch()`.
+
+### 10.3. Chạy retrieval và rerank
+
+```powershell
+uv run python -m src.online_sql "<cau-hoi>"
+```
+
+CLI in nội dung và metadata của các kết quả sau rerank ra standard output.
+
+### 10.4. So sánh các chế độ retrieval
+
+```powershell
+uv run python -m src.retrieval.retriever "<cau-hoi>"
+```
+
+CLI này lần lượt chạy dense, sparse và hybrid để in kết quả của từng chế độ.
+
+## 11. Hành vi lỗi và kiểm tra hiện tại
+
+- Hàm `require()` phát sinh `FileNotFoundError` khi đường dẫn bắt buộc không tồn tại.
+- Parser phát sinh `ValueError` nếu nội dung sau chuẩn hóa quá ngắn.
+- Indexer phát sinh `RuntimeError` nếu collection hiện hữu thiếu dense vector được cấu hình hoặc có sai kích thước dense.
+- Pipeline offline bắt exception theo từng tài liệu, in trạng thái lỗi và tiếp tục tổng hợp kết quả batch.
+- Các tiến trình CLI chủ yếu báo trạng thái bằng `print()`.
+
+## 12. Giới hạn trực tiếp từ implementation hiện tại
+
+- Quy tắc nhận diện cấu trúc trong parser phụ thuộc vào heading và regex tiếng Việt cố định, gồm mẫu `Bảng`.
+- Chunker chỉ giữ các phần có metadata `table`.
+- Cảnh báo chiều dài không làm thay đổi chunk.
+- `CHUNK_OVERLAP` và `EMBED_MAX_TOKENS` mới được khai báo, chưa được áp dụng bởi code xử lý tương ứng.
+- Kiểm tra collection hiện hữu chỉ xác thực dense vector, chưa xác thực cấu hình sparse.
+- Retriever chỉ mở tham số filter theo `section`.
+- Luồng online dừng ở kết quả rerank; chưa có bước sinh câu trả lời hoặc thực thi SQL.
+
+## 13. Tóm tắt BM25 đang triển khai
+
+Phần sparse retrieval hiện có cấu hình tối giản:
+
+- FastEmbed tạo sparse vector.
+- Stemmer bị tắt.
+- `k = 1.2` giữ cơ chế bão hòa tần suất từ.
+- `b = 0.0` bỏ chuẩn hóa chiều dài.
+- Không lưu `avg_len`.
+- Không truyền cấu hình ngôn ngữ.
+- Qdrant áp dụng IDF ở cấp collection.
+- Sparse được hợp nhất với dense bằng RRF trước khi rerank.
+
+Đây là mô tả đúng theo luồng code hiện tại, không bao gồm tham số đo thử, dữ liệu mẫu hoặc kiến trúc chưa được triển khai.

@@ -37,14 +37,13 @@ PASSAGE_PREFIX = ""
 SPARSE_MODEL = "Qdrant/bm25"
 
 # Snowball không có tiếng Việt; stemmer tiếng Anh cắt sai cả từ thường lẫn
-# định danh SQL. BM25_LANGUAGE khi đó chỉ còn chọn stopwords.
+# định danh SQL. FastEmbed đồng thời không dùng stopwords khi tắt stemmer.
 BM25_DISABLE_STEMMER = True
-BM25_LANGUAGE = "english"
 
-# Độ dài trung bình thật của chunk, tính bằng token BM25. Đo lại khi corpus đổi.
-BM25_AVG_LEN = 96.0
+# b=0 tắt chuẩn hoá theo độ dài. Corpus SaaS có nhiều loại tài liệu và thay đổi
+# liên tục, nên không phụ thuộc vào một avg_len phải đo rồi re-index khi nó lệch.
 BM25_K = 1.2
-BM25_B = 0.75
+BM25_B = 0.0
 
 # ---- vector store --------------------------------------------------------
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
