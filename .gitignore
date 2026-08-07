@@ -17,15 +17,15 @@ data/artifacts/*
 !data/artifacts/.gitkeep
 
 # File gốc người dùng upload — không nằm trong repo.
-data/uploads/*
-!data/uploads/.gitkeep
+# data/uploads/*
+# !data/uploads/.gitkeep
 
 # Tài liệu nguồn: commit vào rồi xoá vẫn còn trong lịch sử.
-*.pdf
-*.docx
-*.doc
-*.pptx
-*.xlsx
+# *.pdf
+# *.docx
+# *.doc
+# *.pptx
+# *.xlsx
 
 # Cache model của HuggingFace nếu ai đó trỏ HF_HOME vào repo
 .cache/
