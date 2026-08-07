@@ -19,20 +19,18 @@ uv sync
 cp .env.example .env
 docker compose up -d                 # Qdrant
 
-# đặt tài liệu của bạn vào đây
-cp <tài-liệu>.docx data/uploads/sql/docs/
-
-uv run python -m src.offline_sql "<tài-liệu>.docx"
-uv run python -m src.online_sql "câu hỏi của bạn"
+uv run python -m src.offline_sql "Mô tả bảng BĐS (NEW).docx"
+uv run python -m src.online_sql "Bảng nào lưu doanh thu tài khoản chính?"
 ```
 
-Lần chạy đầu tải ~4,4 GB model từ HuggingFace (embedding 2,2 GB + reranker
+Repo có sẵn tài liệu mẫu trong `data/uploads/sql/docs/` nên clone về chạy được
+ngay. Lần chạy đầu tải ~4,4 GB model từ HuggingFace (embedding 2,2 GB + reranker
 2,2 GB), chạy CPU.
 
-> **Repo không kèm tài liệu mẫu.** `data/uploads/` và `data/artifacts/` bị
-> gitignore. Pipeline hiện bám vào cấu trúc một tài liệu cụ thể (xem
-> `restructure()` trong `src/retrieval/parse.py`) — tài liệu khác định dạng sẽ
-> cần sửa quy tắc nhận diện tiêu đề ở đó.
+> Pipeline bám vào cấu trúc của đúng tài liệu mẫu này — tên bảng trong đó dùng
+> style `normal` chứ không phải Heading, nên `restructure()` trong
+> `src/retrieval/parse.py` phải nhận diện bằng regex. Tài liệu định dạng khác
+> cần sửa quy tắc đó, nếu không sẽ ra 0 chunk (có cảnh báo).
 
 ## Cấu trúc
 
