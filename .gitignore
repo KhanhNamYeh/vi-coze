@@ -1,0 +1,32 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Kết quả trung gian của pipeline — sinh lại được bằng src.offline_sql.
+# Chặn nội dung nhưng giữ thư mục (phủ định chỉ có tác dụng khi cha không bị chặn).
+data/artifacts/*
+!data/artifacts/.gitkeep
+
+# File gốc người dùng upload — không nằm trong repo.
+data/uploads/*
+!data/uploads/.gitkeep
+
+# Tài liệu nguồn: commit vào rồi xoá vẫn còn trong lịch sử.
+*.pdf
+*.docx
+*.doc
+*.pptx
+*.xlsx
+
+# Cache model của HuggingFace nếu ai đó trỏ HF_HOME vào repo
+.cache/
+models/
