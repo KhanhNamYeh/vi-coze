@@ -6,11 +6,9 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 from ..config_sql import (
-    BM25_AVG_LEN,
     BM25_B,
     BM25_DISABLE_STEMMER,
     BM25_K,
-    BM25_LANGUAGE,
     SPARSE_MODEL,
 )
 
@@ -29,14 +27,12 @@ def get_sparse_model():
         model_name=SPARSE_MODEL,
         k=BM25_K,
         b=BM25_B,
-        avg_len=BM25_AVG_LEN,
-        language=BM25_LANGUAGE,
         disable_stemmer=BM25_DISABLE_STEMMER,
     )
 
 
 def encode_passages(texts: list[str]) -> list[Sparse]:
-    """Mã hoá document: có trọng số tần suất và chuẩn hoá độ dài."""
+    """Mã hoá document: trọng số tần suất, không chuẩn hoá độ dài (`b=0`)."""
     return [
         Sparse(indices=e.indices.tolist(), values=e.values.tolist())
         for e in get_sparse_model().embed(texts)

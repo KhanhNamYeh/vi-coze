@@ -96,7 +96,3 @@ Nhiều file thì truyền nhiều tên — `offline.py` gọi `.batch()`, khôn
 ```bash
 uv run python -m src.offline "file_a.docx" "file_b.docx"
 ```
-
-Repo chạy ở chế độ non-package (`[tool.uv] package = false`) — gọi bằng
-`python -m src.<...>` từ gốc repo, không cài vào site-packages.
-
