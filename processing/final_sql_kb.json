@@ -1,0 +1,2912 @@
+{
+  "directed": true,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "customers",
+      "id": "customers"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "customerid",
+      "id": "customers.customerid"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "customers.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "segment",
+      "id": "customers.segment"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "currency",
+      "id": "customers.currency"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "gasstations",
+      "id": "gasstations"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "gasstationid",
+      "id": "gasstations.gasstationid"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "gasstations.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "chainid",
+      "id": "gasstations.chainid"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "country",
+      "id": "gasstations.country"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "segment",
+      "id": "gasstations.segment"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "products",
+      "id": "products"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "productid",
+      "id": "products.productid"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "products.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "description",
+      "id": "products.description"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "account",
+      "id": "account"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "account_id",
+      "id": "account.account_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "account.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "district_id",
+      "id": "account.district_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "frequency",
+      "id": "account.frequency"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "date",
+      "id": "account.date"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "foreign",
+      "id": "account.foreign"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "card",
+      "id": "card"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "card_id",
+      "id": "card.card_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "card.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "disp_id",
+      "id": "card.disp_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "type",
+      "id": "card.type"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "issued",
+      "id": "card.issued"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "foreign",
+      "id": "card.foreign"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "client",
+      "id": "client"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "client_id",
+      "id": "client.client_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "client.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "gender",
+      "id": "client.gender"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "birth_date",
+      "id": "client.birth_date"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "district_id",
+      "id": "client.district_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "foreign",
+      "id": "client.foreign"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "disp",
+      "id": "disp"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "disp_id",
+      "id": "disp.disp_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "disp.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "client_id",
+      "id": "disp.client_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "account_id",
+      "id": "disp.account_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "type",
+      "id": "disp.type"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "foreign",
+      "id": "disp.foreign"
+    },
+    {
+      "type": "table",
+      "color": "#e74c3c",
+      "label": "district",
+      "id": "district"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "district_id",
+      "id": "district.district_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "district.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a2",
+      "id": "district.a2"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a3",
+      "id": "district.a3"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a4",
+      "id": "district.a4"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a5",
+      "id": "district.a5"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a6",
+      "id": "district.a6"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a7",
+      "id": "district.a7"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a8",
+      "id": "district.a8"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a9",
+      "id": "district.a9"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a10",
+      "id": "district.a10"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a11",
+      "id": "district.a11"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a12",
+      "id": "district.a12"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a13",
+      "id": "district.a13"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a14",
+      "id": "district.a14"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a15",
+      "id": "district.a15"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "a16",
+      "id": "district.a16"
+    },
+    {
+      "type": "table",
+      "color": "#e74c3c",
+      "label": "loan",
+      "id": "loan"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "loan_id",
+      "id": "loan.loan_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "loan.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "account_id",
+      "id": "loan.account_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "date",
+      "id": "loan.date"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "amount",
+      "id": "loan.amount"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "duration",
+      "id": "loan.duration"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "payments",
+      "id": "loan.payments"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "status",
+      "id": "loan.status"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "foreign",
+      "id": "loan.foreign"
+    },
+    {
+      "type": "table",
+      "color": "#e74c3c",
+      "label": "trans",
+      "id": "trans"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "trans_id",
+      "id": "trans.trans_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "primary",
+      "id": "trans.primary"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "account_id",
+      "id": "trans.account_id"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "date",
+      "id": "trans.date"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "type",
+      "id": "trans.type"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "operation",
+      "id": "trans.operation"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "amount",
+      "id": "trans.amount"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "balance",
+      "id": "trans.balance"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "k_symbol",
+      "id": "trans.k_symbol"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "bank",
+      "id": "trans.bank"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "account",
+      "id": "trans.account"
+    },
+    {
+      "type": "column",
+      "color": "#3498db",
+      "label": "foreign",
+      "id": "trans.foreign"
+    },
+    {
+      "id": "customerid"
+    },
+    {
+      "id": "segment"
+    },
+    {
+      "id": "currency"
+    },
+    {
+      "id": "gasstationid"
+    },
+    {
+      "id": "chainid"
+    },
+    {
+      "id": "country"
+    },
+    {
+      "id": "productid"
+    },
+    {
+      "id": "description"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "transactions_1k",
+      "id": "transactions_1k"
+    },
+    {
+      "id": "transactionid"
+    },
+    {
+      "id": "date"
+    },
+    {
+      "id": "time"
+    },
+    {
+      "id": "cardid"
+    },
+    {
+      "id": "amount"
+    },
+    {
+      "id": "price"
+    },
+    {
+      "type": "business_rule",
+      "color": "#f1c40f",
+      "label": "yearmonth",
+      "id": "yearmonth"
+    },
+    {
+      "id": "account_id"
+    },
+    {
+      "id": "district_id"
+    },
+    {
+      "id": "frequency"
+    },
+    {
+      "id": "card_id"
+    },
+    {
+      "id": "disp_id"
+    },
+    {
+      "id": "type"
+    },
+    {
+      "id": "issued"
+    },
+    {
+      "id": "client_id"
+    },
+    {
+      "id": "gender"
+    },
+    {
+      "id": "birth_date"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng 6",
+      "id": "khách hàng 6"
+    },
+    {
+      "id": "sum(amount) from orders where customer_id = 6 and order_date between '201308' and '201311'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "nhiều doanh nghiệp vừa và nhỏ (sme)",
+      "id": "nhiều doanh nghiệp vừa và nhỏ (sme)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "đồng koruna của séc",
+      "id": "đồng koruna của séc"
+    },
+    {
+      "id": "czk"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "đồng euro",
+      "id": "đồng euro"
+    },
+    {
+      "id": "eur"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có đúng",
+      "id": "có đúng"
+    },
+    {
+      "id": "sme"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "nhiều hơn",
+      "id": "nhiều hơn"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tổng số sme thanh toán bằng tiền tệ czk",
+      "id": "tổng số sme thanh toán bằng tiền tệ czk"
+    },
+    {
+      "id": "count"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tổng số sme thanh toán bằng tiền tệ eur",
+      "id": "tổng số sme thanh toán bằng tiền tệ eur"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "vào năm 2012",
+      "id": "vào năm 2012"
+    },
+    {
+      "id": "yearmonth between '201201' and '201212'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "ai có mức tiêu thụ ít nhất",
+      "id": "ai có mức tiêu thụ ít nhất"
+    },
+    {
+      "id": "consumption <= (select min(consumption) from lam)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "in lam",
+      "id": "in lam"
+    },
+    {
+      "id": "lam"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tháng đạt đỉnh tiêu thụ gas của khách hàng sme trong năm 2013 là tháng nào?",
+      "id": "tháng đạt đỉnh tiêu thụ gas của khách hàng sme trong năm 2013 là tháng nào?"
+    },
+    {
+      "id": "max(month) from table_name where year = '2013' and customer_type = 'sme'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "mô tả sản phẩm của các sản phẩm được tiêu thụ vào tháng 9 năm 2013",
+      "id": "mô tả sản phẩm của các sản phẩm được tiêu thụ vào tháng 9 năm 2013"
+    },
+    {
+      "id": "description from product where month(date) = '09' and year(date) = '2013'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "quốc gia của các trạm xăng",
+      "id": "quốc gia của các trạm xăng"
+    },
+    {
+      "id": "select country from gas_stations where transaction_date like '201306%'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "các giao dịch diễn ra vào tháng 6 năm 2013",
+      "id": "các giao dịch diễn ra vào tháng 6 năm 2013"
+    },
+    {
+      "id": "select * from transactions where yearmonth = '201306'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "mô tả sản phẩm của các giao dịch diễn ra tại các trạm xăng ở cộng hòa séc",
+      "id": "mô tả sản phẩm của các giao dịch diễn ra tại các trạm xăng ở cộng hòa séc"
+    },
+    {
+      "id": "select * from transactions where country='cze' and type='gas_station_transaction'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "vui lòng liệt kê thời điểm khác nhau của các giao dịch diễn ra tại các trạm xăng từ chuỗi số 11",
+      "id": "vui lòng liệt kê thời điểm khác nhau của các giao dịch diễn ra tại các trạm xăng từ chuỗi số 11"
+    },
+    {
+      "id": "date, transaction_type from gas_stations where station_id in (select id from gas_stations where chain = '11')"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng",
+      "id": "khách hàng"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "at time",
+      "id": "at time"
+    },
+    {
+      "id": "'16:25:00'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "on date",
+      "id": "on date"
+    },
+    {
+      "id": "'2012-08-24'"
+    },
+    {
+      "id": "'customer_segment' as cs where date('2012-08-23 21:20:00') <= cs.end_date"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tất cả các giao dịch diễn ra trong khoảng thời gian 8:00-9:00 vào ngày 2012/8/26",
+      "id": "tất cả các giao dịch diễn ra trong khoảng thời gian 8:00-9:00 vào ngày 2012/8/26"
+    },
+    {
+      "id": "select * from gasstations where time between '08:00:00' and '09:00:00' and date = '2012-08-26' and country = 'cze'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu giao dịch diễn ra ở cze",
+      "id": "có bao nhiêu giao dịch diễn ra ở cze"
+    },
+    {
+      "id": "select count(*) from gasstations where time between '08:00:00' and '09:00:00' and date = '2012-08-26' and country = 'cze'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "quốc tịch của khách hàng",
+      "id": "quốc tịch của khách hàng"
+    },
+    {
+      "id": "select nationality from customers where expenditure = 548.4 and date = '2012-08-24'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tỷ lệ giữa khách hàng thanh toán bằng eur và khách hàng thanh toán bằng czk là bao nhiêu?",
+      "id": "tỷ lệ giữa khách hàng thanh toán bằng eur và khách hàng thanh toán bằng czk là bao nhiêu?"
+    },
+    {
+      "id": "(count(currency = 'eur') / count(currency = 'czk'))"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "mức tiêu thụ trung bình hàng tháng của khách hàng thuộc phân khúc sme trong năm 2013",
+      "id": "mức tiêu thụ trung bình hàng tháng của khách hàng thuộc phân khúc sme trong năm 2013"
+    },
+    {
+      "id": "avg(consumption) / 12 where yearmonth between '201301' and '201312'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "sự khác biệt về tiêu thụ gas giữa khách hàng thanh toán bằng czk và khách hàng thanh toán bằng eur trong năm 2012 là gì?",
+      "id": "sự khác biệt về tiêu thụ gas giữa khách hàng thanh toán bằng czk và khách hàng thanh toán bằng eur trong năm 2012 là gì?"
+    },
+    {
+      "id": "sum(czk_gas_consumption) - sum(eur_gas_consumption) as difference from gas_consumption where yearmonth between '201201' and '201212'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013",
+      "id": "khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013"
+    },
+    {
+      "id": "select avg(consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa sme và lam",
+      "id": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa sme và lam"
+    },
+    {
+      "id": "select avg(sme_consumption) - avg(lam_consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa lam và kam",
+      "id": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa lam và kam"
+    },
+    {
+      "id": "select avg(lam_consumption) - avg(kam_consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa kam và sme",
+      "id": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa kam và sme"
+    },
+    {
+      "id": "select avg(kam_consumption) - avg(sme_consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "trong ba phân khúc—sme, lam và kam",
+      "id": "trong ba phân khúc—sme, lam và kam"
+    },
+    {
+      "id": "category from [table_name] where category in ('sme', 'lam', 'kam')"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "phân khúc nào có tỷ lệ tăng trưởng tiêu thụ thanh toán bằng eur lớn nhất",
+      "id": "phân khúc nào có tỷ lệ tăng trưởng tiêu thụ thanh toán bằng eur lớn nhất"
+    },
+    {
+      "id": "growth_rate from (select * from [table_name] where category in ('sme', 'lam', 'kam') and currency = 'eur') as subquery"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "phân khúc nào có tỷ lệ tăng trưởng tiêu thụ thanh toán bằng eur nhỏ nhất",
+      "id": "phân khúc nào có tỷ lệ tăng trưởng tiêu thụ thanh toán bằng eur nhỏ nhất"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "cộng hòa séc có nhiều hơn slovakia bao nhiêu trạm xăng 'giảm giá'",
+      "id": "cộng hòa séc có nhiều hơn slovakia bao nhiêu trạm xăng 'giảm giá'"
+    },
+    {
+      "id": "select count(*) from gasstations where country = 'cze' and discount = true - (select count(*) from gasstations where country = 'svk' and discount = true)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng lam",
+      "id": "khách hàng lam"
+    },
+    {
+      "id": "46.73"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "vào tháng 2 năm 2012",
+      "id": "vào tháng 2 năm 2012"
+    },
+    {
+      "id": "yearmonth.date >= '201202' and yearmonth.date < '201203'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "% khách hàng tiêu thụ nhiều hơn 528.3",
+      "id": "% khách hàng tiêu thụ nhiều hơn 528.3"
+    },
+    {
+      "id": "sum(case when amount > 528.3 then 1 else 0 end) / count(*) * 100 as percentage"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng đã thanh toán 634.8 vào ngày 2012/8/25",
+      "id": "khách hàng đã thanh toán 634.8 vào ngày 2012/8/25"
+    },
+    {
+      "id": "payment_date = '2012-08-25' and payment_amount = 634.8"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tỷ lệ giảm tiêu thụ từ năm 2012 đến năm 2013",
+      "id": "tỷ lệ giảm tiêu thụ từ năm 2012 đến năm 2013"
+    },
+    {
+      "id": "(select consumption from table where year(payment_date) = 2012) - (select consumption from table where year(payment_date) = 2013) / (select consumption from table where year(payment_date) = 2012)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tỷ lệ của \"premium\" so với toàn bộ phân khúc trong country = \"svk\"",
+      "id": "tỷ lệ của \"premium\" so với toàn bộ phân khúc trong country = \"svk\""
+    },
+    {
+      "id": "count(*) from table_name where country='svk' and premium=true"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng 38508",
+      "id": "khách hàng 38508"
+    },
+    {
+      "id": "sum(amount) from transactions where customer_id = '38508' and date like '%2012-01%'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng chi tiêu nhiều nhất là ai",
+      "id": "khách hàng chi tiêu nhiều nhất là ai"
+    },
+    {
+      "id": "customer who spent the most"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "giá trung bình cho mỗi mặt hàng đơn lẻ được mua bởi khách hàng này",
+      "id": "giá trung bình cho mỗi mặt hàng đơn lẻ được mua bởi khách hàng này"
+    },
+    {
+      "id": "(total(price) / total(amount))"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "all customers who paid more than 29.00 per unit for product no.5",
+      "id": "all customers who paid more than 29.00 per unit for product no.5"
+    },
+    {
+      "id": "consumption_status from customer_order where product_id = 'no.5' and price / amount > 29.00 and date = '201208'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "consumption status",
+      "id": "consumption status"
+    },
+    {
+      "id": "status"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "năm nào ghi nhận lượng tiêu thụ gas thanh toán bằng czk lớn nhất?",
+      "id": "năm nào ghi nhận lượng tiêu thụ gas thanh toán bằng czk lớn nhất?"
+    },
+    {
+      "id": "select * from table_name where substring(date_column, 1, 4) = (select max(substring(date_column, 1, 4)) from table_name)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "mức tiêu thụ hàng tháng cao nhất trong năm 2012 là bao nhiêu?",
+      "id": "mức tiêu thụ hàng tháng cao nhất trong năm 2012 là bao nhiêu?"
+    },
+    {
+      "id": "select sum(consumption) from table_name where yearmonth like '20%12%' and month >= 1 and month <= 12"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "trong số các khách hàng thanh toán bằng euro",
+      "id": "trong số các khách hàng thanh toán bằng euro"
+    },
+    {
+      "id": "currency = 'eur'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu người",
+      "id": "có bao nhiêu người"
+    },
+    {
+      "id": "*"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có mức tiêu thụ hàng tháng trên 1000",
+      "id": "có mức tiêu thụ hàng tháng trên 1000"
+    },
+    {
+      "id": "1000"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "trong số các giao dịch được thực hiện tại các trạm xăng ở cộng hòa séc",
+      "id": "trong số các giao dịch được thực hiện tại các trạm xăng ở cộng hòa séc"
+    },
+    {
+      "id": "date >= '2012-01-01' and country = 'cze'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu giao dịch diễn ra sau ngày 2012/1/1",
+      "id": "có bao nhiêu giao dịch diễn ra sau ngày 2012/1/1"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu tài khoản chọn phát hành sau giao dịch đang ở khu vực east bohemia?",
+      "id": "có bao nhiêu tài khoản chọn phát hành sau giao dịch đang ở khu vực east bohemia?"
+    },
+    {
+      "id": "select count(*) from a3 where 'poplatek po obratu' and region = 'east bohemia'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "số lượng quận có mức lương trung bình của nữ lớn hơn 6000 nhưng nhỏ hơn 10000?",
+      "id": "số lượng quận có mức lương trung bình của nữ lớn hơn 6000 nhưng nhỏ hơn 10000?"
+    },
+    {
+      "id": "from a11 where gender = 'f' and average_salary > 6000 and average_salary < 10000"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu khách hàng nam sống ở north bohemia có mức lương trung bình lớn hơn 8000?",
+      "id": "có bao nhiêu khách hàng nam sống ở north bohemia có mức lương trung bình lớn hơn 8000?"
+    },
+    {
+      "id": "from customers where gender = 'm' and region = 'north bohemia' and average_salary > 8000"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tài khoản đã mở",
+      "id": "tài khoản đã mở"
+    },
+    {
+      "id": "customer is not null"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng nữ",
+      "id": "khách hàng nữ"
+    },
+    {
+      "id": "gender = 'f'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "sinh trước năm 1950",
+      "id": "sinh trước năm 1950"
+    },
+    {
+      "id": "birth_date < '1950-01-01'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "ở sokolov",
+      "id": "ở sokolov"
+    },
+    {
+      "id": "'sokolov' in (select a2 from ...)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng có khoản vay được phê duyệt đầu tiên vào ngày 1993/7/5",
+      "id": "khách hàng có khoản vay được phê duyệt đầu tiên vào ngày 1993/7/5"
+    },
+    {
+      "id": "customer_id from loans where approved_date = '1993-07-05'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "từ ngày 1/1/1995 đến ngày 31/12/1997",
+      "id": "từ ngày 1/1/1995 đến ngày 31/12/1997"
+    },
+    {
+      "id": "'1995-01-01' and '1997-12-31'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu khoản vay",
+      "id": "có bao nhiêu khoản vay"
+    },
+    {
+      "id": "loans"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "với số tiền ít nhất 250.000",
+      "id": "với số tiền ít nhất 250.000"
+    },
+    {
+      "id": "'amount' >= 250000"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "cho mỗi tài khoản",
+      "id": "cho mỗi tài khoản"
+    },
+    {
+      "id": "'account_id'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "chọn phát hành sao kê hàng tháng được phê duyệt",
+      "id": "chọn phát hành sao kê hàng tháng được phê duyệt"
+    },
+    {
+      "id": "'poplatek mesicne' = 'approved'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "bao nhiêu",
+      "id": "bao nhiêu"
+    },
+    {
+      "id": "count(*)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tài khoản đang có hợp đồng hoạt động tại chi nhánh số 1",
+      "id": "tài khoản đang có hợp đồng hoạt động tại chi nhánh số 1"
+    },
+    {
+      "id": "select count(*) from [table_name] where trạng thái = 'c'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "số lượng tội phạm trung bình được thực hiện vào năm 1995 tại các khu vực có số lượng vượt quá 4000 và có các tài khoản được mở bắt đầu từ năm 1997",
+      "id": "số lượng tội phạm trung bình được thực hiện vào năm 1995 tại các khu vực có số lượng vượt quá 4000 và có các tài khoản được mở bắt đầu từ năm 1997"
+    },
+    {
+      "id": "from a15 where a3 > 4000 and (a15 >= 1997)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu phần trăm khách hàng mở tài khoản tại quận có mức lương trung bình trên 10000 là phụ nữ?",
+      "id": "có bao nhiêu phần trăm khách hàng mở tài khoản tại quận có mức lương trung bình trên 10000 là phụ nữ?"
+    },
+    {
+      "id": "select count(*) * 100.0 / (select count(*) from customers where gender = 'f' and avg_salary > 10000) as percentage from customers"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tốc độ tăng trưởng tổng số tiền vay trên tất cả các tài khoản của một khách hàng nam giữa năm 1996 và 1997 là bao nhiêu?",
+      "id": "tốc độ tăng trưởng tổng số tiền vay trên tất cả các tài khoản của một khách hàng nam giữa năm 1996 và 1997 là bao nhiêu?"
+    },
+    {
+      "id": "select (sum(amount_1997) - sum(amount_1996)) / (sum(amount_1996)) * 100 from accounts where gender = 'm'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có bao nhiêu phần trăm khách hàng nam yêu cầu phát hành sao kê hàng tuần?",
+      "id": "có bao nhiêu phần trăm khách hàng nam yêu cầu phát hành sao kê hàng tuần?"
+    },
+    {
+      "id": "count(*) * 100 / (select count(*) from customers where gender = 'm') as percentage"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "số tiền trung bình của các khoản vay",
+      "id": "số tiền trung bình của các khoản vay"
+    },
+    {
+      "id": "avg(amount) from loans where status = 'c' and 'poplatek po obratu'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tỷ lệ số tiền vay đã được trả hết không gặp vấn đề gì",
+      "id": "tỷ lệ số tiền vay đã được trả hết không gặp vấn đề gì"
+    },
+    {
+      "id": "select [(total(amount) & condition) / (total amount)] * 100% as percentage from [table_name] where status = 'a'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "số tiền vay nhỏ hơn usd100,000",
+      "id": "số tiền vay nhỏ hơn usd100,000"
+    },
+    {
+      "id": "100000.00"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tỷ lệ tài khoản vẫn đang hoạt động không có vấn đề gì",
+      "id": "tỷ lệ tài khoản vẫn đang hoạt động không có vấn đề gì"
+    },
+    {
+      "id": "[select count(*) from accounts where status = 'c']"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "nữ khách hàng sinh ngày 1976/1/29",
+      "id": "nữ khách hàng sinh ngày 1976/1/29"
+    },
+    {
+      "id": "a2"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "đối với các hợp đồng vay vẫn đang hoạt động mà khách hàng đang nợ",
+      "id": "đối với các hợp đồng vay vẫn đang hoạt động mà khách hàng đang nợ"
+    },
+    {
+      "id": "status = 'd'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "liệt kê quận",
+      "id": "liệt kê quận"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "nêu tỷ lệ tăng tỷ lệ thất nghiệp từ năm 1995 đến năm 1996",
+      "id": "nêu tỷ lệ tăng tỷ lệ thất nghiệp từ năm 1995 đến năm 1996"
+    },
+    {
+      "id": "(a13 - a12) / a12 * 100"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tỷ lệ tăng thất nghiệp tính bằng phần trăm",
+      "id": "tỷ lệ tăng thất nghiệp tính bằng phần trăm"
+    },
+    {
+      "id": "percentage_increase"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "loại tài khoản không đủ điều kiện vay vốn",
+      "id": "loại tài khoản không đủ điều kiện vay vốn"
+    },
+    {
+      "id": "'employee' and 'contractor'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "thu nhập trung bình của cư dân ở quận nơi đặt tài khoản",
+      "id": "thu nhập trung bình của cư dân ở quận nơi đặt tài khoản"
+    },
+    {
+      "id": "$8000 and $9000"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "lương",
+      "id": "lương"
+    },
+    {
+      "id": "a11"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng có id 3356",
+      "id": "khách hàng có id 3356"
+    },
+    {
+      "id": "customer_id = 3356"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "giao dịch rút tiền mặt",
+      "id": "giao dịch rút tiền mặt"
+    },
+    {
+      "id": "transaction_type = 'vyber'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tất cả các giao dịch",
+      "id": "tất cả các giao dịch"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "id of customers",
+      "id": "id of customers"
+    },
+    {
+      "id": "customer.id"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "age of customers",
+      "id": "age of customers"
+    },
+    {
+      "id": "customer.age"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "customers with high-end credit cards",
+      "id": "customers with high-end credit cards"
+    },
+    {
+      "id": "card.type = 'gold'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "customers who are eligible for loans",
+      "id": "customers who are eligible for loans"
+    },
+    {
+      "id": "disp.type = 'owner'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "customers who have high-end credit cards and are eligible for loans",
+      "id": "customers who have high-end credit cards and are eligible for loans"
+    },
+    {
+      "id": "card.type = 'gold' and disp.type = 'owner'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tài khoản",
+      "id": "tài khoản"
+    },
+    {
+      "id": "accounts"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "năm 1993",
+      "id": "năm 1993"
+    },
+    {
+      "id": "year = '1993'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "có sao kê được phát hành sau giao dịch",
+      "id": "có sao kê được phát hành sau giao dịch"
+    },
+    {
+      "id": "'poplatek po obratu'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "chủ tài khoản",
+      "id": "chủ tài khoản"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "từ năm 1995 đến năm 2000",
+      "id": "từ năm 1995 đến năm 2000"
+    },
+    {
+      "id": "date between '1995-01-01' and '2000-12-31'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "những chủ tài khoản",
+      "id": "những chủ tài khoản"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "đến từ 'east bohemia'",
+      "id": "đến từ 'east bohemia'"
+    },
+    {
+      "id": "address like '%east bohemia%'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tần suất phát hành sao kê",
+      "id": "tần suất phát hành sao kê"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khách hàng nữ lớn tuổi nhất",
+      "id": "khách hàng nữ lớn tuổi nhất"
+    },
+    {
+      "id": "max(age) from customers where gender = 'f'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "các khách hàng nữ",
+      "id": "các khách hàng nữ"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "lớn tuổi nhất",
+      "id": "lớn tuổi nhất"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "mức lương trung bình thấp nhất",
+      "id": "mức lương trung bình thấp nhất"
+    },
+    {
+      "id": "min(averagesalary) from customers where gender = 'f'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "khoảng cách",
+      "id": "khoảng cách"
+    },
+    {
+      "id": "(max(averagesalary) - min(averagesalary)) as salaryrange"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tài khoản của các khách hàng trẻ nhất",
+      "id": "tài khoản của các khách hàng trẻ nhất"
+    },
+    {
+      "id": "min(age) as youngest_customer"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "và có mức lương trung bình cao nhất",
+      "id": "và có mức lương trung bình cao nhất"
+    },
+    {
+      "id": "avg(salary) as highest_average_salary"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "các khách hàng",
+      "id": "các khách hàng"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "người a < ngày sinh của người b",
+      "id": "người a < ngày sinh của người b"
+    },
+    {
+      "id": "age < (select min(age) from customers)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "a11 chỉ mức lương trung bình",
+      "id": "a11 chỉ mức lương trung bình"
+    },
+    {
+      "id": "avg(salary)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tài khoản có ngày phê duyệt khoản vay trong năm 1997",
+      "id": "tài khoản có ngày phê duyệt khoản vay trong năm 1997"
+    },
+    {
+      "id": "account_date_approved >= '1997-01-01' and account_date_approved <= '1997-12-31'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "liệt kê các tài khoản",
+      "id": "liệt kê các tài khoản"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "các tài khoản có số tiền được phê duyệt thấp nhất",
+      "id": "các tài khoản có số tiền được phê duyệt thấp nhất"
+    },
+    {
+      "id": "amount_approved asc"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "chọn sao kê phát hành hàng tuần",
+      "id": "chọn sao kê phát hành hàng tuần"
+    },
+    {
+      "id": "1"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tài khoản có thời hạn vay hơn 12 tháng",
+      "id": "tài khoản có thời hạn vay hơn 12 tháng"
+    },
+    {
+      "id": "duration > 12"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "các tài khoản có số tiền được phê duyệt cao nhất",
+      "id": "các tài khoản có số tiền được phê duyệt cao nhất"
+    },
+    {
+      "id": "approval_amount desc"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "và có ngày mở tài khoản trong năm 1993",
+      "id": "và có ngày mở tài khoản trong năm 1993"
+    },
+    {
+      "id": "open_date like '1993%'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "đối với chi nhánh nằm ở miền nam bohemia có số lượng dân cư lớn nhất",
+      "id": "đối với chi nhánh nằm ở miền nam bohemia có số lượng dân cư lớn nhất"
+    },
+    {
+      "id": "a3 = 'miền nam bohemia' and count(a4) > (select max(count(a4)) from ...)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tỷ lệ khách hàng nam là bao nhiêu?",
+      "id": "tỷ lệ khách hàng nam là bao nhiêu?"
+    },
+    {
+      "id": "divide(count(khách hàng nam), count(khách hàng)) * 100"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "liệt kê chín quận hàng đầu",
+      "id": "liệt kê chín quận hàng đầu"
+    },
+    {
+      "id": "top 9 * from a2 where gender = 'f' order by count(*) desc"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "mười giao dịch rút tiền hàng đầu",
+      "id": "mười giao dịch rút tiền hàng đầu"
+    },
+    {
+      "id": "top 10 * from transactions where type = 'vydaj' and date like '1996-01%' order by a2"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tại chi nhánh xảy ra số lượng tội phạm cao thứ hai vào năm 1995",
+      "id": "tại chi nhánh xảy ra số lượng tội phạm cao thứ hai vào năm 1995"
+    },
+    {
+      "id": "a15 = (select count(*) from ... where nam.gender = 'm' order by count(*) desc limit 1)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "số nhận dạng của chủ tài khoản thực hiện giao dịch bằng thẻ tín dụng với số tiền nhỏ hơn mức trung bình vào năm 1998",
+      "id": "số nhận dạng của chủ tài khoản thực hiện giao dịch bằng thẻ tín dụng với số tiền nhỏ hơn mức trung bình vào năm 1998"
+    },
+    {
+      "id": "customer_id from transactions where card_type = 'vyber kartou' and amount < (select avg(amount) from transactions where year(date) = 1998)"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "tài khoản số 3",
+      "id": "tài khoản số 3"
+    },
+    {
+      "id": "select * from account_requests where account_id = 3"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "phát hành sao kê tài khoản",
+      "id": "phát hành sao kê tài khoản"
+    },
+    {
+      "id": "select * from statement_logs where type = 'regular' and account_id = 3"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "mục đích của việc ghi nợ 3539",
+      "id": "mục đích của việc ghi nợ 3539"
+    },
+    {
+      "id": "select description from payment_purposes where id = 3539"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "k_symbol chỉ mục đích thanh toán",
+      "id": "k_symbol chỉ mục đích thanh toán"
+    },
+    {
+      "id": "select * from payment_purpose_symbols where symbol = 'k_symbol'"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "nữ lớn tuổi nhất",
+      "id": "nữ lớn tuổi nhất"
+    },
+    {
+      "id": "gender = 'f' and age = max(age)"
+    },
+    {
+      "id": "avg(salary) asc"
+    },
+    {
+      "type": "gold_evidence",
+      "color": "#f1c40f",
+      "label": "số tài khoản",
+      "id": "số tài khoản"
+    }
+  ],
+  "edges": [
+    {
+      "label": "has_column",
+      "source": "customers",
+      "target": "customerid"
+    },
+    {
+      "label": "has_column",
+      "source": "customers",
+      "target": "segment"
+    },
+    {
+      "label": "has_column",
+      "source": "customers",
+      "target": "currency"
+    },
+    {
+      "label": "belongs_to",
+      "source": "customers.customerid",
+      "target": "customers"
+    },
+    {
+      "label": "belongs_to",
+      "source": "customers.primary",
+      "target": "customers"
+    },
+    {
+      "label": "belongs_to",
+      "source": "customers.segment",
+      "target": "customers"
+    },
+    {
+      "label": "belongs_to",
+      "source": "customers.currency",
+      "target": "customers"
+    },
+    {
+      "label": "has_column",
+      "source": "gasstations",
+      "target": "gasstationid"
+    },
+    {
+      "label": "has_column",
+      "source": "gasstations",
+      "target": "chainid"
+    },
+    {
+      "label": "has_column",
+      "source": "gasstations",
+      "target": "country"
+    },
+    {
+      "label": "has_column",
+      "source": "gasstations",
+      "target": "segment"
+    },
+    {
+      "label": "belongs_to",
+      "source": "gasstations.gasstationid",
+      "target": "gasstations"
+    },
+    {
+      "label": "belongs_to",
+      "source": "gasstations.primary",
+      "target": "gasstations"
+    },
+    {
+      "label": "belongs_to",
+      "source": "gasstations.chainid",
+      "target": "gasstations"
+    },
+    {
+      "label": "belongs_to",
+      "source": "gasstations.country",
+      "target": "gasstations"
+    },
+    {
+      "label": "belongs_to",
+      "source": "gasstations.segment",
+      "target": "gasstations"
+    },
+    {
+      "label": "has_column",
+      "source": "products",
+      "target": "productid"
+    },
+    {
+      "label": "has_column",
+      "source": "products",
+      "target": "description"
+    },
+    {
+      "label": "belongs_to",
+      "source": "products.productid",
+      "target": "products"
+    },
+    {
+      "label": "belongs_to",
+      "source": "products.primary",
+      "target": "products"
+    },
+    {
+      "label": "belongs_to",
+      "source": "products.description",
+      "target": "products"
+    },
+    {
+      "label": "has_column",
+      "source": "account",
+      "target": "account_id"
+    },
+    {
+      "label": "has_column",
+      "source": "account",
+      "target": "district_id"
+    },
+    {
+      "label": "has_column",
+      "source": "account",
+      "target": "frequency"
+    },
+    {
+      "label": "has_column",
+      "source": "account",
+      "target": "date"
+    },
+    {
+      "label": "belongs_to",
+      "source": "account.account_id",
+      "target": "account"
+    },
+    {
+      "label": "belongs_to",
+      "source": "account.primary",
+      "target": "account"
+    },
+    {
+      "label": "belongs_to",
+      "source": "account.district_id",
+      "target": "account"
+    },
+    {
+      "label": "belongs_to",
+      "source": "account.frequency",
+      "target": "account"
+    },
+    {
+      "label": "belongs_to",
+      "source": "account.date",
+      "target": "account"
+    },
+    {
+      "label": "belongs_to",
+      "source": "account.foreign",
+      "target": "account"
+    },
+    {
+      "label": "has_column",
+      "source": "card",
+      "target": "card_id"
+    },
+    {
+      "label": "has_column",
+      "source": "card",
+      "target": "disp_id"
+    },
+    {
+      "label": "has_column",
+      "source": "card",
+      "target": "type"
+    },
+    {
+      "label": "has_column",
+      "source": "card",
+      "target": "issued"
+    },
+    {
+      "label": "belongs_to",
+      "source": "card.card_id",
+      "target": "card"
+    },
+    {
+      "label": "belongs_to",
+      "source": "card.primary",
+      "target": "card"
+    },
+    {
+      "label": "belongs_to",
+      "source": "card.disp_id",
+      "target": "card"
+    },
+    {
+      "label": "belongs_to",
+      "source": "card.type",
+      "target": "card"
+    },
+    {
+      "label": "belongs_to",
+      "source": "card.issued",
+      "target": "card"
+    },
+    {
+      "label": "belongs_to",
+      "source": "card.foreign",
+      "target": "card"
+    },
+    {
+      "label": "has_column",
+      "source": "client",
+      "target": "client_id"
+    },
+    {
+      "label": "has_column",
+      "source": "client",
+      "target": "gender"
+    },
+    {
+      "label": "has_column",
+      "source": "client",
+      "target": "birth_date"
+    },
+    {
+      "label": "has_column",
+      "source": "client",
+      "target": "district_id"
+    },
+    {
+      "label": "belongs_to",
+      "source": "client.client_id",
+      "target": "client"
+    },
+    {
+      "label": "belongs_to",
+      "source": "client.primary",
+      "target": "client"
+    },
+    {
+      "label": "belongs_to",
+      "source": "client.gender",
+      "target": "client"
+    },
+    {
+      "label": "belongs_to",
+      "source": "client.birth_date",
+      "target": "client"
+    },
+    {
+      "label": "belongs_to",
+      "source": "client.district_id",
+      "target": "client"
+    },
+    {
+      "label": "belongs_to",
+      "source": "client.foreign",
+      "target": "client"
+    },
+    {
+      "label": "has_column",
+      "source": "disp",
+      "target": "disp_id"
+    },
+    {
+      "label": "has_column",
+      "source": "disp",
+      "target": "client_id"
+    },
+    {
+      "label": "has_column",
+      "source": "disp",
+      "target": "account_id"
+    },
+    {
+      "label": "has_column",
+      "source": "disp",
+      "target": "type"
+    },
+    {
+      "label": "belongs_to",
+      "source": "disp.disp_id",
+      "target": "disp"
+    },
+    {
+      "label": "belongs_to",
+      "source": "disp.primary",
+      "target": "disp"
+    },
+    {
+      "label": "belongs_to",
+      "source": "disp.client_id",
+      "target": "disp"
+    },
+    {
+      "label": "belongs_to",
+      "source": "disp.account_id",
+      "target": "disp"
+    },
+    {
+      "label": "belongs_to",
+      "source": "disp.type",
+      "target": "disp"
+    },
+    {
+      "label": "belongs_to",
+      "source": "disp.foreign",
+      "target": "disp"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.district_id",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.primary",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a2",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a3",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a4",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a5",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a6",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a7",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a8",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a9",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a10",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a11",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a12",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a13",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a14",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a15",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "district.a16",
+      "target": "district"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.loan_id",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.primary",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.account_id",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.date",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.amount",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.duration",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.payments",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.status",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "loan.foreign",
+      "target": "loan"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.trans_id",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.primary",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.account_id",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.date",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.type",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.operation",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.amount",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.balance",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.k_symbol",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.bank",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.account",
+      "target": "trans"
+    },
+    {
+      "label": "belongs_to",
+      "source": "trans.foreign",
+      "target": "trans"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "transactionid"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "date"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "time"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "customerid"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "cardid"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "gasstationid"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "productid"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "amount"
+    },
+    {
+      "label": "has_column",
+      "source": "transactions_1k",
+      "target": "price"
+    },
+    {
+      "label": "has_column",
+      "source": "yearmonth",
+      "target": "customerid"
+    },
+    {
+      "label": "has_column",
+      "source": "yearmonth",
+      "target": "date"
+    },
+    {
+      "label": "has consumed",
+      "source": "khách hàng 6",
+      "target": "sum(amount) from orders where customer_id = 6 and order_date between '201308' and '201311'"
+    },
+    {
+      "label": " thanh toán bằng",
+      "source": "nhiều doanh nghiệp vừa và nhỏ (sme)",
+      "target": "currency"
+    },
+    {
+      "label": "thanhtagiao",
+      "source": "đồng koruna của séc",
+      "target": "czk"
+    },
+    {
+      "label": "thanhtagiao",
+      "source": "đồng euro",
+      "target": "eur"
+    },
+    {
+      "label": "so sánh",
+      "source": "có đúng",
+      "target": "sme"
+    },
+    {
+      "label": "so sánh",
+      "source": "nhiều hơn",
+      "target": "sme"
+    },
+    {
+      "label": "tính toán",
+      "source": "tổng số sme thanh toán bằng tiền tệ czk",
+      "target": "count"
+    },
+    {
+      "label": "tính toán",
+      "source": "tổng số sme thanh toán bằng tiền tệ eur",
+      "target": "count"
+    },
+    {
+      "label": "where",
+      "source": "vào năm 2012",
+      "target": "yearmonth between '201201' and '201212'"
+    },
+    {
+      "label": "having",
+      "source": "ai có mức tiêu thụ ít nhất",
+      "target": "consumption <= (select min(consumption) from lam)"
+    },
+    {
+      "label": "from",
+      "source": "in lam",
+      "target": "lam"
+    },
+    {
+      "label": "select",
+      "source": "tháng đạt đỉnh tiêu thụ gas của khách hàng sme trong năm 2013 là tháng nào?",
+      "target": "max(month) from table_name where year = '2013' and customer_type = 'sme'"
+    },
+    {
+      "label": "select",
+      "source": "mô tả sản phẩm của các sản phẩm được tiêu thụ vào tháng 9 năm 2013",
+      "target": "description from product where month(date) = '09' and year(date) = '2013'"
+    },
+    {
+      "label": "in",
+      "source": "quốc gia của các trạm xăng",
+      "target": "select country from gas_stations where transaction_date like '201306%'"
+    },
+    {
+      "label": "in",
+      "source": "các giao dịch diễn ra vào tháng 6 năm 2013",
+      "target": "select * from transactions where yearmonth = '201306'"
+    },
+    {
+      "label": "description",
+      "source": "mô tả sản phẩm của các giao dịch diễn ra tại các trạm xăng ở cộng hòa séc",
+      "target": "select * from transactions where country='cze' and type='gas_station_transaction'"
+    },
+    {
+      "label": "select",
+      "source": "vui lòng liệt kê thời điểm khác nhau của các giao dịch diễn ra tại các trạm xăng từ chuỗi số 11",
+      "target": "date, transaction_type from gas_stations where station_id in (select id from gas_stations where chain = '11')"
+    },
+    {
+      "label": "has paid in",
+      "source": "khách hàng",
+      "target": "currency"
+    },
+    {
+      "label": "belong_to",
+      "source": "khách hàng",
+      "target": "'customer_segment' as cs where date('2012-08-23 21:20:00') <= cs.end_date"
+    },
+    {
+      "label": "at",
+      "source": "at time",
+      "target": "'16:25:00'"
+    },
+    {
+      "label": "on",
+      "source": "on date",
+      "target": "'2012-08-24'"
+    },
+    {
+      "label": "mapping",
+      "source": "tất cả các giao dịch diễn ra trong khoảng thời gian 8:00-9:00 vào ngày 2012/8/26",
+      "target": "select * from gasstations where time between '08:00:00' and '09:00:00' and date = '2012-08-26' and country = 'cze'"
+    },
+    {
+      "label": "mapping",
+      "source": "có bao nhiêu giao dịch diễn ra ở cze",
+      "target": "select count(*) from gasstations where time between '08:00:00' and '09:00:00' and date = '2012-08-26' and country = 'cze'"
+    },
+    {
+      "label": "customer_nationality",
+      "source": "quốc tịch của khách hàng",
+      "target": "select nationality from customers where expenditure = 548.4 and date = '2012-08-24'"
+    },
+    {
+      "label": "mapping",
+      "source": "tỷ lệ giữa khách hàng thanh toán bằng eur và khách hàng thanh toán bằng czk là bao nhiêu?",
+      "target": "(count(currency = 'eur') / count(currency = 'czk'))"
+    },
+    {
+      "label": "mapping",
+      "source": "mức tiêu thụ trung bình hàng tháng của khách hàng thuộc phân khúc sme trong năm 2013",
+      "target": "avg(consumption) / 12 where yearmonth between '201301' and '201312'"
+    },
+    {
+      "label": "select",
+      "source": "sự khác biệt về tiêu thụ gas giữa khách hàng thanh toán bằng czk và khách hàng thanh toán bằng eur trong năm 2012 là gì?",
+      "target": "sum(czk_gas_consumption) - sum(eur_gas_consumption) as difference from gas_consumption where yearmonth between '201201' and '201212'"
+    },
+    {
+      "label": "average annual consumption",
+      "source": "khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013",
+      "target": "select avg(consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "label": "difference between averages",
+      "source": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa sme và lam",
+      "target": "select avg(sme_consumption) - avg(lam_consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "label": "difference between averages",
+      "source": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa lam và kam",
+      "target": "select avg(lam_consumption) - avg(kam_consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "label": "difference between averages",
+      "source": "sự khác biệt về mức tiêu thụ trung bình hàng năm của những khách hàng có lượng tiêu thụ ít nhất thanh toán bằng czk cho năm 2013 giữa kam và sme",
+      "target": "select avg(kam_consumption) - avg(sme_consumption) from customers where payment_currency = 'czk' and year(date) = 2013 and month(date) <= 12"
+    },
+    {
+      "label": "select",
+      "source": "trong ba phân khúc—sme, lam và kam",
+      "target": "category from [table_name] where category in ('sme', 'lam', 'kam')"
+    },
+    {
+      "label": "max",
+      "source": "phân khúc nào có tỷ lệ tăng trưởng tiêu thụ thanh toán bằng eur lớn nhất",
+      "target": "growth_rate from (select * from [table_name] where category in ('sme', 'lam', 'kam') and currency = 'eur') as subquery"
+    },
+    {
+      "label": "min",
+      "source": "phân khúc nào có tỷ lệ tăng trưởng tiêu thụ thanh toán bằng eur nhỏ nhất",
+      "target": "growth_rate from (select * from [table_name] where category in ('sme', 'lam', 'kam') and currency = 'eur') as subquery"
+    },
+    {
+      "label": "map_to_sql",
+      "source": "cộng hòa séc có nhiều hơn slovakia bao nhiêu trạm xăng 'giảm giá'",
+      "target": "select count(*) from gasstations where country = 'cze' and discount = true - (select count(*) from gasstations where country = 'svk' and discount = true)"
+    },
+    {
+      "label": "consume more than",
+      "source": "khách hàng lam",
+      "target": "46.73"
+    },
+    {
+      "label": "filter by date range",
+      "source": "vào tháng 2 năm 2012",
+      "target": "yearmonth.date >= '201202' and yearmonth.date < '201203'"
+    },
+    {
+      "label": "aggregate and filter",
+      "source": "% khách hàng tiêu thụ nhiều hơn 528.3",
+      "target": "sum(case when amount > 528.3 then 1 else 0 end) / count(*) * 100 as percentage"
+    },
+    {
+      "label": "filter",
+      "source": "khách hàng đã thanh toán 634.8 vào ngày 2012/8/25",
+      "target": "payment_date = '2012-08-25' and payment_amount = 634.8"
+    },
+    {
+      "label": "calculate",
+      "source": "tỷ lệ giảm tiêu thụ từ năm 2012 đến năm 2013",
+      "target": "(select consumption from table where year(payment_date) = 2012) - (select consumption from table where year(payment_date) = 2013) / (select consumption from table where year(payment_date) = 2012)"
+    },
+    {
+      "label": "select",
+      "source": "tỷ lệ của \"premium\" so với toàn bộ phân khúc trong country = \"svk\"",
+      "target": "count(*) from table_name where country='svk' and premium=true"
+    },
+    {
+      "label": "has_spent",
+      "source": "khách hàng 38508",
+      "target": "sum(amount) from transactions where customer_id = '38508' and date like '%2012-01%'"
+    },
+    {
+      "label": "select",
+      "source": "khách hàng chi tiêu nhiều nhất là ai",
+      "target": "customer who spent the most"
+    },
+    {
+      "label": "is",
+      "source": "giá trung bình cho mỗi mặt hàng đơn lẻ được mua bởi khách hàng này",
+      "target": "(total(price) / total(amount))"
+    },
+    {
+      "label": "select",
+      "source": "all customers who paid more than 29.00 per unit for product no.5",
+      "target": "consumption_status from customer_order where product_id = 'no.5' and price / amount > 29.00 and date = '201208'"
+    },
+    {
+      "label": "mapping",
+      "source": "consumption status",
+      "target": "status"
+    },
+    {
+      "label": "max",
+      "source": "năm nào ghi nhận lượng tiêu thụ gas thanh toán bằng czk lớn nhất?",
+      "target": "select * from table_name where substring(date_column, 1, 4) = (select max(substring(date_column, 1, 4)) from table_name)"
+    },
+    {
+      "label": "max",
+      "source": "mức tiêu thụ hàng tháng cao nhất trong năm 2012 là bao nhiêu?",
+      "target": "select sum(consumption) from table_name where yearmonth like '20%12%' and month >= 1 and month <= 12"
+    },
+    {
+      "label": "where",
+      "source": "trong số các khách hàng thanh toán bằng euro",
+      "target": "currency = 'eur'"
+    },
+    {
+      "label": "count",
+      "source": "có bao nhiêu người",
+      "target": "*"
+    },
+    {
+      "label": ">",
+      "source": "có mức tiêu thụ hàng tháng trên 1000",
+      "target": "1000"
+    },
+    {
+      "label": "filter",
+      "source": "trong số các giao dịch được thực hiện tại các trạm xăng ở cộng hòa séc",
+      "target": "date >= '2012-01-01' and country = 'cze'"
+    },
+    {
+      "label": "count",
+      "source": "có bao nhiêu giao dịch diễn ra sau ngày 2012/1/1",
+      "target": "*"
+    },
+    {
+      "label": "count",
+      "source": "có bao nhiêu tài khoản chọn phát hành sau giao dịch đang ở khu vực east bohemia?",
+      "target": "select count(*) from a3 where 'poplatek po obratu' and region = 'east bohemia'"
+    },
+    {
+      "label": "select count(*)",
+      "source": "số lượng quận có mức lương trung bình của nữ lớn hơn 6000 nhưng nhỏ hơn 10000?",
+      "target": "from a11 where gender = 'f' and average_salary > 6000 and average_salary < 10000"
+    },
+    {
+      "label": "select count(*)",
+      "source": "có bao nhiêu khách hàng nam sống ở north bohemia có mức lương trung bình lớn hơn 8000?",
+      "target": "from customers where gender = 'm' and region = 'north bohemia' and average_salary > 8000"
+    },
+    {
+      "label": "where",
+      "source": "tài khoản đã mở",
+      "target": "customer is not null"
+    },
+    {
+      "label": "and",
+      "source": "khách hàng nữ",
+      "target": "gender = 'f'"
+    },
+    {
+      "label": "and",
+      "source": "sinh trước năm 1950",
+      "target": "birth_date < '1950-01-01'"
+    },
+    {
+      "label": "and",
+      "source": "ở sokolov",
+      "target": "'sokolov' in (select a2 from ...)"
+    },
+    {
+      "label": "select",
+      "source": "khách hàng có khoản vay được phê duyệt đầu tiên vào ngày 1993/7/5",
+      "target": "customer_id from loans where approved_date = '1993-07-05'"
+    },
+    {
+      "label": "date_range",
+      "source": "từ ngày 1/1/1995 đến ngày 31/12/1997",
+      "target": "'1995-01-01' and '1997-12-31'"
+    },
+    {
+      "label": "count",
+      "source": "có bao nhiêu khoản vay",
+      "target": "loans"
+    },
+    {
+      "label": "condition",
+      "source": "với số tiền ít nhất 250.000",
+      "target": "'amount' >= 250000"
+    },
+    {
+      "label": "group_by",
+      "source": "cho mỗi tài khoản",
+      "target": "'account_id'"
+    },
+    {
+      "label": "filter",
+      "source": "chọn phát hành sao kê hàng tháng được phê duyệt",
+      "target": "'poplatek mesicne' = 'approved'"
+    },
+    {
+      "label": "result",
+      "source": "bao nhiêu",
+      "target": "count(*)"
+    },
+    {
+      "label": "count(*)",
+      "source": "tài khoản đang có hợp đồng hoạt động tại chi nhánh số 1",
+      "target": "select count(*) from [table_name] where trạng thái = 'c'"
+    },
+    {
+      "label": "select count(*)",
+      "source": "số lượng tội phạm trung bình được thực hiện vào năm 1995 tại các khu vực có số lượng vượt quá 4000 và có các tài khoản được mở bắt đầu từ năm 1997",
+      "target": "from a15 where a3 > 4000 and (a15 >= 1997)"
+    },
+    {
+      "label": "mapping",
+      "source": "có bao nhiêu phần trăm khách hàng mở tài khoản tại quận có mức lương trung bình trên 10000 là phụ nữ?",
+      "target": "select count(*) * 100.0 / (select count(*) from customers where gender = 'f' and avg_salary > 10000) as percentage from customers"
+    },
+    {
+      "label": "mapping",
+      "source": "tốc độ tăng trưởng tổng số tiền vay trên tất cả các tài khoản của một khách hàng nam giữa năm 1996 và 1997 là bao nhiêu?",
+      "target": "select (sum(amount_1997) - sum(amount_1996)) / (sum(amount_1996)) * 100 from accounts where gender = 'm'"
+    },
+    {
+      "label": "select",
+      "source": "có bao nhiêu phần trăm khách hàng nam yêu cầu phát hành sao kê hàng tuần?",
+      "target": "count(*) * 100 / (select count(*) from customers where gender = 'm') as percentage"
+    },
+    {
+      "label": "average",
+      "source": "số tiền trung bình của các khoản vay",
+      "target": "avg(amount) from loans where status = 'c' and 'poplatek po obratu'"
+    },
+    {
+      "label": "mapping",
+      "source": "tỷ lệ số tiền vay đã được trả hết không gặp vấn đề gì",
+      "target": "select [(total(amount) & condition) / (total amount)] * 100% as percentage from [table_name] where status = 'a'"
+    },
+    {
+      "label": "less than",
+      "source": "số tiền vay nhỏ hơn usd100,000",
+      "target": "100000.00"
+    },
+    {
+      "label": "percentage of active accounts",
+      "source": "tỷ lệ tài khoản vẫn đang hoạt động không có vấn đề gì",
+      "target": "[select count(*) from accounts where status = 'c']"
+    },
+    {
+      "label": "has_opened_account_in",
+      "source": "nữ khách hàng sinh ngày 1976/1/29",
+      "target": "a2"
+    },
+    {
+      "label": "where",
+      "source": "đối với các hợp đồng vay vẫn đang hoạt động mà khách hàng đang nợ",
+      "target": "status = 'd'"
+    },
+    {
+      "label": "select",
+      "source": "liệt kê quận",
+      "target": "district"
+    },
+    {
+      "label": "and",
+      "source": "nêu tỷ lệ tăng tỷ lệ thất nghiệp từ năm 1995 đến năm 1996",
+      "target": "(a13 - a12) / a12 * 100"
+    },
+    {
+      "label": "as",
+      "source": "tỷ lệ tăng thất nghiệp tính bằng phần trăm",
+      "target": "percentage_increase"
+    },
+    {
+      "label": "not in",
+      "source": "loại tài khoản không đủ điều kiện vay vốn",
+      "target": "'employee' and 'contractor'"
+    },
+    {
+      "label": "between",
+      "source": "thu nhập trung bình của cư dân ở quận nơi đặt tài khoản",
+      "target": "$8000 and $9000"
+    },
+    {
+      "label": "eq",
+      "source": "lương",
+      "target": "a11"
+    },
+    {
+      "label": "where",
+      "source": "khách hàng có id 3356",
+      "target": "customer_id = 3356"
+    },
+    {
+      "label": "and",
+      "source": "giao dịch rút tiền mặt",
+      "target": "transaction_type = 'vyber'"
+    },
+    {
+      "label": "select",
+      "source": "tất cả các giao dịch",
+      "target": "*"
+    },
+    {
+      "label": "has",
+      "source": "id of customers",
+      "target": "customer.id"
+    },
+    {
+      "label": "is",
+      "source": "age of customers",
+      "target": "customer.age"
+    },
+    {
+      "label": "have",
+      "source": "customers with high-end credit cards",
+      "target": "card.type = 'gold'"
+    },
+    {
+      "label": "are",
+      "source": "customers who are eligible for loans",
+      "target": "disp.type = 'owner'"
+    },
+    {
+      "label": "meet",
+      "source": "customers who have high-end credit cards and are eligible for loans",
+      "target": "card.type = 'gold' and disp.type = 'owner'"
+    },
+    {
+      "label": "in",
+      "source": "tài khoản",
+      "target": "accounts"
+    },
+    {
+      "label": "and",
+      "source": "năm 1993",
+      "target": "year = '1993'"
+    },
+    {
+      "label": "and",
+      "source": "có sao kê được phát hành sau giao dịch",
+      "target": "'poplatek po obratu'"
+    },
+    {
+      "label": "select",
+      "source": "chủ tài khoản",
+      "target": "account_id"
+    },
+    {
+      "label": "where",
+      "source": "từ năm 1995 đến năm 2000",
+      "target": "date between '1995-01-01' and '2000-12-31'"
+    },
+    {
+      "label": "from",
+      "source": "những chủ tài khoản",
+      "target": "account"
+    },
+    {
+      "label": "and",
+      "source": "đến từ 'east bohemia'",
+      "target": "address like '%east bohemia%'"
+    },
+    {
+      "label": "group by",
+      "source": "tần suất phát hành sao kê",
+      "target": "account_id"
+    },
+    {
+      "label": "select",
+      "source": "khách hàng nữ lớn tuổi nhất",
+      "target": "max(age) from customers where gender = 'f'"
+    },
+    {
+      "label": "from",
+      "source": "các khách hàng nữ",
+      "target": "customers"
+    },
+    {
+      "label": "where",
+      "source": "lớn tuổi nhất",
+      "target": "gender = 'f'"
+    },
+    {
+      "label": "select",
+      "source": "mức lương trung bình thấp nhất",
+      "target": "min(averagesalary) from customers where gender = 'f'"
+    },
+    {
+      "label": "order by",
+      "source": "mức lương trung bình thấp nhất",
+      "target": "avg(salary) asc"
+    },
+    {
+      "label": "as",
+      "source": "khoảng cách",
+      "target": "(max(averagesalary) - min(averagesalary)) as salaryrange"
+    },
+    {
+      "label": "select",
+      "source": "tài khoản của các khách hàng trẻ nhất",
+      "target": "min(age) as youngest_customer"
+    },
+    {
+      "label": "and",
+      "source": "và có mức lương trung bình cao nhất",
+      "target": "avg(salary) as highest_average_salary"
+    },
+    {
+      "label": "from",
+      "source": "các khách hàng",
+      "target": "customers"
+    },
+    {
+      "label": "where",
+      "source": "người a < ngày sinh của người b",
+      "target": "age < (select min(age) from customers)"
+    },
+    {
+      "label": "group by",
+      "source": "a11 chỉ mức lương trung bình",
+      "target": "avg(salary)"
+    },
+    {
+      "label": "where",
+      "source": "tài khoản có ngày phê duyệt khoản vay trong năm 1997",
+      "target": "account_date_approved >= '1997-01-01' and account_date_approved <= '1997-12-31'"
+    },
+    {
+      "label": "select",
+      "source": "liệt kê các tài khoản",
+      "target": "account_id"
+    },
+    {
+      "label": "select",
+      "source": "liệt kê các tài khoản",
+      "target": "*"
+    },
+    {
+      "label": "order by",
+      "source": "các tài khoản có số tiền được phê duyệt thấp nhất",
+      "target": "amount_approved asc"
+    },
+    {
+      "label": "limit",
+      "source": "chọn sao kê phát hành hàng tuần",
+      "target": "1"
+    },
+    {
+      "label": "where",
+      "source": "tài khoản có thời hạn vay hơn 12 tháng",
+      "target": "duration > 12"
+    },
+    {
+      "label": "order by",
+      "source": "các tài khoản có số tiền được phê duyệt cao nhất",
+      "target": "approval_amount desc"
+    },
+    {
+      "label": "and",
+      "source": "và có ngày mở tài khoản trong năm 1993",
+      "target": "open_date like '1993%'"
+    },
+    {
+      "label": "where",
+      "source": "đối với chi nhánh nằm ở miền nam bohemia có số lượng dân cư lớn nhất",
+      "target": "a3 = 'miền nam bohemia' and count(a4) > (select max(count(a4)) from ...)"
+    },
+    {
+      "label": "select",
+      "source": "tỷ lệ khách hàng nam là bao nhiêu?",
+      "target": "divide(count(khách hàng nam), count(khách hàng)) * 100"
+    },
+    {
+      "label": "select",
+      "source": "liệt kê chín quận hàng đầu",
+      "target": "top 9 * from a2 where gender = 'f' order by count(*) desc"
+    },
+    {
+      "label": "select",
+      "source": "mười giao dịch rút tiền hàng đầu",
+      "target": "top 10 * from transactions where type = 'vydaj' and date like '1996-01%' order by a2"
+    },
+    {
+      "label": "where",
+      "source": "tại chi nhánh xảy ra số lượng tội phạm cao thứ hai vào năm 1995",
+      "target": "a15 = (select count(*) from ... where nam.gender = 'm' order by count(*) desc limit 1)"
+    },
+    {
+      "label": "select",
+      "source": "số nhận dạng của chủ tài khoản thực hiện giao dịch bằng thẻ tín dụng với số tiền nhỏ hơn mức trung bình vào năm 1998",
+      "target": "customer_id from transactions where card_type = 'vyber kartou' and amount < (select avg(amount) from transactions where year(date) = 1998)"
+    },
+    {
+      "label": "requests",
+      "source": "tài khoản số 3",
+      "target": "select * from account_requests where account_id = 3"
+    },
+    {
+      "label": "mapping",
+      "source": "phát hành sao kê tài khoản",
+      "target": "select * from statement_logs where type = 'regular' and account_id = 3"
+    },
+    {
+      "label": "description",
+      "source": "mục đích của việc ghi nợ 3539",
+      "target": "select description from payment_purposes where id = 3539"
+    },
+    {
+      "label": "mapping",
+      "source": "k_symbol chỉ mục đích thanh toán",
+      "target": "select * from payment_purpose_symbols where symbol = 'k_symbol'"
+    },
+    {
+      "label": "where",
+      "source": "nữ lớn tuổi nhất",
+      "target": "gender = 'f' and age = max(age)"
+    },
+    {
+      "label": "select",
+      "source": "số tài khoản",
+      "target": "account_id"
+    }
+  ]
+}
