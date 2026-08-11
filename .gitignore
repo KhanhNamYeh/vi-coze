@@ -11,10 +11,12 @@ build/
 .ruff_cache/
 .mypy_cache/
 
-# Kết quả trung gian của pipeline — sinh lại được bằng src.offline_sql.
-# Chặn nội dung nhưng giữ thư mục (phủ định chỉ có tác dụng khi cha không bị chặn).
-data/artifacts/*
-!data/artifacts/.gitkeep
+# Artifact của pipeline được commit vào repo: clone về là chạy src.online_sql
+# ngay, không phải chạy lại src.offline_sql trước.
+# Muốn quay lại chặn thì bỏ comment 2 dòng dưới (phủ định chỉ có tác dụng khi
+# thư mục cha không bị chặn).
+# data/artifacts/*
+# !data/artifacts/.gitkeep
 
 # File gốc người dùng upload — không nằm trong repo.
 # data/uploads/*
