@@ -15,7 +15,6 @@ class SQLKnowledgeGraphBuilder:
                 base_url="http://localhost:11434/v1",
                 api_key="ollama"
             )
-            # Dùng Llama3 vì có GPU gánh
             self.model = model if model else "llama3"
             print(f"--- Đang dùng GPU + OLLAMA với model: {self.model} ---")
         else:
@@ -25,7 +24,6 @@ class SQLKnowledgeGraphBuilder:
 
         self.kg = nx.DiGraph()
 
-    # --- CÁC HÀM PARSE DDL VÀ BUSINESS GIỮ NGUYÊN ---
     def parse_ddl_folder(self, folder_path):
         print(f"--- Đọc DDL: {folder_path} ---")
         path = Path(folder_path)
@@ -69,7 +67,6 @@ class SQLKnowledgeGraphBuilder:
                                 question = query_match.group(1).strip()
                                 evidence = evidence_match.group(1).strip()
 
-                                # Prompt mới: Yêu cầu thoát các ký tự đặc biệt
                                 prompt = f"""
                                 Task: Map Natural Language to SQL logic.
                                 Question: {question}
@@ -89,10 +86,8 @@ class SQLKnowledgeGraphBuilder:
             )
             raw = response.choices[0].message.content.strip()
 
-            # 1. Xóa bỏ Markdown code fences nếu có
             raw = re.sub(r'```json|```', '', raw).strip()
 
-            # 2. Tìm mảng JSON [ ... ]
             json_match = re.search(r'\[.*\]', raw, re.DOTALL)
             triples = []
 
@@ -101,17 +96,12 @@ class SQLKnowledgeGraphBuilder:
                 try:
                     triples = json.loads(json_str)
                 except:
-                    # 3. Nếu lỗi, dọn dẹp dấu nháy nội bộ cực mạnh
-                    # Thay đổi các lỗi 'key': 'value' thành "key": "value"
                     json_str = re.sub(r"(['\"])\s*(\w+)\s*(['\"])\s*:", r'"\2":', json_str)
-                    # Thử nhặt từng object {...}
                     object_matches = re.findall(r'\{.*?\}', json_str, re.DOTALL)
                     for obj_str in object_matches:
                         try:
-                            # Parse từng object lẻ
                             triples.append(json.loads(obj_str))
                         except:
-                            # Cách cuối: Dùng Regex để ép subject/predicate/object từ text rác
                             s_match = re.search(r'"subject":\s*"(.*?)"', obj_str)
                             p_match = re.search(r'"predicate":\s*"(.*?)"', obj_str)
                             o_match = re.search(r'"object":\s*"(.*?)"', obj_str)
@@ -146,18 +136,13 @@ class SQLKnowledgeGraphBuilder:
             print("Graph trống, không có gì để lưu!")
             return
 
-        # --- THÊM ĐOẠN NÀY ĐỂ LƯU FILE JSON ---
         import json
         from networkx.readwrite import json_graph
 
-        # Chuyển đổi đồ thị sang định dạng JSON
         data = json_graph.node_link_data(self.kg)
         with open("final_sql_kb.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         print("--- Đã lưu file: final_sql_kb.json ---")
-        # --------------------------------------
-
-        # Phần vẽ HTML (giữ nguyên hoặc cập nhật)
         net = Network(height="850px", width="100%", bgcolor="#222222", font_color="white", directed=True)
         net.force_atlas_2based()
         for n, attrs in self.kg.nodes(data=True):
@@ -170,7 +155,7 @@ class SQLKnowledgeGraphBuilder:
 
 
 if __name__ == "__main__":
-    BASE_PATH = r"D:\Downloads\vi-coze\benchmark_data"
+    BASE_PATH = r"/benchmark_data"
     builder = SQLKnowledgeGraphBuilder(use_local=True, model="llama3")
 
     builder.parse_ddl_folder(os.path.join(BASE_PATH, "sql"))
