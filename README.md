@@ -1,211 +1,573 @@
-# 🛡️ Vietnamese Legal Chatbot with Prompt Guard & Advanced RAG
+Được. Dưới đây là bản `README.md` tiếng Việt, viết lại theo đúng pipeline bạn đang có.
 
-Hệ thống tra cứu và hỏi đáp văn bản Pháp luật Việt Nam ứng dụng kỹ thuật **RAG đa tầng (Multi-Stage Retrieval & Specialized Legal Reranking)** kết hợp tầng phòng thủ bảo mật **Prompt Guard** chống tấn công Prompt Injection / Jailbreak.
+```markdown
+# Vietnamese PDF RAG Pipeline
+
+Hệ thống xử lý dữ liệu RAG (Retrieval-Augmented Generation) cho tài liệu PDF tiếng Việt.
+
+Pipeline hiện tại tập trung vào:
+
+- Đọc và trích xuất nội dung từ PDF
+- Chuẩn hóa dữ liệu
+- Chia nhỏ tài liệu thành các đoạn (chunk)
+- Tạo vector embedding
+- Lưu trữ trong Vector Database
+- Tìm kiếm ngữ nghĩa (Semantic Retrieval)
+
+Phiên bản hiện tại hoàn thành phần **Data Pipeline + Retrieval Pipeline**.
+
+Chưa bao gồm bước sinh câu trả lời bằng LLM.
 
 ---
 
-## 🏛️ 1. Kiến trúc hệ thống (System Architecture)
+# 1. Kiến trúc tổng quan
 
-```text
-                           [ USER QUERY ]
-                                 │
-                                 ▼
-                     ┌───────────────────────┐
-                     │     Prompt Guard      │ ──► [Phát hiện Injection / Attack] ──► CHẶN
-                     └───────────────────────┘
-                                 │ (Safe)
-                                 ▼
-                     ┌───────────────────────┐
-                     │    Vector Retrieval   │ ──► Embedding (BAAI/bge-m3)
-                     │     (ChromaDB Top 30) │ ──► Lọc văn bản còn hiệu lực
-                     └───────────────────────┘
-                                 │
-                                 ▼
-                     ┌───────────────────────┐
-                     │   Semantic Reranker   │ ──► Cross-Encoder (bge-reranker-v2-m3)
-                     │       (Top 20)        │
-                     └───────────────────────┘
-                                 │
-                                 ▼
-                     ┌───────────────────────┐
-                     │  Legal Score Ranker   │ ──► 65% Điểm ngữ nghĩa (Reranker)
-                     │        (Top 5)        │ ──► 20% Độ mới văn bản (Recency Decay)
-                     └───────────────────────┘ ──► 15% Thứ bậc hiệu lực (Hiến pháp > Luật > Nghị định...)
-                                 │
-                                 ▼
-                     ┌───────────────────────┐
-                     │    Context Builder    │ ──► Gắn System Prompt + Điều khoản trích dẫn
-                     │      & LLM Engine     │
-                     └───────────────────────┘
-                                 │
-                                 ▼
-                     [ CÂU TRẢ LỜI & CĂN CỨ PHÁP LÝ ]
+```
+
+PDF gốc
+
+```
+|
+v
+```
+
+PDF Loader
+(pdf_loader.py)
+
+```
+|
+v
+```
+
+pdf_extract.jsonl
+
+```
+|
+v
+```
+
+Chunking
+(chunker_optimized.py)
+
+```
+|
+v
+```
+
+chunked.jsonl
+
+```
+|
+v
+```
+
+Embedding Model
+(BAAI/bge-m3)
+
+```
+|
+v
+```
+
+Vector Database
+(ChromaDB)
+
+```
+|
+v
+```
+
+Retriever
+(retriever.py)
+
+```
+|
+v
+```
+
+Các đoạn tài liệu liên quan
+
 ```
 
 ---
 
-## 📂 2. Cấu trúc thư mục dự án (Project Structure)
+# 2. Cấu trúc thư mục
 
-```text
-legal-chatbot-prompt-guard/
+```
+
+C:\RAG
+
 │
 ├── data/
-│   ├── raw/                 # Chứa dữ liệu gốc (vietnamese_legal_content.jsonl, metadata.csv)
-│   └── processed/           # Chứa dữ liệu sau khi làm sạch & chunking (active_clean.jsonl, chunked.jsonl)
+│   │
+│   ├── raw/
+│   │   └── [Reading]-RAG-System.pdf
+│   │
+│   ├── processed/
+│   │   ├── pdf_extract.jsonl
+│   │   └── chunked.jsonl
+│   │
+│   └── vectorstore/
+│       └── chroma/
 │
-├── chroma_legal_db/         # Thư mục lưu cơ sở dữ liệu Vector ChromaDB
 │
 ├── src/
-│   ├── __init__.py
 │   │
-│   ├── data/                # TẦNG 1: Xử lý và tiền xử lý dữ liệu
-│   │   ├── __init__.py
-│   │   ├── cleaner.py       # Bóc tách HTML, chuẩn hóa Unicode NFC, lọc văn bản còn hiệu lực
-│   │   └── chunker.py       # Cắt văn bản theo từng Điều, gắn bối cảnh metadata vào từng chunk
+│   ├── data/
+│   │   │
+│   │   ├── pdf_loader.py
+│   │   └── chunker_optimized.py
 │   │
-│   ├── rag/                 # TẦNG 2: Core RAG Engine
-│   │   ├── __init__.py
-│   │   ├── indexer.py       # Nhúng vector (BGE-M3) và lưu vào ChromaDB (hỗ trợ Auto-resume)
-│   │   ├── retriever.py     # Tìm kiếm Top-K vector tương đồng (tự động nhận GPU/CPU)
-│   │   ├── reranker.py      # Cross-Encoder Reranker chấm lại điểm ngữ nghĩa chính xác
-│   │   └── legal_ranker.py  # Thuật toán xếp hạng đặc thù: Độ mới + Thứ bậc hiệu lực pháp lý
 │   │
-│   └── guard/               # TẦNG 3: Kiểm soát an toàn & Prompt Guard
-│       ├── __init__.py
-│       └── prompt_guard.py  # Bộ lọc chống tấn công Prompt Injection, System Prompt Leak, Jailbreak
+│   └── rag/
+│       │
+│       ├── indexer.py
+│       └── retriever.py
 │
-├── tests/                   # Kịch bản kiểm thử chức năng
-│   ├── __init__.py
-│   ├── test_guard.py        # Kiểm thử các trường hợp tấn công prompt
-│   ├── test_retriever.py    # Kiểm thử riêng tầng Vector Search
-│   └── test_pipeline.py     # Kiểm thử toàn diện toàn bộ luồng RAG + Security
 │
-├── .gitignore               # Loại bỏ dữ liệu lớn, database và môi trường ảo khỏi Git
-├── Dockerfile               # Cấu hình containerization
-├── requirements.txt         # Danh sách thư viện phụ thuộc
-└── README.md                # Tài liệu hướng dẫn sử dụng
-```
+├── requirements.txt
+└── README.md
+
+````
 
 ---
 
-## ⚙️ 3. Cài đặt môi trường (Installation)
+# 3. Chuẩn bị môi trường
 
-### Yêu cầu hệ thống:
-- Python 3.10 hoặc 3.11
-- Dung lượng RAM tối thiểu 8GB (Khuyến nghị có GPU NVIDIA với VRAM >= 6GB để tăng tốc độ embedding & reranking).
+## Yêu cầu
 
-### Bước 1: Tạo và kích hoạt môi trường ảo
+- Python >= 3.10
+- CUDA (tùy chọn, dùng GPU để tăng tốc embedding)
 
-```powershell
-# Tạo môi trường ảo
+Tạo môi trường ảo:
+
+```bash
 python -m venv .venv
+````
 
-# Kích hoạt môi trường ảo trên Windows (PowerShell)
-.\.venv\Scripts\Activate.ps1
+Kích hoạt:
+
+Windows:
+
+```bash
+.venv\Scripts\activate
 ```
 
-### Bước 2: Cài đặt thư viện
+---
 
-Nếu máy có **GPU NVIDIA (CUDA 11.8 / 12.x)**:
-```powershell
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+# 4. Cài đặt thư viện
+
+```bash
 pip install -r requirements.txt
 ```
 
-Nếu máy chỉ có **CPU**:
-```powershell
-pip install -r requirements.txt
+Các thư viện chính:
+
+```
+docling
+langchain
+langchain-text-splitters
+sentence-transformers
+langchain-huggingface
+chromadb
+langchain-chroma
+tiktoken
 ```
 
 ---
 
-## 🚀 4. Hướng dẫn chạy từng bước (Step-by-Step Pipeline)
+# 5. Pipeline xử lý dữ liệu
 
-### Bước 1: Làm sạch dữ liệu và lọc hiệu lực (`cleaner.py`)
-Đặt file nội dung thô `vietnamese_legal_content.jsonl` và `metadata.csv` vào thư mục `data/raw/`:
+## Bước 1: Trích xuất PDF
 
-```powershell
-python -m src.data.cleaner --input data/raw/vietnamese_legal_content.jsonl --metadata data/raw/metadata.csv --output-dir data/processed
+### File:
+
 ```
-*Kết quả:* Tạo ra file `data/processed/vietnamese_legal_active_clean.jsonl` chứa các văn bản còn hiệu lực đã làm sạch HTML và chuẩn hóa Unicode.
-
----
-
-### Bước 2: Phân đoạn văn bản (`chunker.py`)
-Cắt văn bản theo từng **Điều**, tự động gắn header thông tin (Tên VB, Số hiệu, Cơ quan, Ngày ban hành):
-
-```powershell
-python -m src.data.chunker --input data/processed/vietnamese_legal_active_clean.jsonl --output data/processed/chunked.jsonl
-```
-*Kết quả:* Tạo ra file `data/processed/chunked.jsonl`.
-
----
-
-### Bước 3: Nhúng vector và lưu vào ChromaDB (`indexer.py`)
-Mô hình `BAAI/bge-m3` sẽ đọc các chunk, tạo embeddings và lưu vào thư mục `chroma_legal_db/`:
-
-```powershell
-python -m src.rag.indexer --input data/processed/chunked.jsonl --db-dir chroma_legal_db --batch-size 5000
-```
-> **Tính năng Auto-Resume:** Nếu quá trình nhúng bị ngắt quãng giữa chừng, script sẽ tự động kiểm tra số bản ghi đã có trong DB và tiếp tục chạy từ vị trí đó.
-
----
-
-### Bước 4: Kiểm thử hệ thống
-
-#### 1. Kiểm thử tầng bảo mật Prompt Guard:
-```powershell
-python -m tests.test_guard
+src/data/pdf_loader.py
 ```
 
-#### 2. Kiểm thử riêng tầng Vector Search:
-```powershell
-python -m tests.test_retriever --query "Luật Doanh nghiệp 2020" --top-k 10
+### Chức năng:
+
+Chuyển đổi tài liệu PDF thành JSONL có cấu trúc.
+
+Input:
+
+```
+data/raw/[Reading]-RAG-System.pdf
 ```
 
-#### 3. Kiểm thử toàn bộ Pipeline hoàn chỉnh (Guard -> Retrieve -> Rerank -> Legal Score):
-```powershell
-python -m tests.test_pipeline --query "Người dưới 18 tuổi có được thành lập doanh nghiệp không?"
+Output:
+
+```
+data/processed/pdf_extract.jsonl
+```
+
+Ví dụ:
+
+```json
+{
+"id":"Reading_page_5",
+"content":"Một hệ thống RAG hoàn chỉnh...",
+"metadata":{
+    "source":"[Reading]-RAG-System.pdf",
+    "page":5,
+    "title":"Reading-RAG-System"
+}
+}
+```
+
+Chạy:
+
+```bash
+python src/data/pdf_loader.py \
+--input data/raw/[Reading]-RAG-System.pdf
 ```
 
 ---
 
-## 📊 5. Thuật toán Xếp hạng Pháp lý chuyên sâu (Legal Ranking)
+# 6. Chunking tài liệu
 
-Khác với các hệ thống RAG thông thường chỉ so sánh độ tương đồng từ ngữ, hệ thống áp dụng công thức chấm điểm đa tiêu chí:
+## File:
 
-$$\text{Score}_{\text{Final}} = 0.65 \times \text{Score}_{\text{Reranker}} + 0.20 \times \text{Score}_{\text{Recency}} + 0.15 \times \text{Score}_{\text{Hierarchy}}$$
+```
+src/data/chunker_optimized.py
+```
 
-1. **Điểm Ngữ nghĩa ($\text{Score}_{\text{Reranker}}$ - 65%)**: Được tính toán qua mô hình Cross-Encoder `BAAI/bge-reranker-v2-m3`.
-2. **Điểm Độ mới ($\text{Score}_{\text{Recency}}$ - 20%)**: Sử dụng hàm suy giảm số mũ:
-   $$\text{Score}_{\text{Recency}} = e^{-0.07 \times \text{Tuổi văn bản (năm)}}$$
-   *(Văn bản sau 10 năm điểm giảm còn ~50% so với văn bản mới ban hành).*
-3. **Điểm Thứ bậc hiệu lực ($\text{Score}_{\text{Hierarchy}}$ - 15%)**:
-   - Hiến pháp: `1.0`
-   - Bộ luật / Luật: `0.95`
-   - Nghị quyết: `0.85`
-   - Nghị định: `0.75`
-   - Thông tư: `0.65`
-   - Quyết định / Chỉ thị: `0.35 - 0.45`
+## Chức năng:
+
+Chia nhỏ tài liệu thành các đoạn phù hợp cho việc tìm kiếm.
+
+Tính năng:
+
+* Token-aware chunking
+* Hỗ trợ tiếng Việt
+* Giữ metadata
+* Theo dõi thống kê chunk
+* Kiểm soát kích thước chunk
+
+Input:
+
+```
+data/processed/pdf_extract.jsonl
+```
+
+Output:
+
+```
+data/processed/chunked.jsonl
+```
+
+Chạy:
+
+```bash
+python src/data/chunker_optimized.py \
+--input data/processed/pdf_extract.jsonl \
+--output data/processed/chunked.jsonl \
+--strategy token \
+--target-tokens 600 \
+--token-overlap 100
+```
+
+Ví dụ output:
+
+```json
+{
+"chunk_id":"page_5_chunk_1",
+
+"chunk_content":
+"[DOCUMENT CONTEXT]
+
+Title: Reading RAG System
+
+Page:5
+
+Một hệ thống RAG gồm ba giai đoạn..."
+,
+"metrics":{
+    "token_count":520
+},
+
+"metadata":{
+    "page":5
+}
+}
+```
 
 ---
 
-## 🛡️ 6. Cơ chế phòng thủ Prompt Guard
+# 7. Tạo Vector Database
 
-Module `src/guard/prompt_guard.py` đảm bảo kiểm soát an toàn trước khi query đến các tầng sau:
-- **Instruction Override**: Ngăn chặn câu lệnh yêu cầu "bỏ qua chỉ dẫn trước đó", "ignore previous instructions".
-- **System Prompt Leak**: Ngăn chặn yêu cầu tiết lộ câu lệnh hệ thống nội bộ.
-- **Jailbreak Modes**: Phát hiện chế độ DAN, Developer mode, Unrestricted mode.
-- **Code/SQL Injection**: Loại bỏ các thẻ script và cú pháp injection nguy hiểm.
+## File:
+
+```
+src/rag/indexer.py
+```
+
+## Chức năng:
+
+Chuyển đổi chunk thành vector embedding và lưu vào ChromaDB.
+
+Embedding model:
+
+```
+BAAI/bge-m3
+```
+
+Input:
+
+```
+data/processed/chunked.jsonl
+```
+
+Output:
+
+```
+data/vectorstore/chroma/
+```
+
+Chạy:
+
+```bash
+python src/rag/indexer.py
+```
+
+Ví dụ kết quả:
+
+```
+Documents loaded: 177
+
+INDEX COMPLETE
+
+Vectors stored: 177
+```
 
 ---
 
-## 🐳 7. Chạy với Docker
+# 8. Retrieval - Tìm kiếm tài liệu
 
-```powershell
-# Build image
-docker build -t legal-chatbot-guard .
+## File:
 
-# Chạy container kiểm thử pipeline
-docker run --rm legal-chatbot-guard
+```
+src/rag/retriever.py
+```
+
+## Chức năng:
+
+Tìm các đoạn tài liệu có ý nghĩa gần nhất với câu hỏi người dùng.
+
+Luồng hoạt động:
+
+```
+Câu hỏi người dùng
+
+        |
+        v
+
+Embedding câu hỏi
+
+        |
+        v
+
+Vector Similarity Search
+
+        |
+        v
+
+Top-K đoạn tài liệu phù hợp
+```
+
+Ví dụ:
+
+```bash
+python src/rag/retriever.py \
+--query "RAG hiện đại gồm những giai đoạn nào?"
+```
+
+Kết quả:
+
+```
+Page: 42
+
+Một pipeline RAG hoàn chỉnh vận hành dựa trên
+3 giai đoạn chính:
+
+1. Indexing
+2. Retrieval
+3. Generation
+```
+
+---
+
+# 9. Kết quả hiện tại
+
+Tài liệu thử nghiệm:
+
+```
+[Reading]-RAG-System.pdf
+```
+
+Kết quả pipeline:
+
+| Thành phần      | Kết quả     |
+| --------------- | ----------- |
+| PDF xử lý       | Thành công  |
+| Số document     | 116         |
+| Số chunk        | 177         |
+| Embedding model | BAAI/bge-m3 |
+| Vector Database | ChromaDB    |
+| Retrieval       | Thành công  |
+
+---
+
+# 10. Quyết định thiết kế
+
+## Vì sao sử dụng Docling?
+
+Docling được sử dụng để:
+
+* Đọc PDF
+* Trích xuất nội dung
+* Giữ cấu trúc tài liệu
+* Hỗ trợ bảng và layout
+
+## Vì sao sử dụng BGE-M3?
+
+Lý do:
+
+* Hỗ trợ đa ngôn ngữ
+* Phù hợp tiếng Việt
+* Có thể chạy local
+
+## Vì sao sử dụng ChromaDB?
+
+Lý do:
+
+* Dễ triển khai
+* Phù hợp thử nghiệm RAG
+* Tích hợp tốt với LangChain
+
+---
+
+# 11. Giới hạn hiện tại
+
+Đã triển khai:
+
+✅ PDF ingestion
+✅ Text extraction
+✅ Chunking
+✅ Embedding
+✅ Vector Database
+✅ Semantic Retrieval
+
+Chưa triển khai:
+
+❌ Xử lý hình ảnh trong PDF
+❌ Vision model
+❌ Reranker
+❌ LLM sinh câu trả lời
+
+---
+
+# 12. Hướng phát triển tiếp theo
+
+## Multimodal RAG
+
+Bổ sung:
+
+```
+Hình ảnh trong PDF
+
+        |
+        v
+
+Vision Model
+
+        |
+        v
+
+Caption
+
+        |
+        v
+
+Embedding
+```
+
+## Cải thiện Retrieval
+
+Có thể thêm:
+
+* Cross Encoder Reranker
+* BM25 Hybrid Search
+* Metadata filtering
+
+## Thêm lớp sinh câu trả lời
+
+Kiến trúc hoàn chỉnh:
+
+```
+Retriever
+
+    +
+
+LLM Generator
+
+    =
+
+RAG Chatbot
+```
+
+---
+
+# 13. Trạng thái hệ thống
+
+Hiện tại:
+
+```
+PDF
+
+↓
+
+Loader
+
+↓
+
+JSONL
+
+↓
+
+Chunking
+
+↓
+
+Embedding
+
+↓
+
+Vector Database
+
+↓
+
+Retriever
+```
+
+Trạng thái:
+
+✅ Hoàn thành Data Pipeline
+✅ Hoàn thành Indexing Pipeline
+✅ Hoàn thành Retrieval Pipeline
+
+Sẵn sàng tích hợp lớp LLM Generation.
+
+```
+
+Bạn có thể lưu trực tiếp nội dung này thành:
+
+```
+
+C:\RAG\README.md
+
+```
+
+Bản này phản ánh đúng trạng thái hiện tại của project, không ghi dư phần multimodal hay chatbot vì bạn đã quyết định dừng ở Retrieval.
 ```
