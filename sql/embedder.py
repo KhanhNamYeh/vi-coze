@@ -5,24 +5,44 @@ from pathlib import Path
 from sentence_transformers import SentenceTransformer
 
 
-def create_kb_embeddings(kb_path="final_sql_kb.json", output_path="kb_index.npz"):
-    # 1. Cấu hình Model & GPU
+def create_kb_embeddings(kb_path, output_path):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"--- Loading BGE-M3 on {device} ---")
     model = SentenceTransformer("BAAI/bge-m3", device=device)
 
-    # 2. Đọc dữ liệu tri thức
     with open(kb_path, "r", encoding="utf-8") as f:
         kb_data = json.load(f)
 
-    triples = kb_data.get('edges', [])
-    if not triples:
-        print("(!) Không có dữ liệu trong KG.")
-        return
+    node_info = {}
+    for n in kb_data['nodes']:
+        node_id = n.get('id')
+        # Thử lấy title, nếu không có lấy label, nếu không có nữa lấy chính id
+        display_text = n.get('title') or n.get('label') or node_id
+        node_info[node_id] = str(display_text).strip()
 
-    # 3. Tạo văn bản để tìm kiếm (Kết hợp Subject và Quan hệ)
-    # Ví dụ: "sinh trước năm 1950 mapping"
-    documents = [f"{t['source']} {t['label']}" for t in triples]
+    triples = kb_data.get('edges', [])
+    documents = []
+    sources = []
+    targets = []
+    labels = []
+
+    print(f"--- Đang chuẩn bị dữ liệu cho {len(triples)} quan hệ... ---")
+
+    for t in triples:
+        src_id = t['source']
+        tgt_id = t['target']
+        edge_label = t['label']
+
+        src_context = node_info.get(src_id, src_id)
+        tgt_context = node_info.get(tgt_id, tgt_id)
+
+        combined_text = f"{src_context} {edge_label} {tgt_context}"
+        clean_text = " ".join(combined_text.split())
+
+        documents.append(clean_text)
+        sources.append(src_id)
+        targets.append(tgt_id)
+        labels.append(edge_label)
 
     print(f"--- Đang encode {len(documents)} triples... ---")
     embeddings = model.encode(
@@ -32,29 +52,30 @@ def create_kb_embeddings(kb_path="final_sql_kb.json", output_path="kb_index.npz"
         batch_size=32
     )
 
-    # 4. Lưu lại Index
-    # Lưu cả embeddings và documents để sql_retrieval.py không cần đọc lại JSON quá nhiều
     np.savez(
         output_path,
         embeddings=embeddings,
         documents=np.array(documents, dtype=object),
-        targets=np.array([t['target'] for t in triples], dtype=object),
-        sources=np.array([t['source'] for t in triples], dtype=object)
+        targets=np.array(targets, dtype=object),
+        sources=np.array(sources, dtype=object),
+        labels=np.array(labels, dtype=object)
     )
     print(f"--- Đã xuất file chỉ mục: {output_path} ---")
 
 
 if __name__ == "__main__":
-    # Lấy đường dẫn tuyệt đối đến thư mục chứa file embedder.py hiện tại
     current_dir = Path(__file__).parent
+    project_root = current_dir.parent
 
-    # Trỏ vào file JSON nằm trong thư mục processing
-    kb_file = current_dir / "processing" / "final_sql_kb.json"
+    kb_file = project_root / "data" / "artifacts" / "sql" / "knowledge" / "sql_knowledge_map1.json"
     output_index = current_dir / "kb_index.npz"
 
     print(f"Đang tìm file: {kb_file}")
 
-    create_kb_embeddings(
-        kb_path=str(kb_file),
-        output_path=str(output_index)
-    )
+    if not kb_file.exists():
+        print(f"(!) Lỗi: Không tìm thấy file tại {kb_file}")
+    else:
+        create_kb_embeddings(
+            kb_path=str(kb_file),
+            output_path=str(output_index)
+        )

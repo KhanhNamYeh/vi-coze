@@ -1,0 +1,6478 @@
+{
+  "directed": true,
+  "multigraph": true,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "V_USER_PRECINCT_PERMISSION",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 21.20689655172414,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: v_user_precinct_permission",
+      "id": "v_user_precinct_permission"
+    },
+    {
+      "label": "user_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã user (ví dụ: HUY.NGUYEN) ",
+      "id": "v_user_precinct_permission.user_name"
+    },
+    {
+      "label": "user_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã định danh user ",
+      "id": "v_user_precinct_permission.user_id"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã phường/xã mà user được truy cập (ví dụ: VTAU) ",
+      "id": "v_user_precinct_permission.precinct_code"
+    },
+    {
+      "label": "precinct_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên phường/xã mà user được truy cập (ví dụ: Phường Vũng Tàu) ",
+      "id": "v_user_precinct_permission.precinct_name"
+    },
+    {
+      "label": "hub_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Hub quản lý (mã hub) của phường/xã mà user được truy cập (ví dụ: VT.1) ",
+      "id": "v_user_precinct_permission.hub_code"
+    },
+    {
+      "label": "branch_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã TTKD/chi nhánh của phường/xã mà user được truy cập (gồm Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): HCM010000, HCM020000, HCM030000, HCM040000, HCM050000, HCM060000, HCM070000) ",
+      "id": "v_user_precinct_permission.branch_code"
+    },
+    {
+      "label": "branch_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu) ",
+      "id": "v_user_precinct_permission.branch_name"
+    },
+    {
+      "size": 20.517241379310345,
+      "id": "precinct_code"
+    },
+    {
+      "label": "PTM",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "ptm"
+    },
+    {
+      "label": "VLR",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "vlr"
+    },
+    {
+      "label": "TKC",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "tkc"
+    },
+    {
+      "label": "PRECINCT",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 19.482758620689655,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: precinct",
+      "id": "precinct"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Khóa chính ",
+      "id": "precinct.id"
+    },
+    {
+      "label": "code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã phường xã ",
+      "id": "precinct.code"
+    },
+    {
+      "label": "name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên phường xã ",
+      "id": "precinct.name"
+    },
+    {
+      "label": "branch_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên TTKD ",
+      "id": "precinct.branch_name"
+    },
+    {
+      "label": "hub",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên Hub ",
+      "id": "precinct.hub"
+    },
+    {
+      "label": "branch_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã TTKD ",
+      "id": "precinct.branch_code"
+    },
+    {
+      "label": "OTHER_TABLES",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 16.724137931034484,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "other_tables"
+    },
+    {
+      "label": "CODE",
+      "type": "link",
+      "color": "#7f8c8d",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "code"
+    },
+    {
+      "label": "POINT_OF_SALE",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 28.448275862068964,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: point_of_sale",
+      "id": "point_of_sale"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã định danh điểm bán (ví dụ: 17) ",
+      "id": "point_of_sale.id"
+    },
+    {
+      "label": "address",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Địa chỉ điểm bán ",
+      "id": "point_of_sale.address"
+    },
+    {
+      "label": "branch_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu) ",
+      "id": "point_of_sale.branch_name"
+    },
+    {
+      "label": "emp_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên nhân viên phụ trách ",
+      "id": "point_of_sale.emp_name"
+    },
+    {
+      "label": "hub",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Hub quản lý (mã hub) (ví dụ: VT.1) ",
+      "id": "point_of_sale.hub"
+    },
+    {
+      "label": "hub_leader",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên trưởng Hub ",
+      "id": "point_of_sale.hub_leader"
+    },
+    {
+      "label": "lat",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Vĩ độ (ví dụ: 10.765590) ",
+      "id": "point_of_sale.lat"
+    },
+    {
+      "label": "lon",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Kinh độ (ví dụ: 106.662547) ",
+      "id": "point_of_sale.lon"
+    },
+    {
+      "label": "nvbh_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã nhân viên bán hàng ",
+      "id": "point_of_sale.nvbh_code"
+    },
+    {
+      "label": "parent_sale_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã nhân viên/quản lý cấp trên ",
+      "id": "point_of_sale.parent_sale_code"
+    },
+    {
+      "label": "parent_sale_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên nhân viên/quản lý cấp trên ",
+      "id": "point_of_sale.parent_sale_name"
+    },
+    {
+      "label": "phone_number",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Số điện thoại điểm bán ",
+      "id": "point_of_sale.phone_number"
+    },
+    {
+      "label": "precinct_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên phường/xã (ví dụ: Phường Diên Hồng) ",
+      "id": "point_of_sale.precinct_name"
+    },
+    {
+      "label": "sale_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã điểm bán ",
+      "id": "point_of_sale.sale_code"
+    },
+    {
+      "label": "sale_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên điểm bán (ví dụ: ĐBH Minh Quang) ",
+      "id": "point_of_sale.sale_name"
+    },
+    {
+      "label": "sale_type",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Loại điểm bán (ví dụ: Loại 2) ",
+      "id": "point_of_sale.sale_type"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã phường/xã (ví dụ: VTAU) ",
+      "id": "point_of_sale.precinct_code"
+    },
+    {
+      "size": 17.06896551724138,
+      "id": "sale_code"
+    },
+    {
+      "label": "V_BDS_NEW_SUB_SALE_POINT",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 28.448275862068964,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: v_bds_new_sub_sale_point",
+      "id": "v_bds_new_sub_sale_point"
+    },
+    {
+      "label": "sale_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã điểm bán (ví dụ: HCM01DHON_0009) ",
+      "id": "v_bds_new_sub_sale_point.sale_code"
+    },
+    {
+      "label": "sum_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Ngày tổng hợp dữ liệu (luôn luôn là ngày hiện tại) (ví dụ: 17/06/2026) ",
+      "id": "v_bds_new_sub_sale_point.sum_date"
+    },
+    {
+      "label": "mc_quantity_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả trước trong ngày hiện tại (ví dụ: 1) ",
+      "id": "v_bds_new_sub_sale_point.mc_quantity_day"
+    },
+    {
+      "label": "mf_quantity_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả sau trong ngày hiện tại (ví dụ: 0) ",
+      "id": "v_bds_new_sub_sale_point.mf_quantity_day"
+    },
+    {
+      "label": "all_quantity_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trong ngày hiện tại (ví dụ: 1) ",
+      "id": "v_bds_new_sub_sale_point.all_quantity_day"
+    },
+    {
+      "label": "sum_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tháng tổng hợp dữ liệu (luôn luôn là tháng hiện tại) (ví dụ: 06/2026) ",
+      "id": "v_bds_new_sub_sale_point.sum_month"
+    },
+    {
+      "label": "mc_quantity_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả trước trong tháng hiện tại (ví dụ: 15) ",
+      "id": "v_bds_new_sub_sale_point.mc_quantity_month"
+    },
+    {
+      "label": "mf_quantity_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả sau trong tháng hiện tại (ví dụ: 0) ",
+      "id": "v_bds_new_sub_sale_point.mf_quantity_month"
+    },
+    {
+      "label": "all_quantity_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trong tháng hiện tại (ví dụ: 15) ",
+      "id": "v_bds_new_sub_sale_point.all_quantity_month"
+    },
+    {
+      "label": "sum_year",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Năm tổng hợp dữ liệu (năm hiện tại) (ví dụ: 2026) ",
+      "id": "v_bds_new_sub_sale_point.sum_year"
+    },
+    {
+      "label": "mc_quantity_year",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả trước trong năm hiện tại (ví dụ: 30) ",
+      "id": "v_bds_new_sub_sale_point.mc_quantity_year"
+    },
+    {
+      "label": "mf_quantity_year",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả sau trong năm hiện tại (ví dụ: 0) ",
+      "id": "v_bds_new_sub_sale_point.mf_quantity_year"
+    },
+    {
+      "label": "all_quantity_year",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trong năm hiện tại (ví dụ: 30) ",
+      "id": "v_bds_new_sub_sale_point.all_quantity_year"
+    },
+    {
+      "label": "mc_quantity_all_year",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trả trước trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 39) ",
+      "id": "v_bds_new_sub_sale_point.mc_quantity_all_year"
+    },
+    {
+      "label": "mf_quantity_all_year",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Lũy kế thuê bao trả sau trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 1) ",
+      "id": "v_bds_new_sub_sale_point.mf_quantity_all_year"
+    },
+    {
+      "label": "all_quantity_all_year",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng lũy kế thuê bao trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 40) ",
+      "id": "v_bds_new_sub_sale_point.all_quantity_all_year"
+    },
+    {
+      "label": "start_date_last_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Ngày bắt đầu tuần trước (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 04/06/2026) ",
+      "id": "v_bds_new_sub_sale_point.start_date_last_week"
+    },
+    {
+      "label": "last_date_last_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Ngày kết thúc tuần trước (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 10/06/2026) ",
+      "id": "v_bds_new_sub_sale_point.last_date_last_week"
+    },
+    {
+      "label": "mc_quantity_last_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả trước trong tuần trước (ví dụ: 2) ",
+      "id": "v_bds_new_sub_sale_point.mc_quantity_last_week"
+    },
+    {
+      "label": "mf_quantity_last_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả sau trong tuần trước (ví dụ: 0) ",
+      "id": "v_bds_new_sub_sale_point.mf_quantity_last_week"
+    },
+    {
+      "label": "all_quantity_last_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trong tuần trước (ví dụ: 2) ",
+      "id": "v_bds_new_sub_sale_point.all_quantity_last_week"
+    },
+    {
+      "label": "start_date_this_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Ngày bắt đầu tuần hiện tại (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 11/06/2026) ",
+      "id": "v_bds_new_sub_sale_point.start_date_this_week"
+    },
+    {
+      "label": "last_date_this_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Ngày kết thúc tuần hiện tại (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 17/06/2026) ",
+      "id": "v_bds_new_sub_sale_point.last_date_this_week"
+    },
+    {
+      "label": "mc_quantity_this_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả trước trong tuần hiện tại (ví dụ: 8) ",
+      "id": "v_bds_new_sub_sale_point.mc_quantity_this_week"
+    },
+    {
+      "label": "mf_quantity_this_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả sau trong tuần hiện tại (ví dụ: 0) ",
+      "id": "v_bds_new_sub_sale_point.mf_quantity_this_week"
+    },
+    {
+      "label": "all_quantity_this_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trong tuần hiện tại (ví dụ: 8) ",
+      "id": "v_bds_new_sub_sale_point.all_quantity_this_week"
+    },
+    {
+      "label": "sale_point_quantity_last_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần trước (START_DATE_LAST_WEEK). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao ",
+      "id": "v_bds_new_sub_sale_point.sale_point_quantity_last_week"
+    },
+    {
+      "label": "sale_point_quantity_this_week",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần hiện tại (START_DATE_THIS_WEEK). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao ",
+      "id": "v_bds_new_sub_sale_point.sale_point_quantity_this_week"
+    },
+    {
+      "label": "PTM TB",
+      "type": "business_concept",
+      "color": "#888888",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "ptm_tb"
+    },
+    {
+      "label": "NHAN_VIEN_CHAM_SOC_LONG",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 20.517241379310345,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: nhan_vien_cham_soc_long",
+      "id": "nhan_vien_cham_soc_long"
+    },
+    {
+      "label": "insert_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: DATE \nDesc: Ngày ghi nhận dữ liệu (ví dụ: 08/06/2026 14:30:12) ",
+      "id": "nhan_vien_cham_soc_long.insert_date"
+    },
+    {
+      "label": "ngay_cham_soc",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: DATE \nDesc: Ngày chăm sóc điểm bán (ví dụ: 01/06/2026 00:00:00) ",
+      "id": "nhan_vien_cham_soc_long.ngay_cham_soc"
+    },
+    {
+      "label": "ma_diem_ban",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã điểm bán ",
+      "id": "nhan_vien_cham_soc_long.ma_diem_ban"
+    },
+    {
+      "label": "ten_diem_ban",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên điểm bán (ví dụ: ĐBH Minh Quang) ",
+      "id": "nhan_vien_cham_soc_long.ten_diem_ban"
+    },
+    {
+      "label": "nguoi_giao_ke_hoach",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Người giao kế hoạch chăm sóc ",
+      "id": "nhan_vien_cham_soc_long.nguoi_giao_ke_hoach"
+    },
+    {
+      "label": "nhan_vien_cham_soc",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Họ tên nhân viên chăm sóc điểm bán ",
+      "id": "nhan_vien_cham_soc_long.nhan_vien_cham_soc"
+    },
+    {
+      "label": "ma_nhan_vien_cham_soc",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã nhân viên chăm sóc điểm bán ",
+      "id": "nhan_vien_cham_soc_long.ma_nhan_vien_cham_soc"
+    },
+    {
+      "size": 16.03448275862069,
+      "id": "ma_diem_ban"
+    },
+    {
+      "size": 16.03448275862069,
+      "id": "ma_nhan_vien_cham_soc"
+    },
+    {
+      "label": "DIEM_BAN",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "diem_ban"
+    },
+    {
+      "label": "NHAN_VIEN",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "nhan_vien"
+    },
+    {
+      "label": "EMPLOYEE_SALES",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 21.20689655172414,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: employee_sales",
+      "id": "employee_sales"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Khóa chính, định danh duy nhất của bản ghi ",
+      "id": "employee_sales.id"
+    },
+    {
+      "label": "branch_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên trung tâm kinh doanh / chi nhánh ",
+      "id": "employee_sales.branch_name"
+    },
+    {
+      "label": "emp_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã nhân viên ",
+      "id": "employee_sales.emp_code"
+    },
+    {
+      "label": "hub",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên Hub / khu vực quản lý ",
+      "id": "employee_sales.hub"
+    },
+    {
+      "label": "hub_leader",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên hoặc mã trưởng Hub ",
+      "id": "employee_sales.hub_leader"
+    },
+    {
+      "label": "sales_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã Điểm Bán ",
+      "id": "employee_sales.sales_code"
+    },
+    {
+      "label": "sales_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên nhân viên bán hàng ",
+      "id": "employee_sales.sales_name"
+    },
+    {
+      "size": 16.03448275862069,
+      "id": "sales_code"
+    },
+    {
+      "size": 16.03448275862069,
+      "id": "sales_name"
+    },
+    {
+      "label": "V_BDS_NEW_SUB_SHOP",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 27.758620689655174,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: v_bds_new_sub_shop",
+      "id": "v_bds_new_sub_shop"
+    },
+    {
+      "label": "shop_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã cửa hàng ",
+      "id": "v_bds_new_sub_shop.shop_code"
+    },
+    {
+      "label": "shop_type",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Loại cửa hàng (101: cửa hàng, 201: đại lý uỷ quyền, 202: đại lý chuyên) ",
+      "id": "v_bds_new_sub_shop.shop_type"
+    },
+    {
+      "label": "name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên cửa hàng ",
+      "id": "v_bds_new_sub_shop.name"
+    },
+    {
+      "label": "address",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Địa chỉ cửa hàng ",
+      "id": "v_bds_new_sub_shop.address"
+    },
+    {
+      "label": "latitude",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Vĩ độ ",
+      "id": "v_bds_new_sub_shop.latitude"
+    },
+    {
+      "label": "longitude",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Kinh độ ",
+      "id": "v_bds_new_sub_shop.longitude"
+    },
+    {
+      "label": "status",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Trạng thái cửa hàng ",
+      "id": "v_bds_new_sub_shop.status"
+    },
+    {
+      "label": "sum_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Ngày tổng hợp dữ liệu ",
+      "id": "v_bds_new_sub_shop.sum_date"
+    },
+    {
+      "label": "all_quantity_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trong ngày ",
+      "id": "v_bds_new_sub_shop.all_quantity_day"
+    },
+    {
+      "label": "mc_quantity_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả trước trong ngày ",
+      "id": "v_bds_new_sub_shop.mc_quantity_day"
+    },
+    {
+      "label": "mf_quantity_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả sau trong ngày ",
+      "id": "v_bds_new_sub_shop.mf_quantity_day"
+    },
+    {
+      "label": "sum_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tháng tổng hợp dữ liệu ",
+      "id": "v_bds_new_sub_shop.sum_month"
+    },
+    {
+      "label": "all_quantity_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng số thuê bao trong tháng ",
+      "id": "v_bds_new_sub_shop.all_quantity_month"
+    },
+    {
+      "label": "mc_quantity_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả trước trong tháng ",
+      "id": "v_bds_new_sub_shop.mc_quantity_month"
+    },
+    {
+      "label": "mf_quantity_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Số lượng thuê bao trả sau trong tháng ",
+      "id": "v_bds_new_sub_shop.mf_quantity_month"
+    },
+    {
+      "label": "branch_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã TTKD/chi nhánh ",
+      "id": "v_bds_new_sub_shop.branch_code"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã phường/xã ",
+      "id": "v_bds_new_sub_shop.precinct_code"
+    },
+    {
+      "label": "'101', '201', '202'",
+      "type": "filter",
+      "color": "#888888",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "'101',_'201',_'202'"
+    },
+    {
+      "label": "PCK_REPORT_CHATBOX.GET_NEW_SUB_DATA_BY_PRECINCT",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 20.517241379310345,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: pck_report_chatbox.get_new_sub_data_by_precinct",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Mã phường/xã \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.precinct_code"
+    },
+    {
+      "label": "sum_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Ngày báo cáo dữ liệu thuê bao phát triển mới \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.sum_date"
+    },
+    {
+      "label": "chuoi_dia_phuong_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong ngày qua kênh chuỗi địa phương \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.chuoi_dia_phuong_day"
+    },
+    {
+      "label": "dluq_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong ngày qua kênh Đại lý ủy quyền \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.dluq_day"
+    },
+    {
+      "label": "others_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong ngày qua các kênh khác \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.others_day"
+    },
+    {
+      "label": "tkd_khcn_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong ngày qua kênh Tổ KD KHCN \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.tkd_khcn_day"
+    },
+    {
+      "label": "sum_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Tháng báo cáo dữ liệu thuê bao phát triển mới \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.sum_month"
+    },
+    {
+      "label": "chuoi_dia_phuong_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong tháng qua kênh chuỗi địa phương \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.chuoi_dia_phuong_month"
+    },
+    {
+      "label": "dluq_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong tháng qua kênh Đại lý ủy quyền \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.dluq_month"
+    },
+    {
+      "label": "others_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong tháng qua các kênh khác \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.others_month"
+    },
+    {
+      "label": "tkd_khcn_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng thuê bao phát triển mới trong tháng qua kênh Tổ KD KHCN \nDesc: ",
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct.tkd_khcn_month"
+    },
+    {
+      "label": ":date",
+      "type": "filter",
+      "color": "#888888",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": ":date"
+    },
+    {
+      "label": ":user_name",
+      "type": "filter",
+      "color": "#888888",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": ":user_name"
+    },
+    {
+      "label": "PUBLIC_LOCATION",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 22.93103448275862,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: public_location",
+      "id": "public_location"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Khoá chính ",
+      "id": "public_location.id"
+    },
+    {
+      "label": "type",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Loại địa điểm, bao gồm các giá trị: 'TTHC', 'CA', 'CB', 'BV', 'CD', 'PCCC', 'DN', 'DH' ",
+      "id": "public_location.type"
+    },
+    {
+      "label": "type_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên loại địa điểm, bao gồm các giá trị: 'Trung tâm hành chính', 'Trụ sở công an', 'Cảng biển', 'Bệnh viện', 'Cao đẳng', 'Trạm PCCC', 'Doanh Nghiệp', 'Đại học' ",
+      "id": "public_location.type_name"
+    },
+    {
+      "label": "name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên địa điểm ",
+      "id": "public_location.name"
+    },
+    {
+      "label": "address",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Địa chỉ ",
+      "id": "public_location.address"
+    },
+    {
+      "label": "latitude",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Vĩ độ ",
+      "id": "public_location.latitude"
+    },
+    {
+      "label": "longitude",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Kinh độ ",
+      "id": "public_location.longitude"
+    },
+    {
+      "label": "status",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Trạng thái ",
+      "id": "public_location.status"
+    },
+    {
+      "label": "brand_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã TTKD/chi nhánh ",
+      "id": "public_location.brand_code"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã phường/xã ",
+      "id": "public_location.precinct_code"
+    },
+    {
+      "label": "precinct_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên phường/xã ",
+      "id": "public_location.precinct_name"
+    },
+    {
+      "label": "hub",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Hub quản lý ",
+      "id": "public_location.hub"
+    },
+    {
+      "label": "precinct_table",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "precinct_table"
+    },
+    {
+      "label": "V_BDS_SITE",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 25.344827586206897,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: v_bds_site",
+      "id": "v_bds_site"
+    },
+    {
+      "label": "cell_site",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã trạm BTS / Cell Site ",
+      "id": "v_bds_site.cell_site"
+    },
+    {
+      "label": "latitude",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Vĩ độ ",
+      "id": "v_bds_site.latitude"
+    },
+    {
+      "label": "longitude",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Kinh độ ",
+      "id": "v_bds_site.longitude"
+    },
+    {
+      "label": "status",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Trạng thái trạm (1: đang hoạt động, 0: không hoạt động/OFF) ",
+      "id": "v_bds_site.status"
+    },
+    {
+      "label": "sum_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Ngày tổng hợp dữ liệu ",
+      "id": "v_bds_site.sum_date"
+    },
+    {
+      "label": "vlr_all_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng VLR trong ngày ",
+      "id": "v_bds_site.vlr_all_day"
+    },
+    {
+      "label": "vlr_3g_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: VLR 3G trong ngày ",
+      "id": "v_bds_site.vlr_3g_day"
+    },
+    {
+      "label": "vlr_4g_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: VLR 4G trong ngày ",
+      "id": "v_bds_site.vlr_4g_day"
+    },
+    {
+      "label": "vlr_5g_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: VLR 5G trong ngày ",
+      "id": "v_bds_site.vlr_5g_day"
+    },
+    {
+      "label": "sum_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tháng tổng hợp dữ liệu ",
+      "id": "v_bds_site.sum_month"
+    },
+    {
+      "label": "vlr_all_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tổng VLR trong tháng ",
+      "id": "v_bds_site.vlr_all_month"
+    },
+    {
+      "label": "vlr_2g_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: VLR 2G trong tháng ",
+      "id": "v_bds_site.vlr_2g_month"
+    },
+    {
+      "label": "vlr_3g_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: VLR 3G trong tháng ",
+      "id": "v_bds_site.vlr_3g_month"
+    },
+    {
+      "label": "vlr_4g_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: VLR 4G trong tháng ",
+      "id": "v_bds_site.vlr_4g_month"
+    },
+    {
+      "label": "vlr_5g_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: VLR 5G trong tháng ",
+      "id": "v_bds_site.vlr_5g_month"
+    },
+    {
+      "label": "cltc_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tháng ghi nhận chênh lệch thu chi ",
+      "id": "v_bds_site.cltc_month"
+    },
+    {
+      "label": "cltc",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Chỉ số chất lượng chênh lệch thu chi ",
+      "id": "v_bds_site.cltc"
+    },
+    {
+      "label": "branch_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã TTKD/chi nhánh ",
+      "id": "v_bds_site.branch_code"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mã phường/xã ",
+      "id": "v_bds_site.precinct_code"
+    },
+    {
+      "label": "STATUS = 1",
+      "type": "filter",
+      "color": "#888888",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "status_=_1"
+    },
+    {
+      "label": "PCK_REPORT_CHATBOX.GET_VLR_DATA_BY_PRECINCT",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 17.758620689655174,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: pck_report_chatbox.get_vlr_data_by_precinct",
+      "id": "pck_report_chatbox.get_vlr_data_by_precinct"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Mã phường/xã \nDesc: ",
+      "id": "pck_report_chatbox.get_vlr_data_by_precinct.precinct_code"
+    },
+    {
+      "label": "sum_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Ngày báo cáo dữ liệu VLR \nDesc: ",
+      "id": "pck_report_chatbox.get_vlr_data_by_precinct.sum_date"
+    },
+    {
+      "label": "saymee_vlr_quantity_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng VLR Saymee trong ngày \nDesc: ",
+      "id": "pck_report_chatbox.get_vlr_data_by_precinct.saymee_vlr_quantity_day"
+    },
+    {
+      "label": "mobifone_vlr_quantity_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Số lượng VLR MobiFone trong tháng \nDesc: ",
+      "id": "pck_report_chatbox.get_vlr_data_by_precinct.mobifone_vlr_quantity_month"
+    },
+    {
+      "label": "TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy')",
+      "type": "formula",
+      "color": "#2ed573",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "to_date(to_char(:date),_'dd/mm/yyyy')"
+    },
+    {
+      "label": "UPPER(:user_name)",
+      "type": "formula",
+      "color": "#2ed573",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "upper(:user_name)"
+    },
+    {
+      "label": "PCK_REPORT_CHATBOX.GET_REV_DATA_BY_PRECINCT",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 17.758620689655174,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: pck_report_chatbox.get_rev_data_by_precinct",
+      "id": "pck_report_chatbox.get_rev_data_by_precinct"
+    },
+    {
+      "label": "precinct_code",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Mã phường/xã \nDesc: ",
+      "id": "pck_report_chatbox.get_rev_data_by_precinct.precinct_code"
+    },
+    {
+      "label": "sum_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Ngày báo cáo doanh thu \nDesc: ",
+      "id": "pck_report_chatbox.get_rev_data_by_precinct.sum_date"
+    },
+    {
+      "label": "saymee_tkc_rev_day",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Doanh thu TKC Saymee trong ngày \nDesc: ",
+      "id": "pck_report_chatbox.get_rev_data_by_precinct.saymee_tkc_rev_day"
+    },
+    {
+      "label": "sum_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Tháng báo cáo doanh thu \nDesc: ",
+      "id": "pck_report_chatbox.get_rev_data_by_precinct.sum_month"
+    },
+    {
+      "label": "saymee_tkc_rev_month",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: Doanh thu TKC Saymee trong tháng \nDesc: ",
+      "id": "pck_report_chatbox.get_rev_data_by_precinct.saymee_tkc_rev_month"
+    },
+    {
+      "label": "LOCATION_GROUP",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 16.724137931034484,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: location_group",
+      "id": "location_group"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Khoá chính ",
+      "id": "location_group.id"
+    },
+    {
+      "label": "name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên nhóm địa điểm ",
+      "id": "location_group.name"
+    },
+    {
+      "label": "PROJECT",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 17.413793103448278,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: project",
+      "id": "project"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Khoá chính ",
+      "id": "project.id"
+    },
+    {
+      "label": "name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên dự án ",
+      "id": "project.name"
+    },
+    {
+      "label": "location_group_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã nhóm địa điểm liên kết ",
+      "id": "project.location_group_id"
+    },
+    {
+      "size": 17.413793103448278,
+      "id": "location_group_id"
+    },
+    {
+      "label": "NAME",
+      "type": "property",
+      "color": "#888888",
+      "size": 17.758620689655174,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "name"
+    },
+    {
+      "size": 15.344827586206897,
+      "id": "varchar2"
+    },
+    {
+      "size": 15.344827586206897,
+      "id": "number"
+    },
+    {
+      "label": "ID",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 20.517241379310345,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "id"
+    },
+    {
+      "label": "LOCATION",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 23.620689655172413,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: location",
+      "id": "location"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã định danh địa điểm ",
+      "id": "location.id"
+    },
+    {
+      "label": "address",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Địa chỉ địa điểm ",
+      "id": "location.address"
+    },
+    {
+      "label": "lat",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Vĩ độ ",
+      "id": "location.lat"
+    },
+    {
+      "label": "lon",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Kinh độ ",
+      "id": "location.lon"
+    },
+    {
+      "label": "name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên địa điểm ",
+      "id": "location.name"
+    },
+    {
+      "label": "location_group_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã nhóm địa điểm ",
+      "id": "location.location_group_id"
+    },
+    {
+      "label": "project_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã dự án ",
+      "id": "location.project_id"
+    },
+    {
+      "label": "precinct_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên phường/xã ",
+      "id": "location.precinct_name"
+    },
+    {
+      "label": "hub",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Hub quản lý ",
+      "id": "location.hub"
+    },
+    {
+      "label": "branch_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên TTKD/chi nhánh ",
+      "id": "location.branch_name"
+    },
+    {
+      "size": 17.413793103448278,
+      "id": "precinct_name"
+    },
+    {
+      "label": "V_MAN_TASK",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 27.413793103448278,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: v_man_task",
+      "id": "v_man_task"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã định danh công việc ",
+      "id": "v_man_task.id"
+    },
+    {
+      "label": "created_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: TIMESTAMP \nDesc: Thời gian tạo bản ghi ",
+      "id": "v_man_task.created_date"
+    },
+    {
+      "label": "end_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: TIMESTAMP \nDesc: Ngày kết thúc công việc ",
+      "id": "v_man_task.end_date"
+    },
+    {
+      "label": "name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Tên công việc ",
+      "id": "v_man_task.name"
+    },
+    {
+      "label": "priority",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Mức độ ưu tiên ",
+      "id": "v_man_task.priority"
+    },
+    {
+      "label": "start_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: TIMESTAMP \nDesc: Ngày bắt đầu công việc ",
+      "id": "v_man_task.start_date"
+    },
+    {
+      "label": "progress_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Tiến độ thực hiện ",
+      "id": "v_man_task.progress_id"
+    },
+    {
+      "label": "location_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã địa điểm ",
+      "id": "v_man_task.location_id"
+    },
+    {
+      "label": "project_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã dự án ",
+      "id": "v_man_task.project_id"
+    },
+    {
+      "label": "assigner_staff_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã Người giao ",
+      "id": "v_man_task.assigner_staff_id"
+    },
+    {
+      "label": "assignee_staff_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã Người nhận ",
+      "id": "v_man_task.assignee_staff_id"
+    },
+    {
+      "size": 16.03448275862069,
+      "id": "progress_id"
+    },
+    {
+      "size": 16.03448275862069,
+      "id": "location_id"
+    },
+    {
+      "size": 16.379310344827587,
+      "id": "project_id"
+    },
+    {
+      "label": "assigner_staff_id",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "assigner_staff_id"
+    },
+    {
+      "label": "assignee_staff_id",
+      "type": "relationship",
+      "color": "#888888",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "assignee_staff_id"
+    },
+    {
+      "label": "V_MAN_TASK_PROGRESS",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 19.137931034482758,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: v_man_task_progress",
+      "id": "v_man_task_progress"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã định danh tiến độ công việc ",
+      "id": "v_man_task_progress.id"
+    },
+    {
+      "label": "created_date",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: TIMESTAMP \nDesc: Thời gian tạo bản ghi ",
+      "id": "v_man_task_progress.created_date"
+    },
+    {
+      "label": "percent",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Phần trăm hoàn thành ",
+      "id": "v_man_task_progress.percent"
+    },
+    {
+      "label": "task_id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã công việc ",
+      "id": "v_man_task_progress.task_id"
+    },
+    {
+      "size": 16.379310344827587,
+      "id": "task_id"
+    },
+    {
+      "label": "V_CAT_STAFF",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 18.103448275862068,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Table: v_cat_staff",
+      "id": "v_cat_staff"
+    },
+    {
+      "label": "id",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Mã định danh người dùng ",
+      "id": "v_cat_staff.id"
+    },
+    {
+      "label": "full_name",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Họ và tên người dùng ",
+      "id": "v_cat_staff.full_name"
+    },
+    {
+      "label": "gender",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: NUMBER \nDesc: Giới tính ",
+      "id": "v_cat_staff.gender"
+    },
+    {
+      "label": "isdn",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "title": "Type: VARCHAR2 \nDesc: Số thuê bao/số điện thoại ",
+      "id": "v_cat_staff.isdn"
+    },
+    {
+      "label": "USER_NAME",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "user_name"
+    },
+    {
+      "label": "USER_ID",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "user_id"
+    },
+    {
+      "label": "HUB_CODE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "hub_code"
+    },
+    {
+      "label": "BRANCH_CODE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.379310344827587,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "branch_code"
+    },
+    {
+      "label": "BRANCH_NAME",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.724137931034484,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "branch_name"
+    },
+    {
+      "label": "HUB",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.379310344827587,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "hub"
+    },
+    {
+      "label": "ADDRESS",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.379310344827587,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "address"
+    },
+    {
+      "label": "EMP_NAME",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "emp_name"
+    },
+    {
+      "label": "HUB_LEADER",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "hub_leader"
+    },
+    {
+      "label": "LAT",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "lat"
+    },
+    {
+      "label": "LON",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "lon"
+    },
+    {
+      "label": "NVBH_CODE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "nvbh_code"
+    },
+    {
+      "label": "PARENT_SALE_CODE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "parent_sale_code"
+    },
+    {
+      "label": "PARENT_SALE_NAME",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "parent_sale_name"
+    },
+    {
+      "label": "PHONE_NUMBER",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "phone_number"
+    },
+    {
+      "label": "SUM_DATE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.724137931034484,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "sum_date"
+    },
+    {
+      "label": "MC_QUANTITY_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mc_quantity_day"
+    },
+    {
+      "label": "MF_QUANTITY_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mf_quantity_day"
+    },
+    {
+      "label": "ALL_QUANTITY_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "all_quantity_day"
+    },
+    {
+      "label": "Lưu trữ thông tin phát triển mới thuê bao của kênh điểm bán",
+      "type": "concept",
+      "color": "#a55eea",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "lưu_trữ_thông_tin_phát_triển_mới_thuê_bao_của_kênh_điểm_bán"
+    },
+    {
+      "label": "SALE_POINT_QUANTITY_LAST_WEEK",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "sale_point_quantity_last_week"
+    },
+    {
+      "label": "SALE_POINT_QUANTITY_THIS_WEEK",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "sale_point_quantity_this_week"
+    },
+    {
+      "label": "INSERT_DATE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "insert_date"
+    },
+    {
+      "label": "NGAY_CHAM_SOC",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "ngay_cham_soc"
+    },
+    {
+      "label": "TEN_DIEM_BAN",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "ten_diem_ban"
+    },
+    {
+      "label": "NGUOI_GIAO_KE_HOACH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "nguoi_giao_ke_hoach"
+    },
+    {
+      "label": "NHAN_VIEN_CHAM_SOC",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "nhan_vien_cham_soc"
+    },
+    {
+      "label": "EMP_CODE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "emp_code"
+    },
+    {
+      "label": "SHOP_CODE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "shop_code"
+    },
+    {
+      "label": "SHOP_TYPE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "shop_type"
+    },
+    {
+      "label": "LATITUDE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "latitude"
+    },
+    {
+      "label": "LONGITUDE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "longitude"
+    },
+    {
+      "label": "STATUS",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "status"
+    },
+    {
+      "label": "SUM_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "sum_month"
+    },
+    {
+      "label": "ALL_QUANTITY_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "all_quantity_month"
+    },
+    {
+      "label": "MC_QUANTITY_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mc_quantity_month"
+    },
+    {
+      "label": "MF_QUANTITY_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mf_quantity_month"
+    },
+    {
+      "label": "mo_ta_bang_bds_new",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mo_ta_bang_bds_new"
+    },
+    {
+      "label": "TKD_KHCN_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "tkd_khcn_month"
+    },
+    {
+      "label": "TKD_KHDN_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "tkd_khdn_month"
+    },
+    {
+      "label": "TYPE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "type"
+    },
+    {
+      "label": "BRAND_CODE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "brand_code"
+    },
+    {
+      "label": "CELL_SITE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "cell_site"
+    },
+    {
+      "label": "pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name))",
+      "type": "formula",
+      "color": "#2ed573",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "pck_report_chatbox.get_new_sub_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name))"
+    },
+    {
+      "label": "THÁNG_GHI_NHẬN_CHẲNH_LỆCH_THU_CHI",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "tháng_ghi_nhận_chẳnh_lệch_thu_chi"
+    },
+    {
+      "label": "CHỈ_SỐ_CHẤT_LƯỢNG_CHẲNH_LỆCH_THU_CHI",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "chỉ_số_chất_lượng_chẳnh_lệch_thu_chi"
+    },
+    {
+      "label": "TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 17.758620689655174,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))"
+    },
+    {
+      "label": "MOBIFONE_VLR_QUANTITY_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mobifone_vlr_quantity_day"
+    },
+    {
+      "label": "SAYMEE_VLR_QUANTITY_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "saymee_vlr_quantity_day"
+    },
+    {
+      "label": "MOBIFONE_VLR_QUANTITY_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mobifone_vlr_quantity_month"
+    },
+    {
+      "label": "SAYMEE_VLR_QUANTITY_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "saymee_vlr_quantity_month"
+    },
+    {
+      "label": "TABLE(pck_report_chatbox.get_rev_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))",
+      "type": "table",
+      "color": "#ff4757",
+      "size": 18.448275862068964,
+      "font": {
+        "size": 18,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))"
+    },
+    {
+      "label": "MOBIFONE_TKC_REV_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mobifone_tkc_rev_day"
+    },
+    {
+      "label": "SAYMEE_TKC_REV_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "saymee_tkc_rev_day"
+    },
+    {
+      "label": "BHM_REV_DAY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "bhm_rev_day"
+    },
+    {
+      "label": "MOBIFONE_TKC_REV_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "mobifone_tkc_rev_month"
+    },
+    {
+      "label": "SAYMEE_TKC_REV_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "saymee_tkc_rev_month"
+    },
+    {
+      "label": "BHM_REV_MONTH",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "bhm_rev_month"
+    },
+    {
+      "label": "CREATED_DATE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 16.03448275862069,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "created_date"
+    },
+    {
+      "label": "END_DATE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "end_date"
+    },
+    {
+      "label": "PRIORITY",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "priority"
+    },
+    {
+      "label": "START_DATE",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "start_date"
+    },
+    {
+      "label": "PERCENT",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.689655172413794,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "percent"
+    },
+    {
+      "label": "FULL_NAME",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "full_name"
+    },
+    {
+      "label": "GENDER",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "gender"
+    },
+    {
+      "label": "ISDN",
+      "type": "column",
+      "color": "#1e90ff",
+      "size": 15.344827586206897,
+      "font": {
+        "size": 12,
+        "color": "white",
+        "strokeWidth": 2
+      },
+      "id": "isdn"
+    }
+  ],
+  "edges": [
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "v_user_precinct_permission.user_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "v_user_precinct_permission.user_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "v_user_precinct_permission.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "v_user_precinct_permission.precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "v_user_precinct_permission.hub_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "v_user_precinct_permission.branch_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "v_user_precinct_permission.branch_name",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_user_precinct_permission",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "precinct_code",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "user_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "user_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "hub_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "branch_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_user_precinct_permission",
+      "target": "branch_name",
+      "key": 0
+    },
+    {
+      "label": "maps_to",
+      "color": "#a55eea",
+      "source": "ptm",
+      "target": "v_user_precinct_permission",
+      "key": 0
+    },
+    {
+      "label": "maps_to",
+      "color": "#a55eea",
+      "source": "vlr",
+      "target": "v_user_precinct_permission",
+      "key": 0
+    },
+    {
+      "label": "maps_to",
+      "color": "#a55eea",
+      "source": "tkc",
+      "target": "v_user_precinct_permission",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "precinct.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "precinct.code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "precinct.name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "precinct.branch_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "precinct.hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "precinct.branch_code",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "precinct",
+      "target": "other_tables",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "branch_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "precinct",
+      "target": "branch_code",
+      "key": 0
+    },
+    {
+      "label": "is_linked_to",
+      "color": "#7f8c8d",
+      "source": "code",
+      "target": "other_tables",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.branch_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.emp_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.hub_leader",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.lat",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.lon",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.nvbh_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.parent_sale_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.parent_sale_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.phone_number",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.sale_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.sale_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.sale_type",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "point_of_sale.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "point_of_sale",
+      "target": "sale_code",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "point_of_sale",
+      "target": "sale_code",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "sale_code",
+      "key": 2
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "point_of_sale",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "point_of_sale",
+      "target": "precinct_code",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "branch_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "emp_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "hub_leader",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "lat",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "lon",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "nvbh_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "parent_sale_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "parent_sale_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "phone_number",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "mc_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "mf_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "point_of_sale",
+      "target": "all_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.sale_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mc_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mf_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.all_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mc_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mf_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.all_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.sum_year",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mc_quantity_year",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mf_quantity_year",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.all_quantity_year",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mc_quantity_all_year",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mf_quantity_all_year",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.all_quantity_all_year",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.start_date_last_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.last_date_last_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mc_quantity_last_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mf_quantity_last_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.all_quantity_last_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.start_date_this_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.last_date_this_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mc_quantity_this_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.mf_quantity_this_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.all_quantity_this_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.sale_point_quantity_last_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "v_bds_new_sub_sale_point.sale_point_quantity_this_week",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "sale_code",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "sale_code",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "sale_code",
+      "key": 2
+    },
+    {
+      "label": "has_business_concept",
+      "color": "#a55eea",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "ptm_tb",
+      "key": 0
+    },
+    {
+      "label": "defined_as",
+      "color": "#a55eea",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "lưu_trữ_thông_tin_phát_triển_mới_thuê_bao_của_kênh_điểm_bán",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "mc_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "mf_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "all_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "sale_point_quantity_last_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_sale_point",
+      "target": "sale_point_quantity_this_week",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc_long.insert_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc_long.ngay_cham_soc",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc_long.ma_diem_ban",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc_long.ten_diem_ban",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc_long.nguoi_giao_ke_hoach",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc_long.nhan_vien_cham_soc",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc_long.ma_nhan_vien_cham_soc",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "ma_diem_ban",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "ma_diem_ban",
+      "key": 1
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "ma_nhan_vien_cham_soc",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "ma_nhan_vien_cham_soc",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "insert_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "ngay_cham_soc",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "ten_diem_ban",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nguoi_giao_ke_hoach",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "nhan_vien_cham_soc_long",
+      "target": "nhan_vien_cham_soc",
+      "key": 0
+    },
+    {
+      "label": "links_to",
+      "color": "#a55eea",
+      "source": "ma_diem_ban",
+      "target": "diem_ban",
+      "key": 0
+    },
+    {
+      "label": "links_to",
+      "color": "#a55eea",
+      "source": "ma_nhan_vien_cham_soc",
+      "target": "nhan_vien",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "employee_sales.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "employee_sales.branch_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "employee_sales.emp_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "employee_sales.hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "employee_sales.hub_leader",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "employee_sales.sales_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "employee_sales.sales_name",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "employee_sales",
+      "target": "sales_code",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "employee_sales",
+      "target": "sales_code",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "sales_code",
+      "key": 2
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "employee_sales",
+      "target": "sales_name",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "employee_sales",
+      "target": "sales_name",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "sales_name",
+      "key": 2
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "branch_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "emp_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "employee_sales",
+      "target": "hub_leader",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.shop_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.shop_type",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.latitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.longitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.status",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.all_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.mc_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.mf_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.all_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.mc_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.mf_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.branch_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "v_bds_new_sub_shop.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_bds_new_sub_shop",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "precinct_code",
+      "key": 1
+    },
+    {
+      "label": "has_business_concept",
+      "color": "#a55eea",
+      "source": "v_bds_new_sub_shop",
+      "target": "ptm_tb",
+      "key": 0
+    },
+    {
+      "label": "has_filter",
+      "color": "#a55eea",
+      "source": "v_bds_new_sub_shop",
+      "target": "'101',_'201',_'202'",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "shop_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "shop_type",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "latitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "longitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "status",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "all_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "mc_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "mf_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "all_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "mc_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "mf_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_new_sub_shop",
+      "target": "branch_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.chuoi_dia_phuong_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.dluq_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.others_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.tkd_khcn_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.chuoi_dia_phuong_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.dluq_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.others_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct.tkd_khcn_month",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "requires_date",
+      "color": "#a55eea",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": ":date",
+      "key": 0
+    },
+    {
+      "label": "requires_user_name",
+      "color": "#a55eea",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": ":user_name",
+      "key": 0
+    },
+    {
+      "label": "defined_as",
+      "color": "#2ed573",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "to_date(to_char(:date),_'dd/mm/yyyy')",
+      "key": 0
+    },
+    {
+      "label": "defined_as",
+      "color": "#2ed573",
+      "source": "pck_report_chatbox.get_new_sub_data_by_precinct",
+      "target": "upper(:user_name)",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.type",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.type_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.latitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.longitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.status",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.brand_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "public_location.hub",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "public_location",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "precinct_code",
+      "key": 1
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "public_location",
+      "target": "precinct_table",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "type",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "latitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "longitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "status",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "public_location",
+      "target": "brand_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.cell_site",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.latitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.longitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.status",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_all_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_3g_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_4g_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_5g_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_all_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_2g_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_3g_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_4g_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.vlr_5g_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.cltc_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.cltc",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.branch_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "v_bds_site.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_bds_site",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_bds_site",
+      "target": "precinct_code",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "precinct_code",
+      "key": 2
+    },
+    {
+      "label": "has_filter",
+      "color": "#a55eea",
+      "source": "v_bds_site",
+      "target": "status_=_1",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "cell_site",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "latitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "longitude",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "status",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "tháng_ghi_nhận_chẳnh_lệch_thu_chi",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "chỉ_số_chất_lượng_chẳnh_lệch_thu_chi",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_bds_site",
+      "target": "branch_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "pck_report_chatbox.get_vlr_data_by_precinct.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "pck_report_chatbox.get_vlr_data_by_precinct.sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "pck_report_chatbox.get_vlr_data_by_precinct.saymee_vlr_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "pck_report_chatbox.get_vlr_data_by_precinct.mobifone_vlr_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_business_concept",
+      "color": "#a55eea",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "vlr",
+      "key": 0
+    },
+    {
+      "label": "has_formula",
+      "color": "#2ed573",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "to_date(to_char(:date),_'dd/mm/yyyy')",
+      "key": 0
+    },
+    {
+      "label": "has_formula",
+      "color": "#2ed573",
+      "source": "pck_report_chatbox.get_vlr_data_by_precinct",
+      "target": "upper(:user_name)",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": "pck_report_chatbox.get_rev_data_by_precinct.precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": "pck_report_chatbox.get_rev_data_by_precinct.sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": "pck_report_chatbox.get_rev_data_by_precinct.saymee_tkc_rev_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": "pck_report_chatbox.get_rev_data_by_precinct.sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": "pck_report_chatbox.get_rev_data_by_precinct.saymee_tkc_rev_month",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "uses_date",
+      "color": "#a55eea",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": ":date",
+      "key": 0
+    },
+    {
+      "label": "uses_user_name",
+      "color": "#a55eea",
+      "source": "pck_report_chatbox.get_rev_data_by_precinct",
+      "target": ":user_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location_group",
+      "target": "location_group.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location_group",
+      "target": "location_group.name",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "location_group",
+      "target": "other_tables",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location_group",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location_group",
+      "target": "name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "project",
+      "target": "project.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "project",
+      "target": "project.name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "project",
+      "target": "project.location_group_id",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "project",
+      "target": "location_group_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "project",
+      "target": "location_group_id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "project",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "project",
+      "target": "name",
+      "key": 0
+    },
+    {
+      "label": "has_type",
+      "color": "#a55eea",
+      "source": "location_group_id",
+      "target": "number",
+      "key": 0
+    },
+    {
+      "label": "links_to",
+      "color": "#a55eea",
+      "source": "location_group_id",
+      "target": "other_tables",
+      "key": 0
+    },
+    {
+      "label": "has_type",
+      "color": "#a55eea",
+      "source": "name",
+      "target": "varchar2",
+      "key": 0
+    },
+    {
+      "label": "links_to",
+      "color": "#a55eea",
+      "source": "id",
+      "target": "other_tables",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.lat",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.lon",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.location_group_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.project_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location.branch_name",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "location",
+      "target": "location_group_id",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "location",
+      "target": "location_group_id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "location_group_id",
+      "key": 2
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "location",
+      "target": "precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "location",
+      "target": "precinct_name",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "precinct_name",
+      "key": 2
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "location",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "address",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "lat",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "lon",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "project_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "hub",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "location",
+      "target": "branch_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.created_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.end_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.priority",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.start_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.progress_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.location_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.project_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.assigner_staff_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "v_man_task.assignee_staff_id",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_man_task",
+      "target": "progress_id",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task",
+      "target": "progress_id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "progress_id",
+      "key": 2
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_man_task",
+      "target": "location_id",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task",
+      "target": "location_id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "location_id",
+      "key": 2
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_man_task",
+      "target": "project_id",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task",
+      "target": "project_id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "project_id",
+      "key": 2
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "id",
+      "key": 2
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task",
+      "target": "assigner_staff_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "assigner_staff_id",
+      "key": 1
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task",
+      "target": "assignee_staff_id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "assignee_staff_id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "created_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "created_date",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "end_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "priority",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "start_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "percent",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task",
+      "target": "task_id",
+      "key": 0
+    },
+    {
+      "label": "related_to",
+      "color": "#a55eea",
+      "source": "v_man_task",
+      "target": "v_man_task_progress",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "v_man_task_progress.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "v_man_task_progress.created_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "v_man_task_progress.percent",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "v_man_task_progress.task_id",
+      "key": 0
+    },
+    {
+      "label": "links_via",
+      "color": "#7f8c8d",
+      "style": "dashed",
+      "source": "v_man_task_progress",
+      "target": "task_id",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task_progress",
+      "target": "task_id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "task_id",
+      "key": 2
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_man_task_progress",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "created_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_man_task_progress",
+      "target": "percent",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "v_cat_staff.id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "v_cat_staff.full_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "v_cat_staff.gender",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "weight": 1,
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "v_cat_staff.isdn",
+      "key": 0
+    },
+    {
+      "label": "has_relationship",
+      "color": "#a55eea",
+      "source": "v_cat_staff",
+      "target": "id",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "id",
+      "key": 1
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "full_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "gender",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "v_cat_staff",
+      "target": "isdn",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "mo_ta_bang_bds_new",
+      "target": "tkd_khcn_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "mo_ta_bang_bds_new",
+      "target": "tkd_khdn_month",
+      "key": 0
+    },
+    {
+      "label": "defined_as",
+      "color": "#2ed573",
+      "source": "mo_ta_bang_bds_new",
+      "target": "pck_report_chatbox.get_new_sub_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name))",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "mobifone_vlr_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "saymee_vlr_quantity_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "mobifone_vlr_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_vlr_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "saymee_vlr_quantity_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "precinct_code",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "precinct_name",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "sum_date",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "mobifone_tkc_rev_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "saymee_tkc_rev_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "bhm_rev_day",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "sum_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "mobifone_tkc_rev_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "saymee_tkc_rev_month",
+      "key": 0
+    },
+    {
+      "label": "has_column",
+      "color": "#1e90ff",
+      "source": "table(pck_report_chatbox.get_rev_data_by_precinct_(to_date(to_char(:date),_'dd/mm/yyyy'),_upper(:user_name)))",
+      "target": "bhm_rev_month",
+      "key": 0
+    }
+  ]
+}
