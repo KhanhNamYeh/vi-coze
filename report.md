@@ -21,22 +21,22 @@ Mã nguồn hiện tại chưa gọi mô hình sinh câu trả lời, chưa sinh
 
 | File | Trách nhiệm đang được triển khai |
 |---|---|
-| `config_sql.py` | Khai báo đường dẫn, tên model, tham số chunking, Qdrant và retrieval |
+| `branch_sql/config.py` | Khai báo đường dẫn, tên model, tham số chunking, Qdrant và retrieval |
 | `src/schemas.py` | Định nghĩa metadata của chunk và cách tạo định danh |
-| `src/retrieval/parse.py` | Chuyển tài liệu sang Markdown và chuẩn hóa nội dung |
-| `src/retrieval/chunking.py` | Chia Markdown theo heading và tạo chunk |
-| `src/retrieval/embeddings.py` | Sinh embedding dense cho tài liệu và truy vấn |
-| `src/retrieval/sparse.py` | Sinh vector sparse BM25 cho tài liệu và truy vấn |
-| `src/retrieval/store.py` | Tạo collection và ghi point vào Qdrant |
-| `src/retrieval/retriever.py` | Truy hồi dense, sparse hoặc hybrid từ Qdrant |
-| `src/retrieval/rerank.py` | Xếp hạng lại kết quả bằng cross-encoder |
-| `src/retrieval/offline.py` | Điều phối pipeline parse, chunk và index |
-| `src/retrieval/online.py` | Điều phối hybrid retrieval và reranking |
+| `src/offline/parse/docx_parse.py` | Chuyển tài liệu sang Markdown và chuẩn hóa nội dung |
+| `src/offline/chunk/table_chunker.py` | Chia Markdown theo heading và tạo chunk |
+| `src/offline/embed/dense.py` | Sinh embedding dense cho tài liệu và truy vấn |
+| `src/offline/embed/sparse.py` | Sinh vector sparse BM25 cho tài liệu và truy vấn |
+| `src/offline/index/qdrant_store.py` | Tạo collection và ghi point vào Qdrant |
+| `src/online/qdrant_retriever.py` | Truy hồi dense, sparse hoặc hybrid từ Qdrant |
+| `src/online/rerank.py` | Xếp hạng lại kết quả bằng cross-encoder |
+| `src/branch_sql/offline.py` | Điều phối pipeline parse, chunk và index |
+| `src/branch_sql/online.py` | Điều phối hybrid retrieval và reranking |
 | `docker-compose.yml` | Khởi chạy dịch vụ Qdrant cục bộ |
 
 ## 3. Cấu hình tập trung
 
-Các tham số chính được khai báo trong `config_sql.py`.
+Các tham số chính được khai báo trong `branch_sql/config.py`.
 
 ### 3.1. Đường dẫn dữ liệu
 
@@ -89,7 +89,7 @@ Code không lưu hoặc truyền `avg_len` và không truyền tham số ngôn n
 
 ## 4. Pipeline offline
 
-Entry point của pipeline offline là `src/retrieval/offline.py`.
+Entry point của pipeline offline là `src/branch_sql/offline.py`.
 
 ### 4.1. Chuyển đổi tài liệu
 
@@ -173,7 +173,7 @@ Point ID xác định giúp việc index lại cùng một chunk ghi đè đúng
 
 ## 5. Dense embedding
 
-`src/retrieval/embeddings.py` khởi tạo `HuggingFaceEmbeddings` và cache instance bằng `lru_cache`.
+`src/offline/embed/dense.py` khởi tạo `HuggingFaceEmbeddings` và cache instance bằng `lru_cache`.
 
 Hai đường xử lý được tách riêng:
 
@@ -184,7 +184,7 @@ Prefix tương ứng được nối vào văn bản trước khi gọi model; v�
 
 ## 6. Sparse BM25
 
-`src/retrieval/sparse.py` dùng `fastembed.SparseTextEmbedding` và cache model bằng `lru_cache`.
+`src/offline/embed/sparse.py` dùng `fastembed.SparseTextEmbedding` và cache model bằng `lru_cache`.
 
 ### 6.1. Cách mã hóa
 
@@ -213,7 +213,7 @@ Sparse vector được khai báo trong Qdrant với `Modifier.IDF`. Encoder tạ
 
 ## 7. Lưu trữ Qdrant
 
-`src/retrieval/store.py` kết nối tới URL Qdrant từ biến môi trường `QDRANT_URL`, mặc định là `http://localhost:6333`.
+`src/offline/index/qdrant_store.py` kết nối tới URL Qdrant từ biến môi trường `QDRANT_URL`, mặc định là `http://localhost:6333`.
 
 ### 7.1. Collection
 
@@ -249,7 +249,7 @@ Mỗi point lưu:
 
 ## 8. Pipeline online
 
-Entry point của luồng truy hồi kết hợp là `src/retrieval/online.py`.
+Entry point của luồng truy hồi kết hợp là `src/branch_sql/online.py`.
 
 ### 8.1. Hai retriever đầu vào
 
@@ -269,7 +269,7 @@ Hai danh sách được đưa vào `EnsembleRetriever` của LangChain với:
 
 Việc hợp nhất trong `online.py` được thực hiện phía client dựa trên thứ hạng, không cộng trực tiếp raw score của dense và sparse.
 
-Ngoài luồng trên, `src/retrieval/retriever.py` còn cung cấp chế độ `hybrid` dùng `Prefetch` và `FusionQuery(RRF)` của Qdrant để hợp nhất phía server. Chế độ này được gọi trực tiếp qua `search(mode="hybrid")`; `online.py` hiện dùng hai retriever riêng và hợp nhất phía client.
+Ngoài luồng trên, `src/online/qdrant_retriever.py` còn cung cấp chế độ `hybrid` dùng `Prefetch` và `FusionQuery(RRF)` của Qdrant để hợp nhất phía server. Chế độ này được gọi trực tiếp qua `search(mode="hybrid")`; `online.py` hiện dùng hai retriever riêng và hợp nhất phía client.
 
 ### 8.3. Reranking
 
@@ -306,19 +306,19 @@ Image hiện được khai báo là `qdrant/qdrant:latest`.
 ### 10.2. Parse, chunk và index
 
 ```powershell
-uv run python -m src.offline_sql <ten-tai-lieu>
+uv run python -m src.branch_sql.offline <ten-tai-lieu>
 ```
 
 Chỉ tạo artifact mà không ghi Qdrant:
 
 ```powershell
-uv run python -m src.offline_sql <ten-tai-lieu> --no-index
+uv run python -m src.branch_sql.offline <ten-tai-lieu> --no-index
 ```
 
 Tạo lại collection trước khi index:
 
 ```powershell
-uv run python -m src.offline_sql <ten-tai-lieu> --recreate
+uv run python -m src.branch_sql.offline <ten-tai-lieu> --recreate
 ```
 
 Entry point hỗ trợ nhận nhiều tên tài liệu và xử lý bằng `chain.batch()`.
@@ -326,7 +326,7 @@ Entry point hỗ trợ nhận nhiều tên tài liệu và xử lý bằng `chai
 ### 10.3. Chạy retrieval và rerank
 
 ```powershell
-uv run python -m src.online_sql "<cau-hoi>"
+uv run python -m src.branch_sql.online "<cau-hoi>"
 ```
 
 CLI in nội dung và metadata của các kết quả sau rerank ra standard output.
@@ -334,7 +334,7 @@ CLI in nội dung và metadata của các kết quả sau rerank ra standard out
 ### 10.4. So sánh các chế độ retrieval
 
 ```powershell
-uv run python -m src.retrieval.retriever "<cau-hoi>"
+uv run python -m src.online.qdrant_retriever "<cau-hoi>"
 ```
 
 CLI này lần lượt chạy dense, sparse và hybrid để in kết quả của từng chế độ.

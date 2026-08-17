@@ -1,8 +1,8 @@
 """vi-coze — pipeline RAG tiếng Việt.
 
-Mỗi bộ tài liệu là một "nhánh", đặt tên theo hậu tố:
-
-    config_sql.py / offline_sql.py / online_sql.py   nhánh tài liệu schema CSDL
-    src/retrieval/                                    các bước dùng chung
-    src/pdf/                                          nhánh tài liệu PDF (chưa có entry point)
+    src/offline/           các chặng xử lý offline, dùng chung
+    src/online/            các thành phần truy hồi, dùng chung
+    src/branch_sql/        nhánh tài liệu schema CSDL   — offline / online / config
+    src/branch_rag_docs/   nhánh tài liệu PDF           — offline / online / config
+    src/schemas.py         hợp đồng chunk chung cho mọi nhánh
 """

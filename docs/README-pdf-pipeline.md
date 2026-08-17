@@ -158,7 +158,7 @@ Windows:
 # 4. Cài đặt thư viện
 
 ```bash
-uv sync --extra pdf
+uv sync --extra rag_docs
 ```
 
 Các thư viện chính:
@@ -183,7 +183,7 @@ tiktoken
 ### File:
 
 ```
-src/pdf/pdf_loader.py
+src/offline/parse/pdf_parse.py
 ```
 
 ### Chức năng:
@@ -199,7 +199,7 @@ data/raw/[Reading]-RAG-System.pdf
 Output:
 
 ```
-data/processed/pdf/pdf_extract.jsonl
+data/processed/rag_docs/pdf_extract.jsonl
 ```
 
 Ví dụ:
@@ -219,7 +219,7 @@ Ví dụ:
 Chạy:
 
 ```bash
-python src/pdf/pdf_loader.py \
+python src/offline/parse/pdf_parse.py \
 --input data/raw/[Reading]-RAG-System.pdf
 ```
 
@@ -230,7 +230,7 @@ python src/pdf/pdf_loader.py \
 ## File:
 
 ```
-src/pdf/chunker.py
+src/offline/chunk/text_chunker.py
 ```
 
 ## Chức năng:
@@ -248,21 +248,21 @@ Tính năng:
 Input:
 
 ```
-data/processed/pdf/pdf_extract.jsonl
+data/processed/rag_docs/pdf_extract.jsonl
 ```
 
 Output:
 
 ```
-data/processed/pdf/chunked.jsonl
+data/processed/rag_docs/chunked.jsonl
 ```
 
 Chạy:
 
 ```bash
-python src/pdf/chunker.py \
---input data/processed/pdf/pdf_extract.jsonl \
---output data/processed/pdf/chunked.jsonl \
+python src/offline/chunk/text_chunker.py \
+--input data/processed/rag_docs/pdf_extract.jsonl \
+--output data/processed/rag_docs/chunked.jsonl \
 --strategy token \
 --target-tokens 600 \
 --token-overlap 100
@@ -300,7 +300,7 @@ Một hệ thống RAG gồm ba giai đoạn..."
 ## File:
 
 ```
-src/pdf/indexer.py
+src/offline/index/chroma_store.py
 ```
 
 ## Chức năng:
@@ -316,7 +316,7 @@ BAAI/bge-m3
 Input:
 
 ```
-data/processed/pdf/chunked.jsonl
+data/processed/rag_docs/chunked.jsonl
 ```
 
 Output:
@@ -328,7 +328,7 @@ data/index/chroma/
 Chạy:
 
 ```bash
-python src/pdf/indexer.py
+python src/offline/index/chroma_store.py
 ```
 
 Ví dụ kết quả:
@@ -348,7 +348,7 @@ Vectors stored: 177
 ## File:
 
 ```
-src/pdf/retriever.py
+src/online/chroma_retriever.py
 ```
 
 ## Chức năng:
@@ -379,7 +379,7 @@ Top-K đoạn tài liệu phù hợp
 Ví dụ:
 
 ```bash
-python src/pdf/retriever.py \
+python src/online/chroma_retriever.py \
 --query "RAG hiện đại gồm những giai đoạn nào?"
 ```
 
