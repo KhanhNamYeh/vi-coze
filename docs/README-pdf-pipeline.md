@@ -183,7 +183,7 @@ tiktoken
 ### File:
 
 ```
-src/offline/parse/pdf_parse.py
+src/branch_rag_docs/offline/parse/pdf_parse.py
 ```
 
 ### Chức năng:
@@ -219,7 +219,7 @@ Ví dụ:
 Chạy:
 
 ```bash
-python src/offline/parse/pdf_parse.py \
+python src/branch_rag_docs/offline/parse/pdf_parse.py \
 --input data/raw/[Reading]-RAG-System.pdf
 ```
 
@@ -230,7 +230,7 @@ python src/offline/parse/pdf_parse.py \
 ## File:
 
 ```
-src/offline/chunk/text_chunker.py
+src/branch_rag_docs/offline/chunk/text_chunker.py
 ```
 
 ## Chức năng:
@@ -260,7 +260,7 @@ data/processed/rag_docs/chunked.jsonl
 Chạy:
 
 ```bash
-python src/offline/chunk/text_chunker.py \
+python src/branch_rag_docs/offline/chunk/text_chunker.py \
 --input data/processed/rag_docs/pdf_extract.jsonl \
 --output data/processed/rag_docs/chunked.jsonl \
 --strategy token \
@@ -300,7 +300,7 @@ Một hệ thống RAG gồm ba giai đoạn..."
 ## File:
 
 ```
-src/offline/index/chroma_store.py
+src/branch_rag_docs/offline/index/chroma_store.py
 ```
 
 ## Chức năng:
@@ -328,7 +328,7 @@ data/index/chroma/
 Chạy:
 
 ```bash
-python src/offline/index/chroma_store.py
+python src/branch_rag_docs/offline/index/chroma_store.py
 ```
 
 Ví dụ kết quả:
@@ -348,7 +348,7 @@ Vectors stored: 177
 ## File:
 
 ```
-src/online/chroma_retriever.py
+src/branch_rag_docs/online/chroma_retriever.py
 ```
 
 ## Chức năng:
@@ -379,7 +379,7 @@ Top-K đoạn tài liệu phù hợp
 Ví dụ:
 
 ```bash
-python src/online/chroma_retriever.py \
+python src/branch_rag_docs/online/chroma_retriever.py \
 --query "RAG hiện đại gồm những giai đoạn nào?"
 ```
 

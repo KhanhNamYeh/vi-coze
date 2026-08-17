@@ -14,8 +14,8 @@ bằng model nào, đẩy vào store nào, truy hồi ra sao.
     cfg.chunk.max_chars          # 6000
     cfg.processed_dir            # <repo>/data/processed/sql
 
-Các khoá trong JSON đặt trùng tên với thư mục chặng trong `src/offline/`, nên
-nhìn profile là biết chặng nào chạy với tham số gì:
+Các khoá trong JSON đặt trùng tên với thư mục chặng trong `<nhánh>/offline/`,
+nên nhìn profile là biết chặng nào chạy với tham số gì:
 
     parse  extract  link  chunk  embed  index  retrieval
 

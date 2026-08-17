@@ -1,69 +1,79 @@
 # vi-coze
 
-Pipeline RAG tiếng Việt. Hai nhánh tài liệu, chung một bộ chặng xử lý.
+Pipeline RAG tiếng Việt. Hai nhánh tài liệu, mỗi nhánh một bộ chặng xử lý riêng.
 
 ## Cấu trúc
 
-Chặng xử lý chia theo **chức năng**, nhánh chia theo **bộ tài liệu**. Mỗi nhánh
-chỉ có ba file: `offline.py` nạp tri thức, `online.py` truy vấn, `config.py` nạp
-profile JSON. Thứ tự nối các chặng nằm trong `offline.py`, không nằm trong
-`src/offline/`.
+Cây chia theo **bộ tài liệu** trước, trong mỗi nhánh mới chia theo **chức năng**.
+Nhánh nào cũng có cùng ba phần: `config.py` nạp profile JSON, `offline/` nạp tri
+thức, `online/` truy vấn. Thứ tự nối các chặng nằm ở `pipeline.py` của từng
+luồng, không nằm ở các thư mục chặng.
+
+Hai nhánh cùng tên chặng nhưng khác cách làm (docx/heading so với pdf/số trang,
+Qdrant hybrid so với Chroma dense) nên không dùng chung module: sửa một nhánh
+không đụng nhánh kia. Chỗ thật sự dùng chung chỉ còn `config.py` và `schemas.py`.
 
 ```
 src/
 ├── config.py                   class đọc profile JSON trong config/
 ├── schemas.py                  hợp đồng chunk chung cho mọi nhánh
 │
-├── offline/                    CÁC CHẶNG — dùng chung
-│   ├── parse/                  tài liệu gốc -> văn bản có tọa độ
-│   │   ├── docx_parse.py           .docx -> markdown        [sql]
-│   │   ├── pdf_parse.py            .pdf  -> block+page      [rag_docs]
-│   │   ├── image_extractor.py      tách hình khỏi pdf
-│   │   └── image_captioner.py      sinh caption cho hình
-│   ├── extract/                văn bản -> cấu trúc tường minh
-│   │   └── merge_documents.py      gộp text + caption       [rag_docs]
-│   ├── link/                   cấu trúc -> quan hệ
-│   │   └── knowledge_graph.py      graph node-link          [sql]
-│   ├── chunk/                  cấu trúc -> chunk
-│   │   ├── table_chunker.py        1 bảng = 1 chunk         [sql]
-│   │   └── text_chunker.py         cắt theo token           [rag_docs]
-│   ├── embed/                  chunk -> vector
-│   │   ├── dense.py                dùng chung index + query
-│   │   ├── sparse.py               BM25
-│   │   └── kg_embedder.py          embed triple (prototype)
-│   ├── index/                  vector -> store
-│   │   ├── qdrant_store.py         dense + sparse           [sql]
-│   │   └── chroma_store.py         dense                    [rag_docs]
-│   └── verify/                 đối soát ngược về tài liệu gốc
-│       └── inspect_chunks.py       thống kê phân bố chunk
-│
-├── online/                     TRUY HỒI — dùng chung
-│   ├── qdrant_retriever.py         hybrid dense + BM25      [sql]
-│   ├── rerank.py                   cross-encoder tiếng Việt [sql]
-│   ├── chroma_retriever.py         similarity search        [rag_docs]
-│   ├── bge_reranker.py             cross-encoder bge        [rag_docs]
-│   └── kg_retriever.py             truy hồi trên graph (prototype)
-│
-├── branch_sql/                 NHÁNH tài liệu mô tả schema CSDL
+├── branch_sql/                 NHÁNH tài liệu mô tả schema CSDL (.docx)
 │   ├── config.py                   nạp config/sql.json
-│   ├── offline.py                  parse -> chunk -> [link] -> embed -> index
-│   └── online.py                   query -> hybrid -> RRF -> rerank
+│   ├── offline/                parse -> chunk -> [link] -> embed -> index
+│   │   ├── pipeline.py             điều phối, nối bằng LCEL
+│   │   ├── parse/
+│   │   │   └── docx_parse.py           .docx -> markdown có heading
+│   │   ├── extract/                    (CHƯA CÓ: markdown -> schema.json)
+│   │   ├── link/
+│   │   │   └── knowledge_graph.py      graph node-link, cờ --kg
+│   │   ├── chunk/
+│   │   │   └── table_chunker.py        1 bảng = 1 chunk, overlap 0
+│   │   ├── embed/
+│   │   │   ├── dense.py                dùng chung index + query
+│   │   │   ├── sparse.py               BM25
+│   │   │   └── kg_embedder.py          embed triple (prototype)
+│   │   ├── index/
+│   │   │   └── qdrant_store.py         dense + sparse -> Qdrant
+│   │   └── verify/                     (CHƯA CÓ: coverage, trace)
+│   └── online/                 query -> hybrid -> RRF -> rerank
+│       ├── pipeline.py             điều phối
+│       ├── qdrant_retriever.py     hybrid dense + BM25
+│       ├── rerank.py               cross-encoder tiếng Việt
+│       └── kg_retriever.py         truy hồi trên graph (prototype)
 │
 └── branch_rag_docs/            NHÁNH tài liệu PDF
     ├── config.py                   nạp config/rag_docs.json
-    ├── offline.py                  parse -> [extract] -> chunk -> embed + index
-    └── online.py                   query -> similarity -> rerank
+    ├── offline/                parse -> [extract] -> chunk -> embed + index
+    │   ├── pipeline.py             điều phối
+    │   ├── parse/
+    │   │   ├── pdf_parse.py            .pdf -> block có page/bbox
+    │   │   ├── image_extractor.py      tách hình khỏi pdf     (cờ --images)
+    │   │   └── image_captioner.py      sinh caption cho hình  (cờ --images)
+    │   ├── extract/
+    │   │   └── merge_documents.py      gộp text + caption theo trang
+    │   ├── chunk/
+    │   │   └── text_chunker.py         cắt theo token, có overlap
+    │   ├── index/
+    │   │   └── chroma_store.py         embed dense -> Chroma
+    │   └── verify/
+    │       └── inspect_chunks.py       thống kê phân bố chunk, chạy tay
+    └── online/                 query -> similarity -> rerank
+        ├── pipeline.py             điều phối
+        ├── chroma_retriever.py     similarity search
+        └── bge_reranker.py         cross-encoder bge
 ```
 
-`extract/` và `verify/` mới có chỗ đứng chứ chưa có nội dung cho nhánh SQL —
-đó là hai chặng còn thiếu để chứng minh tri thức không mất mát. Xem docstring
-trong `__init__.py` của từng chặng để biết cần bổ sung gì.
+Thư mục chặng rỗng là chỗ đứng đã đặt sẵn chứ chưa có nội dung: nhánh SQL còn
+thiếu `extract/` và `verify/` — hai chặng cần để chứng minh tri thức không mất
+mát; nhánh PDF chưa có `link/`. Xem docstring trong `__init__.py` của từng chặng
+để biết cần bổ sung gì.
 
 ## config/ — profile
 
 Tham số không nằm trong code. Mỗi bộ tài liệu là một **profile** JSON mô tả nó
 được xử lý bằng cách nào. Khoá trong JSON đặt trùng tên với thư mục chặng trong
-`src/offline/`, nên nhìn profile là biết chặng nào chạy với tham số gì.
+`<nhánh>/offline/`, nên nhìn profile là biết chặng nào chạy với tham số gì.
 
 ```
 config/
@@ -144,10 +154,10 @@ uv run python -m src.branch_rag_docs.online  "RAG gồm những thành phần n�
 Từng chặng vẫn chạy riêng được để tune:
 
 ```bash
-uv run python -m src.offline.parse.docx_parse    "Mô tả bảng BĐS (NEW).docx"
-uv run python -m src.offline.chunk.table_chunker mo_ta_bang_bds_new.md
-uv run python -m src.offline.index.qdrant_store  mo_ta_bang_bds_new.chunks.jsonl
-uv run python -m src.online.qdrant_retriever     "bảng nào lưu doanh thu TKC"
+uv run python -m src.branch_sql.offline.parse.docx_parse    "Mô tả bảng BĐS (NEW).docx"
+uv run python -m src.branch_sql.offline.chunk.table_chunker mo_ta_bang_bds_new.md
+uv run python -m src.branch_sql.offline.index.qdrant_store  mo_ta_bang_bds_new.chunks.jsonl
+uv run python -m src.branch_sql.online.qdrant_retriever     "bảng nào lưu doanh thu TKC"
 ```
 
 Chi tiết: [docs/README-sql-pipeline.md](docs/README-sql-pipeline.md) ·
