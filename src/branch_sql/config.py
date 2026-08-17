@@ -1,8 +1,16 @@
-"""Đường dẫn và tham số cho nhánh tài liệu schema SQL.
+"""Nạp profile của nhánh SQL.
 
-`data/` chia theo vai trò trước, rồi mới theo bộ tài liệu (KB). Trước đây hai
-nhánh dùng hai cách đặt tên cho cùng một thứ (`uploads`/`artifacts` và
-`raw`/`processed`), nay gộp về một:
+Tham số thật nằm ở `config/sql.json`, không nằm ở đây. File này chỉ đọc profile
+lên thành object và trải ra thành hằng số cho các chặng dùng:
+
+    from .config import CFG          # object, có kiểu, đọc được cả cây
+    from .config import MAX_CHARS    # lối tắt cho một giá trị lẻ
+
+Chạy profile khác mà không sửa code:
+
+    VI_COZE_PROFILE=sql_v2 uv run python -m src.branch_sql.offline "file.docx"
+
+`data/` chia theo vai trò trước, rồi mới theo bộ tài liệu:
 
     data/raw/<kb>/        đầu vào, người dùng cung cấp — pipeline không ghi vào đây
     data/processed/<kb>/  artifact sinh ra, xoá đi chạy lại được
@@ -13,111 +21,61 @@ nhánh dùng hai cách đặt tên cho cùng một thứ (`uploads`/`artifacts` 
 from __future__ import annotations
 
 import os
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+from ..config import KBConfig, listdir, rel, require, resolve  # noqa: F401  (re-export)
+
+PROFILE = os.getenv("VI_COZE_PROFILE", "sql")
+CFG = KBConfig.load(PROFILE)
+
+# ---- đường dẫn ------------------------------------------------------------
+ROOT = CFG.root
 DATA_DIR = ROOT / "data"
+KB = CFG.kb
 
-# Đổi bộ tài liệu khác thì sửa đúng dòng này.
-KB = "sql"
+RAW_DIR = CFG.raw_dir
+PROCESSED_DIR = CFG.processed_dir
+EVAL_DIR = CFG.eval_dir
+INDEX_DIR = CFG.index_dir
 
-RAW_DIR = DATA_DIR / "raw" / KB
-PROCESSED_DIR = DATA_DIR / "processed" / KB
-EVAL_DIR = DATA_DIR / "eval" / KB
-INDEX_DIR = DATA_DIR / "index"
-
-# Knowledge graph: artifact trung gian giữa markdown và chunk.
-KNOWLEDGE_DIR = PROCESSED_DIR / "knowledge"
+KNOWLEDGE_DIR = CFG.knowledge_dir
 KG_INDEX = INDEX_DIR / "kb_index.npz"
 
-DOC_SUFFIXES = {".docx", ".doc", ".pdf", ".pptx", ".xlsx", ".html", ".htm"}
+DOC_SUFFIXES = set(CFG.parse.suffixes)
 
-# ---- chunking ------------------------------------------------------------
-HEADERS_TO_SPLIT_ON = [("#", "section"), ("##", "table")]
-STRIP_HEADERS = False
-CHUNK_OVERLAP = 0
-MAX_CHARS = 6000
-MIN_CHARS = 200
+# ---- chunking -------------------------------------------------------------
+HEADERS_TO_SPLIT_ON = CFG.chunk.headers_to_split_on
+STRIP_HEADERS = CFG.chunk.strip_headers
+CHUNK_OVERLAP = CFG.chunk.overlap
+MAX_CHARS = CFG.chunk.max_chars
+MIN_CHARS = CFG.chunk.min_chars
 
-# ---- embedding -----------------------------------------------------------
-# Đổi model thì phải đổi COLLECTION và index lại toàn bộ.
-EMBED_MODEL = "AITeamVN/Vietnamese_Embedding"
-EMBED_DIM = 1024
-EMBED_MAX_TOKENS = 2048
-EMBED_BATCH = 16
-NORMALIZE_EMBEDDINGS = True
+# ---- embedding ------------------------------------------------------------
+# Đổi model thì phải đổi `index.collection` trong profile và index lại toàn bộ.
+EMBED_MODEL = CFG.embed.dense.model
+EMBED_DIM = CFG.embed.dense.dim
+EMBED_MAX_TOKENS = CFG.embed.dense.max_tokens
+EMBED_BATCH = CFG.embed.dense.batch
+NORMALIZE_EMBEDDINGS = CFG.embed.dense.normalize
+QUERY_PREFIX = CFG.embed.dense.query_prefix
+PASSAGE_PREFIX = CFG.embed.dense.passage_prefix
 
-# Rỗng với họ bge-m3. Họ E5 bắt buộc "query: " / "passage: ".
-QUERY_PREFIX = ""
-PASSAGE_PREFIX = ""
+# ---- sparse / BM25 --------------------------------------------------------
+_sparse = CFG.embed.sparse
+SPARSE_MODEL = _sparse.model if _sparse else None
+BM25_DISABLE_STEMMER = _sparse.disable_stemmer if _sparse else True
+BM25_K = _sparse.k if _sparse else 1.2
+BM25_B = _sparse.b if _sparse else 0.0
 
-# ---- sparse / BM25 -------------------------------------------------------
-SPARSE_MODEL = "Qdrant/bm25"
+# ---- vector store ---------------------------------------------------------
+QDRANT_URL = CFG.index.url
+DENSE_VECTOR = CFG.index.dense_vector
+SPARSE_VECTOR = CFG.index.sparse_vector
+COLLECTION = CFG.index.collection
+PAYLOAD_INDEX_FIELDS = CFG.index.payload_index_fields
 
-# Snowball không có tiếng Việt; stemmer tiếng Anh cắt sai cả từ thường lẫn
-# định danh SQL. FastEmbed đồng thời không dùng stopwords khi tắt stemmer.
-BM25_DISABLE_STEMMER = True
-
-# b=0 tắt chuẩn hoá theo độ dài. Corpus SaaS có nhiều loại tài liệu và thay đổi
-# liên tục, nên không phụ thuộc vào một avg_len phải đo rồi re-index khi nó lệch.
-BM25_K = 1.2
-BM25_B = 0.0
-
-# ---- vector store --------------------------------------------------------
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-
-DENSE_VECTOR = "dense"
-SPARSE_VECTOR = "bm25"
-
-# Tên mang theo model, số chiều và version chunking để vector khác thế hệ
-# không lẫn vào nhau.
-CHUNKING_VERSION = "c1"
-COLLECTION = f"sqldocs__vnemb_{EMBED_DIM}__{CHUNKING_VERSION}"
-
-PAYLOAD_INDEX_FIELDS = ["doc_id", "table_name", "section"]
-
-# ---- online / search -----------------------------------------------------
-# Số ứng viên lấy ở MỖI nhánh trước khi fuse.
-CANDIDATE_K = 20
-
-# Hằng số RRF: score = sum(1 / (RRF_K + rank)). Qdrant không cho chỉnh hằng số
-# này nên phần fuse chạy ở client qua EnsembleRetriever.
-RRF_K = 40
-RRF_WEIGHTS = [0.5, 0.5]  # [dense, sparse]
-
-RERANK_MODEL = "AITeamVN/Vietnamese_Reranker"
-RERANK_TOP_N = 5
-
-
-def resolve(name: str | Path, base: Path) -> Path:
-    """Tên file -> đường dẫn đầy đủ.
-
-    Đường dẫn tuyệt đối giữ nguyên; có `/` thì tính từ gốc repo; chỉ có tên
-    file thì tìm trong `base`.
-    """
-    p = Path(name)
-    if p.is_absolute():
-        return p
-    if len(p.parts) > 1:
-        return (ROOT / p).resolve()
-    return (base / p).resolve()
-
-
-def listdir(base: Path, pattern: str = "*") -> list[str]:
-    """Tên các file trong thư mục, bỏ file ẩn."""
-    if not base.is_dir():
-        return []
-    return sorted(p.name for p in base.glob(pattern) if p.is_file() and not p.name.startswith("."))
-
-
-def rel(path: Path) -> str:
-    """Đường dẫn tính từ gốc repo, để in ra cho gọn."""
-    return path.relative_to(ROOT).as_posix() if path.is_relative_to(ROOT) else str(path)
-
-
-def require(path: Path, base: Path) -> Path:
-    """Trả về path, hoặc báo lỗi kèm danh sách file có sẵn."""
-    if path.exists():
-        return path
-    listing = "\n".join(f"  - {n}" for n in listdir(base)) or "  (thư mục rỗng)"
-    raise FileNotFoundError(f"không thấy {rel(path)}\n\ncó sẵn trong {rel(base)}:\n{listing}")
+# ---- online / search ------------------------------------------------------
+CANDIDATE_K = CFG.retrieval.candidate_k
+RRF_K = CFG.retrieval.rrf_k
+RRF_WEIGHTS = CFG.retrieval.rrf_weights
+RERANK_MODEL = CFG.retrieval.rerank.model if CFG.retrieval.rerank else None
+RERANK_TOP_N = CFG.retrieval.rerank.top_n if CFG.retrieval.rerank else 5

@@ -1,0 +1,68 @@
+{
+  "kb": "rag_docs",
+  "name": "Tài liệu PDF",
+  "description": "Văn bản trôi chảy, không có ranh giới cấu trúc sẵn như bảng, nên cắt theo độ dài và phải có overlap để câu bị cắt giữa chừng vẫn còn ngữ cảnh.",
+
+  "parse": {
+    "loader": "pdf_docling",
+    "suffixes": [".pdf"],
+    "clean": {
+      "normalize_nfc": true,
+      "strip_invisible": true,
+      "strip_html": true,
+      "block_injection": true
+    }
+  },
+
+  "extract": {
+    "enabled": true,
+    "extractor": "merge_documents"
+  },
+
+  "link": {
+    "enabled": false,
+    "builder": null,
+    "llm": null
+  },
+
+  "chunk": {
+    "mode": "recursive",
+    "headers": [],
+    "strip_headers": false,
+    "chunk_size": 1000,
+    "overlap": 150,
+    "max_chars": 6000,
+    "min_chars": 100
+  },
+
+  "embed": {
+    "dense": {
+      "model": "BAAI/bge-m3",
+      "dim": 1024,
+      "batch": 16,
+      "max_tokens": 8192,
+      "normalize": true,
+      "query_prefix": "",
+      "passage_prefix": ""
+    },
+    "sparse": null
+  },
+
+  "index": {
+    "store": "chroma",
+    "collection": "rag_documents",
+    "subdir": "chroma",
+    "payload_index_fields": []
+  },
+
+  "retrieval": {
+    "mode": "dense",
+    "candidate_k": 20,
+    "rrf_k": 40,
+    "rrf_weights": [1.0, 0.0],
+    "rerank": {
+      "model": "BAAI/bge-reranker-v2-m3",
+      "top_n": 5
+    }
+  }
+}

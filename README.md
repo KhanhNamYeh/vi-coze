@@ -5,12 +5,13 @@ Pipeline RAG tiếng Việt. Hai nhánh tài liệu, chung một bộ chặng x�
 ## Cấu trúc
 
 Chặng xử lý chia theo **chức năng**, nhánh chia theo **bộ tài liệu**. Mỗi nhánh
-chỉ có ba file: `offline.py` nạp tri thức, `online.py` truy vấn, `config.py` giữ
-đường dẫn và tham số. Thứ tự nối các chặng nằm trong `offline.py`, không nằm
-trong `src/offline/`.
+chỉ có ba file: `offline.py` nạp tri thức, `online.py` truy vấn, `config.py` nạp
+profile JSON. Thứ tự nối các chặng nằm trong `offline.py`, không nằm trong
+`src/offline/`.
 
 ```
 src/
+├── config.py                   class đọc profile JSON trong config/
 ├── schemas.py                  hợp đồng chunk chung cho mọi nhánh
 │
 ├── offline/                    CÁC CHẶNG — dùng chung
@@ -44,12 +45,12 @@ src/
 │   └── kg_retriever.py             truy hồi trên graph (prototype)
 │
 ├── branch_sql/                 NHÁNH tài liệu mô tả schema CSDL
-│   ├── config.py
+│   ├── config.py                   nạp config/sql.json
 │   ├── offline.py                  parse -> chunk -> [link] -> embed -> index
 │   └── online.py                   query -> hybrid -> RRF -> rerank
 │
 └── branch_rag_docs/            NHÁNH tài liệu PDF
-    ├── config.py
+    ├── config.py                   nạp config/rag_docs.json
     ├── offline.py                  parse -> [extract] -> chunk -> embed + index
     └── online.py                   query -> similarity -> rerank
 ```
@@ -57,6 +58,58 @@ src/
 `extract/` và `verify/` mới có chỗ đứng chứ chưa có nội dung cho nhánh SQL —
 đó là hai chặng còn thiếu để chứng minh tri thức không mất mát. Xem docstring
 trong `__init__.py` của từng chặng để biết cần bổ sung gì.
+
+## config/ — profile
+
+Tham số không nằm trong code. Mỗi bộ tài liệu là một **profile** JSON mô tả nó
+được xử lý bằng cách nào. Khoá trong JSON đặt trùng tên với thư mục chặng trong
+`src/offline/`, nên nhìn profile là biết chặng nào chạy với tham số gì.
+
+```
+config/
+├── sql.json         parse docx · chunk theo heading · Vietnamese_Embedding + BM25 · Qdrant · hybrid
+└── rag_docs.json    parse pdf  · chunk theo token   · bge-m3                     · Chroma · dense
+```
+
+```jsonc
+{
+  "kb": "sql",
+  "parse":     { "loader": "docx_markitdown", "clean": { "block_injection": true } },
+  "extract":   { "enabled": false, "extractor": "schema_extract" },
+  "link":      { "enabled": false, "builder": "knowledge_graph" },
+  "chunk":     { "mode": "structural", "headers": [["#","section"],["##","table"]], "overlap": 0 },
+  "embed":     { "dense": { "model": "AITeamVN/Vietnamese_Embedding", "dim": 1024 },
+                 "sparse": { "model": "Qdrant/bm25", "k": 1.2, "b": 0.0 } },
+  "index":     { "store": "qdrant", "collection": "sqldocs__vnemb_1024__c1" },
+  "retrieval": { "mode": "hybrid", "candidate_k": 20, "rrf_k": 40,
+                 "rerank": { "model": "AITeamVN/Vietnamese_Reranker", "top_n": 5 } }
+}
+```
+
+Đọc lên bằng class có kiểu, validate lúc nạp — sai khoá hay sai giá trị thì báo
+ngay chứ không chạy sai âm thầm:
+
+```python
+from src.config import KBConfig
+cfg = KBConfig.load("sql")
+cfg.chunk.max_chars      # 6000
+cfg.processed_dir        # <repo>/data/processed/sql
+cfg.save()               # ghi ngược ra JSON, dùng khi người dùng chỉnh qua UI
+```
+
+Thêm cách xử lý mới thì thêm một file JSON, không phải sửa code:
+
+```bash
+cp config/sql.json config/sql_chunk_nho.json     # rồi sửa chunk.max_chars
+VI_COZE_PROFILE=sql_chunk_nho uv run python -m src.branch_sql.offline "file.docx"
+```
+
+Đường dẫn **không** nằm trong JSON — suy ra từ `kb`, để profile không dính đường
+dẫn tuyệt đối của máy nào. `QDRANT_URL` trong môi trường thắng giá trị trong file.
+
+> Hiện profile được chọn lúc import qua biến môi trường. Muốn mỗi request chọn
+> một profile khác nhau như Dify thì phải truyền `KBConfig` xuống thân hàm thay
+> vì đọc hằng số module — đó là bước tiếp theo.
 
 ## data/
 
