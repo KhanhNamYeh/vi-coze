@@ -248,7 +248,7 @@ def main():
         "--output-dir",
         type=Path,
         default=Path(
-            "data/images"
+            "data/processed/pdf/images"
         )
     )
 
@@ -257,7 +257,7 @@ def main():
         "--metadata",
         type=Path,
         default=Path(
-            "data/processed/image_metadata.jsonl"
+            "data/processed/pdf/image_metadata.jsonl"
         )
     )
 

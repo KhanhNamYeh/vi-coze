@@ -27,7 +27,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 DEFAULT_MODEL = "BAAI/bge-m3"
 
-DEFAULT_DB = "data/vectorstore/chroma"
+DEFAULT_DB = "data/index/chroma"
 
 
 

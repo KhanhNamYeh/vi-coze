@@ -1,4 +1,14 @@
-"""Đường dẫn và tham số cho bộ tài liệu SQL."""
+"""Đường dẫn và tham số cho nhánh tài liệu schema SQL.
+
+`data/` chia theo vai trò trước, rồi mới theo bộ tài liệu (KB). Trước đây hai
+nhánh dùng hai cách đặt tên cho cùng một thứ (`uploads`/`artifacts` và
+`raw`/`processed`), nay gộp về một:
+
+    data/raw/<kb>/        đầu vào, người dùng cung cấp — pipeline không ghi vào đây
+    data/processed/<kb>/  artifact sinh ra, xoá đi chạy lại được
+    data/index/           vector store nằm trên đĩa
+    data/eval/<kb>/       bộ gold để đo độ chính xác
+"""
 
 from __future__ import annotations
 
@@ -8,9 +18,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 
-KB = "sql/docs"
-UPLOAD_DIR = DATA_DIR / "uploads" / KB
-ARTIFACT_DIR = DATA_DIR / "artifacts" / KB
+# Đổi bộ tài liệu khác thì sửa đúng dòng này.
+KB = "sql"
+
+RAW_DIR = DATA_DIR / "raw" / KB
+PROCESSED_DIR = DATA_DIR / "processed" / KB
+EVAL_DIR = DATA_DIR / "eval" / KB
+INDEX_DIR = DATA_DIR / "index"
+
+# Knowledge graph: artifact trung gian giữa markdown và chunk.
+KNOWLEDGE_DIR = PROCESSED_DIR / "knowledge"
+KG_INDEX = INDEX_DIR / "kb_index.npz"
 
 DOC_SUFFIXES = {".docx", ".doc", ".pdf", ".pptx", ".xlsx", ".html", ".htm"}
 

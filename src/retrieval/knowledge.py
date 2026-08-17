@@ -7,6 +7,8 @@ from pathlib import Path
 from pyvis.network import Network
 from networkx.readwrite import json_graph
 
+from ..config_sql import KNOWLEDGE_DIR, PROCESSED_DIR, ROOT
+
 
 class SQLKnowledgeGraphBuilder:
     def __init__(self, use_local=True, api_key=None, base_url=None, model=None):
@@ -54,15 +56,12 @@ class SQLKnowledgeGraphBuilder:
         )
 
     def process_files(self, input_paths):
-        script_dir = Path(__file__).parent.absolute()
-        project_root = script_dir.parent.parent
-
         # List of supported extensions
         supported_exts = [".md", ".sql", ".txt", ".csv", ".json", ".jsonl"]
 
         files = []
         for p in input_paths:
-            possible_locs = [Path(p), script_dir / p, project_root / p]
+            possible_locs = [Path(p), ROOT / p]
             target_loc = next((loc for loc in possible_locs if loc.exists()), None)
 
             if target_loc:
@@ -102,7 +101,7 @@ class SQLKnowledgeGraphBuilder:
             except Exception as e:
                 print(f"Error reading {f_path.name}: {e}")
 
-        self.save_and_visualize("sql_knowledge_map")
+        self.save_and_visualize(str(KNOWLEDGE_DIR / "sql_knowledge_map"))
 
     def _parse_markdown_schema(self, content):
         table_sections = re.split(r'##\s*Bảng\s+', content)
@@ -306,7 +305,29 @@ class SQLKnowledgeGraphBuilder:
         net.save_graph(f"{output_prefix}.html")
         print(f"--- Success! Graph created with {self.kg.number_of_nodes()} nodes ---")
 
+
+def build(markdown_path, *, out_dir=None, model="llama3") -> dict:
+    """Bước `knowledge` của chain trong `offline_sql.py`.
+
+    markdown -> node-link JSON + HTML. Trả về đường dẫn và kích thước graph để
+    `offline_sql.main()` in ra, giống các bước khác.
+    """
+    out_dir = Path(out_dir or KNOWLEDGE_DIR)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    prefix = out_dir / "sql_knowledge_map"
+
+    builder = SQLKnowledgeGraphBuilder(use_local=True, model=model)
+    builder.process_files([str(markdown_path)])
+
+    return {
+        "json": prefix.with_suffix(".json"),
+        "html": prefix.with_suffix(".html"),
+        "n_nodes": builder.kg.number_of_nodes(),
+        "n_edges": builder.kg.number_of_edges(),
+    }
+
+
 if __name__ == "__main__":
-    paths = ["data/artifacts/sql/docs"]
-    builder = SQLKnowledgeGraphBuilder(use_local=True, model="llama3")
-    builder.process_files(paths)
+    # Chạy riêng trên toàn bộ markdown đã có, không qua offline_sql.
+    for md in sorted(PROCESSED_DIR.glob("*.md")):
+        print(build(md))

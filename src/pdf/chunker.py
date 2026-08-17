@@ -567,7 +567,7 @@ def main():
         type=Path,
 
         default=Path(
-            "data/processed/pdf_extract.jsonl"
+            "data/processed/pdf/pdf_extract.jsonl"
         )
 
     )
@@ -580,7 +580,7 @@ def main():
         type=Path,
 
         default=Path(
-            "data/processed/chunked.jsonl"
+            "data/processed/pdf/chunked.jsonl"
         )
 
     )

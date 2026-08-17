@@ -4,6 +4,8 @@ import numpy as np
 from pathlib import Path
 from sentence_transformers import SentenceTransformer
 
+from ..config_sql import KG_INDEX, KNOWLEDGE_DIR
+
 
 def create_kb_embeddings(kb_path, output_path):
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -64,11 +66,9 @@ def create_kb_embeddings(kb_path, output_path):
 
 
 if __name__ == "__main__":
-    current_dir = Path(__file__).parent
-    project_root = current_dir.parent
-
-    kb_file = project_root / "data" / "artifacts" / "sql" / "knowledge" / "sql_knowledge_map1.json"
-    output_index = current_dir / "kb_index.npz"
+    kb_file = KNOWLEDGE_DIR / "sql_knowledge_map1.json"
+    output_index = KG_INDEX
+    output_index.parent.mkdir(parents=True, exist_ok=True)
 
     print(f"Đang tìm file: {kb_file}")
 

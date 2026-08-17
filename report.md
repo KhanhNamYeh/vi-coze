@@ -21,7 +21,7 @@ Mã nguồn hiện tại chưa gọi mô hình sinh câu trả lời, chưa sinh
 
 | File | Trách nhiệm đang được triển khai |
 |---|---|
-| `src/config_sql.py` | Khai báo đường dẫn, tên model, tham số chunking, Qdrant và retrieval |
+| `config_sql.py` | Khai báo đường dẫn, tên model, tham số chunking, Qdrant và retrieval |
 | `src/schemas.py` | Định nghĩa metadata của chunk và cách tạo định danh |
 | `src/retrieval/parse.py` | Chuyển tài liệu sang Markdown và chuẩn hóa nội dung |
 | `src/retrieval/chunking.py` | Chia Markdown theo heading và tạo chunk |
@@ -30,13 +30,13 @@ Mã nguồn hiện tại chưa gọi mô hình sinh câu trả lời, chưa sinh
 | `src/retrieval/store.py` | Tạo collection và ghi point vào Qdrant |
 | `src/retrieval/retriever.py` | Truy hồi dense, sparse hoặc hybrid từ Qdrant |
 | `src/retrieval/rerank.py` | Xếp hạng lại kết quả bằng cross-encoder |
-| `src/offline_sql.py` | Điều phối pipeline parse, chunk và index |
-| `src/online_sql.py` | Điều phối hybrid retrieval và reranking |
+| `src/retrieval/offline.py` | Điều phối pipeline parse, chunk và index |
+| `src/retrieval/online.py` | Điều phối hybrid retrieval và reranking |
 | `docker-compose.yml` | Khởi chạy dịch vụ Qdrant cục bộ |
 
 ## 3. Cấu hình tập trung
 
-Các tham số chính được khai báo trong `src/config_sql.py`.
+Các tham số chính được khai báo trong `config_sql.py`.
 
 ### 3.1. Đường dẫn dữ liệu
 
@@ -89,7 +89,7 @@ Code không lưu hoặc truyền `avg_len` và không truyền tham số ngôn n
 
 ## 4. Pipeline offline
 
-Entry point của pipeline offline là `src/offline_sql.py`.
+Entry point của pipeline offline là `src/retrieval/offline.py`.
 
 ### 4.1. Chuyển đổi tài liệu
 
@@ -249,7 +249,7 @@ Mỗi point lưu:
 
 ## 8. Pipeline online
 
-Entry point của luồng truy hồi kết hợp là `src/online_sql.py`.
+Entry point của luồng truy hồi kết hợp là `src/retrieval/online.py`.
 
 ### 8.1. Hai retriever đầu vào
 
@@ -267,9 +267,9 @@ Hai danh sách được đưa vào `EnsembleRetriever` của LangChain với:
 - Trọng số bằng nhau.
 - Hằng số RRF lấy từ `RRF_K`.
 
-Việc hợp nhất trong `online_sql.py` được thực hiện phía client dựa trên thứ hạng, không cộng trực tiếp raw score của dense và sparse.
+Việc hợp nhất trong `online.py` được thực hiện phía client dựa trên thứ hạng, không cộng trực tiếp raw score của dense và sparse.
 
-Ngoài luồng trên, `src/retrieval/retriever.py` còn cung cấp chế độ `hybrid` dùng `Prefetch` và `FusionQuery(RRF)` của Qdrant để hợp nhất phía server. Chế độ này được gọi trực tiếp qua `search(mode="hybrid")`; `online_sql.py` hiện dùng hai retriever riêng và hợp nhất phía client.
+Ngoài luồng trên, `src/retrieval/retriever.py` còn cung cấp chế độ `hybrid` dùng `Prefetch` và `FusionQuery(RRF)` của Qdrant để hợp nhất phía server. Chế độ này được gọi trực tiếp qua `search(mode="hybrid")`; `online.py` hiện dùng hai retriever riêng và hợp nhất phía client.
 
 ### 8.3. Reranking
 

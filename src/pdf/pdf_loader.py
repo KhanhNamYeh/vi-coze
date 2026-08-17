@@ -442,7 +442,7 @@ def main():
     parser.add_argument(
         "--output",
         default=Path(
-            "data/processed/pdf_extract.jsonl"
+            "data/processed/pdf/pdf_extract.jsonl"
         ),
         type=Path
     )

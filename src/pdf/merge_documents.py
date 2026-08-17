@@ -265,7 +265,7 @@ def main():
         "--text",
         type=Path,
         default=Path(
-            "data/processed/pdf_extract.jsonl"
+            "data/processed/pdf/pdf_extract.jsonl"
         ),
         help="Text extract from PDF"
     )
@@ -274,7 +274,7 @@ def main():
         "--captions",
         type=Path,
         default=Path(
-            "data/processed/image_captions.jsonl"
+            "data/processed/pdf/image_captions.jsonl"
         ),
         help="Image captions"
     )
@@ -283,7 +283,7 @@ def main():
         "--metadata",
         type=Path,
         default=Path(
-            "data/processed/image_metadata.jsonl"
+            "data/processed/pdf/image_metadata.jsonl"
         ),
         help="Image metadata"
     )
@@ -292,7 +292,7 @@ def main():
         "--output",
         type=Path,
         default=Path(
-            "data/processed/merged_documents.jsonl"
+            "data/processed/pdf/merged_documents.jsonl"
         ),
         help="Merged output"
     )

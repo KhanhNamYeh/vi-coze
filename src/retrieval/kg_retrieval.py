@@ -6,9 +6,11 @@ from pathlib import Path
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer, CrossEncoder
 
+from ..config_sql import KG_INDEX
+
 
 class SQLRetriever:
-    def __init__(self, index_path="kb_index.npz", k=5):
+    def __init__(self, index_path=KG_INDEX, k=5):
         self.k = k
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -67,11 +69,8 @@ class SQLRetriever:
 
 
 if __name__ == "__main__":
-    current_dir = Path(__file__).parent
-    index_file = current_dir / "kb_index.npz"
-
     try:
-        retriever = SQLRetriever(index_path=str(index_file))
+        retriever = SQLRetriever(index_path=str(KG_INDEX))
         test_queries = [
             "Tìm các điểm bán ở phường Vũng Tàu và nhân viên chăm sóc",
             "Doanh thu Saymee hôm nay",

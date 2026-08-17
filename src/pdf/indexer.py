@@ -37,7 +37,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 DEFAULT_MODEL = "BAAI/bge-m3"
 
-DEFAULT_DB = "data/vectorstore/chroma"
+DEFAULT_DB = "data/index/chroma"
 
 
 
@@ -218,7 +218,7 @@ def main():
         type=Path,
 
         default=Path(
-            "data/processed/chunked.jsonl"
+            "data/processed/pdf/chunked.jsonl"
         )
 
     )

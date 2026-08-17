@@ -2,7 +2,7 @@
 Inspect & Analyze Chunking Results
 
 Usage:
-    python inspect_chunks.py --input data/processed/chunked.jsonl
+    python inspect_chunks.py --input data/processed/pdf/chunked.jsonl
 """
 
 import argparse
@@ -147,7 +147,7 @@ def main():
     parser.add_argument(
         "--input",
         type=Path,
-        default=Path("data/processed/chunked.jsonl"),
+        default=Path("data/processed/pdf/chunked.jsonl"),
         help="Chunked JSONL file"
     )
     

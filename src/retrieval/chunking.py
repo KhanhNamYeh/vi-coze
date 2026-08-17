@@ -2,7 +2,7 @@
 
     uv run python -m src.retrieval.chunking mo_ta_bang_bds_new.md
 
-Chỉ cần tên file — mặc định tìm trong `config.ARTIFACT_DIR`, ghi .chunks.jsonl
+Chỉ cần tên file — mặc định tìm trong `config.PROCESSED_DIR`, ghi .chunks.jsonl
 cạnh file .md.
 
 Cắt theo cấu trúc, không cắt theo độ dài: một bảng = một chunk, overlap = 0.
@@ -21,7 +21,7 @@ from langchain_core.runnables import Runnable, RunnableLambda
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 
 from ..config_sql import (
-    ARTIFACT_DIR,
+    PROCESSED_DIR,
     HEADERS_TO_SPLIT_ON,
     MAX_CHARS,
     MIN_CHARS,
@@ -93,7 +93,7 @@ def check(chunks: list[Document], *, max_chars: int = MAX_CHARS, min_chars: int 
     return warn
 
 
-def load_markdown(name: str | Path, *, base: Path = ARTIFACT_DIR) -> Document:
+def load_markdown(name: str | Path, *, base: Path = PROCESSED_DIR) -> Document:
     src = require(resolve(name, base), base)
     rel = src.relative_to(ROOT).as_posix() if src.is_relative_to(ROOT) else src.name
     return Document(
@@ -102,7 +102,7 @@ def load_markdown(name: str | Path, *, base: Path = ARTIFACT_DIR) -> Document:
     )
 
 
-def write_chunks(chunks: list[Document], *, out_dir: Path = ARTIFACT_DIR, doc_id: str) -> Path:
+def write_chunks(chunks: list[Document], *, out_dir: Path = PROCESSED_DIR, doc_id: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     dst = out_dir / f"{doc_id}.chunks.jsonl"
     with dst.open("w", encoding="utf-8") as f:
@@ -134,8 +134,8 @@ def report(chunks: list[Document], warn: list[str]) -> None:
 def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
-        print(f"file có sẵn trong {rel(ARTIFACT_DIR)}:")
-        for n in listdir(ARTIFACT_DIR, "*.md"):
+        print(f"file có sẵn trong {rel(PROCESSED_DIR)}:")
+        for n in listdir(PROCESSED_DIR, "*.md"):
             print(f"  - {n}")
         return 1
 

@@ -2,7 +2,7 @@
 
     uv run python -m src.retrieval.parse "Mô tả bảng BĐS (NEW).docx"
 
-Chỉ cần tên file — mặc định tìm trong `UPLOAD_DIR`, ghi .md sang `ARTIFACT_DIR`.
+Chỉ cần tên file — mặc định tìm trong `RAW_DIR`, ghi .md sang `PROCESSED_DIR`.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from langchain_core.documents import Document
 from langchain_core.runnables import Runnable, RunnableLambda
 from markitdown import MarkItDown
 
-from ..config_sql import ARTIFACT_DIR, UPLOAD_DIR, listdir, rel, require, resolve
+from ..config_sql import PROCESSED_DIR, RAW_DIR, listdir, rel, require, resolve
 
 # ---- khôi phục cấp bậc tiêu đề -------------------------------------------
 # Số thứ tự là bắt buộc: nó phân biệt dòng tên bảng với dòng ghi chú cũng in đậm.
@@ -111,7 +111,7 @@ def sanitize(md: str) -> tuple[str, list[str]]:
     return md.strip() + "\n", warn
 
 
-def parse(name: str | Path, *, base: Path = UPLOAD_DIR) -> Document:
+def parse(name: str | Path, *, base: Path = RAW_DIR) -> Document:
     """Tên file -> Document chứa markdown đã dựng cấu trúc và làm sạch."""
     src = require(resolve(name, base), base)
     md, warn = sanitize(restructure(MarkItDown().convert(str(src)).text_content))
@@ -135,14 +135,14 @@ def parse(name: str | Path, *, base: Path = UPLOAD_DIR) -> Document:
     )
 
 
-def write_markdown(doc: Document, *, out_dir: Path = ARTIFACT_DIR) -> Path:
+def write_markdown(doc: Document, *, out_dir: Path = PROCESSED_DIR) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     dst = out_dir / f"{doc.metadata['doc_id']}.md"
     dst.write_text(doc.page_content, encoding="utf-8")
     return dst
 
 
-def as_runnable(*, base: Path = UPLOAD_DIR) -> Runnable[str, Document]:
+def as_runnable(*, base: Path = RAW_DIR) -> Runnable[str, Document]:
     """Bước `parse` để nối vào LCEL chain."""
     return RunnableLambda(lambda name: parse(name, base=base), name="parse")
 
@@ -150,8 +150,8 @@ def as_runnable(*, base: Path = UPLOAD_DIR) -> Runnable[str, Document]:
 def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
-        print(f"file có sẵn trong {rel(UPLOAD_DIR)}:")
-        for n in listdir(UPLOAD_DIR):
+        print(f"file có sẵn trong {rel(RAW_DIR)}:")
+        for n in listdir(RAW_DIR):
             print(f"  - {n}")
         return 1
 

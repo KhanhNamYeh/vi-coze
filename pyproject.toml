@@ -2,17 +2,47 @@
 name = "vi-coze"
 version = "0.1.0"
 requires-python = ">=3.11,<3.14"  # onnxruntime (qua markitdown) chưa có wheel cp314
+
+# Khai báo phụ thuộc DUY NHẤT của repo. requirements.txt cũ của nhánh rag_phase3
+# đã gộp vào đây: nó khai báo 7 gói không import ở đâu (FlagEmbedding, pandas,
+# beautifulsoup4, scikit-learn, tqdm, python-dotenv, chromadb) và thiếu 5 gói
+# đang được import thật (docling, tiktoken, pillow, openai, networkx...).
+#
+# Mặc định chỉ cài phần cần cho nhánh SQL. Hai nhánh còn lại nặng nên tách extra:
+#     uv sync                      pipeline schema SQL
+#     uv sync --extra kg           + knowledge graph (bước --kg)
+#     uv sync --extra pdf          + pipeline PDF    (src/pdf)
+#     uv sync --all-extras         tất cả
 dependencies = [
     "markitdown[docx]>=0.1.1",        # docs -> markdown
     "langchain-core>=1.0",            # Document, Runnable/LCEL
     "langchain-text-splitters>=1.0",  # MarkdownHeaderTextSplitter
     "langchain-huggingface>=0.3",     # HuggingFaceEmbeddings
-    "sentence-transformers>=3.0",     # backend cho embedding model
+    "langchain-classic>=1.0.8",       # EnsembleRetriever, CrossEncoderReranker
+    "sentence-transformers>=3.0",     # backend cho embedding + reranker
     "qdrant-client>=1.12",            # vector store
+    "fastembed>=0.8.0",               # BM25 sparse
     "pydantic>=2.9",
-    "fastembed>=0.8.0",
-    "langchain-classic>=1.0.8",
     "sentencepiece>=0.2.2",
+]
+
+[project.optional-dependencies]
+# src/retrieval/knowledge.py + kg_* — knowledge graph, chạy LLM qua endpoint OpenAI-compatible
+kg = [
+    "openai>=1.40",
+    "networkx>=3.2",
+    "pyvis>=0.3.2",
+    "rank-bm25>=0.2.2",
+    "numpy>=1.26",
+]
+
+# src/pdf — pipeline PDF. docling kéo theo model layout/OCR, khá nặng.
+pdf = [
+    "docling>=2.0",
+    "langchain-chroma>=0.1.2",
+    "tiktoken>=0.7",
+    "pillow>=10.0",
+    "transformers>=4.40",
 ]
 
 [dependency-groups]

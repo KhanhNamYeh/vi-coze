@@ -14,7 +14,7 @@ from pathlib import Path
 from langchain_core.documents import Document
 
 from ..config_sql import (
-    ARTIFACT_DIR,
+    PROCESSED_DIR,
     COLLECTION,
     DENSE_VECTOR,
     EMBED_BATCH,
@@ -42,7 +42,7 @@ def point_id(meta: dict) -> str:
     return str(uuid.uuid5(NAMESPACE, key))
 
 
-def load_chunks(name: str | Path, *, base: Path = ARTIFACT_DIR) -> list[Document]:
+def load_chunks(name: str | Path, *, base: Path = PROCESSED_DIR) -> list[Document]:
     src = require(resolve(name, base), base)
     docs = [
         Document(**json.loads(line))
@@ -157,8 +157,8 @@ def main(argv: list[str]) -> int:
 
     if not args:
         print(__doc__)
-        print(f"file có sẵn trong {rel(ARTIFACT_DIR)}:")
-        for n in listdir(ARTIFACT_DIR, "*.chunks.jsonl"):
+        print(f"file có sẵn trong {rel(PROCESSED_DIR)}:")
+        for n in listdir(PROCESSED_DIR, "*.chunks.jsonl"):
             print(f"  - {n}")
         return 1
 

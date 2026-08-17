@@ -1,22 +1,28 @@
-"""Pipeline offline: tên file -> markdown -> chunks.
+"""Pipeline offline của nhánh SQL. Một file điều phối toàn bộ các bước.
 
-    uv run python -m src.offline "Mô tả bảng BĐS (NEW).docx"
+    uv run python -m src.offline_sql "Mô tả bảng BĐS (NEW).docx"
 
-Chỉ cần tên file, mặc định tìm trong `config.UPLOAD_DIR`. Cả hai artifact đều
-ghi ra `config.ARTIFACT_DIR`:
+Chỉ cần tên file, mặc định tìm trong `config_sql.RAW_DIR`. Artifact ghi ra
+`config_sql.PROCESSED_DIR`:
 
-    <doc_id>.md            markdown đã dựng cấu trúc, đã làm sạch
-    <doc_id>.chunks.jsonl  chunk kèm metadata
+    <doc_id>.md                    markdown đã dựng cấu trúc, đã làm sạch
+    <doc_id>.chunks.jsonl          chunk kèm metadata
+    knowledge/sql_knowledge_map.*  knowledge graph (chỉ khi có cờ --kg)
 
 Mặc định chạy hết luồng, bao gồm embed + đẩy lên Qdrant:
 
     parse -> chunk -> embed (dense + bm25) -> upsert Qdrant
 
-Cần Qdrant đang chạy (`docker compose up -d`). Chỉ muốn dừng ở chunk thì thêm
-cờ `--no-index` — hữu ích khi tune tham số chunking, không cần nạp model 2,2 GB.
+Cờ:
 
-Chạy hoàn toàn tách khỏi đường request: không cần API, không gọi LLM. Nối bằng
-LCEL nên bọc vào worker sau này không phải sửa các bước.
+    --no-index   dừng sau bước chunk. Không nạp model 2,2 GB, chạy ~10 giây —
+                 dùng khi tune tham số chunking.
+    --kg         chạy thêm bước dựng knowledge graph từ markdown. Bước này gọi
+                 LLM qua endpoint OpenAI-compatible (mặc định ollama ở
+                 localhost:11434) nên tách khỏi luồng mặc định.
+
+Trừ cờ --kg, pipeline chạy hoàn toàn tách khỏi đường request: không cần API,
+không gọi LLM. Nối bằng LCEL nên bọc vào worker sau này không phải sửa các bước.
 """
 
 from __future__ import annotations
@@ -27,15 +33,16 @@ from pathlib import Path
 from langchain_core.documents import Document
 from langchain_core.runnables import Runnable, RunnableLambda
 
-from .config_sql import ARTIFACT_DIR, ROOT, UPLOAD_DIR, listdir, rel
+from .config_sql import PROCESSED_DIR, RAW_DIR, ROOT, listdir, rel
 from .retrieval import chunking, parse
 
 
 def build_chain(
     *,
-    source_dir: Path = UPLOAD_DIR,
-    out_dir: Path = ARTIFACT_DIR,
+    source_dir: Path = RAW_DIR,
+    out_dir: Path = PROCESSED_DIR,
     do_index: bool = True,
+    do_kg: bool = False,
 ) -> Runnable[str, dict]:
     """tên file -> {"markdown": Path, "chunks": list[Document], ...}"""
 
@@ -66,6 +73,13 @@ def build_chain(
             "warnings": warnings,
         }
 
+    def _knowledge(result: dict) -> dict:
+        # import muộn: kéo theo openai/networkx/pyvis, chỉ cần khi có cờ --kg
+        from .retrieval import knowledge
+
+        result["knowledge"] = knowledge.build(result["markdown"])
+        return result
+
     def _index(result: dict) -> dict:
         # import muộn để --no-index không phải nạp model
         from .retrieval import store
@@ -74,6 +88,8 @@ def build_chain(
         return result
 
     chain = RunnableLambda(_parse, name="parse") | RunnableLambda(_chunk, name="chunk")
+    if do_kg:
+        chain = chain | RunnableLambda(_knowledge, name="knowledge")
     return chain | RunnableLambda(_index, name="index") if do_index else chain
 
 
@@ -84,15 +100,16 @@ def run(name: str, **kw) -> dict:
 def main(argv: list[str]) -> int:
     names = [a for a in argv if not a.startswith("--")]
     do_index = "--no-index" not in argv
+    do_kg = "--kg" in argv
 
     if not names:
         print(__doc__)
-        print(f"file có sẵn trong {rel(UPLOAD_DIR)}:")
-        for n in listdir(UPLOAD_DIR):
+        print(f"file có sẵn trong {rel(RAW_DIR)}:")
+        for n in listdir(RAW_DIR):
             print(f"  - {n}")
         return 1
 
-    chain = build_chain(do_index=do_index)
+    chain = build_chain(do_index=do_index, do_kg=do_kg)
     try:
         results = chain.batch(names) if len(names) > 1 else [chain.invoke(names[0])]
     except (FileNotFoundError, ValueError) as e:
@@ -111,6 +128,9 @@ def main(argv: list[str]) -> int:
         print(f"  chunks -> {rel(r['chunks_path'])}")
         print(f"  {r['n_sections']} nhóm | {r['n_tables']} bảng")
         chunking.report(r["chunks"], r["warnings"])
+        if kg := r.get("knowledge"):
+            print(f"  kg     -> {rel(kg['json'])}"
+                  f" | {kg['n_nodes']} node, {kg['n_edges']} cạnh")
         if idx := r.get("indexed"):
             print(f"  index  -> collection '{idx['collection']}'"
                   f" | {idx['count']} điểm (dense + bm25)")

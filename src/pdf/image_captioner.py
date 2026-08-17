@@ -261,7 +261,7 @@ def main():
         "--metadata",
         type=Path,
         default=Path(
-            "data/processed/image_metadata.jsonl"
+            "data/processed/pdf/image_metadata.jsonl"
         ),
         help="Input image metadata"
     )
@@ -270,7 +270,7 @@ def main():
         "--output",
         type=Path,
         default=Path(
-            "data/processed/image_captions.jsonl"
+            "data/processed/pdf/image_captions.jsonl"
         ),
         help="Output captions"
     )

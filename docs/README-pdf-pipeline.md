@@ -47,7 +47,7 @@ v
 ```
 
 Chunking
-(chunker_optimized.py)
+(chunker.py)
 
 ```
 |
@@ -116,7 +116,7 @@ C:\RAG
 │   ├── data/
 │   │   │
 │   │   ├── pdf_loader.py
-│   │   └── chunker_optimized.py
+│   │   └── chunker.py
 │   │
 │   │
 │   └── rag/
@@ -125,7 +125,7 @@ C:\RAG
 │       └── retriever.py
 │
 │
-├── requirements.txt
+├── pyproject.toml
 └── README.md
 
 ````
@@ -158,7 +158,7 @@ Windows:
 # 4. Cài đặt thư viện
 
 ```bash
-pip install -r requirements.txt
+uv sync --extra pdf
 ```
 
 Các thư viện chính:
@@ -183,7 +183,7 @@ tiktoken
 ### File:
 
 ```
-src/data/pdf_loader.py
+src/pdf/pdf_loader.py
 ```
 
 ### Chức năng:
@@ -199,7 +199,7 @@ data/raw/[Reading]-RAG-System.pdf
 Output:
 
 ```
-data/processed/pdf_extract.jsonl
+data/processed/pdf/pdf_extract.jsonl
 ```
 
 Ví dụ:
@@ -219,7 +219,7 @@ Ví dụ:
 Chạy:
 
 ```bash
-python src/data/pdf_loader.py \
+python src/pdf/pdf_loader.py \
 --input data/raw/[Reading]-RAG-System.pdf
 ```
 
@@ -230,7 +230,7 @@ python src/data/pdf_loader.py \
 ## File:
 
 ```
-src/data/chunker_optimized.py
+src/pdf/chunker.py
 ```
 
 ## Chức năng:
@@ -248,21 +248,21 @@ Tính năng:
 Input:
 
 ```
-data/processed/pdf_extract.jsonl
+data/processed/pdf/pdf_extract.jsonl
 ```
 
 Output:
 
 ```
-data/processed/chunked.jsonl
+data/processed/pdf/chunked.jsonl
 ```
 
 Chạy:
 
 ```bash
-python src/data/chunker_optimized.py \
---input data/processed/pdf_extract.jsonl \
---output data/processed/chunked.jsonl \
+python src/pdf/chunker.py \
+--input data/processed/pdf/pdf_extract.jsonl \
+--output data/processed/pdf/chunked.jsonl \
 --strategy token \
 --target-tokens 600 \
 --token-overlap 100
@@ -300,7 +300,7 @@ Một hệ thống RAG gồm ba giai đoạn..."
 ## File:
 
 ```
-src/rag/indexer.py
+src/pdf/indexer.py
 ```
 
 ## Chức năng:
@@ -316,19 +316,19 @@ BAAI/bge-m3
 Input:
 
 ```
-data/processed/chunked.jsonl
+data/processed/pdf/chunked.jsonl
 ```
 
 Output:
 
 ```
-data/vectorstore/chroma/
+data/index/chroma/
 ```
 
 Chạy:
 
 ```bash
-python src/rag/indexer.py
+python src/pdf/indexer.py
 ```
 
 Ví dụ kết quả:
@@ -348,7 +348,7 @@ Vectors stored: 177
 ## File:
 
 ```
-src/rag/retriever.py
+src/pdf/retriever.py
 ```
 
 ## Chức năng:
@@ -379,7 +379,7 @@ Top-K đoạn tài liệu phù hợp
 Ví dụ:
 
 ```bash
-python src/rag/retriever.py \
+python src/pdf/retriever.py \
 --query "RAG hiện đại gồm những giai đoạn nào?"
 ```
 
