@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vi-coze · Knowledge Studio (offline)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#100f0c; --panel:#161410; --panel2:#1b1813; --panel3:#221e16;
+  --line:#292418; --line2:#35301f;
+  --tx:#ece8dd; --tx2:#a89f8e; --tx3:#6f6857;
+  --am:#e8a33d; --am2:#f2b95f; --amd:rgba(232,163,61,.13);
+  --ok:#8fce9f; --okd:rgba(143,206,159,.11);
+  --f-d:'Bricolage Grotesque','Be Vietnam Pro',sans-serif;
+  --f-b:'Be Vietnam Pro',sans-serif;
+  --f-m:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--tx);font-family:var(--f-b);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font-family:inherit}
+.ic{flex:none;display:inline-block;vertical-align:-2px}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#332e21;border-radius:6px;border:2px solid var(--bg)}
+::-webkit-scrollbar-track{background:transparent}
+::selection{background:rgba(232,163,61,.3)}
+
+/* grain texture rất mờ cho chất liệu */
+.grain{position:fixed;inset:0;z-index:98;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E")}
+
+/* ============ CHUNG ============ */
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);background:var(--panel2);color:var(--tx);font:600 13px var(--f-b);padding:9px 16px;border-radius:9px;cursor:pointer;transition:all .18s}
+.btn:hover{border-color:#4c4326;background:var(--panel3);transform:translateY(-1px)}
+.btn.pri{background:var(--am);border-color:var(--am);color:#1d1305}
+.btn.pri:hover{background:var(--am2);border-color:var(--am2)}
+.btn.big{padding:12px 22px;font-size:14px;border-radius:10px}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.4;pointer-events:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--f-m);border:1px solid var(--line2);border-radius:7px;padding:4px 10px;color:var(--tx2);background:var(--panel)}
+.chip b{color:var(--tx);font-weight:600}
+.mono{font-family:var(--f-m)}
+.view{animation:vin .35s ease both}
+@keyframes vin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ============ TOAST ============ */
+#toast-root{position:fixed;right:20px;bottom:20px;z-index:300;display:flex;flex-direction:column;gap:10px}
+.toast{display:flex;gap:11px;align-items:center;background:var(--panel2);border:1px solid var(--line2);border-left:3px solid var(--am);padding:12px 16px;border-radius:10px;font-size:13px;box-shadow:0 10px 34px rgba(0,0,0,.5);animation:tin .28s ease;max-width:360px}
+.toast.ok{border-left-color:var(--ok)}
+.toast .t-ic{color:var(--am)}.toast.ok .t-ic{color:var(--ok)}
+@keyframes tin{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.toast.out{animation:tout .25s ease forwards}
+@keyframes tout{to{opacity:0;transform:translateX(24px)}}
+
+/* ============ VIEW: PROJECTS ============ */
+#view-projects{max-width:960px;margin:0 auto;padding:44px 32px 90px}
+.pj-meta{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:34px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:38px;height:38px;border-radius:11px;background:var(--amd);border:1px solid rgba(232,163,61,.4);display:grid;place-items:center;color:var(--am)}
+.brand b{font:700 18px var(--f-d);letter-spacing:-.01em}
+.badge-off{font:600 9.5px var(--f-m);letter-spacing:.16em;color:var(--tx3);border:1px solid var(--line2);border-radius:5px;padding:2px 7px;margin-left:2px}
+.pj-meta .hint{font:500 11px var(--f-m);color:var(--tx3);letter-spacing:.06em}
+h1.display{font:800 42px/1.05 var(--f-d);letter-spacing:-.025em;margin-bottom:8px}
+.pj-sub{color:var(--tx2);max-width:560px;margin-bottom:30px}
+.pj-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:22px}
+.pj-count{font:500 12px var(--f-m);color:var(--tx3)}
+#pj-list{display:flex;flex-direction:column;gap:10px}
+.pj-row{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:19px 22px;border:1px solid var(--line);border-radius:14px;background:var(--panel);cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.pj-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--am);transform:scaleY(0);transition:transform .22s}
+.pj-row:hover{border-color:rgba(232,163,61,.45);transform:translateX(5px)}
+.pj-row:hover::before{transform:scaleY(1)}
+.pj-row .pj-name{font:700 16.5px var(--f-d);display:flex;align-items:center;gap:10px}
+.pj-row .pj-name .ic{color:var(--am)}
+.pj-row .pj-desc{color:var(--tx2);font-size:12.5px;margin-top:3px}
+.pj-row .pj-side{text-align:right;flex:none}
+.pj-row .pj-kb{font:500 12px var(--f-m);color:var(--tx2)}
+.pj-row .pj-time{font:400 11px var(--f-m);color:var(--tx3);margin-top:3px}
+
+/* ============ MODAL ============ */
+.modal-bg{position:fixed;inset:0;z-index:120;background:rgba(10,9,6,.7);backdrop-filter:blur(5px);display:grid;place-items:center;animation:fin .22s}
+@keyframes fin{from{opacity:0}}
+.modal{width:min(460px,calc(100vw - 40px));background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:26px;animation:mup .28s ease}
+@keyframes mup{from{opacity:0;transform:translateY(14px) scale(.98)}}
+.modal h3{font:700 21px var(--f-d);margin-bottom:4px}
+.modal .m-sub{color:var(--tx2);font-size:13px;margin-bottom:20px}
+.fld{margin-bottom:16px}
+.fld label{display:block;font:600 11px var(--f-m);letter-spacing:.12em;text-transform:uppercase;color:var(--tx2);margin-bottom:7px}
+.fld input,.fld textarea{width:100%;background:var(--bg);border:1px solid var(--line2);border-radius:9px;color:var(--tx);font:400 14px var(--f-b);padding:10px 13px;outline:none;transition:border-color .15s}
+.fld input:focus,.fld textarea:focus{border-color:var(--am)}
+.fld .err{color:#e07a68;font-size:12px;margin-top:5px;display:none}
+.m-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+
+/* ============ WORKSPACE ============ */
+#view-workspace{display:grid;grid-template-columns:236px 1fr;height:100vh}
+.side{border-right:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;padding:18px 13px 14px}
+.side .brand{padding:2px 8px 18px}
+.side-sep{font:600 10px var(--f-m);letter-spacing:.18em;color:var(--tx3);padding:14px 12px 8px}
+.proj-pick{position:relative;margin:0 4px 6px}
+.proj-pick>button{width:100%;display:flex;align-items:center;gap:9px;background:var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:9px 11px;color:var(--tx);font:600 13px var(--f-b);cursor:pointer;text-align:left}
+.proj-pick>button:hover{border-color:#4c4326}
+.proj-pick>button .ic:last-child{margin-left:auto;color:var(--tx3)}
+.proj-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:5px;z-index:40;box-shadow:0 14px 40px rgba(0,0,0,.5);display:none}
+.proj-menu.open{display:block;animation:vin .18s}
+.proj-menu button{width:100%;display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--tx2);font:500 13px var(--f-b);padding:8px 10px;border-radius:7px;cursor:pointer;text-align:left}
+.proj-menu button:hover{background:var(--panel3);color:var(--tx)}
+.proj-menu button.cur{color:var(--am)}
+.proj-menu hr{border:none;border-top:1px solid var(--line);margin:5px 4px}
+.snav{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+.snav button{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px;color:var(--tx2);font:500 13.5px var(--f-b);border:none;background:none;cursor:pointer;text-align:left;transition:.15s}
+.snav button:hover{color:var(--tx);background:var(--panel2)}
+.snav button.on{color:var(--am);background:var(--amd)}
+.side-foot{margin-top:auto;border-top:1px solid var(--line);padding:14px 10px 2px;font:500 11px var(--f-m);color:var(--tx3);display:flex;flex-direction:column;gap:5px}
+.side-foot .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:7px;box-shadow:0 0 6px rgba(143,206,159,.6)}
+.main{display:flex;flex-direction:column;min-width:0}
+.ws-head{display:flex;align-items:center;gap:16px;padding:22px 34px;border-bottom:1px solid var(--line)}
+.ws-head .ic-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--line2);background:none;color:var(--tx2);display:grid;place-items:center;cursor:pointer;transition:.15s}
+.ws-head .ic-btn:hover{color:var(--tx);border-color:#4c4326}
+.ws-name{font:800 21px var(--f-d);letter-spacing:-.01em}
+.ws-desc{color:var(--tx2);font-size:12.5px;margin-top:1px}
+.ws-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.pane{flex:1;overflow-y:auto;padding:30px 34px 60px}
+.pane-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:22px}
+.pane-head h2{font:700 26px var(--f-d);letter-spacing:-.015em}
+.pane-head p{color:var(--tx2);font-size:13px;margin-top:2px}
+
+/* empty state */
+.empty{border:1px dashed var(--line2);border-radius:18px;padding:70px 30px;text-align:center;max-width:640px;margin:5vh auto 0}
+.empty .e-ic{width:64px;height:64px;border-radius:18px;background:var(--amd);border:1px solid rgba(232,163,61,.3);display:grid;place-items:center;color:var(--am);margin:0 auto 22px}
+.empty h3{font:700 22px var(--f-d);margin-bottom:8px}
+.empty p{color:var(--tx2);max-width:420px;margin:0 auto 24px;font-size:13.5px}
+
+/* knowledge rows */
+.kb-list{display:flex;flex-direction:column;gap:10px}
+.kb-row{display:flex;align-items:center;gap:18px;padding:18px 22px;border:1px solid var(--line);border-radius:14px;background:var(--panel);cursor:pointer;transition:all .18s}
+.kb-row:hover{border-color:rgba(232,163,61,.4)}
+.kb-ic{width:40px;height:40px;border-radius:11px;background:var(--amd);color:var(--am);display:grid;place-items:center;flex:none}
+.kb-name{font:700 15.5px var(--f-d)}
+.kb-meta{font:400 11.5px var(--f-m);color:var(--tx2);margin-top:4px;display:flex;flex-wrap:wrap;gap:4px 14px}
+.kb-right{margin-left:auto;display:flex;align-items:center;gap:12px;flex:none}
+.pill{font:600 11px var(--f-m);color:var(--ok);background:var(--okd);border:1px solid rgba(143,206,159,.3);border-radius:99px;padding:4px 11px;display:inline-flex;align-items:center;gap:6px}
+
+/* ============ OVERLAY CHUNG ============ */
+.ovl{position:fixed;inset:0;z-index:80;background:rgba(9,8,6,.74);backdrop-filter:blur(6px);display:flex;animation:fin .22s}
+.ovl-panel{background:var(--bg);border:1px solid var(--line2);margin:26px;width:min(1220px,calc(100vw - 52px));border-radius:18px;display:flex;flex-direction:column;overflow:hidden;animation:mup .3s ease;box-shadow:0 40px 120px rgba(0,0,0,.6)}
+
+/* ============ SETTING ============ */
+.set-head{display:flex;align-items:center;gap:14px;padding:18px 28px;border-bottom:1px solid var(--line)}
+.set-crumb{font:500 12px var(--f-m);color:var(--tx3);display:flex;align-items:center;gap:8px}
+.set-crumb b{color:var(--tx2);font-weight:600}
+.set-title{font:700 20px var(--f-d)}
+.set-body{flex:1;display:grid;grid-template-columns:1fr 420px;min-height:0}
+.form-col{overflow-y:auto;padding:0 0 30px}
+.f-sec{padding:26px 32px 28px;border-bottom:1px solid var(--line)}
+.f-sec:last-of-type{border-bottom:none}
+.f-num{font:600 10.5px var(--f-m);color:var(--am);letter-spacing:.2em}
+.f-sec h3{font:700 18px var(--f-d);margin:7px 0 5px}
+.f-sec .f-hint{color:var(--tx2);font-size:12.5px;margin-bottom:20px}
+.flbl{display:flex;justify-content:space-between;align-items:baseline;font:600 11px var(--f-m);letter-spacing:.1em;text-transform:uppercase;color:var(--tx2);margin:20px 0 10px}
+.flbl .fhint{font-weight:500;letter-spacing:0;text-transform:none;color:var(--tx3)}
+/* docs */
+.docs{display:flex;flex-direction:column;gap:7px}
+.doc{display:flex;align-items:center;gap:12px;border:1px solid var(--line2);border-radius:10px;padding:11px 14px;cursor:pointer;transition:.15s;background:var(--panel)}
+.doc:hover{border-color:#4c4326}
+.doc.on{border-color:rgba(232,163,61,.55);background:var(--amd)}
+.doc input{display:none}
+.doc-ic{color:var(--tx3)}
+.doc.on .doc-ic{color:var(--am)}
+.doc-name{flex:1;min-width:0}
+.doc-name b{display:block;font:500 12.5px var(--f-m);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-name i{display:block;font-style:normal;font-size:11.5px;color:var(--tx3);margin-top:1px}
+.doc-size{font:500 11.5px var(--f-m);color:var(--tx2)}
+.doc-chk{width:20px;height:20px;border-radius:6px;border:1px solid var(--line2);display:grid;place-items:center;color:transparent;transition:.15s;flex:none}
+.doc.on .doc-chk{background:var(--am);border-color:var(--am);color:#1d1305}
+.doc-sum{margin-top:13px;font:500 12px var(--f-m);color:var(--tx2);display:flex;gap:6px 16px;flex-wrap:wrap}
+.doc-sum b{color:var(--am)}
+/* seg */
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line2);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:none;background:none;color:var(--tx2);font:600 12.5px var(--f-b);padding:7px 15px;border-radius:7px;cursor:pointer;transition:.15s}
+.seg button:hover{color:var(--tx)}
+.seg button.on{background:var(--panel3);color:var(--tx);box-shadow:inset 0 0 0 1px var(--line2)}
+.seg.sm button{padding:5px 11px;font-size:11.5px}
+/* slider rows */
+.srow{display:flex;align-items:center;gap:16px}
+.srow .sval{font:600 13px var(--f-m);color:var(--am);min-width:52px;text-align:right;flex:none}
+.srow .sval small{display:block;font-weight:500;font-size:10px;color:var(--tx3)}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:4px;border-radius:3px;background:var(--line2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--am);border:3.5px solid #2a2314;box-shadow:0 0 0 1.5px var(--am);cursor:grab}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--am);border:3.5px solid #2a2314;box-shadow:0 0 0 1.5px var(--am);cursor:grab}
+input[type=range].mini{max-width:130px}
+/* number + stepper */
+.num-in{display:inline-flex;align-items:center;border:1px solid var(--line2);border-radius:9px;background:var(--bg);overflow:hidden}
+.num-in input{width:84px;background:none;border:none;color:var(--tx);font:600 13px var(--f-m);text-align:center;padding:8px 4px;outline:none;-moz-appearance:textfield}
+.num-in input::-webkit-inner-spin-button{-webkit-appearance:none}
+.num-in button{width:34px;height:36px;background:var(--panel2);border:none;color:var(--tx2);font-size:16px;cursor:pointer}
+.num-in button:hover{color:var(--am)}
+.txt-in{width:100%;background:var(--bg);border:1px solid var(--line2);border-radius:9px;color:var(--tx);font:400 13.5px var(--f-m);padding:10px 13px;outline:none;transition:border-color .15s}
+.txt-in:focus{border-color:var(--am)}
+/* chunk viz */
+.cviz-wrap{margin-top:18px;border:1px solid var(--line);border-radius:11px;background:var(--panel);padding:16px 16px 10px}
+.cviz{width:100%;display:block}
+.cviz .cv{fill:rgba(232,163,61,.05);stroke:rgba(232,163,61,.32);stroke-width:1}
+.cviz .cv.on{fill:rgba(232,163,61,.2)}
+.cviz .cvo{fill:rgba(232,163,61,.14);stroke:none}
+.cviz .cvo.on{fill:rgba(232,163,61,.5)}
+.cviz-cap{font:500 11px var(--f-m);color:var(--tx3);margin-top:9px}
+.cviz-cap b{color:var(--tx2)}
+/* model select */
+.msel{position:relative;max-width:460px}
+.msel-btn{width:100%;display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:11px 14px;color:var(--tx);font:600 13px var(--f-m);cursor:pointer;text-align:left;transition:border-color .15s}
+.msel-btn:hover{border-color:#4c4326}
+.msel-btn .dim{color:var(--am);font-weight:600;font-size:11px;border:1px solid rgba(232,163,61,.4);border-radius:5px;padding:1px 7px}
+.msel-btn .ic:last-child{margin-left:auto;color:var(--tx3);transition:transform .18s}
+.msel.open .msel-btn .ic:last-child{transform:rotate(180deg)}
+.msel-menu{position:absolute;top:calc(100% + 7px);left:0;right:0;background:var(--panel2);border:1px solid var(--line2);border-radius:11px;padding:5px;z-index:30;box-shadow:0 16px 50px rgba(0,0,0,.55);display:none}
+.msel.open .msel-menu{display:block;animation:vin .18s}
+.msel-menu button{width:100%;display:flex;align-items:center;gap:10px;background:none;border:none;border-radius:8px;padding:10px 12px;cursor:pointer;text-align:left;color:var(--tx)}
+.msel-menu button:hover{background:var(--panel3)}
+.msel-menu button.on{background:var(--amd)}
+.msel-menu button b{font:600 12.5px var(--f-m);color:var(--tx)}
+.msel-menu button.on b{color:var(--am)}
+.msel-menu button .dim{font:600 11px var(--f-m);color:var(--am)}
+.msel-menu button i{font-style:normal;font-size:11.5px;color:var(--tx3);flex:none}
+.m-note{margin-top:10px;font:500 11.5px var(--f-m);color:var(--tx3)}
+/* hybrid ratio */
+.hyb{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:18px 18px 15px;margin-top:14px}
+.hyb-labels{display:flex;justify-content:space-between;font:600 12px var(--f-m);margin-bottom:12px}
+.hyb-labels .l-vec{color:var(--am)}
+.hyb-labels .l-kw{color:var(--tx2)}
+.hyb-formula{margin-top:13px;font:500 11.5px var(--f-m);color:var(--tx3);border-top:1px dashed var(--line2);padding-top:12px}
+.hyb-formula b{color:var(--tx2);font-weight:600}
+.hyb-off .hyb-inner{opacity:.35;pointer-events:none;filter:saturate(.4)}
+.hyb-note{font:500 11.5px var(--f-m);color:var(--tx3);margin-top:12px}
+/* json col */
+.jcol{border-left:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;min-height:0}
+.jhead{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.jfile{font:600 12.5px var(--f-m);color:var(--tx)}
+.jlive{display:inline-flex;align-items:center;gap:6px;font:500 10.5px var(--f-m);color:var(--ok)}
+.jlive i{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:blip 1.6s infinite}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
+.jhead .btn{margin-left:auto;padding:6px 10px;font-size:11.5px}
+#json-view{flex:1;overflow:auto;padding:14px 0;font:400 12.3px/1.75 var(--f-m)}
+.jl{display:flex;padding-right:16px}
+.jl:hover{background:rgba(232,163,61,.04)}
+.jl .ln{width:46px;flex:none;text-align:right;padding-right:15px;color:#514a3a;user-select:none}
+.j-key{color:#d6ccba}.j-str{color:#a5c98f}.j-num{color:var(--am2)}.j-bool{color:var(--tx2);font-style:italic}
+.form-actions{padding:24px 32px;display:flex;gap:12px;align-items:center;position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 75%,transparent)}
+
+/* ============ PIPELINE ============ */
+.pl-panel{margin:18px;width:calc(100vw - 36px)}
+.pl-head{display:flex;align-items:center;gap:22px;padding:17px 26px}
+.pl-htitle{font:700 18px var(--f-d);display:flex;align-items:center;gap:10px}
+.pl-htitle .ic{color:var(--am)}
+.pl-hsub{font:500 11.5px var(--f-m);color:var(--tx3);margin-top:2px}
+.pl-hstats{margin-left:auto;display:flex;align-items:center;gap:18px}
+.pl-pctwrap{display:flex;align-items:baseline;gap:9px;font-family:var(--f-m)}
+.pl-pctwrap #pl-pct{font-size:21px;font-weight:600;color:var(--am)}
+.pl-pctwrap #pl-elapsed{font-size:12px;color:var(--tx3)}
+.pl-bar{height:2.5px;background:var(--line)}
+.pl-bar i{display:block;height:100%;width:0%;background:var(--am);transition:width .2s linear}
+.pl-body{flex:1;display:flex;flex-direction:column;min-height:0}
+#pl-stages{flex:1;overflow-y:auto;padding:26px 30px 20px}
+.stage{display:grid;grid-template-columns:46px 1fr;gap:0 20px}
+.s-rail{display:flex;flex-direction:column;align-items:center}
+.s-node{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;font:600 12px var(--f-m);color:var(--tx3);background:var(--bg);flex:none;z-index:1;transition:all .25s}
+.stage.run .s-node{border-color:var(--am);color:var(--am)}
+.stage.done .s-node{border-color:rgba(143,206,159,.55);background:var(--okd);color:var(--ok)}
+.sp{width:14px;height:14px;border-radius:50%;border:2px solid var(--amd);border-top-color:var(--am);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.s-link{width:2px;height:30px;background:var(--line);position:relative;margin:3px 0}
+.s-link.done{background:rgba(143,206,159,.35)}
+.s-link.act::after{content:'';position:absolute;left:-2.5px;width:7px;height:7px;border-radius:50%;background:var(--am);box-shadow:0 0 8px rgba(232,163,61,.8);animation:dotrun 1.05s linear infinite}
+@keyframes dotrun{0%{top:-3px;opacity:0}25%{opacity:1}100%{top:26px;opacity:0}}
+.stage.pend .s-main{opacity:.38}
+.s-head{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+.s-tag{font:600 10px var(--f-m);letter-spacing:.18em;color:var(--tx3)}
+.stage.run .s-tag{color:var(--am)}
+.s-title{font:700 15.5px var(--f-d)}
+.s-time{margin-left:auto;font:600 12px var(--f-m);color:var(--tx3)}
+.stage.run .s-time{color:var(--am)}
+.s-desc{color:var(--tx2);font-size:12.5px;margin-top:3px;font-family:var(--f-m);font-weight:400}
+.s-body{margin:14px 0 20px;transition:opacity .3s}
+.stage.done .s-body{opacity:.55}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.frows{display:flex;flex-direction:column;gap:5px;max-width:640px}
+.frow2{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:8px;padding:7px 12px;font:500 12px var(--f-m);color:var(--tx2);background:var(--panel);transition:.2s}
+.frow2 .fr-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx)}
+.frow2 .fr-st{color:var(--tx3);display:flex;align-items:center;gap:6px;flex:none}
+.frow2.ok{border-color:rgba(143,206,159,.3)}
+.frow2.ok .fr-st{color:var(--ok)}
+.frow2.run .fr-st{color:var(--am)}
+.chunk-live{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.cl-num{font:800 40px/1 var(--f-d);color:var(--am);font-variant-numeric:tabular-nums}
+.cl-lbl{color:var(--tx2);font-size:13px}
+.cl-viz{max-width:640px;border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:13px}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(15px,1fr));gap:5px;max-width:640px;margin-top:2px}
+.bcell{aspect-ratio:1;border-radius:4px;border:1px solid var(--line2);background:var(--panel);transition:.2s}
+.bcell.run{border-color:var(--am);animation:bpulse 1s infinite}
+@keyframes bpulse{50%{background:var(--amd)}}
+.bcell.done{background:rgba(143,206,159,.28);border-color:rgba(143,206,159,.4)}
+.sqlbox{border:1px solid var(--line);border-radius:10px;background:#0c0b09;padding:13px 16px;max-width:640px}
+.sqlbox code{font:500 12.3px/1.7 var(--f-m);color:#c9d3b8;word-break:break-all}
+.sqlbox .caret{display:inline-block;width:7px;height:14px;background:var(--am);vertical-align:-2px;animation:blip .9s infinite}
+/* completion */
+.pl-done{margin:10px 0 8px 66px;border:1px solid rgba(232,163,61,.4);border-radius:14px;background:linear-gradient(0deg,var(--amd),transparent 140%),var(--panel);padding:24px 28px;animation:vin .4s}
+.pl-done-head{display:flex;align-items:center;gap:13px;margin-bottom:20px}
+.pl-done-head .pd-ic{width:42px;height:42px;border-radius:12px;background:var(--okd);border:1px solid rgba(143,206,159,.4);color:var(--ok);display:grid;place-items:center}
+.pl-done-head h4{font:700 19px var(--f-d)}
+.pl-done-head p{color:var(--tx2);font-size:12.5px;font-family:var(--f-m);margin-top:2px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0 0;margin:4px 0 20px}
+.stat{padding:11px 18px;border-left:1px solid var(--line2)}
+.stat:first-child{border-left:none;padding-left:0}
+.stat .st-l{font:600 10px var(--f-m);letter-spacing:.13em;text-transform:uppercase;color:var(--tx3)}
+.stat .st-v{font:700 20px var(--f-d);margin-top:4px;font-variant-numeric:tabular-nums}
+.stat .st-v small{font:500 11px var(--f-m);color:var(--tx2)}
+.path-box{display:flex;align-items:center;gap:10px;background:#0c0b09;border:1px solid var(--line);border-radius:9px;padding:10px 14px;font:500 12.5px var(--f-m);color:var(--am);margin-bottom:18px;max-width:560px}
+.path-box span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.path-box button{margin-left:auto;background:none;border:none;color:var(--tx3);cursor:pointer;padding:3px;border-radius:5px;display:grid;place-items:center}
+.path-box button:hover{color:var(--am)}
+.pl-done-actions{display:flex;gap:11px}
+/* console */
+.cons{border-top:1px solid var(--line);background:#0c0b09;display:flex;flex-direction:column;height:305px;flex:none}
+.cons-head{display:flex;align-items:center;gap:8px;padding:9px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.cons-tab{display:flex;align-items:center;gap:8px;font:600 12px var(--f-m);color:var(--tx2);background:var(--panel2);border:1px solid var(--line2);border-radius:7px 7px 0 0;padding:5px 13px;margin-bottom:-9px}
+.cons-tab .ic{color:var(--am)}
+.cons-path{font:400 11px var(--f-m);color:var(--tx3);margin-left:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cons-tools{margin-left:auto;display:flex;align-items:center;gap:5px}
+.cflt{display:flex;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:2px;gap:2px}
+.cflt button{border:none;background:none;color:var(--tx3);font:600 10.5px var(--f-m);padding:4px 9px;border-radius:6px;cursor:pointer}
+.cflt button:hover{color:var(--tx)}
+.cflt button.on{background:var(--panel3);color:var(--am)}
+.tbtn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line2);color:var(--tx3);font:500 11px var(--f-m);border-radius:7px;padding:5px 10px;cursor:pointer}
+.tbtn:hover{color:var(--tx)}
+.tbtn.on{color:var(--ok);border-color:rgba(143,206,159,.35)}
+.cons-body{flex:1;overflow-y:auto;padding:9px 0;font:400 12.2px/1.9 var(--f-m)}
+.ll{display:flex;padding:0 20px;white-space:pre-wrap;word-break:break-word}
+.ll .lt{color:#56503f;flex:none;width:98px}
+.ll .lv{flex:none;width:46px;font-weight:600}
+.ll .ls{flex:none;width:62px;color:#56503f}
+.ll .lm{color:#c8c1b2}
+.ll-INFO .lv{color:var(--tx2)}
+.ll-OK .lv{color:var(--ok)}.ll-OK .lm{color:#b9d4c1}
+.ll-WARN .lv{color:var(--am)}.ll-WARN .lm{color:#dcc394}
+.cons-body[data-fl="INFO"] .ll:not(.ll-INFO){display:none}
+.cons-body[data-fl="OK"] .ll:not(.ll-OK){display:none}
+.cons-body[data-fl="WARN"] .ll:not(.ll-WARN){display:none}
+
+/* ============ LOG EXPLORER ============ */
+.logs-grid{display:grid;grid-template-columns:308px 1fr;border:1px solid var(--line);border-radius:15px;overflow:hidden;min-height:62vh;max-height:calc(100vh - 220px)}
+.ltree{border-right:1px solid var(--line);background:var(--panel);padding:16px 12px;overflow-y:auto}
+.lt-root{display:flex;align-items:center;gap:8px;font:600 11.5px var(--f-m);color:var(--tx2);padding:7px 9px}
+.lt-root .ic{color:var(--am)}
+.lt-proj{font:600 11px var(--f-m);letter-spacing:.08em;color:var(--tx3);text-transform:uppercase;padding:13px 9px 6px}
+.lt-run{padding:4px 6px 2px}
+.lt-run>button{width:100%;display:flex;align-items:center;gap:7px;background:none;border:none;color:var(--tx2);font:500 11.5px var(--f-m);padding:6px 8px;border-radius:7px;cursor:pointer;text-align:left}
+.lt-run>button:hover{color:var(--tx)}
+.lt-run>button .ic{color:var(--tx3)}
+.lt-run.open>button .ic{color:var(--am)}
+.lt-files{padding:2px 0 6px 22px}
+.lt-files button{width:100%;display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--tx3);font:400 11.5px var(--f-m);padding:5.5px 9px;border-radius:6px;cursor:pointer;text-align:left}
+.lt-files button:hover{color:var(--tx)}
+.lt-files button.on{color:var(--am);background:var(--amd)}
+.lt-files button .ic{flex:none}
+.lview{display:flex;flex-direction:column;min-width:0}
+.lview-head{padding:13px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;font:500 12px var(--f-m);color:var(--tx2);background:var(--panel)}
+.lview-head .p{color:var(--am);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lview-head .btn{margin-left:auto;flex:none;padding:6px 11px;font-size:11.5px}
+.lview-body{flex:1;overflow:auto;padding:12px 0;font:400 12.2px/1.9 var(--f-m);background:#0d0c0a}
+.lview-body .jl{padding-right:14px}
+.jl-card{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:0 18px 9px;background:var(--panel);max-width:760px}
+.jl-card .jl-h{display:flex;gap:14px;font:600 11.5px var(--f-m);color:var(--am);margin-bottom:6px}
+.jl-card .jl-h span{color:var(--tx3);font-weight:400}
+.jl-card .jl-t{font:400 12.3px/1.75 var(--f-m);color:#c4bdad}
+.jl-card .jl-v{font:400 10.5px var(--f-m);color:var(--tx3);margin-top:7px;border-top:1px dashed var(--line2);padding-top:7px}
+.logs-empty{border:1px dashed var(--line2);border-radius:15px;padding:56px 30px;text-align:center;max-width:560px;margin:4vh auto 0}
+.logs-empty .e-ic{width:56px;height:56px;border-radius:15px;background:var(--panel2);border:1px solid var(--line2);display:grid;place-items:center;color:var(--tx3);margin:0 auto 18px}
+.logs-empty h4{font:700 19px var(--f-d);margin-bottom:7px}
+.logs-empty p{color:var(--tx2);font-size:13px;margin-bottom:20px}
+
+@media (max-width:1080px){
+  .set-body{grid-template-columns:1fr}
+  .jcol{display:none}
+  .stat-grid{grid-template-columns:repeat(2,1fr);row-gap:14px}
+  .stat:nth-child(odd){border-left:none;padding-left:0}
+}
+@media (max-width:840px){
+  #view-workspace{grid-template-columns:1fr}
+  .side{display:none}
+  .logs-grid{grid-template-columns:1fr}
+  .ltree{max-height:220px;border-right:none;border-bottom:1px solid var(--line)}
+  .pl-done{margin-left:0}
+  h1.display{font-size:32px}
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div id="toast-root"></div>
+
+<!-- ================= VIEW: DANH SÁCH DỰ ÁN ================= -->
+<section id="view-projects" class="view">
+  <div class="pj-meta">
+    <div class="brand">
+      <div class="brand-mark" id="brand-mark"></div>
+      <b>vi-coze</b><span class="badge-off">OFFLINE</span>
+    </div>
+    <span class="hint">KNOWLEDGE STUDIO · CHẠY HOÀN TOÀN TRÊN MÁY CỦA BẠN</span>
+  </div>
+  <div class="pj-head">
+    <div>
+      <h1 class="display">Dự án</h1>
+      <p class="pj-sub">Tạo chatbot tri thức riêng tư: đánh chỉ mục tài liệu, tách đoạn và nhúng vector ngay trên máy — không cần internet, không gửi dữ liệu đi đâu.</p>
+    </div>
+    <button class="btn pri big" id="btn-newpj"></button>
+  </div>
+  <div id="pj-list"></div>
+</section>
+
+<!-- ================= VIEW: WORKSPACE ================= -->
+<section id="view-workspace" class="view hidden">
+  <aside class="side">
+    <div class="brand">
+      <div class="brand-mark sm" id="brand-mark2"></div>
+      <b>vi-coze</b>
+    </div>
+    <div class="side-sep">DỰ ÁN</div>
+    <div class="proj-pick" id="proj-pick">
+      <button id="proj-pick-btn"></button>
+      <div class="proj-menu" id="proj-menu"></div>
+    </div>
+    <div class="side-sep">KHÔNG GIAN LÀM VIỆC</div>
+    <nav class="snav">
+      <button data-tab="knowledge" class="on" id="nav-kb"></button>
+      <button data-tab="logs" id="nav-lg"></button>
+    </nav>
+    <div class="side-foot">
+      <span><i class="dot"></i>Runtime offline · CPU</span>
+      <span>engine v0.4.2 · sqlite-vec</span>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="ws-head">
+      <button class="ic-btn" id="ws-back"></button>
+      <div>
+        <div class="ws-name" id="ws-name"></div>
+        <div class="ws-desc" id="ws-desc"></div>
+      </div>
+      <div class="ws-right" id="ws-right"></div>
+    </header>
+    <div class="pane" id="pane-holder">
+      <div id="tab-knowledge"></div>
+      <div id="tab-logs" class="hidden"></div>
+    </div>
+  </main>
+</section>
+
+<!-- ================= OVERLAY: KNOWLEDGE SETTING ================= -->
+<div id="ovl-setting" class="ovl hidden">
+  <div class="ovl-panel">
+    <div class="set-head">
+      <div>
+        <div class="set-crumb" id="set-crumb"></div>
+        <div class="set-title">Thiết lập Knowledge</div>
+      </div>
+      <button class="btn ghost" id="set-close" style="margin-left:auto"></button>
+    </div>
+    <div class="set-body">
+      <div style="display:flex;flex-direction:column;min-height:0;min-width:0">
+        <div class="form-col" id="set-form"></div>
+        <div class="form-actions" id="set-actions"></div>
+      </div>
+      <aside class="jcol">
+        <div class="jhead">
+          <span class="jfile">config/sql.json</span>
+          <span class="jlive"><i></i>LIVE</span>
+          <button class="btn" id="json-copy"></button>
+        </div>
+        <div id="json-view"></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ================= OVERLAY: PIPELINE ================= -->
+<div id="ovl-pipeline" class="ovl hidden">
+  <div class="ovl-panel pl-panel">
+    <div class="pl-head">
+      <div>
+        <div class="pl-htitle" id="pl-title"></div>
+        <div class="pl-hsub" id="pl-sub"></div>
+      </div>
+      <div class="pl-hstats">
+        <div class="pl-pctwrap"><span id="pl-pct">0%</span><span id="pl-elapsed">0,0s</span></div>
+        <div class="seg sm" id="pl-speed">
+          <button data-sp="1" class="on">1×</button>
+          <button data-sp="2">2×</button>
+          <button data-sp="4">4×</button>
+        </div>
+        <button class="btn ghost" id="pl-close" disabled></button>
+      </div>
+    </div>
+    <div class="pl-bar"><i id="pl-bar-fill"></i></div>
+    <div class="pl-body">
+      <div id="pl-stages"></div>
+      <div class="cons">
+        <div class="cons-head">
+          <span class="cons-tab" id="cons-tab"></span>
+          <span class="cons-path" id="cons-path"></span>
+          <div class="cons-tools">
+            <div class="cflt" id="cons-flt">
+              <button data-fl="ALL" class="on">TẤT CẢ</button>
+              <button data-fl="INFO">INFO</button>
+              <button data-fl="WARN">WARN</button>
+              <button data-fl="OK">OK</button>
+            </div>
+            <button class="tbtn on" id="cons-autos"></button>
+            <button class="tbtn" id="cons-copy"></button>
+          </div>
+        </div>
+        <div class="cons-body" id="cons-body" data-fl="ALL"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL: TẠO DỰ ÁN ================= -->
+<div id="modal-pj" class="modal-bg hidden">
+  <div class="modal">
+    <h3>Tạo dự án mới</h3>
+    <p class="m-sub">Mỗi dự án chứa chatbot và kho tri thức riêng của bạn.</p>
+    <form id="pj-form" novalidate>
+      <div class="fld">
+        <label for="pj-name">Tên dự án</label>
+        <input id="pj-name" type="text" placeholder="VD: Trợ lý CSKH cửa hàng" autocomplete="off" maxlength="60">
+        <div class="err" id="pj-err">Vui lòng đặt tên cho dự án.</div>
+      </div>
+      <div class="fld">
+        <label for="pj-desc">Mô tả ngắn <span style="color:var(--tx3);text-transform:none;letter-spacing:0">(không bắt buộc)</span></label>
+        <textarea id="pj-desc" rows="2" placeholder="Chatbot này trả lời về điều gì?"></textarea>
+      </div>
+      <div class="m-actions">
+        <button type="button" class="btn ghost" id="pj-cancel">Huỷ</button>
+        <button type="submit" class="btn pri" id="pj-submit">Tạo dự án</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   vi-coze · Knowledge Studio (offline demo)
+   Luồng: Create project → Knowledge Setting → Pipeline → Logs
+   ================================================================ */
+
+/* ---------- Icons (SVG stroke tự vẽ, nhất quán 1.7px) ---------- */
+const ICONS = {
+  check:'<path d="M4.5 12.8l4.8 4.7L19.5 6.5"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  back:'<path d="M19 12H5m6-6l-6 6 6 6"/>',
+  chevD:'<path d="M6 9.5l6 6 6-6"/>',
+  chevR:'<path d="M9.5 6l6 6-6 6"/>',
+  copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
+  folder:'<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h3.6a2 2 0 0 1 1.5.7l1.3 1.5h7.1A2.5 2.5 0 0 1 21.5 9.7v7.8A2.5 2.5 0 0 1 19 20H5.5A2.5 2.5 0 0 1 3 17.5z"/>',
+  file:'<path d="M13.5 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8.5z"/><path d="M13.5 3v5.5H19"/>',
+  db:'<ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.58 3 8 3s8-1.3 8-3v-13"/><path d="M4 12c0 1.7 3.58 3 8 3s8-1.3 8-3"/>',
+  cpu:'<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/>',
+  term:'<path d="M4 17.5l6-5.5-6-5.5"/><path d="M12 19h8"/>',
+  layers:'<path d="M12 3l9 4.8-9 4.8-9-4.8z"/><path d="M3.6 12.4L12 16.9l8.4-4.5"/><path d="M3.6 16.6L12 21l8.4-4.4"/>',
+  play:'<path d="M7.5 5.5l11 6.5-11 6.5z"/>',
+  clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  arrowR:'<path d="M5 12h14m-6-6l6 6-6 6"/>',
+  box:'<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+  msg:'<path d="M21 11.7c0 4.3-4 7.8-9 7.8-1 0-2-.15-2.9-.42L4 20.5l1.3-3.9C4 15.2 3 13.6 3 11.7 3 7.4 7 3.9 12 3.9s9 3.5 9 7.8z"/>'
+};
+const ic = (n, s=16, cls='') => `<svg class="ic ${cls}" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
+
+/* ---------- Helpers ---------- */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = n => Math.round(n).toLocaleString('vi-VN');
+const kb  = b => (b/1024).toFixed(1).replace('.',',') + ' KB';
+const pad = n => String(n).padStart(2,'0');
+const ts  = () => { const d = new Date(); return d.toTimeString().slice(0,8) + '.' + String(d.getMilliseconds()).padStart(3,'0'); };
+const dts = (d=new Date()) => `${pad(d.getDate())}/${pad(d.getMonth()+1)} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const runId = (d=new Date()) => `knowledge_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+const chip = t => `<span class="chip">${t}</span>`;
+const numV = n => String(n).replace('.', ','); // hiển thị số thập phân kiểu vi
+
+function copyText(text, label='Đã sao chép vào clipboard'){
+  const done = () => toast(label, 'ok');
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); done(); }catch(e){ toast('Không sao chép được', ''); }
+  ta.remove();
+}
+function toast(msg, type=''){
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<span class="t-ic">${ic(type==='ok'?'check':'check',15)}</span><span>${esc(msg)}</span>`;
+  $('#toast-root').appendChild(el);
+  setTimeout(() => { el.classList.add('out'); setTimeout(()=>el.remove(), 260); }, 3200);
+}
+
+/* ---------- Dữ liệu mô phỏng ---------- */
+const DOCS = [
+  { id:'d1', name:'chinh-sach-doi-tra.md',   label:'Chính sách đổi trả & bảo hành',      size: 48213,  type:'Markdown' },
+  { id:'d2', name:'faq-khach-hang.txt',      label:'FAQ khách hàng · 214 câu hỏi',       size:126400,  type:'Text' },
+  { id:'d3', name:'huong-dan-san-pham.pdf',  label:'Hướng dẫn sử dụng sản phẩm',         size:302118,  type:'PDF' },
+  { id:'d4', name:'quy-trinh-xu-ly-don.docx',label:'Quy trình xử lý đơn hàng',           size: 88560,  type:'DOCX' },
+  { id:'d5', name:'loi-thuong-gap.md',       label:'Mục kỹ thuật & lỗi thường gặp',      size: 64290,  type:'Markdown' },
+];
+const MODELS = [
+  { id:'bge-m3',    name:'BAAI/bge-m3',                                dim:1024, vps:420, desc:'Đa ngôn ngữ · mạnh cho tiếng Việt · khuyến nghị' },
+  { id:'e5-lg',     name:'intfloat/multilingual-e5-large',              dim:1024, vps:350, desc:'Cân bằng chất lượng và tốc độ' },
+  { id:'minilm',    name:'paraphrase-multilingual-MiniLM-L12-v2',       dim:384,  vps:890, desc:'Nhẹ · tốt cho máy cấu hình thấp' },
+  { id:'vi-sent',   name:'keepitreal/vietnamese-sentence-embedding',    dim:768,  vps:510, desc:'Fine-tune riêng trên văn bản tiếng Việt' },
+];
+const STRATS = {
+  fixed:   { id:'fixed_size', label:'Kích thước cố định' },
+  para:    { id:'paragraph',  label:'Theo đoạn văn' },
+  recur:   { id:'recursive',  label:'Đệ quy nhiều mức' },
+};
+const RETRIEVAL = { vector:'Vector', hybrid:'Hybrid', keyword:'Từ khoá' };
+const CLEAN_RULES = [
+  'Chuẩn hoá Unicode NFC',
+  'Thu gọn khoảng trắng & dòng trống',
+  'Loại bỏ header/footer trùng lặp',
+  'Tách bảng trong PDF thành văn bản có cấu trúc',
+  'Chuẩn hoá dấu câu tiếng Việt',
+];
+const SAMPLE_TEXT = 'Khách hàng có thể yêu cầu đổi trả sản phẩm trong vòng 30 ngày kể từ ngày nhận hàng. Sản phẩm cần còn đầy đủ tem mác, hoá đơn mua hàng và chưa qua sử dụng. Với các sản phẩm lỗi do nhà sản xuất, công ty hỗ trợ đổi mới miễn phí trong 7 ngày đầu tiên. Đối với yêu cầu hoàn tiền, bộ phận kế toán sẽ xử lý trong 3 đến 5 ngày làm việc kể từ khi yêu cầu được phê duyệt. Trường hợp đơn hàng giao trễ quá 5 ngày so với cam kết, khách hàng được áp dụng mã giảm giá 10% cho lần mua tiếp theo. Mọi khiếu nại về chất lượng sản phẩm cần kèm hình ảnh hoặc video quay rõ tình trạng sản phẩm tại thời điểm nhận hàng.';
+const SAMPLE_VECS = [
+  [0.0231,-0.0872, 0.1145, 0.0519,-0.1330, 0.0902, 0.0447,-0.0168],
+  [-0.0563, 0.1021,-0.0290, 0.0874, 0.0115,-0.0944, 0.1260, 0.0337],
+  [0.0812,-0.0059,-0.1176, 0.0420, 0.0931,-0.0255,-0.0704, 0.1049],
+  [0.0094, 0.1240, 0.0608,-0.0863,-0.0492, 0.0715, 0.0180,-0.1127],
+];
+
+/* ---------- Cầu nối API ----------------------------------------------
+   Server là nguồn sự thật. localStorage bị bỏ: hai tab mở cùng lúc sẽ ghi đè
+   nhau, và trạng thái job phải sống lâu hơn cái tab.
+   -------------------------------------------------------------------- */
+const API = {
+  async get(path){
+    const r = await fetch(path);
+    if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
+    return r.headers.get('content-type')?.includes('json') ? r.json() : r.text();
+  },
+  async post(path, body){
+    const r = await fetch(path, {method:'POST', headers:{'Content-Type':'application/json'},
+                                 body: JSON.stringify(body)});
+    if (!r.ok) throw new Error(`${r.status} ${await r.text()}`);
+    return r.json();
+  },
+  projects:  ()            => API.get('/api/projects'),
+  newProject:(b)           => API.post('/api/projects', b),
+  sources:   ()            => API.get('/api/sources'),
+  runs:      (p)           => API.get(`/api/runs?project=${p}`),
+  run:       (id)          => API.get(`/api/runs/${id}`),
+  startRun:  (b)           => API.post('/api/runs', b),
+  log:       (id, off = 0) => API.get(`/api/runs/${id}/log?offset=${off}`),
+};
+
+/* ---------- State + persist ---------- */
+const LS_KEY = 'vicoze_knowledge_studio_v1';
+const DEFAULT_FORM = {
+  kbName: 'Kiến thức tri thức v1',
+  files: ['d1','d2','d3','d4'],
+  strategy: 'fixed',
+  chunkSize: 512,
+  overlap: 64,
+  separator: '\\n\\n',
+  embedModel: 'bge-m3',
+  mode: 'hybrid',
+  ratio: 70,
+  topK: 5,
+  threshold: 0.45,
+};
+const state = {
+  view: 'projects', tab: 'knowledge',
+  currentProjectId: null,
+  projects: [], knowledges: {}, logRuns: [],
+  form: { ...DEFAULT_FORM },
+  logsSel: null,   // { runId, file }
+};
+
+function persist(){
+  /* Server giữ trạng thái. Chỉ form đang soạn dở là cục bộ - mất nó không sao. */
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({ form: state.form })); }catch(e){}
+}
+async function loadState(){
+  try{ state.form = { ...DEFAULT_FORM, ...(JSON.parse(localStorage.getItem(LS_KEY))?.form || {}) }; }catch(e){}
+  const rows = await API.projects();
+  state.projects  = rows.map(p => ({ id:String(p.id), name:p.name, desc:p.description, created:'' }));
+  state.knowledges = Object.fromEntries(rows.map(p => [String(p.id), p.knowledge.map(k => ({
+    id:k.id, name:k.id, origin:k.origin, source:k.source, collection:k.collection,
+    chunkMode:k.chunk?.mode || 'general', created:'', runId:null,
+  }))]));
+  state.logRuns = [];
+}
+function seed(){
+  state.projects = [{ id:'prj_nhan_su', name:'Cẩm nang nhân sự', desc:'Chính sách nội bộ, quy trình nghỉ phép, phúc lợi nhân viên', created:'02/06 · 10:12' }];
+  state.knowledges = { prj_nhan_su: [{
+    id:'kb_ns1', name:'Nhân sự KB v1', docsCount:3, chunks:214, dims:1024,
+    mode:'hybrid · 70/30', created:'02/06 · 10:14', runId:'run_seed', time:'9,8s', size:'0,9 MB',
+  }]};
+  state.logRuns = [makeSeedRun()];
+  persist();
+}
+function makeSeedRun(){
+  const dir = 'data/processed/sql/prj_nhan_su/knowledge_20250602_101244/';
+  const lines = [
+    { t:'10:12:44.102', lvl:'INFO', src:'load',  msg:'Đọc nhan-su-nghi-phuc-loi.docx (74,3 KB) → 76.140 ký tự' },
+    { t:'10:12:44.861', lvl:'INFO', src:'load',  msg:'Đọc chinh-sach-noi-bo.md (31,0 KB) → 31.744 ký tự' },
+    { t:'10:12:45.402', lvl:'INFO', src:'load',  msg:'Đọc quy-trinh-tuyen-dung.pdf (58,2 KB) → 59.596 ký tự' },
+    { t:'10:12:45.911', lvl:'INFO', src:'clean', msg:'Chuẩn hoá Unicode NFC · 167.480 ký tự' },
+    { t:'10:12:46.220', lvl:'WARN', src:'clean', msg:'Phát hiện 6 bảng trong quy-trinh-tuyen-dung.pdf — chuyển đổi sang văn bản có cấu trúc' },
+    { t:'10:12:46.845', lvl:'INFO', src:'chunk', msg:'Chiến lược fixed_size · size 512 · overlap 64' },
+    { t:'10:12:47.512', lvl:'INFO', src:'chunk', msg:'Đoạn #214 · 118 tokens · offset 106.176' },
+    { t:'10:12:48.104', lvl:'INFO', src:'embed', msg:'Batch 7/7 · 22 vectors · 415 vec/s' },
+    { t:'10:12:52.338', lvl:'INFO', src:'index', msg:'INSERT INTO vec_chunks — 214 rows · 0,9 MB' },
+    { t:'10:12:53.105', lvl:'INFO', src:'index', msg:'Tạo chỉ mục FTS5 (bm25) cho truy vấn từ khoá' },
+    { t:'10:12:53.640', lvl:'INFO', src:'save',  msg:'Ghi config/sql.json' },
+    { t:'10:12:53.912', lvl:'OK',   src:'save',  msg:'Hoàn tất indexing "Nhân sự KB v1" · 214 đoạn · 9,8s — sẵn sàng truy vấn' },
+  ];
+  return {
+    id:'run_seed', projectId:'prj_nhan_su', dir,
+    files: [
+      { name:'processing.log', type:'log', lines },
+      { name:'config.json', type:'json', obj: {
+        project_id:'prj_nhan_su',
+        knowledge:{ name:'Nhân sự KB v1',
+          chunking:{ strategy:'fixed_size', chunk_size:512, chunk_overlap:64, separator:'\\n\\n' },
+          embedding:{ model:'BAAI/bge-m3', dimension:1024, batch_size:32, device:'cpu' },
+          retrieval:{ mode:'hybrid', semantic_weight:0.7, keyword_weight:0.3, top_k:5, score_threshold:0.45 },
+          storage:{ vector_store:'sqlite-vec', fts:'fts5', output_dir: dir } } } },
+      { name:'index.meta.json', type:'json', obj: {
+        store:'sqlite-vec', table:'vec_chunks', rows:214, dim:1024, fts:'fts5',
+        size_bytes: 913408, created:'2025-06-02T10:12:53' } },
+    ],
+  };
+}
+const getProject = () => state.projects.find(p => p.id === state.currentProjectId);
+const getRun     = id => state.logRuns.find(r => r.id === id);
+
+/* ================================================================
+   ĐIỀU HƯỚNG
+   ================================================================ */
+function showView(name){
+  state.view = name;
+  $('#view-projects').classList.toggle('hidden', name !== 'projects');
+  $('#view-workspace').classList.toggle('hidden', name !== 'workspace');
+}
+function openProjects(){
+  showView('projects');
+  renderProjects();
+}
+function openWorkspace(pid){
+  state.currentProjectId = pid;
+  const p = getProject();
+  $('#ws-name').textContent = p.name;
+  $('#ws-desc').textContent = p.desc || 'Chưa có mô tả';
+  $('#proj-pick-btn').innerHTML = `${ic('box',15)} <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</span> ${ic('chevD',14)}`;
+  switchTab(state.tab === 'logs' && !state.logRuns.length ? 'knowledge' : state.tab);
+  showView('workspace');
+}
+function switchTab(tab){
+  state.tab = tab;
+  $$('.snav button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  $('#tab-knowledge').classList.toggle('hidden', tab !== 'knowledge');
+  $('#tab-logs').classList.toggle('hidden', tab !== 'logs');
+  if (tab === 'knowledge') renderKnowledgeTab();
+  else renderLogsTab();
+}
+
+/* ================================================================
+   VIEW: PROJECTS
+   ================================================================ */
+function renderProjects(){
+  const totalKb = Object.values(state.knowledges).reduce((a,l)=>a+l.length, 0);
+  $('#pj-count') && ($('#pj-count').textContent = '');
+  $('#pj-list').innerHTML = state.projects.map(p => {
+    const n = (state.knowledges[p.id]||[]).length;
+    return `<div class="pj-row" data-open-pj="${p.id}">
+      <div>
+        <div class="pj-name">${ic('box',16)} ${esc(p.name)}</div>
+        <div class="pj-desc">${esc(p.desc || 'Chưa có mô tả')}</div>
+      </div>
+      <div class="pj-side">
+        <div class="pj-kb">${n} knowledge${n===1?'':'s'}</div>
+        <div class="pj-time">${p.created}</div>
+      </div>
+    </div>`;
+  }).join('') || '<p style="color:var(--tx2)">Chưa có dự án nào — tạo dự án đầu tiên của bạn.</p>';
+  document.querySelector('.pj-count')?.remove();
+  const c = document.createElement('div');
+  c.className = 'pj-count';
+  c.textContent = `${state.projects.length} dự án · ${totalKb} knowledge · runtime local`;
+  $('#view-projects .pj-head').appendChild(c);
+}
+
+/* ================================================================
+   TAB: KNOWLEDGE
+   ================================================================ */
+function renderKnowledgeTab(){
+  const p = getProject();
+  const list = state.knowledges[p.id] || [];
+  const pane = $('#tab-knowledge');
+  let html = `<div class="pane-head">
+    <div><h2>Knowledge</h2><p>Kho tri thức được đánh chỉ mục offline của dự án «${esc(p.name)}».</p></div>
+    <button class="btn pri" id="btn-open-setting">${ic('plus',15)} Tạo Knowledge</button>
+  </div>`;
+  if (!list.length){
+    html += `<div class="empty">
+      <div class="e-ic">${ic('layers',28)}</div>
+      <h3>Chưa có Knowledge nào</h3>
+      <p>Thiết lập chunking, chọn mô hình embedding và chế độ truy xuất hybrid — sau đó để pipeline offline xử lý tài liệu của bạn thành kho tri thức.</p>
+      <button class="btn pri big" id="btn-open-setting2">${ic('play',15)} Thiết lập Knowledge</button>
+    </div>`;
+  } else {
+    html += `<div class="kb-list">` + list.map(k => `
+      <div class="kb-row" data-run="${k.runId}">
+        <div class="kb-ic">${ic('layers',19)}</div>
+        <div>
+          <div class="kb-name">${esc(k.name)}</div>
+          <div class="kb-meta">
+            <span>${k.docsCount} tệp</span><span>${fmt(k.chunks)} đoạn</span><span>${k.dims}d</span>
+            <span>${esc(k.mode)}</span><span>sqlite-vec</span><span>${k.size}</span><span>${k.time}</span>
+          </div>
+        </div>
+        <div class="kb-right">
+          <span class="pill">${ic('check',12)} Đã đánh chỉ mục</span>
+          <button class="btn ghost" data-run="${k.runId}">${ic('term',14)} Nhật ký</button>
+        </div>
+      </div>`).join('') + `</div>`;
+  }
+  pane.innerHTML = html;
+  pane.classList.remove('hidden');
+  $('#btn-open-setting')?.addEventListener('click', openSetting);
+  $('#btn-open-setting2')?.addEventListener('click', openSetting);
+  pane.querySelectorAll('.kb-row').forEach(r => r.addEventListener('click', e => {
+    openRunLogs(r.dataset.run, 'processing.log');
+  }));
+}
+function openRunLogs(runId, file){
+  state.logsSel = { runId, file };
+  switchTab('logs');
+}
+
+/* ================================================================
+   TAB: LOG EXPLORER  (data/processed/sql/)
+   ================================================================ */
+function fileIcon(t){ return t === 'log' ? 'term' : t === 'jsonl' ? 'db' : 'file'; }
+function hlJSON(obj){
+  const raw = JSON.stringify(obj, null, 2);
+  return raw.split('\n').map(line => {
+    const h = esc(line).replace(/("(?:\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*")(\s*:)?|\b(true|false|null)\b|-?\d+(\.\d+)?([eE][+-]?\d+)?/g, m => {
+      let cls = 'j-num';
+      if (m.startsWith('"')) cls = m.endsWith(':') ? 'j-key' : 'j-str';
+      else if (/^(true|false|null)$/.test(m)) cls = 'j-bool';
+      return `<span class="${cls}">${m}</span>`;
+    });
+    return h;
+  });
+}
+function renderJSONLines(obj){
+  const lines = hlJSON(obj);
+  return lines.map((l,i)=>`<div class="jl"><span class="ln">${i+1}</span><span>${l||' '}</span></div>`).join('');
+}
+function renderLogLines(lines){
+  return lines.map(l => `<div class="ll ll-${l.lvl}"><span class="lt">${l.t}</span><span class="lv">${l.lvl}</span><span class="ls">[${l.src}]</span><span class="lm">${esc(l.msg)}</span></div>`).join('');
+}
+function renderJsonlCards(items){
+  return items.map(o => `<div class="jl-card">
+    <div class="jl-h">${esc(o.chunk_id)}<span>${o.tokens} tokens · offset ${fmt(o.offset)}</span></div>
+    <div class="jl-t">${esc(o.text)}</div>
+    <div class="jl-v">vec[${o.dim}][:8] = [${o.vector_head.map(v=>v.toFixed(4)).join(', ')}, …]</div>
+  </div>`).join('');
+}
+function renderLogsTab(){
+  const pane = $('#tab-logs');
+  if (!state.logRuns.length){
+    pane.innerHTML = `<div class="logs-empty">
+      <div class="e-ic">${ic('folder',24)}</div>
+      <h4>Chưa có nhật ký xử lý</h4>
+      <p>Nhật ký pipeline sẽ được ghi vào <span class="mono" style="color:var(--am)">data/processed/sql/</span> sau khi bạn tạo knowledge đầu tiên.</p>
+      <button class="btn pri" id="lg-cta">${ic('arrowR',14)} Đến Knowledge</button>
+    </div>`;
+    $('#lg-cta').addEventListener('click', () => switchTab('knowledge'));
+    return;
+  }
+  // mặc định chọn run mới nhất
+  if (!state.logsSel || !getRun(state.logsSel.runId)){
+    const last = state.logRuns[state.logRuns.length-1];
+    state.logsSel = { runId: last.id, file: last.files[0].name };
+  }
+  const cur = getRun(state.logsSel.runId);
+  const curFile = cur.files.find(f => f.name === state.logsSel.file) || cur.files[0];
+
+  // cây thư mục
+  const byProj = {};
+  [...state.logRuns].reverse().forEach(r => { (byProj[r.projectId] ||= []).push(r); });
+  let tree = `<div class="lt-root">${ic('folder',14)} data/processed/sql/</div>`;
+  for (const [pid, runs] of Object.entries(byProj)){
+    const pj = state.projects.find(p=>p.id===pid);
+    tree += `<div class="lt-proj">${esc(pj ? pj.name : pid)}</div>`;
+    runs.forEach(r => {
+      const open = r.id === cur.id;
+      tree += `<div class="lt-run ${open?'open':''}">
+        <button data-run-t="${r.id}">${ic('chevR',12)} ${r.dir.split('/').pop()}</button>
+        <div class="lt-files" style="${open?'':'display:none'}">` +
+        r.files.map(f => `<button data-run-f="${r.id}" data-file="${f.name}" class="${(r.id===cur.id && f.name===curFile.name)?'on':''}">${ic(fileIcon(f.type),13)} ${f.name}</button>`).join('') +
+        `</div></div>`;
+    });
+  }
+  let body = '';
+  if (curFile.type === 'log')   body = renderLogLines(curFile.lines);
+  if (curFile.type === 'json')  body = renderJSONLines(curFile.obj);
+  if (curFile.type === 'jsonl') body = renderJsonlCards(curFile.lines);
+
+  pane.innerHTML = `<div class="pane-head">
+      <div><h2>Nhật ký xử lý</h2><p>Kết quả pipeline được ghi xuống đĩa theo cấu trúc thư mục offline.</p></div>
+    </div>
+    <div class="logs-grid">
+      <div class="ltree">${tree}</div>
+      <div class="lview">
+        <div class="lview-head">
+          ${ic(fileIcon(curFile.type),14)}
+          <span class="p">${cur.dir}${curFile.name}</span>
+          <button class="btn" id="lv-copy">${ic('copy',13)} Sao chép</button>
+        </div>
+        <div class="lview-body">${body}</div>
+      </div>
+    </div>`;
+  // bindings
+  pane.querySelectorAll('[data-run-t]').forEach(b => b.addEventListener('click', () => {
+    const rid = b.dataset.runT; const r = getRun(rid);
+    state.logsSel = { runId: rid, file: r.files[0].name };
+    renderLogsTab();
+  }));
+  pane.querySelectorAll('[data-run-f]').forEach(b => b.addEventListener('click', () => {
+    state.logsSel = { runId: b.dataset.runF, file: b.dataset.file };
+    renderLogsTab();
+  }));
+  const copyContent = curFile.type === 'log' ? curFile.lines.map(l=>`${l.t} [${l.lvl}] [${l.src}] ${l.msg}`).join('\n')
+    : curFile.type === 'json' ? JSON.stringify(curFile.obj, null, 2)
+    : curFile.lines.map(o=>JSON.stringify(o)).join('\n');
+  $('#lv-copy').addEventListener('click', () => copyText(copyContent, 'Đã sao chép ' + curFile.name));
+}
+
+/* ================================================================
+   OVERLAY: KNOWLEDGE SETTING (form + config/sql.json live)
+   ================================================================ */
+function buildConfig(){
+  const p = getProject(); const f = state.form;
+  const m = MODELS.find(x=>x.id===f.embedModel);
+  const dir = `data/processed/sql/${p.id}/`;
+  const sem = f.mode === 'hybrid' ? f.ratio/100 : (f.mode === 'vector' ? 1 : 0);
+  return {
+    project_id: p.id,
+    knowledge: {
+      name: f.kbName,
+      chunking: {
+        strategy: STRATS[f.strategy].id,
+        chunk_size: f.chunkSize,
+        chunk_overlap: f.overlap,
+        separator: f.strategy === 'fixed' ? f.separator : '\\n\\n',
+      },
+      embedding: { model: m.name, dimension: m.dim, batch_size: 32, device: 'cpu' },
+      retrieval: {
+        mode: f.mode,
+        semantic_weight: +sem.toFixed(2),
+        keyword_weight: +(1-sem).toFixed(2),
+        top_k: f.topK,
+        score_threshold: f.threshold,
+      },
+      storage: { vector_store: 'sqlite-vec', fts: 'fts5', output_dir: dir },
+    },
+  };
+}
+function updateJSON(){
+  $('#json-view').innerHTML = renderJSONLines(buildConfig());
+}
+/* --- viz chunk overlap (SVG) --- */
+function chunkVizSVG(size, ov, docTok=3200, live=false, nShow=12){
+  const W=560, s=W/docTok, step=Math.max(1, size-ov);
+  const total = Math.max(1, Math.ceil((docTok-size)/step)+1);
+  const n = Math.min(nShow, total);
+  let r = '';
+  for (let i=0; i<n; i++){
+    const x = i*step*s, w = Math.min(size, docTok-i*step)*s, y = i%2 ? 30 : 6;
+    r += `<rect class="cv ${live?'':'on'}" ${live?`data-ci="${i}"`:''} x="${x.toFixed(1)}" y="${y}" width="${Math.max(2,w).toFixed(1)}" height="20" rx="3.5"/>`;
+    if (ov>0 && i<n-1){
+      const ovw = Math.min(ov, docTok-i*step-size+ov)*s; // phần chồng lấp cuối chunk
+      r += `<rect class="cvo ${live?'':'on'}" ${live?`data-ci="${i}"`:''} x="${(x+w-ovw).toFixed(1)}" y="${y}" width="${Math.max(0,Math.min(ovw,w)).toFixed(1)}" height="20" rx="3.5"/>`;
+    }
+  }
+  return `<svg viewBox="0 0 ${W} 58" class="cviz">${r}</svg>`;
+}
+function estChunks(){
+  const f = state.form;
+  const chars = DOCS.filter(d=>f.files.includes(d.id)).reduce((a,d)=>a+d.size,0);
+  const tokens = Math.round(chars/4);
+  const step = Math.max(1, f.chunkSize - f.overlap);
+  const n = tokens <= f.chunkSize ? (tokens?1:0) : Math.ceil((tokens - f.overlap)/step);
+  return { chars, tokens, n };
+}
+function paintRange(el, pct){
+  el.style.background = `linear-gradient(90deg, var(--am) 0 ${pct}%, var(--line2) ${pct}% 100%)`;
+}
+
+function openSetting(){
+  $('#ovl-setting').classList.remove('hidden');
+  const p = getProject();
+  $('#set-crumb').innerHTML = `${ic('chevR',11)} <b>${esc(p.name)}</b> ${ic('chevR',11)} Knowledge`;
+  renderSettingForm();
+  updateJSON();
+}
+function renderSettingForm(){
+  const f = state.form;
+  const selDocs = DOCS.filter(d=>f.files.includes(d.id));
+  const est = estChunks();
+  const model = MODELS.find(m=>m.id===f.embedModel);
+  const ovPct = Math.round(f.overlap/f.chunkSize*1000)/10;
+
+  $('#set-form').innerHTML = `
+  <div class="f-sec">
+    <div class="f-num">01 · THÔNG TIN</div>
+    <h3>Knowledge cơ bản</h3>
+    <p class="f-hint">Tên hiển thị của kho tri thức trong dự án này.</p>
+    <input class="txt-in" id="f-name" value="${esc(f.kbName)}" maxlength="60" placeholder="Tên knowledge">
+  </div>
+
+  <div class="f-sec">
+    <div class="f-num">02 · NGUỒN TÀI LIỆU</div>
+    <h3>Chọn tệp đầu vào</h3>
+    <p class="f-hint">Các tệp trong thư mục nguồn của dự án — pipeline sẽ đọc, làm sạch và đánh chỉ mục toàn bộ nội dung.</p>
+    <div class="docs">${DOCS.map(d => `
+      <label class="doc ${f.files.includes(d.id)?'on':''}" data-doc="${d.id}">
+        <span class="doc-ic">${ic('file',16)}</span>
+        <span class="doc-name"><b>${d.name}</b><i>${d.label} · ${d.type}</i></span>
+        <span class="doc-size">${kb(d.size)}</span>
+        <span class="doc-chk">${ic('check',12)}</span>
+      </label>`).join('')}
+    </div>
+    <div class="doc-sum" id="doc-sum"></div>
+  </div>
+
+  <div class="f-sec">
+    <div class="f-num">03 · CHUNKING</div>
+    <h3>Tách đoạn văn bản</h3>
+    <p class="f-hint">Cách tài liệu được cắt thành các đoạn trước khi nhúng vector.</p>
+    <div class="flbl"><span>Chiến lược</span></div>
+    <div class="seg" id="f-strat">${Object.entries(STRATS).map(([k,v])=>`<button data-v="${k}" class="${f.strategy===k?'on':''}">${v.label}</button>`).join('')}</div>
+
+    <div class="flbl"><span>Kích thước đoạn</span><span class="fhint">128 – 2048 tokens</span></div>
+    <div class="srow">
+      <input type="range" id="f-size" min="128" max="2048" step="32" value="${f.chunkSize}">
+      <span class="sval" id="f-size-v">${f.chunkSize}<small>tokens</small></span>
+    </div>
+
+    <div class="flbl"><span>Chồng lấp (overlap)</span><span class="fhint">0 – 256 tokens</span></div>
+    <div class="srow">
+      <input type="range" id="f-ov" min="0" max="256" step="16" value="${f.overlap}">
+      <span class="sval" id="f-ov-v">${f.overlap}<small>≈ ${numV(ovPct)}%</small></span>
+    </div>
+
+    <div id="f-sep-wrap">
+      <div class="flbl"><span>Ký tự phân tách</span><span class="fhint">kiểu escape, vd \\n\\n</span></div>
+      <input class="txt-in" id="f-sep" style="max-width:240px" value="${esc(f.separator)}">
+    </div>
+
+    <div class="cviz-wrap" id="cviz-wrap"></div>
+  </div>
+
+  <div class="f-sec">
+    <div class="f-num">04 · EMBEDDING</div>
+    <h3>Mô hình nhúng vector</h3>
+    <p class="f-hint">Chạy hoàn toàn offline trên CPU của máy bạn.</p>
+    <div class="msel" id="msel">
+      <button type="button" class="msel-btn">${esc(model.name)} <span class="dim">${model.dim}d</span> ${ic('chevD',15)}</button>
+      <div class="msel-menu">${MODELS.map(m=>`
+        <button type="button" data-m="${m.id}" class="${f.embedModel===m.id?'on':''}">
+          <b>${m.name}</b><span class="dim">${m.dim}d</span><i>${m.desc}</i>
+        </button>`).join('')}
+      </div>
+    </div>
+    <div class="m-note" id="m-note"></div>
+  </div>
+
+  <div class="f-sec">
+    <div class="f-num">05 · TRUY XUẤT</div>
+    <h3>Chế độ tìm kiếm</h3>
+    <p class="f-hint">Cách chatbot truy vấn lại kho tri thức khi trả lời.</p>
+    <div class="seg" id="f-mode">${Object.entries(RETRIEVAL).map(([k,v])=>`<button data-v="${k}" class="${f.mode===k?'on':''}">${v}</button>`).join('')}</div>
+
+    <div class="hyb ${f.mode==='hybrid'?'':'hyb-off'}" id="hyb">
+      <div class="hyb-inner">
+        <div class="hyb-labels">
+          <span class="l-vec">Ngữ nghĩa (vector) · <span id="hyb-v">${f.ratio}%</span></span>
+          <span class="l-kw">Từ khoá (BM25) · <span id="hyb-k">${100-f.ratio}%</span></span>
+        </div>
+        <input type="range" id="f-ratio" min="0" max="100" step="5" value="${f.ratio}">
+        <div class="hyb-formula" id="hyb-f"></div>
+      </div>
+      ${f.mode!=='hybrid' ? `<div class="hyb-note">Tỉ lệ trộn chỉ áp dụng cho chế độ Hybrid.</div>` : ''}
+    </div>
+
+    <div class="flbl"><span>Số kết quả trả về (top-k)</span></div>
+    <div class="num-in">
+      <button type="button" id="tk-m">−</button>
+      <input id="f-topk" type="number" min="1" max="20" value="${f.topK}">
+      <button type="button" id="tk-p">+</button>
+    </div>
+
+    <div class="flbl"><span>Ngưỡng điểm (score threshold)</span><span class="fhint">bỏ qua kết quả dưới ngưỡng</span></div>
+    <div class="srow">
+      <input type="range" id="f-th" min="0" max="0.9" step="0.05" value="${f.threshold}">
+      <span class="sval" id="f-th-v">${numV(f.threshold.toFixed(2))}</span>
+    </div>
+  </div>`;
+
+  $('#set-actions').innerHTML = `
+    <button class="btn ghost" id="f-reset">${ic('back',14)} Mặc định</button>
+    <span style="flex:1"></span>
+    <span class="mono" id="f-est" style="font-size:11.5px;color:var(--tx3)"></span>
+    <button class="btn pri big" id="f-create">${ic('play',15)} Tạo Knowledge</button>`;
+
+  /* ---- bindings ---- */
+  const refreshDerived = () => {
+    const e = estChunks();
+    $('#doc-sum').innerHTML = `<span>${f.files.length}/${DOCS.length} tệp đã chọn</span><span>~<b>${fmt(e.chars)}</b> ký tự</span><span>≈ <b>${fmt(e.n)}</b> đoạn dự kiến</span><span>≈ <b>${fmt(e.tokens)}</b> tokens</span>`;
+    $('#f-est').textContent = e.n ? `sẽ tạo ≈ ${fmt(e.n)} vector · ${fmt(e.tokens)} tokens` : 'chưa chọn tệp nào';
+    $('#f-create').disabled = !f.files.length || !f.kbName.trim();
+    const ovP = Math.round(f.overlap/f.chunkSize*1000)/10;
+    const total = Math.max(1, Math.ceil((3200-f.chunkSize)/Math.max(1,f.chunkSize-f.overlap))+1);
+    $('#cviz-wrap').innerHTML = chunkVizSVG(f.chunkSize, f.overlap) +
+      `<div class="cviz-cap"><b>${Math.min(12,total)}/${total}</b> đoạn đầu của một tài liệu mẫu · phần đậm = chồng lấp <b>${numV(ovP)}%</b></div>`;
+    $('#f-sep-wrap').style.display = f.strategy === 'fixed' ? '' : 'none';
+    $('#m-note').textContent = `${model.desc} · ${model.vps} vec/s · batch 32 · cpu`;
+  };
+  $('#f-name').addEventListener('input', e => { f.kbName = e.target.value; $('#f-create').disabled = !f.files.length || !f.kbName.trim(); updateJSON(); });
+  $$('#set-form .doc').forEach(el => el.addEventListener('click', () => {
+    const id = el.dataset.doc;
+    const i = f.files.indexOf(id);
+    if (i >= 0){ f.files.splice(i,1); el.classList.remove('on'); } else { f.files.push(id); el.classList.add('on'); }
+    refreshDerived(); updateJSON();
+  }));
+  $('#f-strat').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    f.strategy = b.dataset.v;
+    $$('#f-strat button').forEach(x=>x.classList.toggle('on', x===b));
+    refreshDerived(); updateJSON();
+  });
+  const sizeR = $('#f-size');
+  sizeR.addEventListener('input', () => {
+    f.chunkSize = +sizeR.value;
+    if (f.overlap > f.chunkSize/2) f.overlap = Math.floor(f.chunkSize/4/16)*16, $('#f-ov').value = f.overlap;
+    $('#f-size-v').innerHTML = `${f.chunkSize}<small>tokens</small>`;
+    paintRange(sizeR, (f.chunkSize-128)/(2048-128)*100);
+    refreshDerived(); updateJSON();
+  });
+  paintRange(sizeR, (f.chunkSize-128)/(2048-128)*100);
+  const ovR = $('#f-ov');
+  ovR.addEventListener('input', () => {
+    f.overlap = +ovR.value;
+    $('#f-ov-v').innerHTML = `${f.overlap}<small>≈ ${numV(Math.round(f.overlap/f.chunkSize*1000)/10)}%</small>`;
+    paintRange(ovR, f.overlap/256*100);
+    refreshDerived(); updateJSON();
+  });
+  paintRange(ovR, f.overlap/256*100);
+  $('#f-sep').addEventListener('input', e => { f.separator = e.target.value || '\\n\\n'; updateJSON(); });
+  /* model select */
+  const msel = $('#msel');
+  msel.querySelector('.msel-btn').addEventListener('click', e => { e.stopPropagation(); msel.classList.toggle('open'); });
+  msel.querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', () => {
+    f.embedModel = b.dataset.m; msel.classList.remove('open');
+    renderSettingForm(); updateJSON();
+  }));
+  /* mode + ratio */
+  $('#f-mode').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    f.mode = b.dataset.v;
+    $$('#f-mode button').forEach(x=>x.classList.toggle('on', x===b));
+    const hyb = $('#hyb');
+    hyb.classList.toggle('hyb-off', f.mode!=='hybrid');
+    hyb.querySelector('.hyb-note')?.remove();
+    if (f.mode!=='hybrid') hyb.insertAdjacentHTML('beforeend','<div class="hyb-note">Tỉ lệ trộn chỉ áp dụng cho chế độ Hybrid.</div>');
+    else hyb.querySelector('.hyb-note')?.remove();
+    updateJSON();
+  });
+  const ratioR = $('#f-ratio');
+  const paintRatio = () => {
+    paintRange(ratioR, f.ratio);
+    $('#hyb-v').textContent = f.ratio + '%';
+    $('#hyb-k').textContent = (100 - f.ratio) + '%';
+    const a = (f.ratio/100).toFixed(2).replace('.',',');
+    const b = (1 - f.ratio/100).toFixed(2).replace('.',',');
+    $('#hyb-f').innerHTML = `score = <b>${a}</b> × cosine(q, v) + <b>${b}</b> × bm25(q, d)`;
+  };
+  ratioR.addEventListener('input', () => { f.ratio = +ratioR.value; paintRatio(); updateJSON(); });
+  paintRatio();
+  /* top-k */
+  const tk = $('#f-topk');
+  const setTk = v => { f.topK = Math.min(20, Math.max(1, v)); tk.value = f.topK; updateJSON(); };
+  $('#tk-m').addEventListener('click', () => setTk(f.topK - 1));
+  $('#tk-p').addEventListener('click', () => setTk(f.topK + 1));
+  tk.addEventListener('change', () => setTk(+tk.value || 5));
+  /* threshold */
+  const thR = $('#f-th');
+  thR.addEventListener('input', () => { f.threshold = +thR.value; $('#f-th-v').textContent = numV(f.threshold.toFixed(2)); paintRange(thR, f.threshold/0.9*100); updateJSON(); });
+  paintRange(thR, f.threshold/0.9*100);
+  /* actions */
+  $('#f-reset').addEventListener('click', () => { state.form = { ...DEFAULT_FORM }; renderSettingForm(); updateJSON(); toast('Đã đặt lại cấu hình mặc định'); });
+  $('#f-create').addEventListener('click', () => {
+    if (!f.files.length || !f.kbName.trim()) return;
+    persist();
+    $('#ovl-setting').classList.add('hidden');
+    openPipeline();
+  });
+  refreshDerived();
+}
+
+/* ================================================================
+   OVERLAY: PIPELINE ENGINE
+   ================================================================ */
+let PL = null;
+let autoScroll = true;
+
+function appendLog(lvl, src, msg){
+  const line = { t: ts(), lvl, src, msg };
+  PL.logs.push(line);
+  const body = $('#cons-body');
+  const el = document.createElement('div');
+  el.className = 'll ll-' + lvl;
+  el.innerHTML = `<span class="lt">${line.t}</span><span class="lv">${lvl}</span><span class="ls">[${src}]</span><span class="lm">${esc(msg)}</span>`;
+  body.appendChild(el);
+  if (body.children.length > 500) body.firstElementChild.remove();
+  if (autoScroll) body.scrollTop = body.scrollHeight;
+}
+function updatePipeHead(){
+  $('#pl-pct').textContent = Math.round(PL.totalP*100) + '%';
+  $('#pl-elapsed').textContent = numV((PL.simMs/1000).toFixed(1)) + 's';
+  $('#pl-bar-fill').style.width = (PL.totalP*100) + '%';
+}
+
+async function openPipeline(){
+  const f = state.form; const p = getProject();
+  const docs = DOCS.filter(d => f.files.includes(d.id));
+  const model = MODELS.find(m => m.id === f.embedModel);
+  const charsIn  = docs.reduce((a,d)=>a+d.size, 0);
+  const charsOut = Math.round(charsIn * 0.958);
+  const tokens   = Math.round(charsOut / 4);
+  const step     = f.chunkSize - f.overlap;
+  const nChunks  = tokens <= f.chunkSize ? 1 : Math.ceil((tokens - f.overlap) / step);
+  const nBatches = Math.max(1, Math.ceil(nChunks / 32));
+  const rId      = runId();
+  const dir      = `data/processed/sql/${p.id}/${rId}/`;
+  const dbMB     = (nChunks * model.dim * 4 / 1048576);
+
+  PL = { cfg: buildConfig(), docs, model, charsIn, charsOut, tokens, step, nChunks, nBatches,
+         rId, dir, dbMB, simMs: 0, totalP: 0, speed: 1, logs: [], committed: false, done: false };
+
+  /* --- header console --- */
+  $('#pl-title').innerHTML = `${ic('layers',18)} ${esc(f.kbName)}`;
+  $('#pl-sub').textContent = `${p.name} · indexing offline · ${fmt(nChunks)} vector dự kiến`;
+  $('#cons-tab').innerHTML = `${ic('term',13)} processing.log`;
+  $('#cons-path').textContent = dir + 'processing.log';
+  $('#cons-body').innerHTML = ''; $('#cons-body').dataset.fl = 'ALL';
+  $$('#cons-flt button').forEach(b => b.classList.toggle('on', b.dataset.fl === 'ALL'));
+  $('#pl-close').disabled = true;
+  $('#pl-pct').textContent = '0%'; $('#pl-elapsed').textContent = '0,0s';
+  $('#pl-bar-fill').style.width = '0%';
+  $$('#pl-speed button').forEach(b => b.classList.toggle('on', b.dataset.sp === '1'));
+  $('#ovl-pipeline').classList.remove('hidden');
+
+  appendLog('INFO','boot', `Khởi động pipeline offline · dự án ${p.id}`);
+
+  /* Gửi job thật rồi cho engine chạy theo trạng thái server trả về. Không gửi
+     được thì rơi về chế độ mô phỏng để giao diện vẫn xem được, và nói rõ. */
+  PL.stageOrder = ['parse','extract','link','chunk','embed','index'];
+  PL.logOffset = 0;
+  const kid = (state.knowledges[p.id] || [])[0]?.id;
+  if (kid){
+    try{
+      const run = await API.startRun({ project: Number(p.id), knowledge_id: kid });
+      PL.runId = run.id;
+      $('#cons-path').textContent = `data/processed/sql/p${p.id}/runs/${run.id}.log`;
+      appendLog('INFO','api', `Đã xếp hàng ${run.id} · hàng đợi ${run.queue_depth}`);
+    }catch(e){
+      appendLog('WARN','api', `Không gửi được job (${e}) — chạy chế độ mô phỏng`);
+    }
+  } else {
+    appendLog('WARN','api', 'Dự án chưa có knowledge nào — chạy chế độ mô phỏng');
+  }
+
+  /* --- định nghĩa 6 stage --- */
+  const SQL_LINE = `INSERT INTO vec_chunks(chunk_id, embedding) SELECT chunk_id, vec_f32(embedding) FROM staging;`;
+  const stageDefs = [
+  { /* 1 · LOAD */
+    title:'parse · Tài liệu → Markdown', desc:`${docs.length} tệp · ${kb(charsIn)} · UTF-8`, dur:2000,
+    detail(){ return `<div class="frows">${PL.docs.map((d,i)=>`
+        <div class="frow2" data-fi="${i}">${ic('file',13)}<span class="fr-name">${d.name}</span><span class="fr-st">—</span></div>`).join('')}
+      </div><div class="chips" data-chips></div>`; },
+    bind(b){ this.rows = [...b.querySelectorAll('[data-fi]')]; },
+    progress(p, b){
+      const done = Math.min(PL.docs.length, Math.floor(p*PL.docs.length + 1e-6));
+      this.rows.forEach((r,i)=>{
+        const st = r.querySelector('.fr-st');
+        r.classList.toggle('ok', i<done); r.classList.toggle('run', i===done && p<1);
+        if (i<done) st.innerHTML = `${ic('check',11)} ${fmt(PL.docs[i].size)} ký tự`;
+        else if (i===done) st.textContent = 'đang đọc…';
+      });
+      b.querySelector('[data-chips]').innerHTML = chip(`<b>${done}/${PL.docs.length}</b> tệp`) + chip(`<b>${fmt(charsIn)}</b> ký tự`);
+    },
+    logs: docs.map((d,i)=>({ at:(i+0.92)/docs.length, lvl:'INFO', src:'load', msg:`Đọc ${d.name} (${kb(d.size)}) → ${fmt(d.size)} ký tự` })),
+  },
+  { /* 2 · CLEAN */
+    title:'extract · Markdown → structured elements', desc:'Unicode · khoảng trắng · bảng biểu', dur:1600,
+    detail(){ return `<div class="frows">${CLEAN_RULES.map((r,i)=>`
+        <div class="frow2" data-ri="${i}"><span class="fr-name">${r}</span><span class="fr-st">—</span></div>`).join('')}
+      </div><div class="chips" data-chips></div>`; },
+    bind(b){ this.rows = [...b.querySelectorAll('[data-ri]')]; },
+    progress(p, b){
+      const done = Math.min(5, Math.floor(p*5 + 1e-6));
+      this.rows.forEach((r,i)=>{
+        const st = r.querySelector('.fr-st');
+        r.classList.toggle('ok', i<done); r.classList.toggle('run', i===done && p<1);
+        if (i<done) st.innerHTML = ic('check',11);
+        else if (i===done) st.textContent = '…';
+      });
+      const cur = Math.round(charsIn + (charsOut-charsIn)*p);
+      b.querySelector('[data-chips]').innerHTML = chip(`<b>${fmt(cur)}</b> ký tự`) + chip(`−<b>4,2%</b> sau làm sạch`);
+    },
+    logs: CLEAN_RULES.map((r,i)=>({
+      at:(i+0.92)/5,
+      lvl: r.includes('bảng') ? 'WARN' : 'INFO', src:'clean',
+      msg: r.includes('bảng') ? 'Phát hiện 14 bảng trong huong-dan-san-pham.pdf — chuyển đổi sang văn bản có cấu trúc' : r + ' · OK'
+    })),
+  },
+  { /* 3 · LINK */
+    title:'link · Gắn cây cha–con', desc:`${STRATS[f.strategy].label} · size ${f.chunkSize} · overlap ${f.overlap} tokens`, dur:2100,
+    detail(){ return `<div class="chunk-live"><span class="cl-num" data-n>0</span><span class="cl-lbl">đoạn được tạo</span></div>
+      <div class="cl-viz">${chunkVizSVG(f.chunkSize, f.overlap, 3200, true)}</div><div class="chips" data-chips></div>`; },
+    progress(p, b){
+      const c = Math.floor(p * PL.nChunks);
+      const el = b.querySelector('[data-n]'); if (el) el.textContent = fmt(c);
+      b.querySelectorAll('[data-ci]').forEach(rc => { if (+rc.dataset.ci < Math.floor(p*12)) rc.classList.add('on'); });
+      b.querySelector('[data-chips]').innerHTML =
+        chip(`<b>${fmt(PL.nChunks)}</b> đoạn`) + chip(`size <b>${f.chunkSize}</b>`) + chip(`overlap <b>${f.overlap}</b>`) + chip(`<b>${fmt(PL.tokens)}</b> tokens`);
+    },
+    logs: Array.from({length:13}, (_,i)=>({ at: 0.04 + i*0.072, lvl:'INFO', src:'chunk',
+      msg: (()=>{ const idx = Math.max(1, Math.floor((0.04+i*0.072)*PL.nChunks));
+        return `Đoạn #${fmt(idx)} · ${f.chunkSize} tokens · offset ${fmt(idx*PL.step)}`; })() })),
+  },
+  { /* 4 · CHUNK */
+    title:'chunk · Elements → chunk' + model.name.split('/').pop(), desc:`${model.dim} chiều · batch 32 · cpu`, dur:5200,
+    detail(){ return `<div class="chips" data-chips></div><div class="bgrid" data-bg>${
+        Array.from({length:nBatches},()=>'<span class="bcell"></span>').join('')}</div>`; },
+    progress(p, b){
+      const vec = Math.floor(p * PL.nChunks);
+      const bd = Math.min(nBatches, Math.floor(p*nBatches + 1e-6));
+      const vps = Math.round(model.vps * (0.92 + 0.1*Math.sin(p*38)));
+      b.querySelectorAll('.bcell').forEach((c,i)=>{ c.className = 'bcell' + (i<bd?' done': i===bd && p<1?' run':''); });
+      b.querySelector('[data-chips]').innerHTML =
+        chip(`<b>${fmt(vec)}/${fmt(PL.nChunks)}</b> vectors`) + chip(`<b>${vps}</b> vec/s`) + chip(`batch <b>${Math.min(bd+1,nBatches)}/${nBatches}</b>`);
+    },
+    logs: Array.from({length:nBatches}, (_,i)=>({ at:(i+0.92)/nBatches, lvl:'INFO', src:'embed',
+      msg:`Batch ${i+1}/${nBatches} · ${Math.min(32, PL.nChunks - i*32)} vectors · ${Math.round(model.vps*(0.9+((i*37)%20)/100))} vec/s` })),
+  },
+  { /* 5 · EMBED */
+    title:'embed · Chunk → dense vector', desc:'sqlite-vec + FTS5 · ' + dir, dur:1900,
+    detail(){ return `<div class="sqlbox"><code data-sql></code><span class="caret"></span></div><div class="chips" data-chips></div>`; },
+    progress(p, b){
+      const code = b.querySelector('[data-sql]');
+      code.textContent = SQL_LINE.slice(0, Math.floor(p * SQL_LINE.length));
+      const rows = Math.floor(p * PL.nChunks);
+      b.querySelector('[data-chips]').innerHTML =
+        chip(`INSERT <b>${fmt(rows)}/${fmt(PL.nChunks)}</b> rows`) + chip(`db <b>${numV((dbMB*p).toFixed(1))} MB</b>`) + chip(`FTS5 <b>${p>0.8?'OK':'…'}</b>`);
+    },
+    logs: [
+      { at:0.02, lvl:'INFO', src:'index', msg:`Khởi tạo ${dir}index.sqlite (sqlite-vec v0.1.6)` },
+      { at:0.10, lvl:'INFO', src:'index', msg:'CREATE TABLE vec_chunks (id INTEGER PRIMARY KEY, chunk_id TEXT, embedding BLOB)' },
+      { at:0.55, lvl:'INFO', src:'index', msg:`INSERT INTO vec_chunks — ${fmt(PL.nChunks)} rows theo batch 500/txn` },
+      { at:0.80, lvl:'INFO', src:'index', msg:'CREATE VIRTUAL TABLE chunks_fts USING fts5(chunk_id, text) — cho truy vấn BM25' },
+      { at:0.96, lvl:'OK',   src:'index', msg:`ANALYZE + VACUUM hoàn tất · ${numV(dbMB.toFixed(1))} MB` },
+    ],
+  },
+  { /* 6 · INDEX */
+    title:'index · Vào Qdrant', desc:'config/sql.json · ' + dir, dur:1500,
+    detail(){
+      const paths = [
+        ['config/sql.json', 'snapshot cấu hình knowledge'],
+        [dir + 'index.sqlite', `${fmt(PL.nChunks)} vectors · ${numV(dbMB.toFixed(1))} MB`],
+        [dir + 'processing.log', 'nhật ký pipeline'],
+        [dir + 'chunks_sample.jsonl', ' mẫu các đoạn đã tách'],
+        [dir + 'index.meta.json', 'siêu dữ liệu chỉ mục'],
+      ];
+      return `<div class="frows">${paths.map(([pa,d])=>`
+        <div class="frow2" data-pa="${pa}">${ic('file',13)}<span class="fr-name">${pa}</span><span class="fr-st">${esc(d)}</span></div>`).join('')}
+      </div>`;
+    },
+    bind(b){ this.rows = [...b.querySelectorAll('[data-pa]')]; },
+    progress(p, b){
+      const done = Math.min(5, Math.floor(p*5 + 1e-6));
+      this.rows.forEach((r,i)=>{
+        r.classList.toggle('ok', i<done); r.classList.toggle('run', i===done && p<1);
+        const st = r.querySelector('.fr-st');
+        if (i<done && !st.dataset.ok){ st.dataset.ok = 1; st.innerHTML = ic('check',11) + ' ' + st.textContent; }
+      });
+    },
+    logs: [
+      { at:0.15, lvl:'INFO', src:'save', msg:'Ghi config/sql.json — snapshot cấu hình knowledge' },
+      { at:0.35, lvl:'INFO', src:'save', msg:`Đồng bộ index.sqlite → ${dir}` },
+      { at:0.55, lvl:'INFO', src:'save', msg:`Ghi processing.log · ${'{L}'} dòng` },
+      { at:0.75, lvl:'INFO', src:'save', msg:'Ghi chunks_sample.jsonl + index.meta.json' },
+    ],
+  },
+  ];
+
+  /* --- dựng DOM stage --- */
+  const holder = $('#pl-stages'); holder.innerHTML = '';
+  stageDefs.forEach((def, i) => {
+    const el = document.createElement('div');
+    el.className = 'stage pend';
+    el.innerHTML = `
+      <div class="s-rail">
+        <div class="s-node">${i+1}</div>
+        ${i < stageDefs.length-1 ? '<div class="s-link"></div>' : ''}
+      </div>
+      <div class="s-main">
+        <div class="s-head"><span class="s-tag">STAGE 0${i+1}</span><span class="s-title">${def.title}</span><span class="s-time"></span></div>
+        <div class="s-desc">${def.desc}</div>
+        <div class="s-body" data-body></div>
+      </div>`;
+    holder.appendChild(el);
+    def.el = el; def.body = el.querySelector('[data-body]');
+  });
+  holder.scrollIntoView({block:'start'});
+
+  /* --- chạy engine --- */
+  (async () => {
+    const totalDur = stageDefs.reduce((a,s)=>a+s.dur, 0);
+    let cum = 0;
+    for (const def of stageDefs){
+      def.el.classList.remove('pend'); def.el.classList.add('run');
+      def.el.querySelector('.s-node').innerHTML = '<span class="sp"></span>';
+      def.el.previousElementSibling?.querySelector('.s-link')?.classList.remove('act');
+      def.body.innerHTML = def.detail();
+      def.bind && def.bind(def.body);
+      def.el.scrollIntoView({block:'nearest', behavior:'smooth'});
+      def.t0 = PL.simMs;
+      if (PL.runId) { await awaitRealStage(def, stageDefs.indexOf(def)); } else
+      await new Promise(res => {
+        let e = 0;
+        const iv = setInterval(() => {
+          const dt = 50;
+          e += dt * PL.speed; PL.simMs += dt * PL.speed;
+          const p = Math.min(1, e / def.dur);
+          def.logs.forEach(l => { if (!l.done && p >= l.at){ l.done = true;
+            appendLog(l.lvl, l.src, l.msg.replace('{L}', PL.logs.length + 4)); } });
+          def.progress && def.progress(p, def.body);
+          def.el.querySelector('.s-time').textContent = Math.round(p*100) + '%';
+          PL.totalP = (cum + p*def.dur) / totalDur;
+          updatePipeHead();
+          if (p >= 1){ clearInterval(iv); res(); }
+        }, 50);
+      });
+      /* hoàn thành stage */
+      def.el.classList.remove('run'); def.el.classList.add('done');
+      def.el.querySelector('.s-node').innerHTML = ic('check', 14);
+      def.el.querySelector('.s-time').textContent = numV(((PL.simMs - def.t0)/1000).toFixed(1)) + 's';
+      def.el.querySelector('.s-link')?.classList.add('done');
+      cum += def.dur;
+    }
+    PL.totalP = 1; updatePipeHead();
+    onPipelineDone();
+  })();
+}
+
+/* Chờ một chặng THẬT xong: poll `/api/runs/{id}` cho tới khi server báo chặng
+   này đã có mốc thời gian. Thanh tiến độ bò đều trong lúc chờ - nó biểu thị
+   "đang chạy", không phải phần trăm thật, vì pipeline không báo tiến độ trong
+   chặng. Reload trang giữa chừng vẫn đúng vì trạng thái nằm ở server. */
+async function awaitRealStage(def, idx){
+  const stage = PL.stageOrder[idx];
+  let p = 0;
+  while (true){
+    let run;
+    try { run = await API.run(PL.runId); }
+    catch(e){ appendLog('ERR','api', String(e)); throw e; }
+
+    const newLog = await API.log(PL.runId, PL.logOffset).catch(() => '');
+    if (newLog){
+      PL.logOffset += new TextEncoder().encode(newLog).length;
+      newLog.split('
+').filter(l => l.trim()).forEach(l =>
+        appendLog(l.trim().startsWith('!') ? 'WARN' : 'INFO', stage, l.trim()));
+    }
+
+    if (run.status === 'error'){
+      appendLog('ERR', stage, run.error || 'job hỏng');
+      def.el.classList.remove('run'); def.el.classList.add('err');
+      throw new Error(run.error || 'job hỏng');
+    }
+    if (run.stages && run.stages[stage]){ def.progress && def.progress(1, def.body); break; }
+
+    p = Math.min(0.95, p + 0.04);
+    def.progress && def.progress(p, def.body);
+    def.el.querySelector('.s-time').textContent = Math.round(p*100) + '%';
+    PL.totalP = (idx + p) / PL.stageOrder.length; updatePipeHead();
+    await new Promise(r => setTimeout(r, 700));
+  }
+}
+
+function onPipelineDone(){
+  PL.done = true;
+  const f = state.form; const p = getProject();
+  const timeS = numV((PL.simMs/1000).toFixed(1));
+  appendLog('OK','save', `Hoàn tất indexing "${f.kbName}" · ${fmt(PL.nChunks)} đoạn · ${timeS}s — sẵn sàng truy vấn`);
+  $('#pl-close').disabled = false;
+  commitPipeline();
+  /* khối tổng kết */
+  const stats = [
+    ['Tệp nguồn',   `<b>${PL.docs.length}</b> <small>tệp</small>`],
+    ['Đoạn văn bản',`<b>${fmt(PL.nChunks)}</b> <small>chunks</small>`],
+    ['Vectors',     `<b>${fmt(PL.nChunks)}</b> <small>× ${PL.model.dim}d</small>`],
+    ['Tokens',      `<b>${fmt(PL.tokens)}</b> <small>tok</small>`],
+    ['Embedding',   `<small>${esc(PL.model.name.split('/').pop())}</small>`],
+    ['Truy xuất',   `<small>${RETRIEVAL[f.mode]}${f.mode==='hybrid'?` ${f.ratio}/${100-f.ratio}`:''}</small>`],
+    ['Dung lượng',  `<b>${numV(PL.dbMB.toFixed(1))}</b> <small>MB</small>`],
+    ['Thời gian',   `<b>${timeS}</b> <small>giây</small>`],
+  ];
+  const done = document.createElement('div');
+  done.className = 'pl-done';
+  done.innerHTML = `
+    <div class="pl-done-head">
+      <div class="pd-ic">${ic('check',20)}</div>
+      <div><h4>Knowledge sẵn sàng truy vấn</h4><p>${fmt(PL.nChunks)} vectors đã được đánh chỉ mục vào sqlite-vec · ${esc(f.kbName)}</p></div>
+    </div>
+    <div class="stat-grid">${stats.map(([l,v])=>`<div class="stat"><div class="st-l">${l}</div><div class="st-v">${v}</div></div>`).join('')}</div>
+    <div class="path-box">${ic('folder',14)}<span>${PL.dir}</span><button id="pd-copy" title="Sao chép đường dẫn">${ic('copy',14)}</button></div>
+    <div class="pl-done-actions">
+      <button class="btn" id="pd-logs">${ic('term',14)} Mở nhật ký xử lý</button>
+      <button class="btn pri" id="pd-finish">${ic('check',14)} Hoàn tất</button>
+    </div>`;
+  $('#pl-stages').appendChild(done);
+  done.scrollIntoView({block:'nearest', behavior:'smooth'});
+  $('#pd-copy').addEventListener('click', () => copyText(PL.dir, 'Đã sao chép đường dẫn logs'));
+  $('#pd-logs').addEventListener('click', () => { closePipeline(); openRunLogs(PL.rId, 'processing.log'); });
+  $('#pd-finish').addEventListener('click', () => { closePipeline(); switchTab('knowledge'); toast('Knowledge «' + f.kbName + '» đã sẵn sàng', 'ok'); });
+}
+function commitPipeline(){
+  if (PL.committed) return; PL.committed = true;
+  const f = state.form; const p = getProject();
+  (state.knowledges[p.id] ||= []).push({
+    id: 'kb_' + Math.random().toString(36).slice(2,7),
+    name: f.kbName, docsCount: PL.docs.length, chunks: PL.nChunks, dims: PL.model.dim,
+    mode: f.mode === 'hybrid' ? `hybrid · ${f.ratio}/${100-f.ratio}` : RETRIEVAL[f.mode].toLowerCase(),
+    created: dts(), runId: PL.rId, time: numV((PL.simMs/1000).toFixed(1)) + 's',
+    size: numV(PL.dbMB.toFixed(1)) + ' MB',
+  });
+  const sents = SAMPLE_TEXT.split(/(?<=\.)\s+/);
+  const idxs = [1, Math.max(2, Math.round(PL.nChunks*0.34)), Math.max(3, Math.round(PL.nChunks*0.67)), Math.max(4, PL.nChunks-1)];
+  state.logRuns.push({
+    id: PL.rId, projectId: p.id, dir: PL.dir,
+    files: [
+      { name:'processing.log', type:'log', lines: PL.logs.map(l=>({...l})) },
+      { name:'config.json', type:'json', obj: PL.cfg },
+      { name:'chunks_sample.jsonl', type:'jsonl', lines: idxs.map((idx,i)=>({
+          chunk_id:'c_'+String(idx).padStart(4,'0'),
+          tokens: i===3 ? Math.round(f.chunkSize*0.78) : f.chunkSize,
+          offset: (idx-1)*PL.step, dim: PL.model.dim,
+          text: (sents[(i*2)%sents.length]+' '+sents[(i*2+1)%sents.length]).trim()+' …',
+          vector_head: SAMPLE_VECS[i],
+        })) },
+      { name:'index.meta.json', type:'json', obj: {
+          store:'sqlite-vec', table:'vec_chunks', rows: PL.nChunks, dim: PL.model.dim,
+          fts:'fts5', size_bytes: Math.round(PL.dbMB*1048576), created: new Date().toISOString() } },
+    ],
+  });
+  persist();
+}
+function closePipeline(){
+  $('#ovl-pipeline').classList.add('hidden');
+}
+
+/* ================================================================
+   KHỞI TẠO + SỰ KIỆN CHUNG
+   ================================================================ */
+function initChrome(){
+  $('#brand-mark').innerHTML = ic('layers',19);
+  $('#brand-mark2').innerHTML = ic('layers',16);
+  $('#btn-newpj').innerHTML = ic('plus',15) + ' Tạo dự án mới';
+  $('#nav-kb').innerHTML = ic('layers',16) + ' Knowledge';
+  $('#nav-lg').innerHTML = ic('term',16) + ' Nhật ký xử lý';
+  $('#ws-back').innerHTML = ic('back',17);
+  $('#set-close').innerHTML = ic('x',15) + ' Đóng';
+  $('#json-copy').innerHTML = ic('copy',13) + ' Sao chép';
+  $('#pl-close').innerHTML = ic('x',14) + ' Đóng';
+  $('#cons-autos').innerHTML = ic('clock',12) + ' Tự cuộn';
+  $('#cons-copy').innerHTML = ic('copy',12) + ' Sao chép';
+  /* nav */
+  $('#ws-back').addEventListener('click', openProjects);
+  $$('.snav button').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+  /* modal tạo dự án */
+  $('#btn-newpj').addEventListener('click', () => { $('#modal-pj').classList.remove('hidden'); $('#pj-name').focus(); });
+  $('#pj-cancel').addEventListener('click', () => $('#modal-pj').classList.add('hidden'));
+  $('#modal-pj').addEventListener('click', e => { if (e.target.id === 'modal-pj') $('#modal-pj').classList.add('hidden'); });
+  $('#pj-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('#pj-name').value.trim();
+    if (!name){ $('#pj-err').style.display = 'block'; $('#pj-name').focus(); return; }
+    $('#pj-err').style.display = 'none';
+    const pid = 'prj_' + Math.random().toString(36).slice(2,8);
+    state.projects.unshift({ id: pid, name, desc: $('#pj-desc').value.trim(), created: dts() });
+    state.knowledges[pid] = [];
+    persist();
+    $('#pj-form').reset();
+    $('#modal-pj').classList.add('hidden');
+    toast('Đã tạo dự án «' + name + '»', 'ok');
+    state.tab = 'knowledge';
+    openWorkspace(pid);
+  });
+  $('#pj-name').addEventListener('input', () => $('#pj-err').style.display = 'none');
+  /* mở project từ list */
+  $('#pj-list').addEventListener('click', e => {
+    const row = e.target.closest('[data-open-pj]');
+    if (row){ state.tab = 'knowledge'; openWorkspace(row.dataset.openPj); }
+  });
+  /* project switcher */
+  $('#proj-pick-btn').addEventListener('click', e => { e.stopPropagation(); $('#proj-menu').classList.toggle('open'); });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#proj-pick')) $('#proj-menu').classList.remove('open');
+    if (!e.target.closest('#msel')) $('#msel')?.classList.remove('open');
+  });
+  /* setting */
+  $('#set-close').addEventListener('click', () => $('#ovl-setting').classList.add('hidden'));
+  $('#json-copy').addEventListener('click', () => copyText(JSON.stringify(buildConfig(), null, 2), 'Đã sao chép config/sql.json'));
+  /* pipeline tools */
+  $('#pl-speed').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || !PL) return;
+    PL.speed = +b.dataset.sp;
+    $$('#pl-speed button').forEach(x => x.classList.toggle('on', x === b));
+    toast('Tốc độ mô phỏng: ' + b.dataset.sp + '×');
+  });
+  $('#pl-close').addEventListener('click', closePipeline);
+  $('#cons-flt').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('#cons-body').dataset.fl = b.dataset.fl;
+    $$('#cons-flt button').forEach(x => x.classList.toggle('on', x === b));
+  });
+  $('#cons-autos').addEventListener('click', () => {
+    autoScroll = !autoScroll;
+    $('#cons-autos').classList.toggle('on', autoScroll);
+  });
+  $('#cons-copy').addEventListener('click', () => {
+    if (!PL) return;
+    copyText(PL.logs.map(l=>`${l.t} [${l.lvl}] [${l.src}] ${l.msg}`).join('\n'), 'Đã sao chép processing.log');
+  });
+  /* phím tắt */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape'){
+      $('#modal-pj').classList.add('hidden');
+      if (!PL || PL.done) $('#ovl-setting').classList.add('hidden');
+    }
+  });
+}
+function renderProjMenu(){
+  $('#proj-menu').innerHTML =
+    state.projects.map(p => `<button class="${p.id===state.currentProjectId?'cur':''}" data-go="${p.id}">${ic('box',14)} ${esc(p.name)}</button>`).join('') +
+    `<hr><button data-go="__all__">${ic('arrowR',14)} Tất cả dự án</button>`;
+  $$('#proj-menu [data-go]').forEach(b => b.addEventListener('click', () => {
+    $('#proj-menu').classList.remove('open');
+    if (b.dataset.go === '__all__') openProjects();
+    else { state.tab = 'knowledge'; openWorkspace(b.dataset.go); }
+  }));
+}
+/* render lại menu mỗi khi mở workspace */
+const _openWorkspace = openWorkspace;
+openWorkspace = function(pid){ _openWorkspace(pid); renderProjMenu(); };
+
+/* ---- boot ---- */
+loadState().then(() => {
+  initChrome();
+  openProjects();
+}).catch(err => {
+  document.body.insertAdjacentHTML('afterbegin',
+    `<div style="padding:18px;background:#3b1113;color:#ffb4b4;font:14px ui-monospace">
+       Không gọi được API: ${String(err)}<br>
+       Chạy server: <b>uv run --extra api python -m src.branch_sql.api</b>
+     </div>`);
+});
+</script>
+</body>
+</html>

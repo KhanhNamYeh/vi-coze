@@ -42,6 +42,14 @@ eval = [
     "openpyxl>=3.1",
 ]
 
+# src/branch_sql/api — server điều khiển pipeline từ trình duyệt. Chỉ hai gói:
+# pydantic đã có sẵn nên FastAPI dùng thẳng KnowledgeCfg/ChunkCfg làm request body.
+api = [
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+    "python-multipart>=0.0.9",
+]
+
 # src/branch_sql/offline/parse/pdf_parse.py — đọc .pdf ở nhánh SQL. Chỉ docling,
 # không kéo theo chroma/tiktoken như extra rag_docs.
 pdf = [

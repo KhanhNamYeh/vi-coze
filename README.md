@@ -42,6 +42,12 @@ src/
 │   │   │   ├── integrity.py            đối soát chunk <-> vector <-> point
 │   │   │   ├── retrieval.py            quét tham số truy hồi trên dev
 │   │   │   └── score.py                điểm (docs@5 + sql@3) / 2
+│   │   └── ...
+│   ├── api/                    Knowledge Studio — điều khiển pipeline từ trình duyệt
+│   │   ├── app.py                  FastAPI: REST + phục vụ UI
+│   │   ├── store.py                SQLite: project, knowledge, run
+│   │   ├── queue.py                hàng đợi một luồng, chạy CLI qua subprocess
+│   │   └── static/index.html       giao diện
 │   │   └── graph/
 │   │       └── knowledge_graph.py      knowledge graph, có LLM (prototype)
 │   └── online/                 query -> hybrid -> RRF -> rerank
