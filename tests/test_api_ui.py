@@ -9,6 +9,7 @@ chuỗi chưa đóng.
 
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
@@ -71,6 +72,72 @@ class TestNoiVaoAPI:
     def test_tab_logs_doc_tu_api(self, script):
         assert "async function renderLogsTab()" in script
         assert "artifacts" in script
+
+
+class TestDungThat:
+    """Dựng trang trong DOM thật rồi bấm qua tới form.
+
+    Kiểm cú pháp thôi chưa đủ: lỗi runtime (biến của mô hình form cũ) vẫn làm
+    overlay mở ra trống trơn mà không báo gì. Đã xảy ra thật - `renderSettingForm`
+    đọc `f.files` sau khi trường đó bị bỏ khỏi DEFAULT_FORM.
+    """
+
+    @pytest.mark.skipif(not shutil.which("node"), reason="cần node")
+    def test_form_knowledge_dung_duoc_noi_dung(self, tmp_path):
+        harness = tmp_path / "run.js"
+        harness.write_text(HARNESS.replace("__UI__", UI.as_posix()), encoding="utf-8")
+        # node tìm module theo vị trí SCRIPT chứ không theo cwd, mà harness nằm
+        # ở thư mục tạm - phải chỉ đường tới node_modules bằng NODE_PATH.
+        env = {**os.environ, "NODE_PATH": str(UI.parent / "node_modules")}
+        r = subprocess.run(["node", str(harness)], capture_output=True, text=True,
+                           cwd=UI.parent, timeout=180, env=env)
+        if "Cannot find module 'jsdom'" in r.stderr:
+            pytest.skip("chưa cài jsdom: npm i --no-save jsdom")
+        assert r.returncode == 0, r.stderr[-1500:]
+        out = r.stdout
+        assert "FORM_OK" in out, "form không dựng được: " + out + r.stderr[-800:]
+        assert "NO_ERROR" in out, "có lỗi runtime: " + out
+
+
+HARNESS = """
+const { JSDOM } = require('jsdom');
+const fs = require('fs');
+const errors = [];
+const dom = new JSDOM(fs.readFileSync('__UI__', 'utf8'), {
+  runScripts: 'dangerously', pretendToBeVisual: true,
+  beforeParse(w){
+    w.fetch = async (u) => {
+      const map = {
+        '/api/projects': [{id:1,name:'P1',description:'',knowledge:[
+          {id:'k1',source:'a.docx',project:1,collection:'c',chunk:{mode:'general'},origin:'profile'}]}],
+        '/api/sources': [{name:'a.docx',size:10,supported:true}],
+      };
+      const key = Object.keys(map).find(k => u.startsWith(k));
+      return { ok: !!key, headers: {get: () => 'application/json'},
+               json: async () => map[key] || [], text: async () => JSON.stringify(map[key] || []) };
+    };
+    w.addEventListener('error', e => errors.push(String(e.error && e.error.stack || e.message)));
+    w.addEventListener('unhandledrejection', e => errors.push(String(e.reason)));
+  }});
+
+setTimeout(() => {
+  const w = dom.window, d = w.document;
+  const pj = d.querySelector('[data-open-pj]');
+  if (pj) pj.dispatchEvent(new w.MouseEvent('click', {bubbles: true}));
+  setTimeout(() => {
+    const b = d.getElementById('btn-open-setting') || d.getElementById('btn-open-setting2');
+    if (b) b.dispatchEvent(new w.MouseEvent('click', {bubbles: true}));
+    setTimeout(() => {
+      const form = d.getElementById('set-form');
+      const secs = d.querySelectorAll('#set-form .f-num').length;
+      if (form && form.innerHTML.length > 2000 && secs >= 4) console.log('FORM_OK', secs);
+      else console.log('FORM_TRONG', form ? form.innerHTML.length : 'khong co', secs);
+      console.log(errors.length ? 'ERRORS ' + errors.slice(0,2).join(' ~~ ') : 'NO_ERROR');
+      process.exit(0);
+    }, 300);
+  }, 400);
+}, 900);
+"""
 
 
 class TestFormChunk:

@@ -686,7 +686,7 @@ const DEFAULT_FORM = {
   onOverflow: 'keep', onUnderflow: 'keep',
   childRoles: '',
   /* embed + retrieval */
-  embedModel: '', mode_r: 'hybrid', ratio: 50, topK: 5,
+  embedModel: '', mode_r: 'hybrid', ratio: 50, topK: 5, threshold: 0.45,
 };
 const state = {
   view: 'projects', tab: 'knowledge',
@@ -831,18 +831,20 @@ function renderKnowledgeTab(){
     </div>`;
   } else {
     html += `<div class="kb-list">` + list.map(k => `
-      <div class="kb-row" data-run="${k.runId}">
+      <div class="kb-row" data-kid="${esc(k.id)}">
         <div class="kb-ic">${ic('layers',19)}</div>
         <div>
           <div class="kb-name">${esc(k.name)}</div>
           <div class="kb-meta">
-            <span>${k.docsCount} tệp</span><span>${fmt(k.chunks)} đoạn</span><span>${k.dims}d</span>
-            <span>${esc(k.mode)}</span><span>sqlite-vec</span><span>${k.size}</span><span>${k.time}</span>
+            <span>${esc(k.source || '—')}</span>
+            <span>chunk: ${esc(k.chunkMode || '—')}</span>
+            <span>${esc(k.collection || '—')}</span>
+            <span>${k.origin === 'profile' ? 'khai trong profile' : 'tạo từ Studio'}</span>
           </div>
         </div>
         <div class="kb-right">
-          <span class="pill">${ic('check',12)} Đã đánh chỉ mục</span>
-          <button class="btn ghost" data-run="${k.runId}">${ic('term',14)} Nhật ký</button>
+          <button class="btn" data-run-kid="${esc(k.id)}">${ic('play',14)} Chạy lại</button>
+          <button class="btn ghost" data-log-kid="${esc(k.id)}">${ic('term',14)} Nhật ký</button>
         </div>
       </div>`).join('') + `</div>`;
   }
@@ -850,8 +852,11 @@ function renderKnowledgeTab(){
   pane.classList.remove('hidden');
   $('#btn-open-setting')?.addEventListener('click', openSetting);
   $('#btn-open-setting2')?.addEventListener('click', openSetting);
-  pane.querySelectorAll('.kb-row').forEach(r => r.addEventListener('click', e => {
-    openRunLogs(r.dataset.run, 'processing.log');
+  pane.querySelectorAll('[data-run-kid]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); openPipeline(b.dataset.runKid);
+  }));
+  pane.querySelectorAll('[data-log-kid]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation(); switchTab('logs');
   }));
 }
 function openRunLogs(runId, file){
@@ -1040,6 +1045,9 @@ function paintRange(el, pct){
 }
 
 function openSetting(){
+  try{ _openSetting(); }catch(e){ showError('openSetting', e); }
+}
+function _openSetting(){
   $('#ovl-setting').classList.remove('hidden');
   const p = getProject();
   $('#set-crumb').innerHTML = `${ic('chevR',11)} <b>${esc(p.name)}</b> ${ic('chevR',11)} Knowledge`;
@@ -1048,10 +1056,10 @@ function openSetting(){
 }
 function renderSettingForm(){
   const f = state.form;
-  const selDocs = DOCS.filter(d=>f.files.includes(d.id));
-  const est = estChunks();
-  const model = MODELS.find(m=>m.id===f.embedModel);
-  const ovPct = Math.round(f.overlap/f.chunkSize*1000)/10;
+  /* `selDocs`/`est`/`ovPct` thuộc mô hình form CŨ (files + chunkSize). Form giờ
+     khớp ChunkCfg nên chúng không còn nguồn dữ liệu - giữ lại là ném lỗi ngay
+     dòng đầu và overlay mở ra trống trơn. */
+  const model = MODELS.find(m => m.id === f.embedModel) || MODELS[0];
 
   $('#set-form').innerHTML = `
   <div class="f-sec">
@@ -1776,6 +1784,24 @@ function renderProjMenu(){
 /* render lại menu mỗi khi mở workspace */
 const _openWorkspace = openWorkspace;
 openWorkspace = function(pid){ _openWorkspace(pid); renderProjMenu(); };
+
+/* Lỗi runtime trong một handler làm cả nhánh đó chết mà không để lại dấu vết
+   nào trên màn hình. Hiện nó ra để lần sau nhìn là biết, thay vì đoán CSS. */
+function showError(where, err){
+  console.error(where, err);
+  let bar = document.getElementById('js-err');
+  if (!bar){
+    bar = document.createElement('div');
+    bar.id = 'js-err';
+    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:10px 14px;'
+      + 'background:#3b1113;color:#ffb4b4;font:12.5px ui-monospace,monospace;white-space:pre-wrap;'
+      + 'max-height:34vh;overflow:auto;border-top:1px solid #7f2a2e';
+    document.body.appendChild(bar);
+  }
+  bar.textContent = `[${where}] ${err && err.stack ? err.stack : err}`;
+}
+window.addEventListener('error', e => showError('lỗi JS', e.error || e.message));
+window.addEventListener('unhandledrejection', e => showError('promise', e.reason));
 
 /* ---- boot ---- */
 loadState().then(() => {
