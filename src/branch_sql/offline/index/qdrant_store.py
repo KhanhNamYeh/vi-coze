@@ -108,7 +108,22 @@ def ensure_collection(client, collection: str, *, recreate: bool = False) -> boo
     return True
 
 
-def build_points(rows: list[dict], vectors: dict[str, list[float]]):
+def load_parents(doc_id: str, *, base: Path = PROCESSED_DIR) -> dict[str, str]:
+    """`chunk_id của cha -> page_content`. Rỗng nếu không phải chế độ parent_child.
+
+    Cha đi thẳng vào payload của con thay vì nằm ở một collection riêng: quan hệ
+    ở đây là 1-1 nên không có gì bị nhân bản, và truy hồi chỉ tốn MỘT vòng gọi -
+    khớp bằng câu hỏi rồi trả về cả mẫu, không phải tra thêm docstore.
+    """
+    src = base / f"{doc_id}.parents.jsonl"
+    if not src.exists():
+        return {}
+    rows = [json.loads(l) for l in src.read_text(encoding="utf-8").splitlines() if l.strip()]
+    return {r["metadata"]["chunk_id"]: r["page_content"] for r in rows}
+
+
+def build_points(rows: list[dict], vectors: dict[str, list[float]],
+                 parents: dict[str, str] | None = None):
     """Chunk + vector -> PointStruct, sparse dựng ngay tại đây."""
     from qdrant_client import models
 
@@ -132,7 +147,13 @@ def build_points(rows: list[dict], vectors: dict[str, list[float]]):
             },
             # `text` giữ nguyên page_content để trả về nguyên văn; metadata trải
             # phẳng để filter theo `table_name`/`section` không phải nested key.
-            payload={"text": row["page_content"], **meta},
+            # `parent_text` là nội dung ĐẦY ĐỦ để trả cho LLM khi con khớp.
+            payload={
+                "text": row["page_content"],
+                **meta,
+                **({"parent_text": parents[meta["parent_chunk_id"]]}
+                   if parents and meta.get("parent_chunk_id") in parents else {}),
+            },
         ))
     return points
 
@@ -148,9 +169,10 @@ def index(doc_id: str, *, collection: str = COLLECTION, recreate: bool = False,
             "chạy lại chặng embed."
         )
 
+    parents = load_parents(doc_id, base=base)
     client = get_client()
     created = ensure_collection(client, collection, recreate=recreate)
-    points = build_points(rows, vectors)
+    points = build_points(rows, vectors, parents)
 
     for i in range(0, len(points), UPSERT_BATCH):
         client.upsert(collection, points=points[i : i + UPSERT_BATCH], wait=True)
@@ -160,6 +182,7 @@ def index(doc_id: str, *, collection: str = COLLECTION, recreate: bool = False,
         "collection": collection,
         "created": created,
         "n_points": len(points),
+        "n_parents": len(parents),
         "total": client.count(collection, exact=True).count,
     }
 
@@ -167,7 +190,9 @@ def index(doc_id: str, *, collection: str = COLLECTION, recreate: bool = False,
 def report(res: dict) -> None:
     print(f"     collection '{res['collection']}' {'vừa tạo' if res['created'] else 'đã có'}"
           f" | dense='{DENSE_VECTOR}' ({EMBED_DIM}d) + sparse='{SPARSE_VECTOR}' (IDF)")
-    print(f"     upsert {res['n_points']} point | tổng trong collection: {res['total']}")
+    print(f"     upsert {res['n_points']} point"
+          + (f" (kèm {res['n_parents']} cha trong payload)" if res["n_parents"] else "")
+          + f" | tổng trong collection: {res['total']}")
     print(f"     model: {EMBED_MODEL}")
 
 

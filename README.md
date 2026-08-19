@@ -6,7 +6,8 @@ Pipeline RAG tiếng Việt. Hai nhánh tài liệu, mỗi nhánh một bộ ch�
 
 Cây chia theo **bộ tài liệu** trước, trong mỗi nhánh mới chia theo **chức năng**.
 Nhánh nào cũng có cùng ba phần: `config.py` nạp profile JSON, `offline/` nạp tri
-thức, `online/` truy vấn. Thứ tự nối các chặng nằm ở `pipeline.py` của từng
+thức, `online/` truy vấn. Thứ tự nối các chặng nằm ở `project.py` (nhánh SQL)
+hoặc `pipeline.py` của từng
 luồng, không nằm ở các thư mục chặng.
 
 Hai nhánh cùng tên chặng nhưng khác cách làm (docx/heading so với pdf/số trang,
@@ -20,8 +21,8 @@ src/
 │
 ├── branch_sql/                 NHÁNH tài liệu mô tả schema CSDL (.docx)
 │   ├── config.py                   nạp config/sql.json
-│   ├── offline/                raw -> parse -> extract -> link -> chunk
-│   │   ├── pipeline.py             điều phối, nối bằng LCEL
+│   ├── offline/                parse -> extract -> link -> chunk -> embed -> index
+│   │   ├── project.py              chạy trọn một dự án qua sáu chặng
 │   │   ├── parse/
 │   │   │   ├── doc_parse.py            PDF/DOCX -> canonical Markdown
 │   │   │   ├── docx_parse.py           loader DOCX
@@ -33,6 +34,14 @@ src/
 │   │   │   └── hierarchy.py            elements -> cây cha-con
 │   │   ├── chunk/
 │   │   │   └── table_chunker.py        elements -> chunk + metadata
+│   │   ├── embed/
+│   │   │   └── encoder.py              chunk -> chunk_id + dense vector
+│   │   ├── index/
+│   │   │   └── qdrant_store.py         dense + BM25 vào Qdrant
+│   │   ├── verify/
+│   │   │   ├── integrity.py            đối soát chunk <-> vector <-> point
+│   │   │   ├── retrieval.py            quét tham số truy hồi trên dev
+│   │   │   └── score.py                điểm (docs@5 + sql@3) / 2
 │   │   └── graph/
 │   │       └── knowledge_graph.py      knowledge graph, có LLM (prototype)
 │   └── online/                 query -> hybrid -> RRF -> rerank
@@ -63,9 +72,11 @@ src/
         └── bge_reranker.py         cross-encoder bge
 ```
 
-Luồng SQL kết thúc ở `chunk`; các module embed/index và `graph/` không nằm trong
-pipeline `raw -> parse -> extract -> link -> chunk` này. Bốn chặng trong pipeline
-đều tất định — `graph/` gọi LLM nên đứng ngoài.
+Luồng SQL chạy trọn sáu chặng qua `project.py`; `graph/` gọi LLM nên đứng ngoài.
+Sáu chặng trong pipeline đều tất định — cùng đầu vào cho ra cùng artifact.
+
+Mỗi dự án là một hộp đen: artifact ở `data/processed/sql/p<id>/`, collection
+riêng, không dùng chung kho nào với dự án khác.
 
 ## config/ — profile
 

@@ -1,704 +1,626 @@
-# `parse/` — tài liệu gốc thành Markdown
+# Báo cáo kỹ thuật — Pipeline offline nhánh SQL
 
-## Đầu vào
+## 1. Tổng quan
 
-`.docx` và `.pdf` — khai ở `parse.suffixes` trong `config/sql.json`, mặc định
-đặt tại `data/raw/sql/`.
+Nhánh `src/branch_sql` xử lý tài liệu tri thức thành chunk có thể truy hồi, qua sáu chặng tất định:
 
-## Nhiệm vụ
-
-### Đặt định danh tài liệu
-
-Tạo `doc_id` từ slug bỏ dấu và đuôi nguồn:
-
-```text
-Mô tả bảng BĐS (NEW).docx
-→ mo_ta_bang_bds_new__docx
+```
+parse -> extract -> link -> chunk -> embed -> index
 ```
 
-Đuôi nguồn nằm trong `doc_id` để bản DOCX và PDF của cùng tài liệu không ghi đè
-artifact của nhau.
+Chặng thứ bảy, `verify`, đứng ngoài chuỗi và trả lời câu hỏi "index đã dùng được chưa".
 
-Trước khi nhận file, parser quét thư mục chứa nguồn. Nếu hai file khác nhau cho
-ra cùng `doc_id`, pipeline dừng và báo tên cả hai file.
+Sản phẩm định vị là **platform**. Đơn vị khai báo là **bộ tri thức** (`knowledge`): một nguồn, một cách xử lý, thuộc một hoặc nhiều **dự án**. Mỗi dự án là một hộp đen — artifact và collection tách hẳn, không có đường nào để dự án này nhìn thấy dữ liệu của dự án kia.
 
-### Nhận diện định dạng và chọn loader
-
-Nhận diện định dạng theo đuôi file và đối chiếu với `parse.suffixes`. Đuôi không
-có trong danh sách bị từ chối ngay, kèm danh sách các đuôi được khai.
-
-Chọn loader:
-
-```text
-.pdf  → pdf_parse  → Docling
-.docx → docx_parse → MarkItDown/Mammoth
+```jsonc
+"knowledge": [
+  { "id": "schema_docx", "source": "Mô tả bảng BĐS (NEW).docx",
+    "project": 1,      "collection": "sqlp{project}__docs", "chunk": { ... } },
+  { "id": "schema_pdf",  "source": "Mô tả bảng BĐS (NEW).pdf",
+    "project": 2,      "collection": "sqlp{project}__docs", "chunk": { ... } },
+  { "id": "sql_sample",  "source": "Text2SQL_testcase.xlsx",
+    "project": [1, 2], "collection": "sqlp{project}__sql",  "chunk": { ... } }
+]
 ```
 
-Docling nặng nên chỉ được import khi thật sự gặp `.pdf`.
+Khai chung một bộ tri thức cho nhiều dự án nghĩa là **khai một lần rồi vật chất hoá thành nhiều bản**, không phải trỏ chung vào một kho. Nếu một bộ tri thức thuộc nhiều dự án mà tên collection cố định, profile không nạp được.
 
-### Mở và giải mã file
+| | Dự án 1 | Dự án 2 |
+|---|---|---|
+| Tài liệu schema | `.docx` → `sqlp1__docs` | `.pdf` → `sqlp2__docs` |
+| SQL sample | `.xlsx` → `sqlp1__sql` | `.xlsx` → `sqlp2__sql` |
+| Artifact | `data/processed/sql/p1/` | `data/processed/sql/p2/` |
 
-MarkItDown gọi Mammoth đọc OOXML và trả Markdown thô.
+Lệnh chạy:
 
-Docling chạy mô hình nhận diện layout với `do_table_structure=True` và trả về
-`DoclingDocument` — một cây object có item, marker và bảng, không phải text
-Markdown đã hoàn chỉnh.
+```bash
+VI_COZE_PROJECT=1 uv run python -m src.branch_sql.offline 1 --recreate
+VI_COZE_PROJECT=2 uv run --extra pdf python -m src.branch_sql.offline 2 --recreate
+```
 
-### Khôi phục cấp bậc tiêu đề
+---
 
-Mỗi loader có một bộ luật riêng vì hai định dạng hỏng theo hai kiểu khác nhau.
+## 2. `parse/` — Tài liệu gốc thành Markdown
 
-DOCX: tên bảng dùng style `normal`, nên MarkItDown xuất thành bullet in đậm:
+### 2.1. Đầu vào
 
-```text
+Các định dạng được hỗ trợ: `.docx`, `.pdf`, `.xlsx`.
+
+Danh sách định dạng được khai báo tại `parse.suffixes` trong `config/sql.json`.
+
+Thư mục đầu vào mặc định: `data/raw/sql/` — dùng chung cho mọi dự án.
+
+### 2.2. Nhiệm vụ
+
+#### 2.2.1. Đặt định danh tài liệu
+
+Parser tạo `doc_id` bằng cách: chuyển tên tài liệu thành slug; loại bỏ dấu tiếng Việt; chuẩn hóa ký tự đặc biệt; gắn thêm đuôi định dạng nguồn.
+
+Ví dụ: `Mô tả bảng BĐS (NEW).docx` được chuyển thành `mo_ta_bang_bds_new__docx`.
+
+Đuôi nguồn được giữ trong `doc_id` để bản DOCX và PDF của cùng tài liệu không ghi đè artifact của nhau.
+
+Trước khi xử lý file, parser quét thư mục nguồn. Nếu hai file khác nhau tạo ra cùng một `doc_id`, pipeline dừng và báo đầy đủ tên của hai file xung đột.
+
+#### 2.2.2. Nhận diện định dạng và chọn loader
+
+Định dạng được nhận diện theo phần mở rộng file và đối chiếu với `parse.suffixes`. Nếu phần mở rộng không được khai báo, pipeline từ chối file và trả về thông báo chứa danh sách các định dạng được hỗ trợ.
+
+Loader được lựa chọn như sau:
+
+- `.pdf` → `pdf_parse` → Docling
+- `.xlsx` → `xlsx_parse` → openpyxl
+- `.docx` và còn lại → `docx_parse` → MarkItDown/Mammoth
+
+Docling có chi phí khởi tạo lớn nên chỉ được import khi pipeline thực sự gặp tài liệu PDF.
+
+#### 2.2.3. Mở và giải mã file
+
+Đối với DOCX, MarkItDown gọi Mammoth để đọc cấu trúc OOXML và trả về Markdown thô.
+
+Đối với PDF, Docling chạy mô hình nhận diện layout với `do_table_structure=True`. Kết quả là một `DoclingDocument`, tức cây object gồm các item, marker, text và table, không phải Markdown hoàn chỉnh. Pipeline đọc trực tiếp object model này để khôi phục cấu trúc trước khi tuần tự hóa thành Markdown.
+
+Đối với XLSX, openpyxl đọc sheet ở chế độ read-only. Sheet nào ứng với vai trò nào được khai tại `parse.sheets`.
+
+#### 2.2.4. Khôi phục cấp bậc tiêu đề
+
+Ba định dạng sử dụng ba bộ luật khác nhau do lỗi cấu trúc của chúng không giống nhau.
+
+**DOCX.** Trong tài liệu nguồn, tên bảng có thể sử dụng style `normal`. MarkItDown vì vậy xuất tên bảng thành bullet in đậm:
+
+```
 * 1. **Bảng X**
 ```
 
-`docx_parse.restructure()` nâng dòng này thành:
+Hàm `docx_parse.restructure()` chuyển dòng này thành heading cấp hai:
 
-```text
+```
 ## Bảng X
 ```
 
-Luật nhận diện lấy từ `parse.table_heading` trong profile. Nhóm bắt `name` được
-đưa thẳng vào heading. Nội dung trước heading cấp một đầu tiên được coi là bìa
-hoặc mục lục và bị bỏ; link neo của mục lục cũng bị loại.
+Mẫu nhận diện được khai báo tại `parse.table_heading`. Mẫu phải khớp: bullet đầu dòng; số thứ tự; toàn bộ tên bảng được in đậm. Nhóm bắt `name` được dùng trực tiếp làm nội dung heading.
 
-PDF: đọc thẳng object model của Docling, không đi qua
-`export_to_markdown()` cho toàn tài liệu. Docling có thể gán mọi tiêu đề
-`level=1` và đọc nhầm tên bảng thành list item, nhưng số thứ tự vẫn còn trong
-`text` hoặc `item.marker`.
+Nội dung đứng trước heading cấp một đầu tiên được coi là bìa hoặc mục lục và bị loại. Các link neo sinh từ mục lục cũng được loại bỏ. Ký tự bullet ở đầu mọi dòng danh sách bị cắt trên toàn tài liệu.
 
-Số quyết định cấp bậc:
+Đây là quy tắc đặc thù của profile SQL. Nếu áp dụng cho loại tài liệu khác, cần kiểm tra để tránh loại nhầm phần mở đầu có nội dung thực hoặc làm mất cấu trúc danh sách. Cấp heading xuất ra hiện đặt cứng là hai, không đọc từ profile.
 
-```text
-1.   → # section
-1.1. → ## table
-```
+**PDF.** Pipeline đọc trực tiếp object model của Docling và không gọi `export_to_markdown()` cho toàn bộ tài liệu.
 
-Quy tắc được áp dụng cho mọi item, không phụ thuộc nhãn Docling đã gán. Nội dung
-trước tiêu đề đánh số đầu tiên được coi là bìa/mục lục và bị bỏ.
+Docling có thể: gán mọi tiêu đề thành `level=1`; nhận diện sai tên bảng thành list item; vẫn giữ số thứ tự trong `text` hoặc `item.marker`.
 
-### Nối bảng PDF bị ngắt trang
+Vì vậy, số thứ tự được dùng để xác định cấp heading:
 
-Docling cắt bảng theo ranh giới trang; phần sau không còn dòng tiêu đề thật. Hai
-table item liền kề được coi là một bảng bị ngắt và được nối thành một bảng
-Markdown.
+- `1.` → heading cấp một, role `section`
+- `1.1.` → heading cấp hai, role `table`
 
-Logic này nằm trong `parse/` vì phải chạy trước khi tạo canonical Markdown. Nếu
-để tới extract, hàng dữ liệu đầu của phần sau đã bị hiểu nhầm thành tên cột.
+Quy tắc này được áp dụng cho mọi item, không phụ thuộc hoàn toàn vào nhãn do Docling sinh ra. Chỉ nhận marker từ hai cấp trở lên, vì gạch đầu dòng trong thân bài cũng được đánh số nhưng luôn một cấp.
 
-### Làm sạch văn bản
+Nội dung đứng trước tiêu đề đánh số đầu tiên được coi là bìa hoặc mục lục và bị loại. Tài liệu PDF không đánh số tiêu đề sẽ cho ra Markdown rỗng.
 
-DOCX và PDF dùng chung `sanitize()`:
+**XLSX.** Mỗi hàng Excel thành một mục có tiêu đề là mã testcase, bên dưới là ba nhãn `query:`, `evidence:`, `sql:`. Câu SQL nằm trong khối fence chứ không thả trần: SQL vốn thụt đầu dòng bằng khoảng trắng, để trần thì CommonMark nuốt thành indented code block và ranh giới đoạn lệch đi.
 
-- chuẩn hóa Unicode NFC;
-- bỏ ký tự vô hình;
-- bỏ HTML comment và các thẻ HTML được nhận diện;
-- cảnh báo liệt kê đúng thẻ đã bỏ;
-- bỏ dải gạch ngang ngăn mục;
-- sửa lỗi gõ của tài liệu nguồn theo `parse.replacements`;
-- cảnh báo dòng nghi prompt injection nhưng không xóa nội dung;
-- bỏ khoảng trắng cuối dòng, co khoảng trắng thừa và giới hạn dòng trống liên
-  tiếp.
+Chỉ sheet vai trò `dev` được dựng thành Markdown để đem đi index. Sheet `test` là bộ giữ kín, chỉ sinh JSON qua `eval/gold_parse.py`.
 
-Markdown ngắn hơn 50 ký tự bị từ chối để tránh đưa tài liệu rỗng hoặc PDF scan
-chưa OCR sang chặng sau.
+#### 2.2.5. Nối bảng PDF bị ngắt trang
 
-### Giữ metadata tối thiểu
+Docling có thể tách một bảng thành nhiều table item theo ranh giới trang. Phần tiếp theo của bảng thường không có dòng tiêu đề thực.
 
-Parse giữ trong bộ nhớ:
+Việc nối bảng được thực hiện trong `parse/` vì cần xảy ra trước khi tạo canonical Markdown. Nếu để đến `extract/`, hàng dữ liệu đầu tiên của phần tiếp theo có thể bị hiểu nhầm thành tên cột.
 
-```text
-doc_id
-title
-source_name
-warnings[]
-```
+Điều kiện nối hiện tại chỉ có một: hai table item liền nhau trong reading order, tức không có bất kỳ item nào khác nằm giữa. Một đoạn văn hay một heading xen vào là đủ để pipeline giữ chúng tách rời.
 
-Metadata này được truyền nội bộ sang extract. Parse không ghi file metadata
-riêng.
+Pipeline **không** kiểm tra ranh giới trang, **không** so số cột, **không** xác minh table item thứ hai có header hợp lệ hay không, và **không** sinh cảnh báo cho thao tác nối. Đây là luật yếu nhất trong chặng này.
 
-## Thư viện
+#### 2.2.6. Làm sạch văn bản
 
-`markitdown[docx]` — DOCX thành Markdown · `docling` — PDF thành object model,
-extra `pdf` · `langchain-core` — `Document` và metadata · `pydantic` — đọc
-profile.
+Cả ba định dạng sử dụng chung hàm `sanitize()`. Các thao tác bao gồm: chuẩn hóa Unicode NFC; loại ký tự vô hình; loại HTML comment; loại các thẻ HTML theo danh sách trắng tên thẻ, nên placeholder dạng `<NEW>`, `<ten_user>` được giữ lại; cảnh báo chính xác các loại thẻ đã bị loại; bỏ dải gạch ngang dùng để ngăn mục; sửa lỗi gõ theo `parse.replacements`; phát hiện dòng có dấu hiệu prompt injection và sinh cảnh báo nhưng không xóa nội dung; bỏ khoảng trắng cuối dòng; co khoảng trắng thừa; giới hạn số dòng trống liên tiếp.
 
-## Đầu ra — `<doc_id>.md`
+Markdown có độ dài dưới 50 ký tự bị từ chối để tránh chuyển tài liệu rỗng hoặc PDF scan chưa OCR sang bước tiếp theo. Ngưỡng này là kiểm tra kỹ thuật tối thiểu, không phải đánh giá đầy đủ chất lượng nội dung.
 
-Artifact duy nhất của parse:
+#### 2.2.7. Giữ metadata tối thiểu
 
-```text
-data/processed/sql/<doc_id>.md
-```
+Parse giữ các metadata sau trong bộ nhớ: `doc_id`, `title`, `source_name`, `warnings[]`. Metadata được truyền trực tiếp sang `extract/`. Parse không tạo file metadata riêng.
 
-Không tạo `DocumentIR`, không tạo `blocks[]` và không tạo metadata sidecar.
+### 2.3. Thư viện
 
-Ví dụ:
+- `markitdown[docx]`: chuyển DOCX thành Markdown.
+- `docling`: đọc PDF thành object model và nhận diện cấu trúc bảng.
+- `openpyxl`: đọc sheet của XLSX.
+- `langchain-core`: biểu diễn Document và metadata trong bộ nhớ.
+- `pydantic`: đọc và kiểm tra profile cấu hình.
 
-```markdown
-# Danh mục dùng chung
+### 2.4. Đầu ra
 
-## Bảng V_USER_PRECINCT_PERMISSION
+Artifact duy nhất của parse: `data/processed/sql/p<project>/<doc_id>.md`
 
-Ý nghĩa của bảng: Lưu trữ quyền truy cập của user theo phường/xã.
+Parse không tạo: DocumentIR; `blocks[]`; file metadata sidecar.
 
-| **Tên cột** | **Kiểu dữ liệu** | **Mô tả** |
-| --- | --- | --- |
-| USER_NAME | VARCHAR2 | Mã user |
-```
+### 2.5. Kết quả
 
-## Kết quả — hai định dạng hội tụ về cấu trúc chính
+| Chỉ số | DOCX | PDF | XLSX |
+|---|---|---|---|
+| Heading section | 7 | 7 | 1 |
+| Heading cấp hai | 18 | 18 | 18 |
+| Bảng | 18 | 18 | 0 |
+| Tổng hàng dữ liệu | 194 | 194 | — |
+| Độ dài Markdown | — | — | 18.353 ký tự |
+| Thời gian convert quan sát | Dưới 1 giây | Khoảng 75 giây | Dưới 1 giây |
 
-| Chỉ số | DOCX | PDF |
-|---|---:|---:|
-| Heading section | 7 | 7 |
-| Heading table | 18 | 18 |
-| Bảng | 18 | 18 |
-| Tổng hàng dữ liệu | 194 | 194 |
-| Thời gian convert quan sát | dưới 1 giây | khoảng 75 giây |
+### 2.6. Giới hạn hiện tại
 
-PDF phải chạy model layout nên chậm hơn nhiều. Thời gian trên là số quan sát với
-tài liệu mẫu, không phải SLA.
+- Không giữ bounding box.
+- Không giữ số trang trong artifact Markdown.
+- Không giữ ảnh, figure, caption, header/footer hoặc tài sản gốc. Với PDF, đây là mất mát so với object model ban đầu của Docling.
+- Định dạng được nhận diện theo phần mở rộng file, chưa kiểm tra magic bytes.
+- Luật nối bảng PDF chỉ dựa vào tính liền kề và không sinh cảnh báo.
+- Nhánh DOCX bỏ mọi nội dung trước heading cấp một đầu tiên và cắt ký tự bullet trên toàn tài liệu.
+- Nhánh PDF phụ thuộc việc tài liệu có đánh số tiêu đề.
+- Tên file không dùng chữ Latin cho ra `doc_id` rỗng.
+- Nếu có cả DOCX và PDF tương đương, nên ưu tiên DOCX vì nhanh hơn và không cần mô hình layout.
+- Khi chỉ chạy riêng `parse/`, artifact `.md` không chứa đầy đủ warning.
 
-## Giới hạn hiện tại
+---
 
-- Không giữ bbox, số trang, ảnh, figure, caption, header/footer hoặc tài sản
-  gốc. Với PDF, đây là mất mát so với object model Docling.
-- Nhận diện định dạng theo đuôi file, chưa đọc magic bytes.
-- Có bản DOCX thì nên ưu tiên DOCX vì nhanh hơn và không cần model layout.
-- Chạy riêng parse chỉ tạo `.md`; muốn giữ đầy đủ warnings trong extract phải
-  chạy pipeline liền mạch để metadata được truyền trong bộ nhớ.
+## 3. `extract/` — Markdown thành structured elements độc lập
 
-# `extract/` — Markdown thành structured elements độc lập
+### 3.1. Đầu vào
 
-## Đầu vào
+Extract nhận file `<doc_id>.md` do `parse/` tạo, nằm tại `data/processed/sql/p<project>/`.
 
-`<doc_id>.md` do parse sinh ra, nằm tại `data/processed/sql/`.
+### 3.2. Nhiệm vụ
 
-## Nhiệm vụ
+#### 3.2.1. `blocks.py` — tách block
 
-### `blocks.py` — cắt block
+Module sử dụng `markdown-it-py` với CommonMark và hỗ trợ bảng GFM để nhận diện các block cấp ngoài cùng: heading; paragraph; list; table; quote; code; HTML.
 
-Dùng `markdown-it-py` với CommonMark và bảng GFM để phát hiện các block cấp
-ngoài cùng:
+Extract không sử dụng regex để tách cấu trúc Markdown. Nhờ đó, parser xử lý đúng: code fence; heading dạng gạch dưới; danh sách lồng; dấu `|` được escape trong ô bảng.
 
-```text
-heading
-paragraph
-list
-table
-quote
-code
-html
-```
+Khoảng dòng được lấy từ `token.map` và chuyển sang chỉ số 1-based: `line_start`, `line_end`.
 
-Không dùng regex để tách Markdown, nhờ đó xử lý đúng code fence, heading gạch
-dưới, danh sách lồng và dấu `\|` được escape trong ô bảng.
+Block được đánh ID theo thứ tự đọc: `block_1`, `block_2`, ... Thứ tự đọc là thứ tự phần tử trong mảng.
 
-Xác định `line_start`/`line_end`, 1-based trên file `.md`, từ `token.map`.
+Vai trò heading được lấy từ `extract.heading_roles`: `#` → section, `##` → table. Extract không phụ thuộc vào `chunk.split_on`.
 
-Tạo ID block theo thứ tự đọc:
+Cảnh báo cấu trúc được sinh khi: tài liệu không có block, thiếu heading role yêu cầu, hoặc heading level không nằm trong `extract.heading_roles`.
 
-```text
-block_1, block_2, ...
-```
+#### 3.2.2. `block_extract.py` — đọc nội dung block
 
-Thứ tự đọc chính là thứ tự của mảng, không có field `order` riêng.
+Bộ xử lý được chọn theo `type`: heading → giữ tên, level và role; table → tạo `columns[]`, `rows[]` và `n_rows`; các loại còn lại → xử lý như text.
 
-Gán vai trò heading từ `extract.heading_roles`:
+#### 3.2.3. Đọc bảng
 
-```text
-#  → section
-## → table
-```
+Extract duyệt token Markdown theo cấu trúc `thead`, `tr`, `th`, `td`.
 
-Extract không đọc `chunk.headers`.
+`columns[]` giữ tên các cột hiển thị. `rows[]` giữ các hàng dữ liệu. `n_rows` giữ số hàng dữ liệu, không tính header.
 
-Kiểm tra cấu trúc và sinh cảnh báo khi:
+Extract không tự chia dòng theo `|`; dấu `|` trong nội dung ô không tạo cột giả. Table element vẫn giữ trường `text` chứa Markdown gốc để truy vết.
 
-- tài liệu không có block;
-- thiếu hẳn một heading role đã khai;
-- heading có level không nằm trong `extract.heading_roles`.
+Nếu `extract.strip_cell_emphasis=true`, dấu nhấn mạnh trong ô tiêu đề được loại.
 
-Block chỉ tồn tại trong bộ nhớ. Không ghi `.blocks.json`, vì đây là dữ liệu có
-thể dựng lại trực tiếp từ `.md`.
+#### 3.2.4. Đọc và gán role cho text
 
-Có thể chạy lệnh sau để soi cấu trúc mà không ghi artifact:
+Một text block có thể chứa nhiều nhãn liền nhau. Extract cắt block tại mỗi dòng khớp với biểu thức trong `extract.roles`.
 
-```powershell
-uv run python -m src.branch_sql.offline.extract.blocks <doc_id>.md
-```
+Profile SQL có bảy role, chia hai nhóm:
 
-### `block_extract.py` — đọc nội dung
+- Tài liệu schema: `table_meaning`, `column_intro`, `relation_hint`, `business_rule`
+- SQL sample: `sample_query`, `sample_evidence`, `sample_sql`
 
-Chọn bộ xử lý theo `type` của block:
+Hai nhóm dùng chung một danh sách vì role nhận diện bằng regex; mẫu của nhóm này không khớp nội dung của nhóm kia.
 
-```text
-heading → giữ tên, level, role
-table   → columns[] + rows[] + n_rows
-còn lại → text có label/role
-```
+Nhãn được tách khỏi nội dung nhưng vẫn được giữ trong trường `label`. Nếu nhãn và nội dung nằm trong cùng block, nội dung được gộp vào cùng một element. Nếu nhãn đứng riêng còn nội dung nằm ở block khác, extract giữ `text` rỗng.
 
-### Đọc bảng
+#### 3.2.5. Tạo element độc lập
 
-Đi trên token Markdown:
+Element được đánh ID theo thứ tự đọc: `el_1`, `el_2`, ...
 
-- `thead` phân biệt hàng tiêu đề;
-- `tr` mở một hàng;
-- `th`/`td` xác định ô;
-- `columns[]` giữ tên cột;
-- `rows[]` giữ dữ liệu;
-- `n_rows` giữ số hàng dữ liệu.
+Nếu một block sinh nhiều element, mỗi element nhận một `block_id` có hậu tố thứ tự (`block_5.1`, `block_5.2`).
 
-Không tự tách theo dấu `|`, nên dấu `\|` trong nội dung ô không tạo cột giả.
+Tại bước này, extract không tạo: `parent_id`, ancestor `section`/`table`, `relations[]`.
 
-Bảng vẫn giữ `text` là Markdown gốc để không phải render ngược từ
-`columns[]`/`rows[]`.
+#### 3.2.6. Sinh cảnh báo
 
-Nếu `extract.strip_cell_emphasis=true`, dấu nhấn mạnh trong ô tiêu đề được bỏ
-bằng token con:
+Ngoài cảnh báo từ `blocks.py`, extract cảnh báo khi: text không khớp role nào; bảng không có hàng tiêu đề.
 
-```text
-**Tên cột** → Tên cột
-```
+### 3.3. Thư viện
 
-### Đọc và gán role cho text
+- `markdown-it-py`: tách block và đọc bảng ở cấp token.
+- `pydantic`: đọc và kiểm tra cấu hình extract.
 
-Một text block có thể chứa nhiều nhãn liền nhau. Extract cắt lại tại mỗi dòng
-khớp regex trong `extract.roles`.
+### 3.4. Đầu ra
 
-Bốn role của profile SQL:
+Artifact: `<doc_id>.extract.json`. Cấu trúc envelope gồm `schema_version`, `doc_id`, `title`, `source_name`, `warnings[]`, `elements[]`.
 
-```text
-table_meaning
-column_intro
-relation_hint
-business_rule
-```
+### 3.5. Kết quả
 
-Nhãn được tách khỏi nội dung nhưng vẫn được giữ:
+| Chỉ số | DOCX | PDF | XLSX |
+|---|---|---|---|
+| Heading element | 25 | 25 | 19 |
+| Table element | 18 | 18 | 0 |
+| Text element | 72 | 73 | 72 |
+| Tổng element | 115 | 116 | 91 |
+| Tổng hàng dữ liệu | 194 | 194 | — |
+| Element có `parent_id` | 0 | 0 | 0 |
 
-```text
-Mối liên kết: qua cột CODE
-```
+PDF có thêm một text element không khớp role; element này được giữ và cảnh báo được đưa vào `warnings[]`.
 
-trở thành:
+XLSX có 18 element không khớp role — đó là 18 khối code chứa câu SQL, chúng được `link/` ghép vào nhãn `sql:` đứng ngay trước.
 
-```json
-{
-  "role": "relation_hint",
-  "label": "Mối liên kết:",
-  "text": "qua cột CODE"
-}
-```
+### 3.6. Giới hạn hiện tại
 
-Nhãn đứng riêng mà nội dung nằm trong cùng block vẫn được gộp vào `text`. Nếu
-nội dung nằm ở block khác, extract để `text` rỗng; link mới ghép hoặc tạo quan
-hệ.
+- `block_N` và `el_N` phụ thuộc vào vị trí: khi chèn nội dung đầu tài liệu, ID phía sau có thể thay đổi.
+- List, quote, code và HTML hiện đi qua nhánh text.
+- Extract không diễn giải ý nghĩa cột hoặc quan hệ nghiệp vụ, không ghép nhãn với element khác, không xây dựng hierarchy.
 
-Giữ `line_start`/`line_end` cho từng element, kể cả khi một block bị cắt thành
-nhiều đoạn. Khoảng dòng phủ cả dòng nhãn và dòng nội dung.
+---
 
-Khi một block sinh nhiều element, `block_id` nhận hậu tố:
+## 4. `link/` — Elements thành hierarchy
 
-```text
-block_5 → block_5.1, block_5.2
-```
+### 4.1. Đầu vào
 
-### Tạo element độc lập
+Link nhận `<doc_id>.extract.json`. Các element đầu vào độc lập và chưa có `parent_id`, chưa có ancestor.
 
-Extract gắn ID theo thứ tự đọc:
+### 4.2. Nhiệm vụ
 
-```text
-el_1, el_2, ...
-```
+#### 4.2.1. Gắn heading cha–con
 
-Extract không tạo:
+Hàm `attach_hierarchy()` duyệt element theo thứ tự đọc và duy trì stack heading. Khi gặp heading mới, đóng các heading cùng cấp hoặc sâu hơn. Heading còn lại trên đỉnh stack trở thành cha.
 
-```text
-parent_id
-section/table ancestors
-caption_of
-relations[]
-```
+Quy tắc:
 
-Toàn bộ hierarchy và quan hệ thuộc `link/`.
+- heading section cấp cao nhất có `parent_id=null`;
+- heading table nhận section làm cha;
+- text và table nhận heading gần nhất làm cha;
+- text và table nhận cả ancestor `section` và `table`.
 
-### Sinh cảnh báo
+Tên ancestor được gắn theo `role` của heading trong stack, không theo một danh sách vai trò khai sẵn. Vì vậy chặng này không có khoá cấu hình nào và không chứa tên role của một bộ tài liệu cụ thể trong code.
 
-Ngoài cảnh báo block, extract cảnh báo:
+Bốn trường `parent_id`, `section`, `table`, `role` đã đủ để `chunk/` gom nội dung theo từng đơn vị. Một quan hệ dạng `applies_to` nối business rule với heading bảng sẽ nói lại đúng điều mà ancestor `table` đã nói, nên không được tạo.
 
-- text không khớp role nào trong `extract.roles`;
-- bảng không có hàng tiêu đề.
+#### 4.2.2. Ghép nhãn đứng riêng với nội dung sau
 
-Cảnh báo parse được truyền vào và gom chung trong `warnings[]`.
+Hàm `merge_standalone_labels()` ghép nhãn với text tiếp theo khi: element hiện tại là text có `label`; `text` của element hiện tại rỗng; element tiếp theo là text không có label và không có role; hai element cùng `parent_id`.
 
-## Thư viện
+Element chứa label giữ nguyên ID, nhận nội dung của element sau và mở rộng `line_end`. Element nội dung dư được loại để linked artifact không chứa hai bản sao cùng một câu.
 
-`markdown-it-py` — tách block và đọc bảng ở mức token · `pydantic` — đọc
-`extract.heading_roles`, `extract.roles` và `strip_cell_emphasis`.
+Nhãn đứng trước một bảng không bị ghép. `"Chi tiết các cột trong bảng:"` là câu dẫn; nuốt vào bảng thì nó dính hàng tiêu đề và hỏng cú pháp Markdown. Nhãn ở lại thành một element text riêng và vẫn vào chunk như một dòng.
 
-## Đầu ra — `<doc_id>.extract.json`
+#### 4.2.3. Không tạo relationships
 
-```json
-{
-  "schema_version": "1.0",
-  "doc_id": "mo_ta_bang_bds_new__docx",
-  "title": "Mô tả bảng BĐS (NEW)",
-  "source_name": "Mô tả bảng BĐS (NEW).docx",
-  "warnings": [],
-  "elements": []
-}
-```
+Chặng này chỉ dựng cây và ghép nhãn. Diễn giải quan hệ nghiệp vụ — bảng nào nối bảng nào qua cột gì, nhãn nào mô tả object nào — thuộc chặng `graph/` và không tất định như ở đây.
 
-Ví dụ heading element:
+#### 4.2.4. Sinh cảnh báo
 
-```json
-{
-  "block_id": "block_2",
-  "modality": "heading",
-  "level": 2,
-  "role": "table",
-  "text": "Bảng V_USER_PRECINCT_PERMISSION",
-  "line_start": 3,
-  "line_end": 3,
-  "id": "el_2"
-}
-```
+Link quét một lượt để lập bảng `parent_id → tập modality của các con`, rồi sinh ba cảnh báo:
 
-Ví dụ table element:
+| Cảnh báo | Điều kiện |
+|---|---|
+| element nằm ngoài mọi heading | element không phải heading và không có `parent_id` |
+| nhãn rỗng không tìm được nội dung | nhãn có `label`, `text` rỗng, và trong cùng cha không có object nào ngoài text/heading |
+| heading cấp sâu nhất không có bảng bên dưới | heading ở cấp sâu nhất mà không có element table nào làm con |
 
-```json
-{
-  "block_id": "block_4",
-  "modality": "table",
-  "text": "| **Tên cột** | **Kiểu dữ liệu** | **Mô tả** |\n| --- | --- | --- |\n...",
-  "columns": ["Tên cột", "Kiểu dữ liệu", "Mô tả"],
-  "rows": [["USER_NAME", "VARCHAR2", "Mã user"]],
-  "n_rows": 1,
-  "line_start": 8,
-  "line_end": 17,
-  "id": "el_5"
-}
-```
+Cảnh báo thứ hai xét theo **cùng cha**, không theo element đứng kề. Ở bản PDF, Docling chèn text vào giữa nhãn và bảng nên chỉ 1 trong 18 nhãn đứng ngay trước bảng của nó; xét theo kề sẽ báo oan 17 lần trên một tài liệu lành.
 
-## Kết quả
+Cảnh báo thứ ba chỉ chạy khi tài liệu thật sự có element table.
 
-| Chỉ số | DOCX | PDF |
-|---|---:|---:|
-| Heading element | 25 | 25 |
-| Table element | 18 | 18 |
-| Text element | 72 | 73 |
-| Tổng element | 115 | 116 |
-| Tổng hàng dữ liệu | 194 | 194 |
-| Element có `parent_id` | 0 | 0 |
+Linked artifact chứa cảnh báo tích lũy của ba chặng.
 
-PDF có thêm một text element không khớp role. Element được giữ nguyên và cảnh
-báo được đưa vào `warnings[]`.
+### 4.3. Thư viện
 
-## Giới hạn hiện tại
+Link chỉ sử dụng thư viện chuẩn Python (`json`, `collections`, `pathlib`, `sys`). Không dùng regex, không gọi LLM. Chặng này tất định: cùng đầu vào cho ra cùng artifact.
 
-- `block_N` và `el_N` phụ thuộc vị trí; chèn nội dung ở đầu tài liệu làm ID phía
-  sau thay đổi.
-- List, quote, code và HTML đi qua nhánh text; output hiện không giữ modality
-  riêng cho từng loại này.
-- Không diễn giải ý nghĩa từng cột hoặc quan hệ nghiệp vụ trong extract.
-- Không ghép nhãn với element khác tại chặng này.
+### 4.4. Đầu ra
 
-# `link/` — elements thành hierarchy và relationships
+Artifact: `<doc_id>.linked.json`. Giữ nguyên envelope của extract và thay `elements[]` bằng các element đã gắn hierarchy. Không có `relations[]`.
 
-## Đầu vào
+### 4.5. Kết quả
 
-`<doc_id>.extract.json` với envelope:
+| Chỉ số | DOCX | PDF | XLSX |
+|---|---|---|---|
+| Tổng element | 115 | 116 | 73 |
+| Root có `parent_id=null` | 7 | 7 | 1 |
+| Element không phải root có `parent_id` | 108/108 | 109/109 | 72/72 |
+| Element mang ancestor `section` | 108 | 109 | 72 |
+| Element mang ancestor cấp hai | 90 | 91 | 54 |
+| Nhãn dẫn vào bảng, đứng riêng | 18 | 18 | 0 |
+| Cảnh báo do link sinh ra | 0 | 0 | 0 |
 
-```text
-schema_version
-doc_id
-title
-source_name
-warnings[]
-elements[]
-```
+Hai bản DOCX và PDF hội tụ về cùng một cây dù Docling xếp phần tử theo thứ tự khác: cây bám vào cấp heading, không bám vị trí kề nhau.
 
-Mỗi element đầu vào độc lập, chưa có `parent_id`, `section`, `table` hoặc
-relations.
+XLSX giảm từ 91 xuống 73 element vì 18 khối code chứa SQL được ghép vào nhãn `sql:`.
 
-## Nhiệm vụ
+### 4.6. Giới hạn hiện tại
 
-### Gắn heading cha–con
+- Hierarchy phụ thuộc thứ tự heading trong mảng.
+- Ghép nhãn phụ thuộc vị trí: nhãn chỉ ghép được với element đứng ngay sau nó và cùng cha.
+- 18 nhãn dẫn vào bảng đứng riêng vĩnh viễn; quan hệ "nhãn này mô tả bảng kia" không được biểu diễn trong artifact.
+- `el_N` phụ thuộc vị trí, chưa phải ID ổn định.
+- Link không diễn giải quan hệ nghiệp vụ giữa các bảng.
 
-`attach_hierarchy()` quét element theo thứ tự đọc và giữ stack các heading đang
-mở.
+---
 
-Khi gặp heading mới có level nhỏ hơn hoặc bằng heading trên đỉnh stack, các
-heading cùng cấp hoặc sâu hơn được đóng.
+## 5. `chunk/` — Elements thành chunk
 
-Mỗi element nhận `parent_id` là heading cha gần nhất. Tên các heading tổ tiên
-được gắn dưới khóa role tương ứng.
+### 5.1. Đầu vào
 
-Với profile SQL:
+Chunk nhận `<doc_id>.linked.json`. Không đọc lại Markdown và không đọc `.extract.json`: element ở đó chưa có `section`/`table`, gom theo đơn vị sẽ ra rỗng.
 
-```json
-{
-  "parent_id": "el_2",
-  "section": "Danh mục dùng chung",
-  "table": "Bảng V_USER_PRECINCT_PERMISSION"
-}
-```
+### 5.2. Nhiệm vụ
 
-Heading bảng nhận section làm tổ tiên. Text và table element bên trong nhận cả
-section và table.
+#### 5.2.1. Hai chế độ
 
-### Ghép nhãn đứng riêng với nội dung sau nó
+- `general` — cắt phẳng, mọi chunk cùng một bộ tham số, khớp cái nào trả thẳng cái đó.
+- `parent_child` — hai tầng. Con nhỏ, đi vào vector store, dùng để khớp truy vấn. Cha lớn, được trả về cho LLM khi con khớp.
 
-`merge_standalone_labels()` ghép khi:
+Mỗi bộ tri thức khai khối `chunk` của riêng nó trong `knowledge[]`, nên tài liệu schema và bộ SQL sample dùng hai chế độ khác nhau trong cùng một profile.
 
-- element hiện tại là text có `label` nhưng `text` rỗng;
-- element ngay sau là text không có `label` và không có `role`;
-- hai element có cùng `parent_id`.
+#### 5.2.2. Thang cắt
 
-Nhãn giữ nguyên ID. Nội dung của element sau được đưa vào nhãn,
-`line_end` được mở rộng và element nội dung dư bị bỏ để linked output không giữ
-hai bản sao cùng một câu.
+Trong mỗi tầng, cắt theo thang `split_on`, thứ tự trong mảng là thứ tự ưu tiên:
 
-Nếu sau nhãn là object như table, link không nhập hai element. Quan hệ được biểu
-diễn bằng `caption_of`.
+- `heading` — một heading cấp N là một đơn vị nội dung;
+- `table_row` — bảng quá dài cắt thành từng nhóm hàng, lặp header;
+- `length` — chốt chặn cuối, dùng `RecursiveCharacterTextSplitter` với `separators` khai trong profile và `keep_separator=False`.
 
-### Tạo `caption_of`
+Chỉ xuống bậc sau khi bậc trước cho ra chunk vượt `budget.max`. Với `on_overflow: "keep"`, thang dừng ở bậc đầu và độ dài không bị cưỡng chế.
 
-Nhãn rỗng và object được gom theo `parent_id`. Các nhãn được ghép với object
-cùng cha theo thứ tự trong nhóm.
+#### 5.2.3. Ngân sách
 
-Không yêu cầu nhãn đứng sát object. Vì vậy PDF vẫn nối đúng khi Docling xếp:
+`budget.unit` nhận `token` hoặc `char`. Với `token`, độ dài đếm bằng chính tokenizer của `embed.dense.model`, không phải ước lượng theo ký tự.
 
-```text
-column_intro → relation_hint → business_rule → table
-```
+Breadcrumb và ngữ cảnh thừa hưởng được ghép vào sau khi cắt, nên chúng được trừ hao trước: trần thực tế của thang cắt là `budget.max` trừ độ dài phần đầu.
 
-Relation:
+#### 5.2.4. Tầng con lọc theo role
 
-```json
-{
-  "type": "caption_of",
-  "source": "el_4",
-  "target": "el_5",
-  "confidence": 0.9,
-  "rule": "same_parent"
-}
-```
+`child_roles` khai element nào được giữ ở tầng con. Với bộ SQL sample, `child_roles: ["sample_query"]` nghĩa là con chỉ gồm câu hỏi nên vector của nó thuần câu hỏi, không bị pha loãng bởi evidence và câu SQL; cha vẫn là cả mẫu.
 
-Nhãn thừa không bị gán bừa; `check()` giữ lại và cảnh báo.
+#### 5.2.5. Ngữ cảnh
 
-### Nối `relation_hint` và `business_rule` với bảng hiện tại
+- `breadcrumb` — đường dẫn `tài liệu > section > đơn vị` prepend vào đầu chunk.
+- `inherit.from_roles` — mảnh thứ hai trở đi của một đơn vị bị cắt thừa hưởng nội dung của role được khai.
+- `restore_labels` — dựng lại nhãn mà extract đã cắt.
 
-`applies_to()` đi ngược `parent_id` đến heading gần nhất có `role="table"`.
+#### 5.2.6. Định danh chunk
 
-```json
-{
-  "type": "applies_to",
-  "source": "el_7",
-  "target": "el_2",
-  "confidence": 1.0,
-  "rule": "table_ancestor"
-}
-```
+`chunk_id` băm nội dung trong phạm vi một tài liệu, không băm vị trí. Chèn một đơn vị ở đầu tài liệu không đổi ID của các chunk phía sau.
 
-Chỉ hai role sau tham gia:
+`content_hash` băm `page_content` thật sự được lưu, kể cả breadcrumb.
 
-```text
-relation_hint
-business_rule
-```
+### 5.3. Thư viện
 
-### Nối tới bảng được nhắc tên
+- `langchain-text-splitters`: `RecursiveCharacterTextSplitter` cho bậc `length`.
+- `langchain-core`: biểu diễn Document.
+- `transformers`: tokenizer để đếm token.
 
-`_aliases()` tạo bí danh từ heading:
+### 5.4. Đầu ra
 
-- luôn giữ tên heading đầy đủ;
-- giữ token viết hoa, có chữ số hoặc dấu gạch dưới;
-- token chỉ được giữ khi xuất hiện ở đúng một heading.
+- `<doc_id>.chunks.jsonl` — chunk đi vào vector store.
+- `<doc_id>.parents.jsonl` — chỉ có ở chế độ `parent_child`.
 
-Token chung xuất hiện ở nhiều heading bị loại. Regex có biên từ để `PRECINCT`
-không khớp lọt trong `V_USER_PRECINCT_PERMISSION`.
+### 5.5. Kết quả
 
-Link bỏ relation tự trỏ và relation trỏ về tổ tiên của chính element.
+| Chỉ số | DOCX | PDF | XLSX |
+|---|---|---|---|
+| Chế độ | general | general | parent_child |
+| Chunk | 18 | 18 | 18 con + 18 cha |
+| Token con min / p50 / max | 176 / 488 / 1349 | 166 / 481 / 1348 | 28 / 39 / 52 |
+| Token cha min / p50 / max | — | — | 232 / 374 / 706 |
+| Đơn vị bị cắt nhỏ | 0 | 0 | 0 |
+| Chunk vượt trần 2048 | 0 | 0 | 0 |
 
-```json
-{
-  "type": "refers_to",
-  "source": "el_20",
-  "target": "el_2",
-  "confidence": 0.7,
-  "rule": "heading_alias"
-}
-```
+### 5.6. Giới hạn hiện tại
 
-### Nối tới cột được nhắc tên
+- Không có overlap giữa các chunk khi cắt theo cấu trúc; `budget.overlap` chỉ có tác dụng ở bậc `length`.
+- Không có `prev_chunk_id`/`next_chunk_id` để nới ngữ cảnh khi truy hồi.
+- `on_underflow` chỉ có `keep` và `drop`, chưa gộp được chunk quá ngắn.
+- Trần token chỉ cảnh báo, không cưỡng chế.
 
-Extract không tạo column element. `refers_to_columns()` lấy ô đầu của mỗi row
-làm tên cột, tìm tên đó trong `relation_hint` hoặc `business_rule`, rồi trỏ tới
-table element chứa cột.
+---
 
-Tên cột được giữ trong `rule`:
+## 6. `embed/` — Chunk thành dense vector
 
-```json
-{
-  "type": "refers_to",
-  "source": "el_6",
-  "target": "el_5",
-  "confidence": 0.9,
-  "rule": "column:CODE"
-}
-```
+### 6.1. Đầu vào
 
-Cách này không mở rộng `elements[]` bằng column node nhưng vẫn giữ được bảng và
-tên cột liên quan.
+Embed nhận `<doc_id>.chunks.jsonl`.
 
-### Tạo `continuation_of`
+### 6.2. Nhiệm vụ
 
-Hai heuristic hiện có:
+- Nạp embedding model và tokenizer. Model nạp qua `HuggingFaceEmbeddings` của LangChain, nhưng giữ tay nắm tới `SentenceTransformer` bên dưới vì đó là chỗ duy nhất lấy được tokenizer thật và `max_seq_length` thật.
+- Kiểm tra số token bằng đúng tokenizer của model, với `add_special_tokens=True` vì `[CLS]`/`[SEP]` cũng chiếm chỗ trong context.
+- Từ chối chunk vượt context limit. Context limit là giá trị nhỏ hơn giữa `max_seq_length` của model và `embed.dense.max_tokens` của profile. Chunk vượt limit bị từ chối kèm hướng dẫn sửa ở chặng chunk, không tự cắt cụt.
+- Embedding `page_content` thành dense vector, chuẩn hoá L2 theo `embed.dense.normalize`.
+- Xử lý theo batch. SentenceTransformer tự gom batch theo độ dài, chỉ cần truyền `batch_size` từ profile.
+- Giữ mapping `chunk_id → vector` trong artifact riêng.
 
-- table có `columns[]` rỗng và đứng sau một table được coi là phần nối của bảng
-  trước — confidence `0.8`;
-- text không có role và đóng nhiều ngoặc hơn mở được coi là đuôi câu bị ngắt —
-  confidence `0.6`.
+Artifact tách khỏi chặng `index` vì embed là phần đắt nhất của pipeline còn upsert thì rẻ: đổi vector store không phải embed lại, và `verify` soi được vector trước khi chúng vào store.
 
-Relation trỏ từ mảnh sau về mảnh trước:
+### 6.3. Thư viện
 
-```json
-{
-  "type": "continuation_of",
-  "source": "el_20",
-  "target": "el_19",
-  "confidence": 0.8,
-  "rule": "broken:table"
-}
-```
+- `langchain-huggingface`, `sentence-transformers`: nạp model và mã hoá.
+- `transformers`: tokenizer.
+- `numpy`: ma trận vector và artifact `.npz`.
 
-Đây là suy đoán, nên mọi `continuation_of` đều sinh cảnh báo để kiểm tra bằng
-mắt.
+### 6.4. Đầu ra
 
-### Đánh số quan hệ
+`<doc_id>.vectors.npz` chứa `ids`, `vectors` và tên model. Đọc lại bằng model khác tên sẽ bị từ chối.
 
-Relations được tạo theo thứ tự builder rồi đánh ID:
+### 6.5. Kết quả
 
-```text
-r_1, r_2, ...
-```
+| Chỉ số | DOCX | PDF | XLSX (con) |
+|---|---|---|---|
+| Vector | 18 | 18 | 18 |
+| Chiều | 1024 float32 | 1024 float32 | 1024 float32 |
+| Token min / p50 / max | 178 / 490 / 1351 | 168 / 483 / 1350 | 30 / 41 / 54 |
+| Context limit | 2048 | 2048 | 2048 |
+| Chuẩn L2 | 1.0000 | 1.0000 | 1.0000 |
+| Vector NaN/Inf | 0 | 0 | 0 |
 
-Các loại hiện có:
+Model: `AITeamVN/Vietnamese_Embedding`.
 
-| Type | Source → target | Confidence |
-|---|---|---:|
-| `caption_of` | nhãn rỗng → object cùng cha | `0.9` |
-| `continuation_of` | mảnh sau → mảnh trước | `0.8` hoặc `0.6` |
-| `applies_to` | role nghiệp vụ → heading bảng hiện tại | `1.0` |
-| `refers_to` | role nghiệp vụ → heading được nhắc tên | `0.7` |
-| `refers_to` | role nghiệp vụ → table chứa cột được nhắc | `0.9` |
+Số token ở đây lớn hơn số ở chặng chunk đúng hai đơn vị vì tính cả token đặc biệt.
 
-### Sinh cảnh báo
+### 6.6. Giới hạn hiện tại
 
-Link bổ sung cảnh báo khi:
+- Chỉ hỗ trợ model chạy được qua `SentenceTransformer`.
+- Không có cache: chunk không đổi vẫn được embed lại khi chạy lại.
 
-- nhãn rỗng không tìm được object cùng cha;
-- element không phải heading nằm ngoài mọi heading;
-- có `continuation_of` cần soi lại;
-- tài liệu không có heading nên không tạo được alias.
+---
 
-Warnings của parse và extract vẫn được giữ. Linked artifact có danh sách cảnh
-báo tích lũy của cả ba chặng.
+## 7. `index/` — Đưa chunk vào hệ thống tìm kiếm
 
-Link làm việc trên bản sao của `elements[]`, không sửa object extract đầu vào.
+### 7.1. Đầu vào
 
-## Thư viện
+`<doc_id>.chunks.jsonl`, `<doc_id>.vectors.npz`, và `<doc_id>.parents.jsonl` nếu có. Số chunk và số vector phải khớp, lệch thì dừng.
 
-Thư viện chuẩn Python: `json`, `re`, `collections`, `pathlib`. Link không gọi
-LLM và không cần model ngoài.
+### 7.2. Nhiệm vụ
 
-## Đầu ra — `<doc_id>.linked.json`
+Index tạo hai đường tìm kiếm trên **cùng một tập point**.
 
-Giữ envelope extract, thay `elements[]` bằng bản đã gắn hierarchy và thêm
-`relations[]`:
+**Dense index** — named vector `dense`, khoảng cách cosine, vector lấy từ `.vectors.npz` để tìm theo ngữ nghĩa.
 
-```json
-{
-  "schema_version": "1.0",
-  "doc_id": "mo_ta_bang_bds_new__docx",
-  "title": "Mô tả bảng BĐS (NEW)",
-  "source_name": "Mô tả bảng BĐS (NEW).docx",
-  "warnings": [],
-  "elements": [
-    {
-      "id": "el_7",
-      "parent_id": "el_2",
-      "section": "Danh mục dùng chung",
-      "table": "Bảng V_USER_PRECINCT_PERMISSION"
-    }
-  ],
-  "relations": [
-    {
-      "id": "r_1",
-      "type": "caption_of",
-      "source": "el_4",
-      "target": "el_5",
-      "confidence": 0.9,
-      "rule": "same_parent"
-    }
-  ]
-}
-```
+**Sparse/BM25 index** — named sparse vector `bm25`, dựng trực tiếp từ `page_content` để tìm từ khóa chính xác.
 
-## Kết quả
+Hai đường nằm chung point nên `chunk_id` của chúng luôn khớp nhau; không có cách nào để hai chỉ mục lệch tập tài liệu. Đó là lý do không tách BM25 ra một store riêng dù nó rẻ hơn.
 
-| Quan hệ | DOCX | PDF |
-|---|---:|---:|
-| `caption_of` | 18 | 18 |
-| `applies_to` | 36 | 36 |
-| `refers_to` | 36 | 36 |
-| `continuation_of` | 0 | 1 |
-| Tổng relation | 90 | 91 |
-| Element có `parent_id` | 115/115 | 116/116 |
+`Modifier.IDF` là bắt buộc với sparse vector do FastEmbed sinh ra: bộ mã hoá cố tình bỏ phần IDF khỏi trọng số để Qdrant tính lấy trên toàn collection. Thiếu cờ này thì điểm BM25 sai công thức mà không có lỗi nào báo.
 
-PDF có một `continuation_of`; relation được giữ cùng cảnh báo thay vì tự động
-gộp dữ liệu.
+Point ID suy từ `chunk_id`, mà `chunk_id` băm theo nội dung, nên chạy lại trên cùng dữ liệu ghi đè đúng point cũ và không nhân đôi.
 
-## Giới hạn hiện tại
+Payload giữ `text` nguyên văn cộng toàn bộ metadata trải phẳng. Ở chế độ `parent_child`, payload còn có `parent_text` là nội dung đầy đủ của cha: quan hệ ở đây là 1-1 nên không có gì bị nhân bản, và truy hồi chỉ tốn một vòng gọi — khớp bằng câu hỏi rồi trả về cả mẫu, không phải tra thêm docstore.
 
-- `parent_id` và ancestor phụ thuộc thứ tự heading trong mảng.
-- Ghép nhãn với text chỉ xét element ngay sau.
-- `caption_of` ghép theo thứ tự trong cùng parent; lệch số lượng sẽ để lại
-  orphan warning.
-- Column relation giả định tên cột nằm ở ô đầu mỗi row và target vẫn là table
-  element.
-- Alias và tên cột hiện được so khớp phân biệt hoa/thường.
-- `continuation_of` là heuristic, không phải khẳng định chắc chắn.
-- `el_N` và `r_N` phụ thuộc vị trí, chưa phải ID ổn định theo nội dung.
+### 7.3. Thư viện
 
-# Luồng cuối cùng
+- `qdrant-client`: tạo collection, upsert, truy vấn.
+- `fastembed`: sinh sparse vector BM25.
 
-```text
-parse/
-File → canonical Markdown
+### 7.4. Đầu ra
 
-extract/
-Markdown → independent structured elements
+Collection trong Qdrant, một collection cho mỗi bộ tri thức trong mỗi dự án. Hai dự án không dùng chung collection nào.
 
-link/
-Elements → parent-child và relationships
-```
+### 7.5. Kết quả
 
-Chạy toàn bộ luồng:
+| Collection | Point | Nguồn | Chế độ chunk | `parent_text` |
+|---|---|---|---|---|
+| `sqlp1__docs` | 18 | `.docx` | general | không |
+| `sqlp1__sql` | 18 | `.xlsx` | parent_child | có |
+| `sqlp2__docs` | 18 | `.pdf` | general | không |
+| `sqlp2__sql` | 18 | `.xlsx` | parent_child | có |
 
-```powershell
-uv run python -m src.branch_sql.offline "Mô tả bảng BĐS (NEW).docx"
-```
+Cả bốn collection đều có `dense` 1024 chiều cosine và `bm25` với `modifier=idf`. Giao của tập collection dự án 1 và dự án 2 là rỗng.
 
-Pipeline chỉ ghi ba artifact trong `data/processed/sql/`:
+Ví dụ một point trong `sqlp1__sql`: con 120 ký tự (chỉ câu hỏi) → cha 1.613 ký tự (cả mẫu gồm query, evidence và SQL).
 
-```text
-<doc_id>.md
-<doc_id>.extract.json
-<doc_id>.linked.json
-```
+### 7.6. Giới hạn hiện tại
+
+- Chỉ hỗ trợ Qdrant.
+- Chunk đổi nội dung sinh point mới, point cũ thành rác; phải dùng `--recreate` khi đổi cách chunk.
+- `parent_text` nằm trong payload của con nên chỉ hợp với quan hệ 1-1 hoặc ít con mỗi cha; nhiều con mỗi cha sẽ nhân bản nội dung.
+
+---
+
+## 8. `verify/` — Kiểm tra index đã dùng được chưa
+
+### 8.1. Kiểm tra tính toàn vẹn
+
+Ba nguồn phải khớp nhau từng `chunk_id`: `.chunks.jsonl`, `.vectors.npz`, và point trong Qdrant. Lệch giữa ba nguồn là kiểu hỏng không tự lộ ra lúc chạy: truy vấn vẫn trả về kết quả, chỉ là thiếu mất vài đơn vị, hoặc trả về đơn vị có vector nhưng không còn text.
+
+Các phép kiểm:
+
+- Không có `chunk_id` trùng.
+- Không có chunk rỗng.
+- Không có chunk vượt `budget.max`.
+- Số vector bằng số chunk.
+- Vector có đúng dimension.
+- Vector không chứa NaN hoặc Infinity.
+- Dense index và sparse index có cùng tập `chunk_id`. Vì hai chỉ mục nằm chung point, phép này được kiểm bằng cách xác nhận mỗi point mang đủ cả hai vector.
+- Mỗi record vẫn giữ được `page_content` và metadata cần thiết: `chunk_id`, `doc_id`, `table_name`, `section`, `element_ids`, `line_start`, `line_end`, `n_tokens`.
+
+Mã thoát khác 0 khi có lỗi, để nối được vào CI.
+
+**Kết quả:** cả bốn bộ tri thức của hai dự án đều toàn vẹn.
+
+| Bộ tri thức | Chunk | Vector | Kết luận |
+|---|---|---|---|
+| Dự án 1 — `schema_docx` | 18 | 18 | toàn vẹn |
+| Dự án 1 — `sql_sample` | 18 | 18 | toàn vẹn |
+| Dự án 2 — `schema_pdf` | 18 | 18 | toàn vẹn |
+| Dự án 2 — `sql_sample` | 18 | 18 | toàn vẹn |
+
+### 8.2. Chấm điểm truy hồi
+
+Một câu hỏi được truy hồi trên hai đường của dự án, mỗi đường một trần khác nhau:
+
+| Đường | Trần | Collection | Cách suy ra tên bảng |
+|---|---|---|---|
+| Tài liệu | top-5 | `..__docs` | `table_name` của chunk |
+| SQL sample | top-3 | `..__sql` | tập bảng của mẫu khớp được |
+
+Điểm của một câu: `(recall_docs@5 + recall_sql@3) / 2`. Hai vế đều là "số bảng gold tìm được / tổng bảng gold". Chia đôi để điểm nằm trong [0, 1]; báo cáo cả hai vế riêng vì chúng hỏng theo hai kiểu khác nhau — vế tài liệu yếu là truy hồi kém, vế sample yếu là bộ mẫu chưa phủ dạng câu hỏi.
+
+**Chặn rò rỉ.** Tập `dev.json` và bộ SQL sample đem đi index là cùng 18 dòng. Truy hồi vế sample sẽ luôn tìm thấy chính câu hỏi đang hỏi, và mẫu đó tự khai đáp án. Điểm lúc đó là điểm trí nhớ, không phải điểm truy hồi. Vì vậy mẫu trùng `test_case_id` với câu hỏi bị loại khỏi kết quả trước khi chấm.
+
+**Kết quả trên tập dev, chế độ `rrf`:**
+
+| | Dự án 1 (DOCX) | Dự án 2 (PDF) |
+|---|---|---|
+| recall tài liệu@5 | 0.704 | 0.713 |
+| complete tài liệu@5 | 0.389 | 0.389 |
+| recall SQL sample@3 | 0.838 | 0.838 |
+| **Điểm tổng** | **0.771** | **0.775** |
+
+Hai dự án chênh nhau 0.004 — hai định dạng của cùng một tài liệu cho kết quả truy hồi tương đương, đúng như phần `parse` và `link` đã cho thấy chúng hội tụ về cùng một cấu trúc.
+
+**Vế SQL sample mạnh hơn vế tài liệu** (0.838 so với 0.704). Câu hỏi trong bộ mẫu gần nhau về cách diễn đạt nên tìm mẫu tương tự dễ hơn tìm đúng bảng trong tài liệu schema. Hai câu SQL_006 và SQL_015 có `sql@3 = 0` vì cả ba mẫu gần nhất đều không dùng bảng mà chúng cần.
+
+### 8.3. Chỉnh tham số truy hồi
+
+`verify/retrieval.py` quét 32 cấu hình trên bốn trục: `mode` (dense/sparse/rrf/wrrf), `candidate_k`, `rrf_k`, `weights`.
+
+Dev dùng để **chọn tham số**, không dùng để báo cáo. Chốt xong tham số bằng dev thì chạy `test.json` một lần duy nhất để lấy số cuối cùng.
+
+**Kết quả quét, top-5:**
+
+| mode | candidate_k | rrf_k | weights | complete@5 | recall@5 | mrr |
+|---|---|---|---|---|---|---|
+| rrf | 50 | server | — | 0.389 | 0.704 | 0.889 |
+| rrf | 20 | server | — | 0.389 | 0.704 | 0.861 |
+| wrrf | 20 | 10 | 0.5/0.5 | 0.333 | 0.685 | 0.852 |
+| sparse | — | — | — | 0.333 | 0.676 | 0.861 |
+| dense | — | — | — | 0.278 | 0.634 | 0.806 |
+
+**Ảnh hưởng của `k`:**
+
+| top-k | complete | recall |
+|---|---|---|
+| 5 | 0.389 | 0.704 |
+| 8 | 0.500 | 0.810 |
+| 10 | 0.611 | 0.880 |
+
+**Kết luận.** RRF phía server thắng mọi biến thể weighted; không có bộ trọng số nào vượt được 50/50 và `rrf_k` gần như không ảnh hưởng, nghĩa là hai nhánh đóng góp cân bằng. Nút thắt không nằm ở công thức fusion mà ở `k`: phần lớn câu hỏi cần 3–4 bảng, lấy 5 trên tổng 18 bảng thì gần như không có chỗ sai. Nới lên 10 kéo `complete` từ 0.389 lên 0.611.
+
+### 8.4. Giới hạn hiện tại
+
+- Chưa chạy chấm điểm trên `test.json`; mọi số trong báo cáo đo trên `dev`.
+- Reranker khai trong profile nhưng chưa nối vào đường đo.
+- Vế SQL sample chấm bằng tập bảng của mẫu, tức một chỉ báo thay thế: mẫu dùng cùng bộ bảng thì gần như chắc chắn minh hoạ cùng kiểu JOIN, nhưng không có gì bảo đảm nó là mẫu tốt nhất cho câu hỏi.
+- Bộ đo chỉ có 18 câu dev và 15 câu test; chênh lệch dưới 0.05 giữa hai cấu hình nằm trong nhiễu.
