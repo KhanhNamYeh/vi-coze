@@ -889,76 +889,80 @@ function renderJsonlCards(items){
     <div class="jl-v">vec[${o.dim}][:8] = [${o.vector_head.map(v=>v.toFixed(4)).join(', ')}, …]</div>
   </div>`).join('');
 }
-function renderLogsTab(){
+async function renderLogsTab(){
   const pane = $('#tab-logs');
-  if (!state.logRuns.length){
+  const p = getProject();
+  let runs = [], files = [];
+  try{
+    [runs, files] = await Promise.all([API.runs(p.id), API.get(`/api/projects/${p.id}/artifacts`)]);
+  }catch(e){ pane.innerHTML = `<div class="logs-empty"><h4>Không đọc được nhật ký</h4><p>${esc(String(e))}</p></div>`; return; }
+
+  if (!runs.length && !files.length){
     pane.innerHTML = `<div class="logs-empty">
       <div class="e-ic">${ic('folder',24)}</div>
       <h4>Chưa có nhật ký xử lý</h4>
-      <p>Nhật ký pipeline sẽ được ghi vào <span class="mono" style="color:var(--am)">data/processed/sql/</span> sau khi bạn tạo knowledge đầu tiên.</p>
+      <p>Artifact được ghi vào <span class="mono" style="color:var(--am)">data/processed/sql/p${p.id}/</span> sau lần chạy đầu tiên.</p>
       <button class="btn pri" id="lg-cta">${ic('arrowR',14)} Đến Knowledge</button>
     </div>`;
     $('#lg-cta').addEventListener('click', () => switchTab('knowledge'));
     return;
   }
-  // mặc định chọn run mới nhất
-  if (!state.logsSel || !getRun(state.logsSel.runId)){
-    const last = state.logRuns[state.logRuns.length-1];
-    state.logsSel = { runId: last.id, file: last.files[0].name };
-  }
-  const cur = getRun(state.logsSel.runId);
-  const curFile = cur.files.find(f => f.name === state.logsSel.file) || cur.files[0];
 
-  // cây thư mục
-  const byProj = {};
-  [...state.logRuns].reverse().forEach(r => { (byProj[r.projectId] ||= []).push(r); });
-  let tree = `<div class="lt-root">${ic('folder',14)} data/processed/sql/</div>`;
-  for (const [pid, runs] of Object.entries(byProj)){
-    const pj = state.projects.find(p=>p.id===pid);
-    tree += `<div class="lt-proj">${esc(pj ? pj.name : pid)}</div>`;
-    runs.forEach(r => {
-      const open = r.id === cur.id;
-      tree += `<div class="lt-run ${open?'open':''}">
-        <button data-run-t="${r.id}">${ic('chevR',12)} ${r.dir.split('/').pop()}</button>
-        <div class="lt-files" style="${open?'':'display:none'}">` +
-        r.files.map(f => `<button data-run-f="${r.id}" data-file="${f.name}" class="${(r.id===cur.id && f.name===curFile.name)?'on':''}">${ic(fileIcon(f.type),13)} ${f.name}</button>`).join('') +
-        `</div></div>`;
-    });
-  }
-  let body = '';
-  if (curFile.type === 'log')   body = renderLogLines(curFile.lines);
-  if (curFile.type === 'json')  body = renderJSONLines(curFile.obj);
-  if (curFile.type === 'jsonl') body = renderJsonlCards(curFile.lines);
+  const sel = state.logsSel?.file && files.some(f => f.name === state.logsSel.file)
+    ? state.logsSel.file : (files.find(f => f.kind === 'log') || files[0])?.name;
+  state.logsSel = { file: sel };
+
+  const badge = st => ({completed:'ok', error:'err', running:'run', queued:'pend'}[st] || '');
+  const tree = `<div class="lt-root">${ic('folder',14)} data/processed/sql/p${p.id}/</div>` +
+    `<div class="lt-proj">Lần chạy (${runs.length})</div>` +
+    runs.map(r => `<div class="lt-run">
+        <button data-run-t="${r.id}" class="${badge(r.status)}">${ic(r.status==='error'?'x':'check',12)} ${esc(r.id)}
+          <i style="opacity:.6"> · ${esc(r.status)}${r.stage?' @ '+esc(r.stage):''}</i></button>
+      </div>`).join('') +
+    `<div class="lt-proj">Artifact (${files.length})</div>` +
+    files.map(f => `<div class="lt-run"><button data-file="${esc(f.name)}" class="${f.name===sel?'on':''}">
+        ${ic(fileIcon(f.kind==='jsonl'?'jsonl':f.kind==='json'?'json':'log'),13)} ${esc(f.name)}
+        <i style="opacity:.55"> · ${kb(f.size)}</i></button></div>`).join('');
+
+  let raw = '';
+  try{ raw = await API.get(`/api/projects/${p.id}/artifacts/${encodeURIComponent(sel)}`); }
+  catch(e){ raw = String(e); }
+
+  let body;
+  if (sel.endsWith('.jsonl'))
+    body = renderJsonlCards(raw.split(String.fromCharCode(10)).filter(Boolean).slice(0,40).map(l => { try{ return JSON.parse(l); }catch{ return {line:l}; } }));
+  else if (sel.endsWith('.json'))
+    body = renderJSONLines(JSON.parse(raw || '{}'));
+  else
+    body = `<pre class="mono" style="margin:0;padding:14px;white-space:pre-wrap;line-height:1.6">${esc(raw) || '(rỗng)'}</pre>`;
 
   pane.innerHTML = `<div class="pane-head">
-      <div><h2>Nhật ký xử lý</h2><p>Kết quả pipeline được ghi xuống đĩa theo cấu trúc thư mục offline.</p></div>
+      <div><h2>Nhật ký xử lý</h2><p>Đọc trực tiếp từ đĩa — <span class="mono">data/processed/sql/p${p.id}/</span></p></div>
     </div>
     <div class="logs-grid">
       <div class="ltree">${tree}</div>
       <div class="lview">
         <div class="lview-head">
-          ${ic(fileIcon(curFile.type),14)}
-          <span class="p">${cur.dir}${curFile.name}</span>
+          ${ic('file',14)}
+          <span class="p">data/processed/sql/p${p.id}/${esc(sel)}</span>
           <button class="btn" id="lv-copy">${ic('copy',13)} Sao chép</button>
         </div>
         <div class="lview-body">${body}</div>
       </div>
     </div>`;
-  // bindings
-  pane.querySelectorAll('[data-run-t]').forEach(b => b.addEventListener('click', () => {
-    const rid = b.dataset.runT; const r = getRun(rid);
-    state.logsSel = { runId: rid, file: r.files[0].name };
-    renderLogsTab();
+
+  pane.querySelectorAll('[data-file]').forEach(b => b.addEventListener('click', () => {
+    state.logsSel = { file: b.dataset.file }; renderLogsTab();
   }));
-  pane.querySelectorAll('[data-run-f]').forEach(b => b.addEventListener('click', () => {
-    state.logsSel = { runId: b.dataset.runF, file: b.dataset.file };
+  pane.querySelectorAll('[data-run-t]').forEach(b => b.addEventListener('click', async () => {
+    const st = await API.get(`/api/runs/${b.dataset.runT}/stats`);
+    state.logsSel = { file: `${b.dataset.runT}.log` };
     renderLogsTab();
+    toast(`${b.dataset.runT}: ${Object.keys(st).filter(k=>!['doc_id','dir'].includes(k)).join(' · ')}`, 'ok');
   }));
-  const copyContent = curFile.type === 'log' ? curFile.lines.map(l=>`${l.t} [${l.lvl}] [${l.src}] ${l.msg}`).join('\n')
-    : curFile.type === 'json' ? JSON.stringify(curFile.obj, null, 2)
-    : curFile.lines.map(o=>JSON.stringify(o)).join('\n');
-  $('#lv-copy').addEventListener('click', () => copyText(copyContent, 'Đã sao chép ' + curFile.name));
+  $('#lv-copy').addEventListener('click', () => copyText(raw, 'Đã sao chép ' + sel));
 }
+
 
 /* ================================================================
    OVERLAY: KNOWLEDGE SETTING (form + config/sql.json live)
@@ -1492,8 +1496,9 @@ async function openPipeline(kidArg){
       def.el.classList.remove('pend'); def.el.classList.add('run');
       def.el.querySelector('.s-node').innerHTML = '<span class="sp"></span>';
       def.el.previousElementSibling?.querySelector('.s-link')?.classList.remove('act');
-      def.body.innerHTML = def.detail();
-      def.bind && def.bind(def.body);
+      def.body.innerHTML = PL.runId ? statPanel(PL.stageOrder[stageDefs.indexOf(def)], PL.stats)
+                                    : def.detail();
+      if (!PL.runId) def.bind && def.bind(def.body);
       def.el.scrollIntoView({block:'nearest', behavior:'smooth'});
       def.t0 = PL.simMs;
       if (PL.runId) { await awaitRealStage(def, stageDefs.indexOf(def)); } else
@@ -1524,6 +1529,42 @@ async function openPipeline(kidArg){
   })();
 }
 
+/* Panel chi tiết vẽ từ số liệu THẬT của artifact. Chặng chưa ghi xong thì
+   không có khoá tương ứng trong /stats - hiện "đang chạy" chứ không bịa số. */
+const STAT_ROWS = {
+  parse:   st => [['ký tự', fmt(st.chars)], ['dòng', fmt(st.lines)],
+                  ['heading #', st.h1], ['heading ##', st.h2], ['dòng bảng', fmt(st.tables)]],
+  extract: st => [['element', fmt(st.elements)], ['hàng dữ liệu', fmt(st.rows)],
+                  ...Object.entries(st.modality).map(([k,v]) => [k, fmt(v)]),
+                  ...Object.entries(st.roles).slice(0,4).map(([k,v]) => ['role ' + k, fmt(v)])],
+  link:    st => [['element', fmt(st.elements)], ['gốc', st.roots],
+                  ['có cha', st.with_parent], ['mang tổ tiên', st.ancestors]],
+  chunk:   st => [['chunk', fmt(st.n)], ['token min', st.min], ['token p50', st.p50],
+                  ['token max', st.max], ['mảnh của đơn vị bị cắt', st.split_units],
+                  ['có hàng xóm', `${st.with_neighbor}/${st.n}`],
+                  ...(st.parents ? [['chunk cha', st.parents]] : [])],
+  embed:   st => [['vector', fmt(st.vectors)], ['chiều', st.dim], ['kiểu', st.dtype],
+                  ['hữu hạn', st.finite ? 'đủ' : 'CÓ NaN/Inf'], ['model', st.model.split('/').pop()]],
+  index:   st => st.error ? [['collection', st.collection], ['lỗi', st.error.slice(0,80)]]
+                          : [['collection', st.collection], ['point', fmt(st.points)],
+                             ['dense', st.vectors.join(',')], ['sparse', st.sparse.join(',')]],
+};
+
+function statPanel(stage, stats){
+  const st = stats && stats[stage];
+  if (!st) return `<div class="frows"><div class="frow2"><span class="fr-name">đang chạy…</span></div></div>`;
+  const rows = STAT_ROWS[stage](st);
+  let html = `<div class="frows">${rows.map(([k,v]) =>
+    `<div class="frow2 ok">${ic('check',11)}<span class="fr-name">${esc(k)}</span><span class="fr-st">${esc(String(v))}</span></div>`).join('')}</div>`;
+  if (stage === 'chunk' && st.sample?.length){
+    html += `<div class="chips">${st.sample.slice(0,3).map(c =>
+      chip(`<b>${esc(c.table_name || '—')}</b> ${c.n_tokens} tok`)).join('')}</div>`;
+    html += `<pre class="mono" style="margin:8px 0 0;padding:10px;background:var(--bg2);border-radius:8px;
+      white-space:pre-wrap;font-size:11.5px;line-height:1.55;max-height:150px;overflow:auto">${esc(st.sample[0].head)}…</pre>`;
+  }
+  return html;
+}
+
 /* Chờ một chặng THẬT xong: poll `/api/runs/{id}` cho tới khi server báo chặng
    này đã có mốc thời gian. Thanh tiến độ bò đều trong lúc chờ - nó biểu thị
    "đang chạy", không phải phần trăm thật, vì pipeline không báo tiến độ trong
@@ -1549,7 +1590,13 @@ async function awaitRealStage(def, idx){
       def.el.classList.remove('run'); def.el.classList.add('err');
       throw new Error(run.error || 'job hỏng');
     }
-    if (run.stages && run.stages[stage]){ def.progress && def.progress(1, def.body); break; }
+    if (run.stages && run.stages[stage]){
+      try{
+        PL.stats = await API.get(`/api/runs/${PL.runId}/stats`);
+        def.body.innerHTML = statPanel(stage, PL.stats);
+      }catch(e){ def.progress && def.progress(1, def.body); }
+      break;
+    }
 
     p = Math.min(0.95, p + 0.04);
     def.progress && def.progress(p, def.body);
