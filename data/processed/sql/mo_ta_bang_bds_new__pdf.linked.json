@@ -1,0 +1,2524 @@
+{
+  "schema_version": "1.0",
+  "doc_id": "mo_ta_bang_bds_new__pdf",
+  "title": "Mô tả bảng BĐS (NEW)",
+  "source_name": "Mô tả bảng BĐS (NEW).pdf",
+  "warnings": [
+    "bỏ 18 dải gạch ngang ngăn mục",
+    "sửa 1 chỗ khớp /(?<=\\|\\s)Cột\\d+(?=\\s*\\|)/ -> 'Tên cột'",
+    "1 đoạn không khớp nhãn nào trong extract.roles"
+  ],
+  "elements": [
+    {
+      "block_id": "block_1",
+      "modality": "heading",
+      "level": 1,
+      "role": "section",
+      "text": "Danh mục dùng chung",
+      "line_start": 1,
+      "line_end": 1,
+      "id": "el_1",
+      "parent_id": null
+    },
+    {
+      "block_id": "block_2",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng V_USER_PRECINCT_PERMISSION",
+      "line_start": 3,
+      "line_end": 3,
+      "id": "el_2",
+      "parent_id": "el_1",
+      "section": "Danh mục dùng chung"
+    },
+    {
+      "block_id": "block_3.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ quyền truy cập của user theo phường/xã (user được xem thông tin của các phường/xã nào)",
+      "line_start": 5,
+      "line_end": 5,
+      "id": "el_3",
+      "parent_id": "el_2",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng V_USER_PRECINCT_PERMISSION"
+    },
+    {
+      "block_id": "block_3.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 6,
+      "line_end": 6,
+      "id": "el_4",
+      "parent_id": "el_2",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng V_USER_PRECINCT_PERMISSION"
+    },
+    {
+      "block_id": "block_3.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE.",
+      "line_start": 7,
+      "line_end": 8,
+      "id": "el_5",
+      "parent_id": "el_2",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng V_USER_PRECINCT_PERMISSION"
+    },
+    {
+      "block_id": "block_3.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Nếu user hỏi về các dữ liệu liên quan tới PTM, VLR, TKC, trạm, ... thì luôn luôn map với bảng này để chỉ trả về dữ liệu trong phạm vi quyền truy cập của user.\nDữ liệu tổng khoảng 10000 dòng.",
+      "line_start": 9,
+      "line_end": 11,
+      "id": "el_6",
+      "parent_id": "el_2",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng V_USER_PRECINCT_PERMISSION"
+    },
+    {
+      "block_id": "block_4",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|---------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| USER_NAME | VARCHAR2 | Mã user (ví dụ: HUY.NGUYEN) |\n| USER_ID | NUMBER | Mã định danh user |\n| PRECINCT_CODE | VARCHAR2 | Mã phường/xã mà user được truy cập (ví dụ: VTAU) |\n| PRECINCT_NAME | VARCHAR2 | Tên phường/xã mà user được truy cập (ví dụ: Phường Vũng Tàu) |\n| HUB_CODE | VARCHAR2 | Hub quản lý (mã hub) của phường/xã mà user được truy cập (ví dụ: VT.1) |\n| BRANCH_CODE | VARCHAR2 | Mã TTKD/chi nhánh của phường/xã mà user được truy cập (gồm Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): HCM010000, HCM020000, HCM030000, HCM040000, HCM050000, HCM060000, HCM070000) |\n| BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu) |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "USER_NAME",
+          "VARCHAR2",
+          "Mã user (ví dụ: HUY.NGUYEN)"
+        ],
+        [
+          "USER_ID",
+          "NUMBER",
+          "Mã định danh user"
+        ],
+        [
+          "PRECINCT_CODE",
+          "VARCHAR2",
+          "Mã phường/xã mà user được truy cập (ví dụ: VTAU)"
+        ],
+        [
+          "PRECINCT_NAME",
+          "VARCHAR2",
+          "Tên phường/xã mà user được truy cập (ví dụ: Phường Vũng Tàu)"
+        ],
+        [
+          "HUB_CODE",
+          "VARCHAR2",
+          "Hub quản lý (mã hub) của phường/xã mà user được truy cập (ví dụ: VT.1)"
+        ],
+        [
+          "BRANCH_CODE",
+          "VARCHAR2",
+          "Mã TTKD/chi nhánh của phường/xã mà user được truy cập (gồm Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): HCM010000, HCM020000, HCM030000, HCM040000, HCM050000, HCM060000, HCM070000)"
+        ],
+        [
+          "BRANCH_NAME",
+          "VARCHAR2",
+          "Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu)"
+        ]
+      ],
+      "n_rows": 7,
+      "line_start": 13,
+      "line_end": 21,
+      "id": "el_7",
+      "parent_id": "el_2",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng V_USER_PRECINCT_PERMISSION"
+    },
+    {
+      "block_id": "block_5",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng PRECINCT",
+      "line_start": 23,
+      "line_end": 23,
+      "id": "el_8",
+      "parent_id": "el_1",
+      "section": "Danh mục dùng chung"
+    },
+    {
+      "block_id": "block_6.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin của của các phường/xã",
+      "line_start": 25,
+      "line_end": 25,
+      "id": "el_9",
+      "parent_id": "el_8",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng PRECINCT"
+    },
+    {
+      "block_id": "block_6.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 26,
+      "line_end": 26,
+      "id": "el_10",
+      "parent_id": "el_8",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng PRECINCT"
+    },
+    {
+      "block_id": "block_6.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột CODE",
+      "line_start": 27,
+      "line_end": 28,
+      "id": "el_11",
+      "parent_id": "el_8",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng PRECINCT"
+    },
+    {
+      "block_id": "block_6.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Thường truy xuất vào bảng này để lấy các thông tin thêm của phường/xã (phường/xã thuộc hub gì, TTKD gì, ...) nếu bảng gốc không có đủ thông tin.\nDữ liệu tổng có 168 dòng (tương ứng với 168 phường/xã).",
+      "line_start": 29,
+      "line_end": 31,
+      "id": "el_12",
+      "parent_id": "el_8",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng PRECINCT"
+    },
+    {
+      "block_id": "block_7",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-------------|----------------|---------------|\n| ID | NUMBER | Khóa chính |\n| CODE | VARCHAR2 | Mã phường xã |\n| NAME | VARCHAR2 | Tên phường xã |\n| BRANCH_NAME | VARCHAR2 | Tên TTKD |\n| HUB | VARCHAR2 | Tên Hub |\n| BRANCH_CODE | VARCHAR2 | Mã TTKD |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Khóa chính"
+        ],
+        [
+          "CODE",
+          "VARCHAR2",
+          "Mã phường xã"
+        ],
+        [
+          "NAME",
+          "VARCHAR2",
+          "Tên phường xã"
+        ],
+        [
+          "BRANCH_NAME",
+          "VARCHAR2",
+          "Tên TTKD"
+        ],
+        [
+          "HUB",
+          "VARCHAR2",
+          "Tên Hub"
+        ],
+        [
+          "BRANCH_CODE",
+          "VARCHAR2",
+          "Mã TTKD"
+        ]
+      ],
+      "n_rows": 6,
+      "line_start": 33,
+      "line_end": 40,
+      "id": "el_13",
+      "parent_id": "el_8",
+      "section": "Danh mục dùng chung",
+      "table": "Bảng PRECINCT"
+    },
+    {
+      "block_id": "block_8",
+      "modality": "heading",
+      "level": 1,
+      "role": "section",
+      "text": "Dữ liệu điểm bán",
+      "line_start": 42,
+      "line_end": 42,
+      "id": "el_14",
+      "parent_id": null
+    },
+    {
+      "block_id": "block_9",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng POINT_OF_SALE",
+      "line_start": 44,
+      "line_end": 44,
+      "id": "el_15",
+      "parent_id": "el_14",
+      "section": "Dữ liệu điểm bán"
+    },
+    {
+      "block_id": "block_10.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin của các điểm bán",
+      "line_start": 46,
+      "line_end": 46,
+      "id": "el_16",
+      "parent_id": "el_15",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng POINT_OF_SALE"
+    },
+    {
+      "block_id": "block_10.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 47,
+      "line_end": 47,
+      "id": "el_17",
+      "parent_id": "el_15",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng POINT_OF_SALE"
+    },
+    {
+      "block_id": "block_10.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột SALE_CODE và PRECINCT_CODE.",
+      "line_start": 48,
+      "line_end": 49,
+      "id": "el_18",
+      "parent_id": "el_15",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng POINT_OF_SALE"
+    },
+    {
+      "block_id": "block_10.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Thường truy xuất vào bảng này để lấy các thông tin thêm của điểm bán (phường/xã thuộc hub gì, TTKD gì, loại gì, ...) nếu bảng gốc không có đủ thông tin.\nDữ liệu tổng khoảng 2000 dòng (tương ứng với khoảng 2000 điểm bán).",
+      "line_start": 50,
+      "line_end": 52,
+      "id": "el_19",
+      "parent_id": "el_15",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng POINT_OF_SALE"
+    },
+    {
+      "block_id": "block_11",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| ID | NUMBER | Mã định danh điểm bán (ví dụ: 17) |\n| ADDRESS | VARCHAR2 | Địa chỉ điểm bán |\n| BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu) |\n| EMP_NAME | VARCHAR2 | Tên nhân viên phụ trách |\n| HUB | VARCHAR2 | Hub quản lý (mã hub) (ví dụ: VT.1) |\n| HUB_LEADER | VARCHAR2 | Tên trưởng Hub |\n| LAT | VARCHAR2 | Vĩ độ (ví dụ: 10.765590) |\n| LON | VARCHAR2 | Kinh độ (ví dụ: 106.662547) |\n| NVBH_CODE | VARCHAR2 | Mã nhân viên bán hàng |\n| PARENT_SALE_CODE | VARCHAR2 | Mã nhân viên/quản lý cấp trên |\n| PARENT_SALE_NAME | VARCHAR2 | Tên nhân viên/quản lý cấp trên |\n| PHONE_NUMBER | VARCHAR2 | Số điện thoại điểm bán |\n| PRECINCT_NAME | VARCHAR2 | Tên phường/xã (ví dụ: Phường Diên Hồng) |\n| SALE_CODE | VARCHAR2 | Mã điểm bán |\n| SALE_NAME | VARCHAR2 | Tên điểm bán (ví dụ: ĐBH Minh Quang) |\n| SALE_TYPE | VARCHAR2 | Loại điểm bán (ví dụ: Loại 2) |\n| PRECINCT_CODE | VARCHAR2 | Mã phường/xã (ví dụ: VTAU) |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Mã định danh điểm bán (ví dụ: 17)"
+        ],
+        [
+          "ADDRESS",
+          "VARCHAR2",
+          "Địa chỉ điểm bán"
+        ],
+        [
+          "BRANCH_NAME",
+          "VARCHAR2",
+          "Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu)"
+        ],
+        [
+          "EMP_NAME",
+          "VARCHAR2",
+          "Tên nhân viên phụ trách"
+        ],
+        [
+          "HUB",
+          "VARCHAR2",
+          "Hub quản lý (mã hub) (ví dụ: VT.1)"
+        ],
+        [
+          "HUB_LEADER",
+          "VARCHAR2",
+          "Tên trưởng Hub"
+        ],
+        [
+          "LAT",
+          "VARCHAR2",
+          "Vĩ độ (ví dụ: 10.765590)"
+        ],
+        [
+          "LON",
+          "VARCHAR2",
+          "Kinh độ (ví dụ: 106.662547)"
+        ],
+        [
+          "NVBH_CODE",
+          "VARCHAR2",
+          "Mã nhân viên bán hàng"
+        ],
+        [
+          "PARENT_SALE_CODE",
+          "VARCHAR2",
+          "Mã nhân viên/quản lý cấp trên"
+        ],
+        [
+          "PARENT_SALE_NAME",
+          "VARCHAR2",
+          "Tên nhân viên/quản lý cấp trên"
+        ],
+        [
+          "PHONE_NUMBER",
+          "VARCHAR2",
+          "Số điện thoại điểm bán"
+        ],
+        [
+          "PRECINCT_NAME",
+          "VARCHAR2",
+          "Tên phường/xã (ví dụ: Phường Diên Hồng)"
+        ],
+        [
+          "SALE_CODE",
+          "VARCHAR2",
+          "Mã điểm bán"
+        ],
+        [
+          "SALE_NAME",
+          "VARCHAR2",
+          "Tên điểm bán (ví dụ: ĐBH Minh Quang)"
+        ],
+        [
+          "SALE_TYPE",
+          "VARCHAR2",
+          "Loại điểm bán (ví dụ: Loại 2)"
+        ],
+        [
+          "PRECINCT_CODE",
+          "VARCHAR2",
+          "Mã phường/xã (ví dụ: VTAU)"
+        ]
+      ],
+      "n_rows": 17,
+      "line_start": 54,
+      "line_end": 72,
+      "id": "el_20",
+      "parent_id": "el_15",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng POINT_OF_SALE"
+    },
+    {
+      "block_id": "block_12",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng V_BDS_NEW_SUB_SALE_POINT",
+      "line_start": 74,
+      "line_end": 74,
+      "id": "el_21",
+      "parent_id": "el_14",
+      "section": "Dữ liệu điểm bán"
+    },
+    {
+      "block_id": "block_13.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin phát triển mới thuê bao của kênh điểm bán",
+      "line_start": 76,
+      "line_end": 76,
+      "id": "el_22",
+      "parent_id": "el_21",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+    },
+    {
+      "block_id": "block_13.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 77,
+      "line_end": 77,
+      "id": "el_23",
+      "parent_id": "el_21",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+    },
+    {
+      "block_id": "block_13.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột SALE_CODE.",
+      "line_start": 78,
+      "line_end": 79,
+      "id": "el_24",
+      "parent_id": "el_21",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+    },
+    {
+      "block_id": "block_13.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy các thông tin về số lượng PTM TB của kênh điểm bán (phường/xã thuộc hub gì, TTKD gì, loại gì, ...).\nDữ liệu tổng khoảng 2000 dòng (tương ứng với khoảng 2000 điểm bán).",
+      "line_start": 80,
+      "line_end": 82,
+      "id": "el_25",
+      "parent_id": "el_21",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+    },
+    {
+      "block_id": "block_14",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-------------------|----------------|------------------------------------------------------------------------|\n| SALE_CODE | VARCHAR 2 | Mã điểm bán (ví dụ: HCM01DHON_0009) |\n| SUM_DATE | VARCHAR 2 | Ngày tổng hợp dữ liệu (luôn luôn là ngày hiện tại) (ví dụ: 17/06/2026) |\n| MC_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả trước trong ngày hiện tại (ví dụ: 1) |\n| MF_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả sau trong ngày hiện tại (ví dụ: 0) |\n| ALL_QUANTITY_DAY | NUMBER | Tổng số thuê bao trong ngày hiện tại (ví dụ: 1) |\n| SUM_MONTH | VARCHAR 2 | Tháng tổng hợp dữ liệu (luôn luôn là tháng hiện tại) (ví dụ: 06/2026) |\n| MC_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả trước trong tháng hiện tại (ví dụ: 15) |\n| MF_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả sau trong tháng hiện tại (ví dụ: 0) |\n| ALL_QUANTITY_MONTH | NUMBER | Tổng số thuê bao trong tháng hiện tại (ví dụ: 15) |\n| SUM_YEAR | VARCHAR 2 | Năm tổng hợp dữ liệu (năm hiện tại) (ví dụ: 2026) |\n| MC_QUANTITY_YEAR | NUMBER | Số lượng thuê bao trả trước trong năm hiện tại (ví dụ: 30) |\n| MF_QUANTITY_YEAR | NUMBER | Số lượng thuê bao trả sau trong năm hiện tại (ví dụ: 0) |\n| ALL_QUANTITY_YEAR | NUMBER | Tổng số thuê bao trong năm hiện tại (ví dụ: 30) |\n| MC_QUANTITY_ALL_YEAR | NUMBER | Tổng số thuê bao trả trước trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 39) |\n| MF_QUANTITY_ALL_YEAR | NUMBER | Lũy kế thuê bao trả sau trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 1) |\n| ALL_QUANTITY_ALL_YEAR | NUMBER | Tổng lũy kế thuê bao trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 40) |\n| START_DATE_LAST_WEEK | VARCHAR 2 | Ngày bắt đầu tuần trước (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 04/06/2026) |\n| LAST_DATE_LAST_WEEK | VARCHAR 2 | Ngày kết thúc tuần trước (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 10/06/2026) |\n| MC_QUANTITY_LAST_WEEK | NUMBER | Số lượng thuê bao trả trước trong tuần trước (ví dụ: 2) |\n| MF_QUANTITY_LAST_WEEK | NUMBER | Số lượng thuê bao trả sau trong tuần trước (ví dụ: 0) |\n| ALL_QUANTITY_LAST_WEEK | NUMBER | Tổng số thuê bao trong tuần trước (ví dụ: 2) |\n| START_DATE_THIS_WEEK | VARCHAR 2 | Ngày bắt đầu tuần hiện tại (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 11/06/2026) |\n| LAST_DATE_THIS_WEEK | VARCHAR 2 | Ngày kết thúc tuần hiện tại (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 17/06/2026) |\n| MC_QUANTITY_THIS_WEEK | NUMBER | Số lượng thuê bao trả trước trong tuần hiện tại (ví dụ: 8) |\n| MF_QUANTITY_THIS_WEEK | NUMBER | Số lượng thuê bao trả sau trong tuần hiện tại (ví dụ: 0) |\n| ALL_QUANTITY_THIS_WEEK | NUMBER | Tổng số thuê bao trong tuần hiện tại (ví dụ: 8) |\n| SALE_POINT_QUANTITY_LAST_W EEK | NUMBER | Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần trước (START_DATE_LAST_WEE K). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao |\n| SALE_POINT_QUANTITY_THIS_W EEK | NUMBER | Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần hiện tại (START_DATE_THIS_WEE K). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "SALE_CODE",
+          "VARCHAR 2",
+          "Mã điểm bán (ví dụ: HCM01DHON_0009)"
+        ],
+        [
+          "SUM_DATE",
+          "VARCHAR 2",
+          "Ngày tổng hợp dữ liệu (luôn luôn là ngày hiện tại) (ví dụ: 17/06/2026)"
+        ],
+        [
+          "MC_QUANTITY_DAY",
+          "NUMBER",
+          "Số lượng thuê bao trả trước trong ngày hiện tại (ví dụ: 1)"
+        ],
+        [
+          "MF_QUANTITY_DAY",
+          "NUMBER",
+          "Số lượng thuê bao trả sau trong ngày hiện tại (ví dụ: 0)"
+        ],
+        [
+          "ALL_QUANTITY_DAY",
+          "NUMBER",
+          "Tổng số thuê bao trong ngày hiện tại (ví dụ: 1)"
+        ],
+        [
+          "SUM_MONTH",
+          "VARCHAR 2",
+          "Tháng tổng hợp dữ liệu (luôn luôn là tháng hiện tại) (ví dụ: 06/2026)"
+        ],
+        [
+          "MC_QUANTITY_MONTH",
+          "NUMBER",
+          "Số lượng thuê bao trả trước trong tháng hiện tại (ví dụ: 15)"
+        ],
+        [
+          "MF_QUANTITY_MONTH",
+          "NUMBER",
+          "Số lượng thuê bao trả sau trong tháng hiện tại (ví dụ: 0)"
+        ],
+        [
+          "ALL_QUANTITY_MONTH",
+          "NUMBER",
+          "Tổng số thuê bao trong tháng hiện tại (ví dụ: 15)"
+        ],
+        [
+          "SUM_YEAR",
+          "VARCHAR 2",
+          "Năm tổng hợp dữ liệu (năm hiện tại) (ví dụ: 2026)"
+        ],
+        [
+          "MC_QUANTITY_YEAR",
+          "NUMBER",
+          "Số lượng thuê bao trả trước trong năm hiện tại (ví dụ: 30)"
+        ],
+        [
+          "MF_QUANTITY_YEAR",
+          "NUMBER",
+          "Số lượng thuê bao trả sau trong năm hiện tại (ví dụ: 0)"
+        ],
+        [
+          "ALL_QUANTITY_YEAR",
+          "NUMBER",
+          "Tổng số thuê bao trong năm hiện tại (ví dụ: 30)"
+        ],
+        [
+          "MC_QUANTITY_ALL_YEAR",
+          "NUMBER",
+          "Tổng số thuê bao trả trước trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 39)"
+        ],
+        [
+          "MF_QUANTITY_ALL_YEAR",
+          "NUMBER",
+          "Lũy kế thuê bao trả sau trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 1)"
+        ],
+        [
+          "ALL_QUANTITY_ALL_YEAR",
+          "NUMBER",
+          "Tổng lũy kế thuê bao trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 40)"
+        ],
+        [
+          "START_DATE_LAST_WEEK",
+          "VARCHAR 2",
+          "Ngày bắt đầu tuần trước (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 04/06/2026)"
+        ],
+        [
+          "LAST_DATE_LAST_WEEK",
+          "VARCHAR 2",
+          "Ngày kết thúc tuần trước (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 10/06/2026)"
+        ],
+        [
+          "MC_QUANTITY_LAST_WEEK",
+          "NUMBER",
+          "Số lượng thuê bao trả trước trong tuần trước (ví dụ: 2)"
+        ],
+        [
+          "MF_QUANTITY_LAST_WEEK",
+          "NUMBER",
+          "Số lượng thuê bao trả sau trong tuần trước (ví dụ: 0)"
+        ],
+        [
+          "ALL_QUANTITY_LAST_WEEK",
+          "NUMBER",
+          "Tổng số thuê bao trong tuần trước (ví dụ: 2)"
+        ],
+        [
+          "START_DATE_THIS_WEEK",
+          "VARCHAR 2",
+          "Ngày bắt đầu tuần hiện tại (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 11/06/2026)"
+        ],
+        [
+          "LAST_DATE_THIS_WEEK",
+          "VARCHAR 2",
+          "Ngày kết thúc tuần hiện tại (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 17/06/2026)"
+        ],
+        [
+          "MC_QUANTITY_THIS_WEEK",
+          "NUMBER",
+          "Số lượng thuê bao trả trước trong tuần hiện tại (ví dụ: 8)"
+        ],
+        [
+          "MF_QUANTITY_THIS_WEEK",
+          "NUMBER",
+          "Số lượng thuê bao trả sau trong tuần hiện tại (ví dụ: 0)"
+        ],
+        [
+          "ALL_QUANTITY_THIS_WEEK",
+          "NUMBER",
+          "Tổng số thuê bao trong tuần hiện tại (ví dụ: 8)"
+        ],
+        [
+          "SALE_POINT_QUANTITY_LAST_W EEK",
+          "NUMBER",
+          "Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần trước (START_DATE_LAST_WEE K). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao"
+        ],
+        [
+          "SALE_POINT_QUANTITY_THIS_W EEK",
+          "NUMBER",
+          "Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần hiện tại (START_DATE_THIS_WEE K). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao"
+        ]
+      ],
+      "n_rows": 28,
+      "line_start": 84,
+      "line_end": 113,
+      "id": "el_26",
+      "parent_id": "el_21",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+    },
+    {
+      "block_id": "block_15",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG",
+      "line_start": 115,
+      "line_end": 115,
+      "id": "el_27",
+      "parent_id": "el_14",
+      "section": "Dữ liệu điểm bán"
+    },
+    {
+      "block_id": "block_16.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ lịch sử chăm sóc điểm bán của nhân viên chăm sóc",
+      "line_start": 117,
+      "line_end": 117,
+      "id": "el_28",
+      "parent_id": "el_27",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng NHAN_VIEN_CHAM_SOC_LONG"
+    },
+    {
+      "block_id": "block_16.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 118,
+      "line_end": 118,
+      "id": "el_29",
+      "parent_id": "el_27",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng NHAN_VIEN_CHAM_SOC_LONG"
+    },
+    {
+      "block_id": "block_16.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột MA_DIEM_BAN và MA_NHAN_VIEN_CHAM_SOC.",
+      "line_start": 119,
+      "line_end": 120,
+      "id": "el_30",
+      "parent_id": "el_27",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng NHAN_VIEN_CHAM_SOC_LONG"
+    },
+    {
+      "block_id": "block_16.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Thường truy xuất vào bảng này để lấy các thông tin thêm của điểm bán (phường/xã thuộc hub gì, TTKD gì, loại gì, ...) nếu bảng gốc không có đủ thông tin.\nDữ liệu mới nhất là dữ liệu ngày N-1.\nDữ liệu tổng khoảng 30000 dòng.",
+      "line_start": 121,
+      "line_end": 124,
+      "id": "el_31",
+      "parent_id": "el_27",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng NHAN_VIEN_CHAM_SOC_LONG"
+    },
+    {
+      "block_id": "block_17",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|---------------------|----------------|-----------------------------------------------------|\n| INSERT_DATE | DATE | Ngày ghi nhận dữ liệu (ví dụ: 08/06/2026 14:30:12) |\n| NGAY_CHAM_SOC | DATE | Ngày chăm sóc điểm bán (ví dụ: 01/06/2026 00:00:00) |\n| MA_DIEM_BAN | VARCHAR2 | Mã điểm bán |\n| TEN_DIEM_BAN | VARCHAR2 | Tên điểm bán (ví dụ: ĐBH Minh Quang) |\n| NGUOI_GIAO_KE_HOACH | VARCHAR2 | Người giao kế hoạch chăm sóc |\n| NHAN_VIEN_CHAM_SOC | VARCHAR2 | Họ tên nhân viên chăm sóc điểm bán |\n| MA_NHAN_VIEN_CHAM_SOC | VARCHAR2 | Mã nhân viên chăm sóc điểm bán |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "INSERT_DATE",
+          "DATE",
+          "Ngày ghi nhận dữ liệu (ví dụ: 08/06/2026 14:30:12)"
+        ],
+        [
+          "NGAY_CHAM_SOC",
+          "DATE",
+          "Ngày chăm sóc điểm bán (ví dụ: 01/06/2026 00:00:00)"
+        ],
+        [
+          "MA_DIEM_BAN",
+          "VARCHAR2",
+          "Mã điểm bán"
+        ],
+        [
+          "TEN_DIEM_BAN",
+          "VARCHAR2",
+          "Tên điểm bán (ví dụ: ĐBH Minh Quang)"
+        ],
+        [
+          "NGUOI_GIAO_KE_HOACH",
+          "VARCHAR2",
+          "Người giao kế hoạch chăm sóc"
+        ],
+        [
+          "NHAN_VIEN_CHAM_SOC",
+          "VARCHAR2",
+          "Họ tên nhân viên chăm sóc điểm bán"
+        ],
+        [
+          "MA_NHAN_VIEN_CHAM_SOC",
+          "VARCHAR2",
+          "Mã nhân viên chăm sóc điểm bán"
+        ]
+      ],
+      "n_rows": 7,
+      "line_start": 126,
+      "line_end": 134,
+      "id": "el_32",
+      "parent_id": "el_27",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng NHAN_VIEN_CHAM_SOC_LONG"
+    },
+    {
+      "block_id": "block_18",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng EMPLOYEE_SALES",
+      "line_start": 136,
+      "line_end": 136,
+      "id": "el_33",
+      "parent_id": "el_14",
+      "section": "Dữ liệu điểm bán"
+    },
+    {
+      "block_id": "block_19.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin của các nhân viên chăm sóc",
+      "line_start": 138,
+      "line_end": 138,
+      "id": "el_34",
+      "parent_id": "el_33",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng EMPLOYEE_SALES"
+    },
+    {
+      "block_id": "block_19.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 139,
+      "line_end": 139,
+      "id": "el_35",
+      "parent_id": "el_33",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng EMPLOYEE_SALES"
+    },
+    {
+      "block_id": "block_20",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-------------|----------------|--------------------------------------------|\n| ID | NUMBER | Khóa chính, định danh duy nhất của bản ghi |\n| BRANCH_NAME | VARCHAR2 | Tên trung tâm kinh doanh / chi nhánh |\n| EMP_CODE | VARCHAR2 | Mã nhân viên |\n| HUB | VARCHAR2 | Tên Hub / khu vực quản lý |\n| HUB_LEADER | VARCHAR2 | Tên hoặc mã trưởng Hub |\n| SALES_CODE | VARCHAR2 | Mã Điểm Bán |\n| SALES_NAME | VARCHAR2 | Tên nhân viên bán hàng |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Khóa chính, định danh duy nhất của bản ghi"
+        ],
+        [
+          "BRANCH_NAME",
+          "VARCHAR2",
+          "Tên trung tâm kinh doanh / chi nhánh"
+        ],
+        [
+          "EMP_CODE",
+          "VARCHAR2",
+          "Mã nhân viên"
+        ],
+        [
+          "HUB",
+          "VARCHAR2",
+          "Tên Hub / khu vực quản lý"
+        ],
+        [
+          "HUB_LEADER",
+          "VARCHAR2",
+          "Tên hoặc mã trưởng Hub"
+        ],
+        [
+          "SALES_CODE",
+          "VARCHAR2",
+          "Mã Điểm Bán"
+        ],
+        [
+          "SALES_NAME",
+          "VARCHAR2",
+          "Tên nhân viên bán hàng"
+        ]
+      ],
+      "n_rows": 7,
+      "line_start": 141,
+      "line_end": 149,
+      "id": "el_36",
+      "parent_id": "el_33",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng EMPLOYEE_SALES"
+    },
+    {
+      "block_id": "block_21.1",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột SALES_CODE và SALES_NAME.",
+      "line_start": 151,
+      "line_end": 152,
+      "id": "el_37",
+      "parent_id": "el_33",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng EMPLOYEE_SALES"
+    },
+    {
+      "block_id": "block_21.2",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Thường truy xuất vào bảng này để lấy các thông tin thêm của điểm bán (phường/xã thuộc hub gì, TTKD gì, loại gì, ...) nếu bảng gốc không có đủ thông tin.\nDữ liệu mới nhất là dữ liệu ngày N-1.\nDữ liệu tổng khoảng 100 dòng (tương ứng với 100 nhân viên chăm sóc).",
+      "line_start": 153,
+      "line_end": 156,
+      "id": "el_38",
+      "parent_id": "el_33",
+      "section": "Dữ liệu điểm bán",
+      "table": "Bảng EMPLOYEE_SALES"
+    },
+    {
+      "block_id": "block_22",
+      "modality": "heading",
+      "level": 1,
+      "role": "section",
+      "text": "Dữ liệu kinh doanh",
+      "line_start": 158,
+      "line_end": 158,
+      "id": "el_39",
+      "parent_id": null
+    },
+    {
+      "block_id": "block_23",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng V_BDS_NEW_SUB_SHOP",
+      "line_start": 160,
+      "line_end": 160,
+      "id": "el_40",
+      "parent_id": "el_39",
+      "section": "Dữ liệu kinh doanh"
+    },
+    {
+      "block_id": "block_24.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin phát triển mới thuê bao của kênh cửa hàng và đại lý",
+      "line_start": 162,
+      "line_end": 162,
+      "id": "el_41",
+      "parent_id": "el_40",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng V_BDS_NEW_SUB_SHOP"
+    },
+    {
+      "block_id": "block_24.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 163,
+      "line_end": 163,
+      "id": "el_42",
+      "parent_id": "el_40",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng V_BDS_NEW_SUB_SHOP"
+    },
+    {
+      "block_id": "block_24.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE.",
+      "line_start": 164,
+      "line_end": 165,
+      "id": "el_43",
+      "parent_id": "el_40",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng V_BDS_NEW_SUB_SHOP"
+    },
+    {
+      "block_id": "block_24.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy số lượng PTM TB của kênh cửa hàng và đại lý.\nChỉ được sử dụng SHOP_TYPE in ('101', '201', '202'), các giá trị khác không được SELECT\nDữ liệu tổng khoảng 600 dòng.",
+      "line_start": 166,
+      "line_end": 169,
+      "id": "el_44",
+      "parent_id": "el_40",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng V_BDS_NEW_SUB_SHOP"
+    },
+    {
+      "block_id": "block_25",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|--------------------|----------------|-------------------------------------------------------------------------|\n| SHOP_CODE | VARCHAR2 | Mã cửa hàng |\n| SHOP_TYPE | VARCHAR2 | Loại cửa hàng (101: cửa hàng, 201: đại lý uỷ quyền, 202: đại lý chuyên) |\n| NAME | VARCHAR2 | Tên cửa hàng |\n| ADDRESS | VARCHAR2 | Địa chỉ cửa hàng |\n| LATITUDE | NUMBER | Vĩ độ |\n| LONGITUDE | NUMBER | Kinh độ |\n| STATUS | NUMBER | Trạng thái cửa hàng |\n| SUM_DATE | VARCHAR2 | Ngày tổng hợp dữ liệu |\n| ALL_QUANTITY_DAY | NUMBER | Tổng số thuê bao trong ngày |\n| MC_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả trước trong ngày |\n| MF_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả sau trong ngày |\n| SUM_MONTH | VARCHAR2 | Tháng tổng hợp dữ liệu |\n| ALL_QUANTITY_MONTH | NUMBER | Tổng số thuê bao trong tháng |\n| MC_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả trước trong tháng |\n| MF_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả sau trong tháng |\n| BRANCH_CODE | VARCHAR2 | Mã TTKD/chi nhánh |\n| PRECINCT_CODE | VARCHAR2 | Mã phường/xã |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "SHOP_CODE",
+          "VARCHAR2",
+          "Mã cửa hàng"
+        ],
+        [
+          "SHOP_TYPE",
+          "VARCHAR2",
+          "Loại cửa hàng (101: cửa hàng, 201: đại lý uỷ quyền, 202: đại lý chuyên)"
+        ],
+        [
+          "NAME",
+          "VARCHAR2",
+          "Tên cửa hàng"
+        ],
+        [
+          "ADDRESS",
+          "VARCHAR2",
+          "Địa chỉ cửa hàng"
+        ],
+        [
+          "LATITUDE",
+          "NUMBER",
+          "Vĩ độ"
+        ],
+        [
+          "LONGITUDE",
+          "NUMBER",
+          "Kinh độ"
+        ],
+        [
+          "STATUS",
+          "NUMBER",
+          "Trạng thái cửa hàng"
+        ],
+        [
+          "SUM_DATE",
+          "VARCHAR2",
+          "Ngày tổng hợp dữ liệu"
+        ],
+        [
+          "ALL_QUANTITY_DAY",
+          "NUMBER",
+          "Tổng số thuê bao trong ngày"
+        ],
+        [
+          "MC_QUANTITY_DAY",
+          "NUMBER",
+          "Số lượng thuê bao trả trước trong ngày"
+        ],
+        [
+          "MF_QUANTITY_DAY",
+          "NUMBER",
+          "Số lượng thuê bao trả sau trong ngày"
+        ],
+        [
+          "SUM_MONTH",
+          "VARCHAR2",
+          "Tháng tổng hợp dữ liệu"
+        ],
+        [
+          "ALL_QUANTITY_MONTH",
+          "NUMBER",
+          "Tổng số thuê bao trong tháng"
+        ],
+        [
+          "MC_QUANTITY_MONTH",
+          "NUMBER",
+          "Số lượng thuê bao trả trước trong tháng"
+        ],
+        [
+          "MF_QUANTITY_MONTH",
+          "NUMBER",
+          "Số lượng thuê bao trả sau trong tháng"
+        ],
+        [
+          "BRANCH_CODE",
+          "VARCHAR2",
+          "Mã TTKD/chi nhánh"
+        ],
+        [
+          "PRECINCT_CODE",
+          "VARCHAR2",
+          "Mã phường/xã"
+        ]
+      ],
+      "n_rows": 17,
+      "line_start": 171,
+      "line_end": 189,
+      "id": "el_45",
+      "parent_id": "el_40",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng V_BDS_NEW_SUB_SHOP"
+    },
+    {
+      "block_id": "block_26",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))",
+      "line_start": 191,
+      "line_end": 191,
+      "id": "el_46",
+      "parent_id": "el_39",
+      "section": "Dữ liệu kinh doanh"
+    },
+    {
+      "block_id": "block_27.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin phát triển mới thuê bao của các kênh kinh doanh (kênh cửa hàng, kênh chuỗi, kênh đại lý chuyên, kênh đại lý ủy quyền, kênh online, kênh quản lý, kênh Khách hàng cá nhân, kênh Khách hàng doanh nghiệp)",
+      "line_start": 193,
+      "line_end": 193,
+      "id": "el_47",
+      "parent_id": "el_46",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_27.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 194,
+      "line_end": 194,
+      "id": "el_48",
+      "parent_id": "el_46",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_27.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE.",
+      "line_start": 195,
+      "line_end": 196,
+      "id": "el_49",
+      "parent_id": "el_46",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_27.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy số lượng PTM TB của các kênh (kênh cửa hàng, kênh chuỗi, kênh đại lý chuyên, kênh đại lý ủy quyền, kênh online, kênh quản lý, kênh Khách hàng cá nhân, kênh Khách hàng doanh nghiệp), ngoại trừ kênh điểm bán.\nKhi gọi, truyền biến date (ngày phát triển thuê bao (cột SUM_DATE)) và user_name (user gọi truy cập dữ liệu)\nBảng này đã có sẵn phân quyền. Nên không cần phải map lại với bảng V_USER_PRECINCT_PERMISSION để lọc quyền nữa.\nDữ liệu mới nhất là ngày N (ngày hiện tại)\nDữ liệu tổng có 168 dòng (tương ứng với 168 phường/xã).",
+      "line_start": 197,
+      "line_end": 202,
+      "id": "el_50",
+      "parent_id": "el_46",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_28",
+      "modality": "table",
+      "text": "| Tên cột | Mô tả |\n|-----------|---------|\n| PRECINCT_CODE | Mã phường/xã |\n| PRECINCT_NAME | Tên phường/xã |\n| SUM_DATE | Ngày báo cáo dữ liệu thuê bao phát triển mới |\n| CUAHANG_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh Cửa hàng |\n| CHUOI_DIA_PHUONG_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh chuỗi địa phương |\n| DLC_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh Đại lý chuyên |\n| DLUQ_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh Đại lý ủy quyền |\n| ONL_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh Online |\n| OTHERS_DAY | Số lượng thuê bao phát triển mới trong ngày qua các kênh khác |\n| QUAN_LY_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh Quản lý |\n| TKD_KHCN_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh Tổ KD KHCN |\n| TKD_KHDN_DAY | Số lượng thuê bao phát triển mới trong ngày qua kênh Tổ KD KHDN |\n| SUM_MONTH | Tháng báo cáo dữ liệu thuê bao phát triển mới |\n| CUAHANG_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh Cửa hàng |\n| CHUOI_DIA_PHUONG_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh chuỗi địa phương |\n| DLC_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh Đại lý chuyên |\n| DLUQ_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh Đại lý ủy quyền |\n| ONL_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh Online |\n| OTHERS_MONTH | Số lượng thuê bao phát triển mới trong tháng qua các kênh khác |\n| QUAN_LY_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh Quản lý |\n| TKD_KHCN_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh Tổ KD KHCN |\n| TKD_KHDN_MONTH | Số lượng thuê bao phát triển mới trong tháng qua kênh Tổ KD KHDN |",
+      "columns": [
+        "Tên cột",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "PRECINCT_CODE",
+          "Mã phường/xã"
+        ],
+        [
+          "PRECINCT_NAME",
+          "Tên phường/xã"
+        ],
+        [
+          "SUM_DATE",
+          "Ngày báo cáo dữ liệu thuê bao phát triển mới"
+        ],
+        [
+          "CUAHANG_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh Cửa hàng"
+        ],
+        [
+          "CHUOI_DIA_PHUONG_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh chuỗi địa phương"
+        ],
+        [
+          "DLC_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh Đại lý chuyên"
+        ],
+        [
+          "DLUQ_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh Đại lý ủy quyền"
+        ],
+        [
+          "ONL_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh Online"
+        ],
+        [
+          "OTHERS_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua các kênh khác"
+        ],
+        [
+          "QUAN_LY_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh Quản lý"
+        ],
+        [
+          "TKD_KHCN_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh Tổ KD KHCN"
+        ],
+        [
+          "TKD_KHDN_DAY",
+          "Số lượng thuê bao phát triển mới trong ngày qua kênh Tổ KD KHDN"
+        ],
+        [
+          "SUM_MONTH",
+          "Tháng báo cáo dữ liệu thuê bao phát triển mới"
+        ],
+        [
+          "CUAHANG_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh Cửa hàng"
+        ],
+        [
+          "CHUOI_DIA_PHUONG_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh chuỗi địa phương"
+        ],
+        [
+          "DLC_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh Đại lý chuyên"
+        ],
+        [
+          "DLUQ_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh Đại lý ủy quyền"
+        ],
+        [
+          "ONL_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh Online"
+        ],
+        [
+          "OTHERS_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua các kênh khác"
+        ],
+        [
+          "QUAN_LY_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh Quản lý"
+        ],
+        [
+          "TKD_KHCN_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh Tổ KD KHCN"
+        ],
+        [
+          "TKD_KHDN_MONTH",
+          "Số lượng thuê bao phát triển mới trong tháng qua kênh Tổ KD KHDN"
+        ]
+      ],
+      "n_rows": 22,
+      "line_start": 204,
+      "line_end": 227,
+      "id": "el_51",
+      "parent_id": "el_46",
+      "section": "Dữ liệu kinh doanh",
+      "table": "Bảng TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_29",
+      "modality": "heading",
+      "level": 1,
+      "role": "section",
+      "text": "Vùng phủ địa lý",
+      "line_start": 229,
+      "line_end": 229,
+      "id": "el_52",
+      "parent_id": null
+    },
+    {
+      "block_id": "block_30",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng PUBLIC_LOCATION",
+      "line_start": 231,
+      "line_end": 231,
+      "id": "el_53",
+      "parent_id": "el_52",
+      "section": "Vùng phủ địa lý"
+    },
+    {
+      "block_id": "block_31.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin các điểm dữ liệu địa lý hành chính dùng để hiển thị lên bản đồ số, bao gồm các Trung tâm hành chính, Trụ sở công an, Cảng biển, Bệnh viện, Cao đẳng, Trạm PCCC, Doanh Nghiệp, Đại học",
+      "line_start": 233,
+      "line_end": 233,
+      "id": "el_54",
+      "parent_id": "el_53",
+      "section": "Vùng phủ địa lý",
+      "table": "Bảng PUBLIC_LOCATION"
+    },
+    {
+      "block_id": "block_31.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 234,
+      "line_end": 234,
+      "id": "el_55",
+      "parent_id": "el_53",
+      "section": "Vùng phủ địa lý",
+      "table": "Bảng PUBLIC_LOCATION"
+    },
+    {
+      "block_id": "block_31.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE.",
+      "line_start": 235,
+      "line_end": 236,
+      "id": "el_56",
+      "parent_id": "el_53",
+      "section": "Vùng phủ địa lý",
+      "table": "Bảng PUBLIC_LOCATION"
+    },
+    {
+      "block_id": "block_31.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy số lượng PTM TB của kênh cửa hàng và đại lý.\nDữ liệu tổng khoảng 5000 dòng.",
+      "line_start": 237,
+      "line_end": 239,
+      "id": "el_57",
+      "parent_id": "el_53",
+      "section": "Vùng phủ địa lý",
+      "table": "Bảng PUBLIC_LOCATION"
+    },
+    {
+      "block_id": "block_32",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|---------------|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| ID | NUMBER | Khoá chính |\n| TYPE | VARCHAR2 | Loại địa điểm, bao gồm các giá trị: 'TTHC', 'CA', 'CB', 'BV', 'CD', 'PCCC', 'DN', 'DH' |\n| TYPE_NAME | VARCHAR2 | Tên loại địa điểm, bao gồm các giá trị: 'Trung tâm hành chính', 'Trụ sở công an', 'Cảng biển', 'Bệnh viện', 'Cao đẳng', 'Trạm PCCC', 'Doanh Nghiệp', 'Đại học' |\n| NAME | VARCHAR2 | Tên địa điểm |\n| ADDRESS | VARCHAR2 | Địa chỉ |\n| LATITUDE | NUMBER | Vĩ độ |\n| LONGITUDE | NUMBER | Kinh độ |\n| STATUS | NUMBER | Trạng thái |\n| BRAND_CODE | VARCHAR2 | Mã TTKD/chi nhánh |\n| PRECINCT_CODE | VARCHAR2 | Mã phường/xã |\n| PRECINCT_NAME | VARCHAR2 | Tên phường/xã |\n| HUB | VARCHAR2 | Hub quản lý |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Khoá chính"
+        ],
+        [
+          "TYPE",
+          "VARCHAR2",
+          "Loại địa điểm, bao gồm các giá trị: 'TTHC', 'CA', 'CB', 'BV', 'CD', 'PCCC', 'DN', 'DH'"
+        ],
+        [
+          "TYPE_NAME",
+          "VARCHAR2",
+          "Tên loại địa điểm, bao gồm các giá trị: 'Trung tâm hành chính', 'Trụ sở công an', 'Cảng biển', 'Bệnh viện', 'Cao đẳng', 'Trạm PCCC', 'Doanh Nghiệp', 'Đại học'"
+        ],
+        [
+          "NAME",
+          "VARCHAR2",
+          "Tên địa điểm"
+        ],
+        [
+          "ADDRESS",
+          "VARCHAR2",
+          "Địa chỉ"
+        ],
+        [
+          "LATITUDE",
+          "NUMBER",
+          "Vĩ độ"
+        ],
+        [
+          "LONGITUDE",
+          "NUMBER",
+          "Kinh độ"
+        ],
+        [
+          "STATUS",
+          "NUMBER",
+          "Trạng thái"
+        ],
+        [
+          "BRAND_CODE",
+          "VARCHAR2",
+          "Mã TTKD/chi nhánh"
+        ],
+        [
+          "PRECINCT_CODE",
+          "VARCHAR2",
+          "Mã phường/xã"
+        ],
+        [
+          "PRECINCT_NAME",
+          "VARCHAR2",
+          "Tên phường/xã"
+        ],
+        [
+          "HUB",
+          "VARCHAR2",
+          "Hub quản lý"
+        ]
+      ],
+      "n_rows": 12,
+      "line_start": 241,
+      "line_end": 254,
+      "id": "el_58",
+      "parent_id": "el_53",
+      "section": "Vùng phủ địa lý",
+      "table": "Bảng PUBLIC_LOCATION"
+    },
+    {
+      "block_id": "block_33",
+      "modality": "heading",
+      "level": 1,
+      "role": "section",
+      "text": "Vùng phủ kỹ thuật",
+      "line_start": 256,
+      "line_end": 256,
+      "id": "el_59",
+      "parent_id": null
+    },
+    {
+      "block_id": "block_34",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng V_BDS_SITE",
+      "line_start": 258,
+      "line_end": 258,
+      "id": "el_60",
+      "parent_id": "el_59",
+      "section": "Vùng phủ kỹ thuật"
+    },
+    {
+      "block_id": "block_35.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin về cell/trạm BTS.",
+      "line_start": 260,
+      "line_end": 260,
+      "id": "el_61",
+      "parent_id": "el_60",
+      "section": "Vùng phủ kỹ thuật",
+      "table": "Bảng V_BDS_SITE"
+    },
+    {
+      "block_id": "block_35.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 261,
+      "line_end": 261,
+      "id": "el_62",
+      "parent_id": "el_60",
+      "section": "Vùng phủ kỹ thuật",
+      "table": "Bảng V_BDS_SITE"
+    },
+    {
+      "block_id": "block_35.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE.",
+      "line_start": 262,
+      "line_end": 263,
+      "id": "el_63",
+      "parent_id": "el_60",
+      "section": "Vùng phủ kỹ thuật",
+      "table": "Bảng V_BDS_SITE"
+    },
+    {
+      "block_id": "block_35.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để thông tin về cell/trạm BTS và các dữ liệu VLR, CLTS của cell/trạm BTS.\nLuôn thêm điều kiện STATUS = 1 khi truy xuất, vì chỉ cần quan tâm dữ liệu của các trạm/cell cùng hoạt động\nDữ liệu tổng khoảng 30000 dòng.",
+      "line_start": 264,
+      "line_end": 267,
+      "id": "el_64",
+      "parent_id": "el_60",
+      "section": "Vùng phủ kỹ thuật",
+      "table": "Bảng V_BDS_SITE"
+    },
+    {
+      "block_id": "block_36",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|---------------|----------------|-------------------------------------------------------------|\n| CELL_SITE | VARCHAR2 | Mã trạm BTS / Cell Site |\n| LATITUDE | NUMBER | Vĩ độ |\n| LONGITUDE | NUMBER | Kinh độ |\n| STATUS | NUMBER | Trạng thái trạm (1: đang hoạt động, 0: không hoạt động/OFF) |\n| SUM_DATE | VARCHAR2 | Ngày tổng hợp dữ liệu |\n| VLR_ALL_DAY | NUMBER | Tổng VLR trong ngày |\n| VLR_3G_DAY | NUMBER | VLR 3G trong ngày |\n| VLR_4G_DAY | NUMBER | VLR 4G trong ngày |\n| VLR_5G_DAY | NUMBER | VLR 5G trong ngày |\n| SUM_MONTH | VARCHAR2 | Tháng tổng hợp dữ liệu |\n| VLR_ALL_MONTH | NUMBER | Tổng VLR trong tháng |\n| VLR_2G_MONTH | NUMBER | VLR 2G trong tháng |\n| VLR_3G_MONTH | NUMBER | VLR 3G trong tháng |\n| VLR_4G_MONTH | NUMBER | VLR 4G trong tháng |\n| VLR_5G_MONTH | NUMBER | VLR 5G trong tháng |\n| CLTC_MONTH | VARCHAR2 | Tháng ghi nhận chênh lệch thu chi |\n| CLTC | NUMBER | Chỉ số chất lượng chênh lệch thu chi |\n| BRANCH_CODE | VARCHAR2 | Mã TTKD/chi nhánh |\n| PRECINCT_CODE | VARCHAR2 | Mã phường/xã |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "CELL_SITE",
+          "VARCHAR2",
+          "Mã trạm BTS / Cell Site"
+        ],
+        [
+          "LATITUDE",
+          "NUMBER",
+          "Vĩ độ"
+        ],
+        [
+          "LONGITUDE",
+          "NUMBER",
+          "Kinh độ"
+        ],
+        [
+          "STATUS",
+          "NUMBER",
+          "Trạng thái trạm (1: đang hoạt động, 0: không hoạt động/OFF)"
+        ],
+        [
+          "SUM_DATE",
+          "VARCHAR2",
+          "Ngày tổng hợp dữ liệu"
+        ],
+        [
+          "VLR_ALL_DAY",
+          "NUMBER",
+          "Tổng VLR trong ngày"
+        ],
+        [
+          "VLR_3G_DAY",
+          "NUMBER",
+          "VLR 3G trong ngày"
+        ],
+        [
+          "VLR_4G_DAY",
+          "NUMBER",
+          "VLR 4G trong ngày"
+        ],
+        [
+          "VLR_5G_DAY",
+          "NUMBER",
+          "VLR 5G trong ngày"
+        ],
+        [
+          "SUM_MONTH",
+          "VARCHAR2",
+          "Tháng tổng hợp dữ liệu"
+        ],
+        [
+          "VLR_ALL_MONTH",
+          "NUMBER",
+          "Tổng VLR trong tháng"
+        ],
+        [
+          "VLR_2G_MONTH",
+          "NUMBER",
+          "VLR 2G trong tháng"
+        ],
+        [
+          "VLR_3G_MONTH",
+          "NUMBER",
+          "VLR 3G trong tháng"
+        ],
+        [
+          "VLR_4G_MONTH",
+          "NUMBER",
+          "VLR 4G trong tháng"
+        ],
+        [
+          "VLR_5G_MONTH",
+          "NUMBER",
+          "VLR 5G trong tháng"
+        ],
+        [
+          "CLTC_MONTH",
+          "VARCHAR2",
+          "Tháng ghi nhận chênh lệch thu chi"
+        ],
+        [
+          "CLTC",
+          "NUMBER",
+          "Chỉ số chất lượng chênh lệch thu chi"
+        ],
+        [
+          "BRANCH_CODE",
+          "VARCHAR2",
+          "Mã TTKD/chi nhánh"
+        ],
+        [
+          "PRECINCT_CODE",
+          "VARCHAR2",
+          "Mã phường/xã"
+        ]
+      ],
+      "n_rows": 19,
+      "line_start": 269,
+      "line_end": 289,
+      "id": "el_65",
+      "parent_id": "el_60",
+      "section": "Vùng phủ kỹ thuật",
+      "table": "Bảng V_BDS_SITE"
+    },
+    {
+      "block_id": "block_37",
+      "modality": "heading",
+      "level": 1,
+      "role": "section",
+      "text": "Báo cáo doanh thu TKC và VLR",
+      "line_start": 291,
+      "line_end": 291,
+      "id": "el_66",
+      "parent_id": null
+    },
+    {
+      "block_id": "block_38",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))",
+      "line_start": 293,
+      "line_end": 293,
+      "id": "el_67",
+      "parent_id": "el_66",
+      "section": "Báo cáo doanh thu TKC và VLR"
+    },
+    {
+      "block_id": "block_39.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin số lượng VLR.",
+      "line_start": 295,
+      "line_end": 295,
+      "id": "el_68",
+      "parent_id": "el_67",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_39.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 296,
+      "line_end": 296,
+      "id": "el_69",
+      "parent_id": "el_67",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_39.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE.",
+      "line_start": 297,
+      "line_end": 298,
+      "id": "el_70",
+      "parent_id": "el_67",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_39.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy số lượng VLR.\nKhi gọi, truyền biến date (ngày phát triển thuê bao (cột SUM_DATE)) và user_name (user gọi truy cập dữ liệu)\nBảng này đã có sẵn phân quyền. Nên không cần phải map lại với bảng V_USER_PRECINCT_PERMISSION để lọc quyền nữa.\nDữ liệu mới nhất là ngày N-2.\nDữ liệu tổng có 168 dòng (tương ứng với 168 phường/xã).",
+      "line_start": 299,
+      "line_end": 304,
+      "id": "el_71",
+      "parent_id": "el_67",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_40",
+      "modality": "table",
+      "text": "| Tên cột | Mô tả |\n|-----------------------------|-----------------------------------|\n| PRECINCT_CODE | Mã phường/xã |\n| PRECINCT_NAME | Tên phường/xã |\n| SUM_DATE | Ngày báo cáo dữ liệu VLR |\n| MOBIFONE_VLR_QUANTITY_DAY | Số lượng VLR MobiFone trong ngày |\n| SAYMEE_VLR_QUANTITY_DAY | Số lượng VLR Saymee trong ngày |\n| SUM_MONTH | Tháng báo cáo dữ liệu VLR |\n| MOBIFONE_VLR_QUANTITY_MONTH | Số lượng VLR MobiFone trong tháng |\n| SAYMEE_VLR_QUANTITY_MONTH | Số lượng VLR Saymee trong tháng |",
+      "columns": [
+        "Tên cột",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "PRECINCT_CODE",
+          "Mã phường/xã"
+        ],
+        [
+          "PRECINCT_NAME",
+          "Tên phường/xã"
+        ],
+        [
+          "SUM_DATE",
+          "Ngày báo cáo dữ liệu VLR"
+        ],
+        [
+          "MOBIFONE_VLR_QUANTITY_DAY",
+          "Số lượng VLR MobiFone trong ngày"
+        ],
+        [
+          "SAYMEE_VLR_QUANTITY_DAY",
+          "Số lượng VLR Saymee trong ngày"
+        ],
+        [
+          "SUM_MONTH",
+          "Tháng báo cáo dữ liệu VLR"
+        ],
+        [
+          "MOBIFONE_VLR_QUANTITY_MONTH",
+          "Số lượng VLR MobiFone trong tháng"
+        ],
+        [
+          "SAYMEE_VLR_QUANTITY_MONTH",
+          "Số lượng VLR Saymee trong tháng"
+        ]
+      ],
+      "n_rows": 8,
+      "line_start": 306,
+      "line_end": 315,
+      "id": "el_72",
+      "parent_id": "el_67",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+    },
+    {
+      "block_id": "block_41",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng TABLE(pck_report_chatbox.get_rev_data_by_precinct",
+      "line_start": 317,
+      "line_end": 317,
+      "id": "el_73",
+      "parent_id": "el_66",
+      "section": "Báo cáo doanh thu TKC và VLR"
+    },
+    {
+      "block_id": "block_42.1",
+      "modality": "text",
+      "role": null,
+      "label": "",
+      "text": "(TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))",
+      "line_start": 319,
+      "line_end": 319,
+      "id": "el_74",
+      "parent_id": "el_73",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_rev_data_by_precinct"
+    },
+    {
+      "block_id": "block_42.2",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin doanh thu tài khoản chính.",
+      "line_start": 320,
+      "line_end": 320,
+      "id": "el_75",
+      "parent_id": "el_73",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_rev_data_by_precinct"
+    },
+    {
+      "block_id": "block_42.3",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 321,
+      "line_end": 321,
+      "id": "el_76",
+      "parent_id": "el_73",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_rev_data_by_precinct"
+    },
+    {
+      "block_id": "block_42.4",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE.",
+      "line_start": 322,
+      "line_end": 323,
+      "id": "el_77",
+      "parent_id": "el_73",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_rev_data_by_precinct"
+    },
+    {
+      "block_id": "block_42.5",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy doanh thu tài khoản chính.\nKhi gọi, truyền biến date (ngày phát triển thuê bao (cột SUM_DATE)) và user_name (user gọi truy cập dữ liệu)\nBảng này đã có sẵn phân quyền. Nên không cần phải map lại với bảng V_USER_PRECINCT_PERMISSION để lọc quyền nữa.\nDữ liệu mới nhất là ngày N-2.\nDữ liệu tổng có 168 dòng (tương ứng với 168 phường/xã).",
+      "line_start": 324,
+      "line_end": 329,
+      "id": "el_78",
+      "parent_id": "el_73",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_rev_data_by_precinct"
+    },
+    {
+      "block_id": "block_43",
+      "modality": "table",
+      "text": "| Tên cột | Mô tả |\n|------------------------|------------------------------------|\n| PRECINCT_CODE | Mã phường/xã |\n| PRECINCT_NAME | Tên phường/xã |\n| SUM_DATE | Ngày báo cáo doanh thu |\n| MOBIFONE_TKC_REV_DAY | Doanh thu TKC MobiFone trong ngày |\n| SAYMEE_TKC_REV_DAY | Doanh thu TKC Saymee trong ngày |\n| BHM_REV_DAY | Doanh thu BHM trong ngày |\n| SUM_MONTH | Tháng báo cáo doanh thu |\n| MOBIFONE_TKC_REV_MONTH | Doanh thu TKC MobiFone trong tháng |\n| SAYMEE_TKC_REV_MONTH | Doanh thu TKC Saymee trong tháng |\n| BHM_REV_MONTH | Doanh thu BHM trong tháng |",
+      "columns": [
+        "Tên cột",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "PRECINCT_CODE",
+          "Mã phường/xã"
+        ],
+        [
+          "PRECINCT_NAME",
+          "Tên phường/xã"
+        ],
+        [
+          "SUM_DATE",
+          "Ngày báo cáo doanh thu"
+        ],
+        [
+          "MOBIFONE_TKC_REV_DAY",
+          "Doanh thu TKC MobiFone trong ngày"
+        ],
+        [
+          "SAYMEE_TKC_REV_DAY",
+          "Doanh thu TKC Saymee trong ngày"
+        ],
+        [
+          "BHM_REV_DAY",
+          "Doanh thu BHM trong ngày"
+        ],
+        [
+          "SUM_MONTH",
+          "Tháng báo cáo doanh thu"
+        ],
+        [
+          "MOBIFONE_TKC_REV_MONTH",
+          "Doanh thu TKC MobiFone trong tháng"
+        ],
+        [
+          "SAYMEE_TKC_REV_MONTH",
+          "Doanh thu TKC Saymee trong tháng"
+        ],
+        [
+          "BHM_REV_MONTH",
+          "Doanh thu BHM trong tháng"
+        ]
+      ],
+      "n_rows": 10,
+      "line_start": 331,
+      "line_end": 342,
+      "id": "el_79",
+      "parent_id": "el_73",
+      "section": "Báo cáo doanh thu TKC và VLR",
+      "table": "Bảng TABLE(pck_report_chatbox.get_rev_data_by_precinct"
+    },
+    {
+      "block_id": "block_44",
+      "modality": "heading",
+      "level": 1,
+      "role": "section",
+      "text": "Quản lý công việc và dự án",
+      "line_start": 344,
+      "line_end": 344,
+      "id": "el_80",
+      "parent_id": null
+    },
+    {
+      "block_id": "block_45",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng LOCATION_GROUP",
+      "line_start": 346,
+      "line_end": 346,
+      "id": "el_81",
+      "parent_id": "el_80",
+      "section": "Quản lý công việc và dự án"
+    },
+    {
+      "block_id": "block_46.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin nhóm địa điểm.",
+      "line_start": 348,
+      "line_end": 348,
+      "id": "el_82",
+      "parent_id": "el_81",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION_GROUP"
+    },
+    {
+      "block_id": "block_46.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 349,
+      "line_end": 349,
+      "id": "el_83",
+      "parent_id": "el_81",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION_GROUP"
+    },
+    {
+      "block_id": "block_46.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột ID.",
+      "line_start": 350,
+      "line_end": 351,
+      "id": "el_84",
+      "parent_id": "el_81",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION_GROUP"
+    },
+    {
+      "block_id": "block_46.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy thông tin nhóm địa điểm.\nDữ liệu tổng có 1 dòng (hiện chỉ có 1 nhóm địa điểm là Uỷ Ban Nhân Dân).",
+      "line_start": 352,
+      "line_end": 354,
+      "id": "el_85",
+      "parent_id": "el_81",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION_GROUP"
+    },
+    {
+      "block_id": "block_47",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-----------|----------------|-------------------|\n| ID | NUMBER | Khoá chính |\n| Name | VARCHAR2 | Tên nhóm địa điểm |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Khoá chính"
+        ],
+        [
+          "Name",
+          "VARCHAR2",
+          "Tên nhóm địa điểm"
+        ]
+      ],
+      "n_rows": 2,
+      "line_start": 356,
+      "line_end": 359,
+      "id": "el_86",
+      "parent_id": "el_81",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION_GROUP"
+    },
+    {
+      "block_id": "block_48",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng PROJECT",
+      "line_start": 361,
+      "line_end": 361,
+      "id": "el_87",
+      "parent_id": "el_80",
+      "section": "Quản lý công việc và dự án"
+    },
+    {
+      "block_id": "block_49.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin dự án.",
+      "line_start": 363,
+      "line_end": 363,
+      "id": "el_88",
+      "parent_id": "el_87",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng PROJECT"
+    },
+    {
+      "block_id": "block_49.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 364,
+      "line_end": 364,
+      "id": "el_89",
+      "parent_id": "el_87",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng PROJECT"
+    },
+    {
+      "block_id": "block_49.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột ID và LOCATION_GROUP_ID.",
+      "line_start": 365,
+      "line_end": 366,
+      "id": "el_90",
+      "parent_id": "el_87",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng PROJECT"
+    },
+    {
+      "block_id": "block_49.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy thông tin nhóm địa điểm.\nDữ liệu tổng có 1 dòng (hiện chỉ có 1 nhóm địa điểm là Triển khai hạ tầng CNTT 168 Xã).",
+      "line_start": 367,
+      "line_end": 369,
+      "id": "el_91",
+      "parent_id": "el_87",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng PROJECT"
+    },
+    {
+      "block_id": "block_50",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-------------------|----------------|---------------------------|\n| ID | NUMBER | Khoá chính |\n| NAME | VARCHAR2 | Tên dự án |\n| LOCATION_GROUP_ID | NUMBER | Mã nhóm địa điểm liên kết |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Khoá chính"
+        ],
+        [
+          "NAME",
+          "VARCHAR2",
+          "Tên dự án"
+        ],
+        [
+          "LOCATION_GROUP_ID",
+          "NUMBER",
+          "Mã nhóm địa điểm liên kết"
+        ]
+      ],
+      "n_rows": 3,
+      "line_start": 371,
+      "line_end": 375,
+      "id": "el_92",
+      "parent_id": "el_87",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng PROJECT"
+    },
+    {
+      "block_id": "block_51",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng LOCATION",
+      "line_start": 377,
+      "line_end": 377,
+      "id": "el_93",
+      "parent_id": "el_80",
+      "section": "Quản lý công việc và dự án"
+    },
+    {
+      "block_id": "block_52.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin địa điểm.",
+      "line_start": 379,
+      "line_end": 379,
+      "id": "el_94",
+      "parent_id": "el_93",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION"
+    },
+    {
+      "block_id": "block_52.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 380,
+      "line_end": 380,
+      "id": "el_95",
+      "parent_id": "el_93",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION"
+    },
+    {
+      "block_id": "block_52.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột ID, LOCATION_GROUP_ID và PRECINCT_NAME.",
+      "line_start": 381,
+      "line_end": 382,
+      "id": "el_96",
+      "parent_id": "el_93",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION"
+    },
+    {
+      "block_id": "block_52.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy thông tin địa điểm.\nDữ liệu tổng khoảng 300 dòng.",
+      "line_start": 383,
+      "line_end": 385,
+      "id": "el_97",
+      "parent_id": "el_93",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION"
+    },
+    {
+      "block_id": "block_53",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-------------------|----------------|-----------------------|\n| ID | NUMBER | Mã định danh địa điểm |\n| ADDRESS | VARCHAR2 | Địa chỉ địa điểm |\n| LAT | NUMBER | Vĩ độ |\n| LON | NUMBER | Kinh độ |\n| NAME | VARCHAR2 | Tên địa điểm |\n| LOCATION_GROUP_ID | NUMBER | Mã nhóm địa điểm |\n| PROJECT_ID | NUMBER | Mã dự án |\n| PRECINCT_NAME | VARCHAR2 | Tên phường/xã |\n| HUB | VARCHAR2 | Hub quản lý |\n| BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Mã định danh địa điểm"
+        ],
+        [
+          "ADDRESS",
+          "VARCHAR2",
+          "Địa chỉ địa điểm"
+        ],
+        [
+          "LAT",
+          "NUMBER",
+          "Vĩ độ"
+        ],
+        [
+          "LON",
+          "NUMBER",
+          "Kinh độ"
+        ],
+        [
+          "NAME",
+          "VARCHAR2",
+          "Tên địa điểm"
+        ],
+        [
+          "LOCATION_GROUP_ID",
+          "NUMBER",
+          "Mã nhóm địa điểm"
+        ],
+        [
+          "PROJECT_ID",
+          "NUMBER",
+          "Mã dự án"
+        ],
+        [
+          "PRECINCT_NAME",
+          "VARCHAR2",
+          "Tên phường/xã"
+        ],
+        [
+          "HUB",
+          "VARCHAR2",
+          "Hub quản lý"
+        ],
+        [
+          "BRANCH_NAME",
+          "VARCHAR2",
+          "Tên TTKD/chi nhánh"
+        ]
+      ],
+      "n_rows": 10,
+      "line_start": 387,
+      "line_end": 398,
+      "id": "el_98",
+      "parent_id": "el_93",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng LOCATION"
+    },
+    {
+      "block_id": "block_54",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng V_MAN_TASK",
+      "line_start": 400,
+      "line_end": 400,
+      "id": "el_99",
+      "parent_id": "el_80",
+      "section": "Quản lý công việc và dự án"
+    },
+    {
+      "block_id": "block_55.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin các công việc được khai báo.",
+      "line_start": 402,
+      "line_end": 402,
+      "id": "el_100",
+      "parent_id": "el_99",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK"
+    },
+    {
+      "block_id": "block_55.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 403,
+      "line_end": 403,
+      "id": "el_101",
+      "parent_id": "el_99",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK"
+    },
+    {
+      "block_id": "block_55.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột ID, PROGRESS_ID , LOCATION_ID, PROJECT_ID, assigner_staff_id và assignee_staff_id.",
+      "line_start": 404,
+      "line_end": 405,
+      "id": "el_102",
+      "parent_id": "el_99",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK"
+    },
+    {
+      "block_id": "block_55.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy thông tin công việc.\nDữ liệu tổng khoảng 20000 dòng.",
+      "line_start": 406,
+      "line_end": 408,
+      "id": "el_103",
+      "parent_id": "el_99",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK"
+    },
+    {
+      "block_id": "block_56",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-------------------|----------------|-------------------------|\n| ID | NUMBER | Mã định danh công việc |\n| CREATED_DATE | TIMESTAMP | Thời gian tạo bản ghi |\n| END_DATE | TIMESTAMP | Ngày kết thúc công việc |\n| NAME | VARCHAR2 | Tên công việc |\n| PRIORITY | VARCHAR2 | Mức độ ưu tiên |\n| START_DATE | TIMESTAMP | Ngày bắt đầu công việc |\n| PROGRESS_ID | NUMBER | Tiến độ thực hiện |\n| location_id | NUMBER | Mã địa điểm |\n| project_id | NUMBER | Mã dự án |\n| assigner_staff_id | NUMBER | Mã Người giao |\n| assignee_staff_id | NUMBER | Mã Người nhận |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Mã định danh công việc"
+        ],
+        [
+          "CREATED_DATE",
+          "TIMESTAMP",
+          "Thời gian tạo bản ghi"
+        ],
+        [
+          "END_DATE",
+          "TIMESTAMP",
+          "Ngày kết thúc công việc"
+        ],
+        [
+          "NAME",
+          "VARCHAR2",
+          "Tên công việc"
+        ],
+        [
+          "PRIORITY",
+          "VARCHAR2",
+          "Mức độ ưu tiên"
+        ],
+        [
+          "START_DATE",
+          "TIMESTAMP",
+          "Ngày bắt đầu công việc"
+        ],
+        [
+          "PROGRESS_ID",
+          "NUMBER",
+          "Tiến độ thực hiện"
+        ],
+        [
+          "location_id",
+          "NUMBER",
+          "Mã địa điểm"
+        ],
+        [
+          "project_id",
+          "NUMBER",
+          "Mã dự án"
+        ],
+        [
+          "assigner_staff_id",
+          "NUMBER",
+          "Mã Người giao"
+        ],
+        [
+          "assignee_staff_id",
+          "NUMBER",
+          "Mã Người nhận"
+        ]
+      ],
+      "n_rows": 11,
+      "line_start": 410,
+      "line_end": 422,
+      "id": "el_104",
+      "parent_id": "el_99",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK"
+    },
+    {
+      "block_id": "block_57",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng V_MAN_TASK_PROGRESS",
+      "line_start": 424,
+      "line_end": 424,
+      "id": "el_105",
+      "parent_id": "el_80",
+      "section": "Quản lý công việc và dự án"
+    },
+    {
+      "block_id": "block_58.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin tiến độ công việc.",
+      "line_start": 426,
+      "line_end": 426,
+      "id": "el_106",
+      "parent_id": "el_105",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK_PROGRESS"
+    },
+    {
+      "block_id": "block_58.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 427,
+      "line_end": 427,
+      "id": "el_107",
+      "parent_id": "el_105",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK_PROGRESS"
+    },
+    {
+      "block_id": "block_58.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột ID, và TASK_ID.",
+      "line_start": 428,
+      "line_end": 429,
+      "id": "el_108",
+      "parent_id": "el_105",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK_PROGRESS"
+    },
+    {
+      "block_id": "block_58.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy thông tin tiến độ công việc.\nDữ liệu tổng khoảng 30000 dòng.",
+      "line_start": 430,
+      "line_end": 432,
+      "id": "el_109",
+      "parent_id": "el_105",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK_PROGRESS"
+    },
+    {
+      "block_id": "block_59",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|--------------|----------------|--------------------------------|\n| ID | NUMBER | Mã định danh tiến độ công việc |\n| CREATED_DATE | TIMESTAMP | Thời gian tạo bản ghi |\n| PERCENT | NUMBER | Phần trăm hoàn thành |\n| TASK_ID | NUMBER | Mã công việc |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Mã định danh tiến độ công việc"
+        ],
+        [
+          "CREATED_DATE",
+          "TIMESTAMP",
+          "Thời gian tạo bản ghi"
+        ],
+        [
+          "PERCENT",
+          "NUMBER",
+          "Phần trăm hoàn thành"
+        ],
+        [
+          "TASK_ID",
+          "NUMBER",
+          "Mã công việc"
+        ]
+      ],
+      "n_rows": 4,
+      "line_start": 434,
+      "line_end": 439,
+      "id": "el_110",
+      "parent_id": "el_105",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_MAN_TASK_PROGRESS"
+    },
+    {
+      "block_id": "block_60",
+      "modality": "heading",
+      "level": 2,
+      "role": "table",
+      "text": "Bảng V_CAT_STAFF",
+      "line_start": 441,
+      "line_end": 441,
+      "id": "el_111",
+      "parent_id": "el_80",
+      "section": "Quản lý công việc và dự án"
+    },
+    {
+      "block_id": "block_61.1",
+      "modality": "text",
+      "role": "table_meaning",
+      "label": "Ý nghĩa của bảng:",
+      "text": "Lưu trữ thông tin nhân viên của công việc.",
+      "line_start": 443,
+      "line_end": 443,
+      "id": "el_112",
+      "parent_id": "el_111",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_CAT_STAFF"
+    },
+    {
+      "block_id": "block_61.2",
+      "modality": "text",
+      "role": "column_intro",
+      "label": "Chi tiết các cột trong bảng:",
+      "text": "",
+      "line_start": 444,
+      "line_end": 444,
+      "id": "el_113",
+      "parent_id": "el_111",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_CAT_STAFF"
+    },
+    {
+      "block_id": "block_61.3",
+      "modality": "text",
+      "role": "relation_hint",
+      "label": "Mối liên kết:",
+      "text": "Liên kết với các bảng khác qua cột ID.",
+      "line_start": 445,
+      "line_end": 446,
+      "id": "el_114",
+      "parent_id": "el_111",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_CAT_STAFF"
+    },
+    {
+      "block_id": "block_61.4",
+      "modality": "text",
+      "role": "business_rule",
+      "label": "Ghi chú:",
+      "text": "Truy xuất vào bảng này để lấy thông tin nhân viên của công việc.\nDữ liệu tổng khoảng 500 dòng.",
+      "line_start": 447,
+      "line_end": 449,
+      "id": "el_115",
+      "parent_id": "el_111",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_CAT_STAFF"
+    },
+    {
+      "block_id": "block_62",
+      "modality": "table",
+      "text": "| Tên cột | Kiểu dữ liệu | Mô tả |\n|-----------|----------------|---------------------------|\n| ID | NUMBER | Mã định danh người dùng |\n| FULL_NAME | VARCHAR2 | Họ và tên người dùng |\n| GENDER | NUMBER | Giới tính |\n| ISDN | VARCHAR2 | Số thuê bao/số điện thoại |",
+      "columns": [
+        "Tên cột",
+        "Kiểu dữ liệu",
+        "Mô tả"
+      ],
+      "rows": [
+        [
+          "ID",
+          "NUMBER",
+          "Mã định danh người dùng"
+        ],
+        [
+          "FULL_NAME",
+          "VARCHAR2",
+          "Họ và tên người dùng"
+        ],
+        [
+          "GENDER",
+          "NUMBER",
+          "Giới tính"
+        ],
+        [
+          "ISDN",
+          "VARCHAR2",
+          "Số thuê bao/số điện thoại"
+        ]
+      ],
+      "n_rows": 4,
+      "line_start": 451,
+      "line_end": 456,
+      "id": "el_116",
+      "parent_id": "el_111",
+      "section": "Quản lý công việc và dự án",
+      "table": "Bảng V_CAT_STAFF"
+    }
+  ]
+}

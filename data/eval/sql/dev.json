@@ -1,0 +1,198 @@
+[
+  {
+    "test_case_id": "SQL_001",
+    "query": "5 điểm bán hàng có số lượng thuê bao phát triển mới nhiều nhất trong tháng.",
+    "evidence": "Điểm bán hàng được biểu diễn bằng SALE_CODE trong bảng POINT_OF_SALE. Số lượng thuê bao phát triển mới trong tháng được biểu diễn bằng ALL_QUANTITY_MONTH trong bảng V_BDS_NEW_SUB_SALE_POINT. Hai bảng liên kết với nhau qua SALE_CODE. Dữ liệu chỉ được lấy trong phạm vi phường/xã user có quyền truy cập thông qua V_USER_PRECINCT_PERMISSION.PRECINCT_CODE.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  p.sale_code as sale_code,\n  nvl(s.all_quantity_month, 0) as all_quantity_month\n  FROM point_of_sale p\n  LEFT JOIN v_bds_new_sub_sale_point s\n  on upper(trim(p.sale_code)) = upper(trim(s.sale_code))\n  and s.SUM_date = to_char(sysdate, 'dd/MM/yyyy')\n  WHERE exists (\n  SELECT c.precinct_code\n  FROM v_user_precinct_permission c\n  WHERE upper(c.user_name) = upper('USER_NAME_ABC')\n  and c.precinct_code = p.precinct_code\n  )\n  ORDER BY nvl(s.all_quantity_month, 0) desc\n )\n WHERE rownum <= 5",
+    "relevant_chunks": [
+      "V_BDS_NEW_SUB_SALE_POINT",
+      "POINT_OF_SALE",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_002",
+    "query": "Điểm bán nào phát triển thuê bao trong tháng nhưng chưa được chăm sóc?",
+    "evidence": "Điểm bán có phát triển thuê bao trong tháng được biểu diễn bằng ALL_QUANTITY_MONTH > 0 trong bảng V_BDS_NEW_SUB_SALE_POINT. Lịch sử chăm sóc điểm bán được biểu diễn bằng MA_DIEM_BAN và NGAY_CHAM_SOC trong bảng NHAN_VIEN_CHAM_SOC_LONG. Dữ liệu điểm bán phải nằm trong phạm vi quyền user qua V_USER_PRECINCT_PERMISSION.",
+    "sql": "SELECT\n  p.sale_code as sale_code,\n  p.sale_name as sale_name,\n  p.branch_name as branch_name,\n  p.hub as hub,\n  p.precinct_code as precinct_code,\n  p.precinct_name as precinct_name,\n  nvl(s.mc_quantity_month, 0) as mc_quantity_month,\n  nvl(s.mf_quantity_month, 0) as mf_quantity_month,\n  nvl(s.all_quantity_month, 0) as all_quantity_month,\n  s.SUM_date as SUM_date,\n  s.SUM_month as SUM_month\n FROM point_of_sale p\n JOIN v_bds_new_sub_sale_point s\n  on upper(trim(p.sale_code)) = upper(trim(s.sale_code))\n  and s.SUM_date = to_char(sysdate, 'dd/MM/yyyy')\n LEFT JOIN (\n  SELECT distinct ma_diem_ban\n  FROM nhan_vien_cham_soc_long\n  WHERE ngay_cham_soc >=\n  to_date(to_char(sysdate, 'dd/MM/yyyy'), 'dd/MM/yyyy') - 30\n  and ngay_cham_soc <\n  to_date(to_char(sysdate, 'dd/MM/yyyy'), 'dd/MM/yyyy') + 1\n ) k\n  on upper(trim(k.ma_diem_ban)) = upper(trim(p.sale_code))\n WHERE nvl(s.all_quantity_month, 0) > 0\n  and k.ma_diem_ban is null\n  and exists (\n  SELECT c.precinct_code\n  FROM v_user_precinct_permission c\n  WHERE upper(c.user_name) = upper('USER_NAME_ABC')\n  and c.precinct_code = p.precinct_code\n  )\n ORDER BY\n  nvl(s.all_quantity_month, 0) desc,\n  p.branch_name,\n  p.hub,\n  p.precinct_name,\n  p.sale_name",
+    "relevant_chunks": [
+      "POINT_OF_SALE",
+      "V_BDS_NEW_SUB_SALE_POINT",
+      "NHAN_VIEN_CHAM_SOC_LONG",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_003",
+    "query": "So sánh phát triển thuê bao giữa các trung tâm kinh doanh trong tháng?",
+    "evidence": "Trung tâm kinh doanh được biểu diễn bằng BRANCH_NAME trong bảng POINT_OF_SALE. Số thuê bao trả trước, trả sau và tổng thuê bao trong tháng được biểu diễn lần lượt bằng MC_QUANTITY_MONTH, MF_QUANTITY_MONTH và ALL_QUANTITY_MONTH trong bảng V_BDS_NEW_SUB_SALE_POINT. Điểm bán có phát triển thuê bao trong tháng được biểu diễn bằng ALL_QUANTITY_MONTH > 0. Dữ liệu phải giới hạn theo V_USER_PRECINCT_PERMISSION.",
+    "sql": "SELECT\n  rownum as stt,\n  x.*\n FROM (\n  SELECT\n  p.branch_name as branch_name,\n  count(distinct p.sale_code) as tong_so_diem_ban,\n  count(\n  distinct case\n  WHEN nvl(s.all_quantity_month, 0) > 0\n  then p.sale_code\n  end\n  ) as so_diem_ban_co_ptm_thang,\n  count(\n  distinct case\n  WHEN nvl(s.all_quantity_month, 0) = 0\n  then p.sale_code\n  end\n  ) as so_diem_ban_chua_ptm_thang,\n  round(\n  count(\n  distinct case\n  WHEN nvl(s.all_quantity_month, 0) > 0\n  then p.sale_code\n  end\n  ) * 100\n  / nullif(count(distinct p.sale_code), 0),\n  2\n  ) as ty_le_diem_ban_co_ptm_thang,\n  SUM(nvl(s.mc_quantity_month, 0)) as mc_quantity_month,\n  SUM(nvl(s.mf_quantity_month, 0)) as mf_quantity_month,\n  SUM(nvl(s.all_quantity_month, 0)) as all_quantity_month\n  FROM point_of_sale p\n  LEFT JOIN v_bds_new_sub_sale_point s\n  on upper(trim(p.sale_code)) = upper(trim(s.sale_code))\n  and s.SUM_date = to_char(sysdate, 'dd/mm/yyyy')\n  WHERE exists (\n  SELECT c.precinct_code\n  FROM v_user_precinct_permission c\n  WHERE upper(c.user_name) = upper('USER_NAME_ABC')\n  and c.precinct_code = p.precinct_code\n  )\n  GROUP BY p.branch_name\n  ORDER BY\n  SUM(nvl(s.all_quantity_month, 0)) desc,\n  count(\n  distinct case\n  WHEN nvl(s.all_quantity_month, 0) > 0\n  then p.sale_code\n  end\n  ) desc\n ) x",
+    "relevant_chunks": [
+      "POINT_OF_SALE",
+      "V_BDS_NEW_SUB_SALE_POINT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_004",
+    "query": "Top 5 phường có số lượng phát triển thuê bao nhiều nhất trong ngày qua kênh cửa hàng/đại lý.",
+    "evidence": "“Cửa hàng” được biểu diễn bằng SHOP_TYPE = '101', “Đại lý ủy quyền” bằng SHOP_TYPE = '201', “Đại lý chuyên” bằng SHOP_TYPE = '202' trong bảng V_BDS_NEW_SUB_SHOP. Số lượng thuê bao phát triển trong ngày được biểu diễn bằng ALL_QUANTITY_DAY. Phường/xã user được phép truy cập được biểu diễn bằng PRECINCT_CODE, PRECINCT_NAME trong bảng V_USER_PRECINCT_PERMISSION. Chỉ lấy dữ liệu V_BDS_NEW_SUB_SHOP có STATUS = 1.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  c.precinct_code,\n  c.precinct_name,\n  SUM(s.all_quantity_day) as tong_so_ttb\n  FROM v_bds_new_sub_shop s\n  INNER JOIN (\n  SELECT distinct\n  precinct_code,\n  precinct_name\n  FROM v_user_precinct_permission\n  WHERE upper(user_name) = upper('USER_NAME_ABC')\n  ) c\n  on c.precinct_code = s.precinct_code\n  WHERE s.status = 1\n  and s.shop_type in ('101', '201', '202')\n  GROUP BY\n  c.precinct_code,\n  c.precinct_name\n  ORDER BY tong_so_ttb desc nulls last\n )\n WHERE rownum <= 5",
+    "relevant_chunks": [
+      "V_BDS_NEW_SUB_SHOP",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_005",
+    "query": "Tỷ lệ cửa hàng/đại lý có phát triển thuê bao trong tháng so với tổng số cửa hàng/đại lý của từng trung tâm kinh doanh.",
+    "evidence": "Cửa hàng/đại lý được biểu diễn bằng SHOP_TYPE IN ('101', '201', '202') trong bảng V_BDS_NEW_SUB_SHOP. Cửa hàng/đại lý có phát triển thuê bao trong tháng được biểu diễn bằng ALL_QUANTITY_MONTH > 0. Trung tâm kinh doanh được biểu diễn bằng BRANCH_NAME trong bảng V_USER_PRECINCT_PERMISSION. Chỉ lấy dữ liệu có STATUS = 1.",
+    "sql": "SELECT\n  branch_name,\n  tong_so_cua_hang,\n  so_cua_hang_co_pttb,\n  round(\n  so_cua_hang_co_pttb * 100.0\n  / nullif(tong_so_cua_hang, 0),\n  2\n  ) as ty_le_phat_trien\n FROM (\n  SELECT\n  c.branch_name,\n  count(distinct s.shop_code) as tong_so_cua_hang,\n  count(\n  distinct case\n  WHEN s.all_quantity_month > 0\n  then s.shop_code\n  end\n  ) as so_cua_hang_co_pttb\n  FROM v_bds_new_sub_shop s\n  INNER JOIN (\n  SELECT distinct\n  precinct_code,\n  branch_name\n  FROM v_user_precinct_permission\n  WHERE upper(user_name) = upper('USER_NAME_ABC')\n  ) c\n  on c.precinct_code = s.precinct_code\n  WHERE s.status = 1\n  and s.shop_type in ('101', '201', '202')\n  GROUP BY c.branch_name\n ) t\n WHERE branch_name is not null\n ORDER BY ty_le_phat_trien desc",
+    "relevant_chunks": [
+      "V_BDS_NEW_SUB_SHOP",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_006",
+    "query": "Phường/xã nào có tổng thuê bao phát triển mới cao nhất trong ngày 06/07/2026?",
+    "evidence": "Phường/xã được biểu diễn bằng PRECINCT_NAME từ TABLE(pck_report_chatbox.get_new_sub_data_by_precinct(...)). Tổng thuê bao phát triển mới trong ngày được biểu diễn bằng tổng các cột CUAHANG_DAY, CHUOI_DIA_PHUONG_DAY, DLC_DAY, DLUQ_DAY, ONL_DAY, OTHERS_DAY, QUAN_LY_DAY, TKD_KHCN_DAY và TKD_KHDN_DAY.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  fact.precinct_name,\n  (\n  fact.cuahang_day\n  + fact.chuoi_dia_phuong_day\n  + fact.dlc_day\n  + fact.dluq_day\n  + fact.onl_day\n  + fact.others_day\n  + fact.quan_ly_day\n  + fact.tkd_khcn_day\n  + fact.tkd_khdn_day\n  ) as tong_tb_moi\n  FROM table(\n  pck_report_chatbox.get_new_sub_data_by_precinct(\n  to_date('06072026', 'ddmmyyyy'),\n  upper('USER_NAME_ABC')\n  )\n  ) fact\n  ORDER BY tong_tb_moi desc\n )\n WHERE rownum = 1",
+    "relevant_chunks": [
+      "TABLE(pck_report_chatbox.get_new_sub_data_by_precinct)"
+    ]
+  },
+  {
+    "test_case_id": "SQL_007",
+    "query": "Danh sách các Bệnh viện tại trung tâm kinh doanh Sài Gòn.",
+    "evidence": "“Bệnh viện” được biểu diễn bằng TYPE_NAME chứa 'Bệnh viện' trong bảng PUBLIC_LOCATION. Trung tâm kinh doanh Sài Gòn được biểu diễn bằng BRANCH_NAME chứa 'Sài Gòn' trong bảng PRECINCT. PUBLIC_LOCATION liên kết với PRECINCT và V_USER_PRECINCT_PERMISSION qua PRECINCT_CODE. Chỉ lấy địa điểm có STATUS = 1.",
+    "sql": "SELECT\n  loc.name,\n  loc.address,\n  loc.precinct_name\n FROM public_location loc\n JOIN precinct prec\n  on prec.code = loc.precinct_code\n JOIN v_user_precinct_permission perm\n  on perm.precinct_code = loc.precinct_code\n  and perm.user_name = upper('USER_NAME_ABC')\n WHERE loc.status = 1\n  and loc.type_name like '%Bệnh viện%'\n  and prec.branch_name like '%Sài Gòn'",
+    "relevant_chunks": [
+      "PUBLIC_LOCATION",
+      "PRECINCT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_008",
+    "query": "Thống kê số lượng Bệnh viện và Trụ sở công an theo từng trung tâm kinh doanh.",
+    "evidence": "“Bệnh viện” được biểu diễn bằng TYPE_NAME = 'Bệnh viện' và “Trụ sở công an” bằng TYPE_NAME = 'Trụ sở công an' trong bảng PUBLIC_LOCATION. Trung tâm kinh doanh được biểu diễn bằng BRANCH_NAME trong bảng PRECINCT. Các bảng liên kết qua PRECINCT_CODE và dữ liệu phải giới hạn theo V_USER_PRECINCT_PERMISSION. Chỉ lấy PUBLIC_LOCATION có STATUS = 1.",
+    "sql": "SELECT\n  prec.branch_name,\n  SUM(\n  case\n  WHEN loc.type_name = 'Bệnh viện' then 1\n  else 0\n  end\n  ) as so_luong_benh_vien,\n  SUM(\n  case\n  WHEN loc.type_name = 'Trụ sở công an' then 1\n  else 0\n  end\n  ) as so_luong_cong_an\n FROM public_location loc\n JOIN precinct prec\n  on prec.code = loc.precinct_code\n JOIN v_user_precinct_permission perm\n  on perm.precinct_code = loc.precinct_code\n  and perm.user_name = upper('USER_NAME_ABC')\n WHERE loc.status = 1\n  and loc.type_name in ('Bệnh viện', 'Trụ sở công an')\n GROUP BY prec.branch_name\n ORDER BY prec.branch_name asc",
+    "relevant_chunks": [
+      "PUBLIC_LOCATION",
+      "PRECINCT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_009",
+    "query": "Top 3 Hub có nhiều Trung tâm hành chính nhất.",
+    "evidence": "“Trung tâm hành chính” được biểu diễn bằng TYPE_NAME = 'Trung tâm hành chính' trong bảng PUBLIC_LOCATION. Hub được biểu diễn bằng HUB trong PUBLIC_LOCATION. Dữ liệu phải nằm trong phạm vi quyền user qua V_USER_PRECINCT_PERMISSION và chỉ lấy địa điểm có STATUS = 1.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  loc.hub,\n  count(loc.id) as so_luong_tthc\n  FROM public_location loc\n  JOIN v_user_precinct_permission perm\n  on perm.precinct_code = loc.precinct_code\n  and perm.user_name = upper('USER_NAME_ABC')\n  WHERE loc.status = 1\n  and loc.type_name = 'Trung tâm hành chính'\n  GROUP BY loc.hub\n  ORDER BY so_luong_tthc desc\n )\n WHERE rownum <= 3",
+    "relevant_chunks": [
+      "PUBLIC_LOCATION",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_010",
+    "query": "Tổng số thuê bao VLR 4G và 5G đang hoạt động trong ngày của các trạm trung tâm kinh doanh Gò Vấp.",
+    "evidence": "VLR 4G và 5G trong ngày được biểu diễn bằng VLR_4G_DAY và VLR_5G_DAY trong bảng V_BDS_SITE. Trạm đang hoạt động được biểu diễn bằng STATUS = 1. Trung tâm kinh doanh Gò Vấp được biểu diễn bằng BRANCH_NAME chứa 'Gò Vấp' trong bảng PRECINCT. Dữ liệu ngày mới nhất của nhóm VLR/trạm trong mẫu được lấy theo SUM_DATE = SYSDATE - 2 và phải giới hạn theo V_USER_PRECINCT_PERMISSION.",
+    "sql": "SELECT\n  SUM(nvl(site.vlr_4g_day, 0)) as vlr_4g,\n  SUM(nvl(site.vlr_5g_day, 0)) as vlr_5g\n FROM v_bds_site site\n JOIN precinct prec\n  on prec.code = site.precinct_code\n JOIN v_user_precinct_permission perm\n  on perm.precinct_code = site.precinct_code\n  and perm.user_name = upper('USER_NAME_ABC')\n WHERE site.SUM_date = to_char(sysdate - 2, 'DD/MM/YYYY')\n  and prec.branch_name like '%Gò Vấp'\n  and site.status = 1",
+    "relevant_chunks": [
+      "V_BDS_SITE",
+      "PRECINCT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_011",
+    "query": "Top 10 trạm BTS có tổng thuê bao VLR cao nhất trong tháng này.",
+    "evidence": "Trạm BTS được biểu diễn bằng CELL_SITE trong bảng V_BDS_SITE. Tổng VLR trong tháng được biểu diễn bằng VLR_ALL_MONTH; tháng tổng hợp dữ liệu được biểu diễn bằng SUM_MONTH. Chỉ lấy trạm có STATUS = 1 và dữ liệu phải giới hạn theo V_USER_PRECINCT_PERMISSION.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  site.cell_site,\n  site.vlr_all_month,\n  site.branch_code\n  FROM v_bds_site site\n  JOIN v_user_precinct_permission perm\n  on perm.precinct_code = site.precinct_code\n  and perm.user_name = upper('USER_NAME_ABC')\n  WHERE site.SUM_month = to_char(sysdate, 'MM/YYYY')\n  and site.status = 1\n  ORDER BY site.vlr_all_month desc\n )\n WHERE rownum <= 10",
+    "relevant_chunks": [
+      "V_BDS_SITE",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_012",
+    "query": "Danh sách 5 phường có chỉ số chất lượng chênh lệch thu chi trung bình thấp nhất trong tháng.",
+    "evidence": "Chỉ số chất lượng chênh lệch thu chi được biểu diễn bằng CLSQL_ trong bảng V_BDS_SITE. Phường/xã được biểu diễn bằng NAME trong bảng PRECINCT và liên kết qua PRECINCT_CODE. Tháng tổng hợp được biểu diễn bằng SUM_MONTH. Chỉ lấy trạm có STATUS = 1 và dữ liệu phải giới hạn theo V_USER_PRECINCT_PERMISSION.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  prec.name as ten_phuong,\n  avg(site.clSQL_) as clSQL__trung_binh\n  FROM v_bds_site site\n  JOIN precinct prec\n  on prec.code = site.precinct_code\n  JOIN v_user_precinct_permission perm\n  on perm.precinct_code = site.precinct_code\n  and perm.user_name = upper('USER_NAME_ABC')\n  WHERE site.SUM_month = to_char(sysdate, 'MM/YYYY')\n  and site.status = 1\n  GROUP BY prec.name\n  ORDER BY clSQL__trung_binh asc\n )\n WHERE rownum <= 5",
+    "relevant_chunks": [
+      "V_BDS_SITE",
+      "PRECINCT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_013",
+    "query": "Số lượng VLR MobiFone và Saymee theo từng phường/xã hôm nay",
+    "evidence": "Phường/xã được biểu diễn bằng PRECINCT_NAME từ TABLE(pck_report_chatbox.get_vlr_data_by_precinct(...)). Số lượng VLR MobiFone và Saymee trong ngày được biểu diễn bằng MOBIFONE_VLR_QUANTITY_DAY và SAYMEE_VLR_QUANTITY_DAY. Dữ liệu VLR mới nhất là ngày N-2.",
+    "sql": "SELECT\n  fact.precinct_name,\n  fact.mobifone_vlr_quantity_day,\n  fact.saymee_vlr_quantity_day\n FROM table(\n  pck_report_chatbox.get_vlr_data_by_precinct(\n  to_date(\n  to_char(sysdate - 2, 'ddmmyyyy'),\n  'ddmmyyyy'\n  ),\n  upper('USER_NAME_ABC')\n  )\n ) fact",
+    "relevant_chunks": [
+      "TABLE(pck_report_chatbox.get_vlr_data_by_precinct)"
+    ]
+  },
+  {
+    "test_case_id": "SQL_014",
+    "query": "Phường/xã nào có số lượng VLR MobiFone cao nhất trong ngày 06/07/2026?",
+    "evidence": "Phường/xã được biểu diễn bằng PRECINCT_NAME từ TABLE(pck_report_chatbox.get_vlr_data_by_precinct(...)). Số lượng VLR MobiFone trong ngày được biểu diễn bằng MOBIFONE_VLR_QUANTITY_DAY.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  fact.precinct_name,\n  fact.mobifone_vlr_quantity_day\n  FROM table(\n  pck_report_chatbox.get_vlr_data_by_precinct(\n  to_date('06072026', 'ddmmyyyy'),\n  upper('USER_NAME_ABC')\n  )\n  ) fact\n  ORDER BY fact.mobifone_vlr_quantity_day desc\n )\n WHERE rownum = 1",
+    "relevant_chunks": [
+      "TABLE(pck_report_chatbox.get_vlr_data_by_precinct)"
+    ]
+  },
+  {
+    "test_case_id": "SQL_015",
+    "query": "Phường/xã nào có doanh thu tài khoản chính MobiFone cao nhất trong tháng 07/2026?",
+    "evidence": "Phường/xã được biểu diễn bằng PRECINCT_NAME từ TABLE(pck_report_chatbox.get_rev_data_by_precinct(...)). Doanh thu tài khoản chính MobiFone trong tháng được biểu diễn bằng MOBIFONE_TKC_REV_MONTH.",
+    "sql": "SELECT *\n FROM (\n  SELECT\n  fact.precinct_name,\n  fact.mobifone_tkc_rev_month\n  FROM table(\n  pck_report_chatbox.get_rev_data_by_precinct(\n  to_date('31072026', 'ddmmyyyy'),\n  upper('USER_NAME_ABC')\n  )\n  ) fact\n  ORDER BY fact.mobifone_tkc_rev_month desc\n )\n WHERE rownum = 1",
+    "relevant_chunks": [
+      "TABLE(pck_report_chatbox.get_rev_data_by_precinct)"
+    ]
+  },
+  {
+    "test_case_id": "SQL_016",
+    "query": "Có bao nhiêu công việc đã hoàn thành trong dự án Triển khai hạ tầng CNTT 168 Xã tại UBND Phường Bình Phú?",
+    "evidence": "Dự án “Triển khai hạ tầng CNTT 168 Xã” được biểu diễn bằng NAME trong bảng PROJECT. Địa điểm “UBND Phường Bình Phú” được biểu diễn bằng NAME trong bảng LOCATION. Công việc được biểu diễn bằng ID trong bảng V_MAN_TASK. Công việc hoàn thành được biểu diễn bằng PERCENT = 100 trong bảng V_MAN_TASK_PROGRESS. Dữ liệu địa bàn phải giới hạn theo V_USER_PRECINCT_PERMISSION thông qua PRECINCT.",
+    "sql": "SELECT\n  count(task.id) as so_cong_viec_hoan_thanh\n FROM v_man_task task\n INNER JOIN project proj\n  on task.project_id = proj.id\n INNER JOIN location loc\n  on task.location_id = loc.id\n INNER JOIN v_man_task_progress prog\n  on task.id = prog.task_id\n INNER JOIN (\n  SELECT distinct\n  code,\n  name,\n  branch_name\n  FROM precinct\n ) p\n  on p.name = loc.precinct_name\n  and p.branch_name = loc.branch_name\n INNER JOIN (\n  SELECT distinct precinct_code\n  FROM v_user_precinct_permission\n  WHERE upper(user_name) = upper('USER_NAME_ABC')\n ) perm\n  on perm.precinct_code = p.code\n WHERE proj.name = 'Triển khai hạ tầng CNTT 168 Xã'\n  and loc.name = 'UBND Phường Bình Phú'\n  and prog.percent = 100",
+    "relevant_chunks": [
+      "V_MAN_TASK",
+      "V_MAN_TASK_PROGRESS",
+      "PROJECT",
+      "LOCATION",
+      "PRECINCT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_017",
+    "query": "Thống kê công việc của dự án Triển khai hạ tầng CNTT 168 Xã theo Hub: số lượng đã hoàn thành, chưa hoàn thành, và tổng.",
+    "evidence": "Dự án được biểu diễn bằng NAME trong bảng PROJECT. Hub được biểu diễn bằng HUB trong bảng LOCATION. Công việc được biểu diễn bằng ID trong V_MAN_TASK. Hoàn thành được biểu diễn bằng PERCENT = 100; chưa hoàn thành bằng PERCENT < 100 hoặc NULL trong V_MAN_TASK_PROGRESS. Dữ liệu phải giới hạn theo V_USER_PRECINCT_PERMISSION.",
+    "sql": "SELECT\n  loc.hub,\n  SUM(\n  case\n  WHEN prog.percent = 100 then 1\n  else 0\n  end\n  ) as so_cv_hoan_thanh,\n  SUM(\n  case\n  WHEN prog.percent < 100\n  or prog.percent is null then 1\n  else 0\n  end\n  ) as so_cv_chua_hoan_thanh,\n  count(task.id) as tong_so_cong_viec\n FROM v_man_task task\n INNER JOIN project proj\n  on task.project_id = proj.id\n INNER JOIN location loc\n  on task.location_id = loc.id\n LEFT JOIN v_man_task_progress prog\n  on task.id = prog.task_id\n INNER JOIN (\n  SELECT distinct\n  code,\n  name,\n  branch_name\n  FROM precinct\n ) p\n  on p.name = loc.precinct_name\n  and p.branch_name = loc.branch_name\n INNER JOIN (\n  SELECT distinct precinct_code\n  FROM v_user_precinct_permission\n  WHERE upper(user_name) = upper('USER_NAME_ABC')\n ) perm\n  on perm.precinct_code = p.code\n WHERE proj.name = 'Triển khai hạ tầng CNTT 168 Xã'\n GROUP BY loc.hub\n ORDER BY tong_so_cong_viec desc",
+    "relevant_chunks": [
+      "V_MAN_TASK",
+      "V_MAN_TASK_PROGRESS",
+      "PROJECT",
+      "LOCATION",
+      "PRECINCT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  },
+  {
+    "test_case_id": "SQL_018",
+    "query": "Liệt kê các địa điểm thuộc Triển khai hạ tầng CNTT 168 Xã chưa có công việc hoàn thành?",
+    "evidence": "Dự án “Triển khai hạ tầng CNTT 168 Xã” được biểu diễn bằng NAME trong bảng PROJECT. Địa điểm được biểu diễn bằng NAME trong bảng LOCATION. Công việc hoàn thành được biểu diễn bằng PERCENT = 100 trong bảng V_MAN_TASK_PROGRESS. “Chưa có công việc hoàn thành” được xác định khi không tồn tại công việc tại địa điểm đó có tiến độ PERCENT = 100. Dữ liệu phải giới hạn theo V_USER_PRECINCT_PERMISSION.",
+    "sql": "SELECT distinct\n  loc.name as ten_dia_diem\n FROM location loc\n INNER JOIN project proj\n  on loc.project_id = proj.id\n INNER JOIN (\n  SELECT distinct\n  code,\n  name,\n  branch_name\n  FROM precinct\n ) p\n  on p.name = loc.precinct_name\n  and p.branch_name = loc.branch_name\n INNER JOIN (\n  SELECT distinct precinct_code\n  FROM v_user_precinct_permission\n  WHERE upper(user_name) = upper('USER_NAME_ABC')\n ) perm\n  on perm.precinct_code = p.code\n WHERE proj.name = 'Triển khai hạ tầng CNTT 168 Xã'\n  and not exists (\n  SELECT 1\n  FROM v_man_task t\n  INNER JOIN v_man_task_progress tp\n  on t.id = tp.task_id\n  WHERE t.location_id = loc.id\n  and tp.percent = 100\n  )",
+    "relevant_chunks": [
+      "LOCATION",
+      "V_MAN_TASK",
+      "V_MAN_TASK_PROGRESS",
+      "PROJECT",
+      "PRECINCT",
+      "V_USER_PRECINCT_PERMISSION"
+    ]
+  }
+]
