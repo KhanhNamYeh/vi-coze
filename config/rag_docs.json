@@ -19,7 +19,14 @@
   "chunk": {
     "split_on": [
       {
-        "by": "length"
+        "by": "length",
+        "separators": [
+          "\\n\\n",
+          "\\n",
+          ". ",
+          " ",
+          ""
+        ]
       }
     ],
     "budget": {
@@ -45,7 +52,8 @@
         "max_chars": 300
       },
       "restore_labels": false
-    }
+    },
+    "mode": "general"
   },
   "embed": {
     "dense": {

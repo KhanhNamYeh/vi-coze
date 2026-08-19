@@ -28,6 +28,10 @@ class ChunkMeta(BaseModel):
     line_start: int | None = None
     line_end: int | None = None
 
+    # Chế độ parent-child: con mang ID của cha để retriever trả cha về làm ngữ
+    # cảnh. None nghĩa là chunk phẳng, hoặc chính nó là cha.
+    parent_chunk_id: str | None = None
+
     n_chars: int = 0
     n_tokens: int | None = None
     chunk_id: str = ""

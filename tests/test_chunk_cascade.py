@@ -9,7 +9,9 @@ from __future__ import annotations
 import pytest
 
 from src.branch_sql.offline.chunk import table_chunker as tc
-from src.config import BudgetCfg, ChunkCfg, ContextCfg, FilterCfg, InheritCfg, SplitRule
+from src.config import (
+    BudgetCfg, ChunkCfg, ContextCfg, FilterCfg, InheritCfg, ParentCfg, SplitRule,
+)
 
 
 def heading_only(**budget) -> ChunkCfg:
@@ -132,7 +134,7 @@ class TestSplit:
         docs = tc.split(self.IR, cfg=cfg(max=120))
         assert len(docs) > 1
         assert "Lưu thông tin phường xã" in docs[1].page_content
-        assert docs[1].metadata["part"] == "2/3"
+        assert docs[1].metadata["part"].startswith("2/")
 
     def test_chunk_id_theo_noi_dung_khong_theo_vi_tri(self):
         """Chèn một bảng ở đầu tài liệu không được đổi ID của bảng phía sau."""
@@ -192,6 +194,68 @@ class TestChiCatTheoHeading:
         assert any("vượt trần" in w for w in tc.check(docs, cfg=heading_only()))
 
 
+class TestParentChild:
+    """Hai tầng: con để khớp, cha để trả về. Theo đúng mô hình của Dify."""
+
+    def pc(self, method="paragraph", child_max=120, **parent):
+        c = cfg(max=child_max, on_overflow="descend")
+        c.mode = "parent_child"
+        c.parent = ParentCfg(
+            method=method,
+            split_on=[SplitRule(by="heading", level=2)],
+            budget=BudgetCfg(unit="char", max=100000, min=0, on_overflow="keep"),
+            **parent,
+        )
+        return c
+
+    def test_paragraph_cha_la_ca_don_vi(self):
+        kids, parents = tc.build(TestSplit.IR, cfg=self.pc())
+        assert len(parents) == 1                    # một `##` = một cha
+        assert len(kids) > 1                        # con bị cắt nhỏ
+        assert len(parents[0].page_content) > len(kids[0].page_content)
+
+    def test_con_tro_ve_cha_co_that(self):
+        kids, parents = tc.build(TestSplit.IR, cfg=self.pc())
+        ids = {p.metadata["chunk_id"] for p in parents}
+        assert all(k.metadata["parent_chunk_id"] in ids for k in kids)
+
+    def test_cha_khong_co_parent_chunk_id(self):
+        _, parents = tc.build(TestSplit.IR, cfg=self.pc())
+        assert parents[0].metadata["parent_chunk_id"] is None
+
+    def test_full_doc_mot_cha_duy_nhat(self):
+        kids, parents = tc.build(TestSplit.IR, cfg=self.pc(method="full_doc"))
+        assert len(parents) == 1
+        assert len({k.metadata["parent_chunk_id"] for k in kids}) == 1
+
+    def test_full_doc_cat_cut_o_max_length(self):
+        _, parents = tc.build(TestSplit.IR, cfg=self.pc(method="full_doc", max_length=60))
+        assert len(parents[0].page_content) == 60
+
+    def test_general_khong_sinh_cha(self):
+        kids, parents = tc.build(TestSplit.IR, cfg=cfg())
+        assert parents == [] and kids[0].metadata["parent_chunk_id"] is None
+
+
+class TestTruTaoBreadcrumb:
+    def test_khong_manh_nao_vuot_tran_du_da_them_breadcrumb(self):
+        """Breadcrumb ghép vào SAU khi cắt, không trừ hao thì mảnh nào cũng vượt."""
+        docs = tc.split(TestSplit.IR, cfg=cfg(max=150, on_overflow="descend"))
+        assert docs and all(len(d.page_content) <= 150 for d in docs)
+
+
+class TestSeparators:
+    def test_khai_duoc_dau_ngan_rieng(self):
+        c = cfg(max=60, on_overflow="descend")
+        c.split_on[-1].separators = ["|||"]
+        body = "|||".join(w * 40 for w in ("một", "hai", "ba"))
+        parts = tc.split_unit([heading("el_1", "Bảng T"), text("el_2", body)], c)
+        assert len(parts) == 3                       # cắt đúng tại dấu ngăn
+        joined = " ".join(p for p, _ in parts)
+        assert "|||" not in joined                   # dấu ngăn bị xoá khỏi nội dung
+        assert "một" in joined and "ba" in joined
+
+
 class TestConfig:
     def test_descend_thi_bac_cuoi_phai_la_length(self):
         with pytest.raises(ValueError, match=r"phải\s+là .length."):
@@ -206,6 +270,14 @@ class TestConfig:
             budget=BudgetCfg(on_overflow="keep"),
         )
         assert [r.by for r in cfg_.split_on] == ["heading"]
+
+    def test_parent_child_phai_khai_khoi_parent(self):
+        with pytest.raises(ValueError, match="phải khai khối chunk.parent"):
+            ChunkCfg(mode="parent_child", split_on=[SplitRule(by="length")])
+
+    def test_paragraph_phai_khai_split_on(self):
+        with pytest.raises(ValueError, match="phải khai parent.split_on"):
+            ParentCfg(method="paragraph")
 
     def test_min_phai_nho_hon_max(self):
         with pytest.raises(ValueError, match="min phải nhỏ hơn"):

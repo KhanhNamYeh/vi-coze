@@ -1,7 +1,24 @@
-"""Embed chunk rồi upsert lên Qdrant.
+"""Chunk + vector -> Qdrant. Chặng `index`.
 
     docker compose up -d
-    uv run python -m src.branch_sql.offline.index.qdrant_store mo_ta_bang_bds_new.chunks.jsonl
+    uv run python -m src.branch_sql.offline.index.qdrant_store mo_ta_bang_bds_new__docx
+
+Một collection, HAI đường tìm kiếm trên cùng tập point:
+
+    dense   named vector, cosine, vector lấy từ `<doc_id>.vectors.npz`
+    bm25    named sparse vector, dựng từ chính `page_content`
+
+Hai đường nằm chung point nên `chunk_id` của chúng luôn khớp nhau - không có
+cách nào để hai chỉ mục lệch tập tài liệu. Đó là lý do không tách BM25 ra một
+store riêng dù nó rẻ hơn.
+
+`Modifier.IDF` là BẮT BUỘC với sparse vector do FastEmbed sinh ra: bộ mã hoá cố
+tình bỏ phần IDF khỏi trọng số để Qdrant tính lấy trên toàn collection. Thiếu cờ
+này thì điểm BM25 sai công thức mà không có lỗi nào báo - chỉ là kết quả kém.
+
+Point ID suy từ `chunk_id`, mà `chunk_id` băm theo NỘI DUNG: chạy lại trên cùng
+dữ liệu ghi đè đúng point cũ, không nhân đôi. Chunk đổi nội dung thì thành point
+mới, và point cũ thành rác - dùng `--recreate` khi đổi cách chunk.
 """
 
 from __future__ import annotations
@@ -11,47 +28,30 @@ import sys
 import uuid
 from pathlib import Path
 
-from langchain_core.documents import Document
-
 from ...config import (
-    PROCESSED_DIR,
     COLLECTION,
     DENSE_VECTOR,
-    EMBED_BATCH,
     EMBED_DIM,
     EMBED_MODEL,
     PAYLOAD_INDEX_FIELDS,
+    PROCESSED_DIR,
     QDRANT_URL,
-    SPARSE_MODEL,
     SPARSE_VECTOR,
     listdir,
     rel,
-    require,
-    resolve,
 )
-from ..embed.dense import embed_passages
+from ..embed.encoder import load_chunks, load_vectors
 from ..embed.sparse import encode_passages
 
 # Đổi giá trị này sau khi đã index sẽ sinh ra point ID khác cho cùng chunk.
 NAMESPACE = uuid.UUID("6f9619ff-8b86-d011-b42d-00c04fc964ff")
 
-
-def point_id(meta: dict) -> str:
-    """UUID tất định. Qdrant chỉ nhận point ID kiểu uint64 hoặc UUID."""
-    key = f"{meta['doc_id']}|{meta['no']}|{meta['part']}"
-    return str(uuid.uuid5(NAMESPACE, key))
+UPSERT_BATCH = 64
 
 
-def load_chunks(name: str | Path, *, base: Path = PROCESSED_DIR) -> list[Document]:
-    src = require(resolve(name, base), base)
-    docs = [
-        Document(**json.loads(line))
-        for line in src.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
-    if not docs:
-        raise ValueError(f"{rel(src)}: 0 chunk - chạy chunking trước")
-    return docs
+def point_id(chunk_id: str) -> str:
+    """UUID tất định từ `chunk_id`. Qdrant chỉ nhận ID kiểu uint64 hoặc UUID."""
+    return str(uuid.uuid5(NAMESPACE, chunk_id))
 
 
 def get_client():
@@ -60,32 +60,36 @@ def get_client():
     return QdrantClient(url=QDRANT_URL)
 
 
-def ensure_collection(client, *, recreate: bool = False) -> bool:
+def ensure_collection(client, collection: str, *, recreate: bool = False) -> bool:
     """Tạo collection + payload index nếu chưa có. Trả True nếu vừa tạo mới."""
     from qdrant_client import models
 
-    exists = client.collection_exists(COLLECTION)
-    if exists and recreate:
-        client.delete_collection(COLLECTION)
-        exists = False
-    if exists:
-        info = client.get_collection(COLLECTION)
+    if recreate and client.collection_exists(collection):
+        client.delete_collection(collection)
+
+    if client.collection_exists(collection):
+        info = client.get_collection(collection)
         vectors = info.config.params.vectors or {}
         if DENSE_VECTOR not in vectors:
             raise ValueError(
-                f"collection '{COLLECTION}' không có vector tên '{DENSE_VECTOR}' "
-                f"(schema cũ dùng vector không tên). Chạy lại với --recreate."
+                f"collection '{collection}' không có vector tên '{DENSE_VECTOR}'. "
+                "Chạy lại với --recreate."
             )
-        dim = vectors[DENSE_VECTOR].size
-        if dim != EMBED_DIM:
+        if (dim := vectors[DENSE_VECTOR].size) != EMBED_DIM:
             raise ValueError(
-                f"collection '{COLLECTION}' đang có {dim} chiều nhưng model cho "
-                f"{EMBED_DIM} chiều. Đổi model thì phải đổi tên collection và index lại."
+                f"collection '{collection}' đang có {dim} chiều nhưng model cho "
+                f"{EMBED_DIM} chiều. Đổi model thì phải đổi index.collection và index lại."
+            )
+        sparse = info.config.params.sparse_vectors or {}
+        if SPARSE_VECTOR in sparse and sparse[SPARSE_VECTOR].modifier != models.Modifier.IDF:
+            raise ValueError(
+                f"sparse vector '{SPARSE_VECTOR}' thiếu Modifier.IDF - điểm BM25 "
+                "sẽ sai công thức. Chạy lại với --recreate."
             )
         return False
 
     client.create_collection(
-        collection_name=COLLECTION,
+        collection_name=collection,
         vectors_config={
             DENSE_VECTOR: models.VectorParams(size=EMBED_DIM, distance=models.Distance.COSINE),
         },
@@ -97,58 +101,74 @@ def ensure_collection(client, *, recreate: bool = False) -> bool:
     # Thiếu payload index thì filter là quét toàn bộ collection.
     for field in PAYLOAD_INDEX_FIELDS:
         client.create_payload_index(
-            collection_name=COLLECTION,
+            collection_name=collection,
             field_name=field,
             field_schema=models.PayloadSchemaType.KEYWORD,
         )
     return True
 
 
-def index(docs: list[Document], *, recreate: bool = False) -> dict:
-    """Embed rồi upsert. Chạy lại trên cùng dữ liệu không nhân đôi điểm."""
+def build_points(rows: list[dict], vectors: dict[str, list[float]]):
+    """Chunk + vector -> PointStruct, sparse dựng ngay tại đây."""
     from qdrant_client import models
 
-    client = get_client()
-    created = ensure_collection(client, recreate=recreate)
+    texts = [r["page_content"] for r in rows]
+    sparse = encode_passages(texts)
 
-    total = 0
-    for i in range(0, len(docs), EMBED_BATCH):
-        batch = docs[i : i + EMBED_BATCH]
-        texts = [d.page_content for d in batch]
-        dense = embed_passages(texts)
-        sparse = encode_passages(texts)
-        client.upsert(
-            collection_name=COLLECTION,
-            points=[
-                models.PointStruct(
-                    id=point_id(d.metadata),
-                    vector={
-                        DENSE_VECTOR: dv,
-                        SPARSE_VECTOR: models.SparseVector(
-                            indices=sv.indices, values=sv.values
-                        ),
-                    },
-                    # giữ cả text để search trả về nội dung, không chỉ id
-                    payload={
-                        **d.metadata,
-                        "text": d.page_content,
-                        "embed_model": EMBED_MODEL,
-                        "sparse_model": SPARSE_MODEL,
-                    },
-                )
-                for d, dv, sv in zip(batch, dense, sparse)
-            ],
-            wait=True,
+    points = []
+    for row, sv in zip(rows, sparse):
+        meta = row["metadata"]
+        cid = meta["chunk_id"]
+        if cid not in vectors:
+            raise ValueError(
+                f"chunk_id '{cid}' không có vector trong .vectors.npz - "
+                "chạy lại chặng embed sau khi đổi chunk."
+            )
+        points.append(models.PointStruct(
+            id=point_id(cid),
+            vector={
+                DENSE_VECTOR: vectors[cid].tolist(),
+                SPARSE_VECTOR: models.SparseVector(indices=sv.indices, values=sv.values),
+            },
+            # `text` giữ nguyên page_content để trả về nguyên văn; metadata trải
+            # phẳng để filter theo `table_name`/`section` không phải nested key.
+            payload={"text": row["page_content"], **meta},
+        ))
+    return points
+
+
+def index(doc_id: str, *, collection: str = COLLECTION, recreate: bool = False,
+          base: Path = PROCESSED_DIR) -> dict:
+    """Đọc chunk + vector của một tài liệu rồi upsert. Chạy lại không nhân đôi."""
+    rows = load_chunks(doc_id, base=base)
+    vectors = load_vectors(doc_id, base=base)
+    if len(vectors) != len(rows):
+        raise ValueError(
+            f"{len(rows)} chunk nhưng {len(vectors)} vector - embed và chunk lệch nhau, "
+            "chạy lại chặng embed."
         )
-        total += len(batch)
-        print(f"     upsert {total}/{len(docs)}")
+
+    client = get_client()
+    created = ensure_collection(client, collection, recreate=recreate)
+    points = build_points(rows, vectors)
+
+    for i in range(0, len(points), UPSERT_BATCH):
+        client.upsert(collection, points=points[i : i + UPSERT_BATCH], wait=True)
 
     return {
-        "collection": COLLECTION,
+        "doc_id": doc_id,
+        "collection": collection,
         "created": created,
-        "indexed": total,
-        "count": client.count(COLLECTION, exact=True).count,
+        "n_points": len(points),
+        "total": client.count(collection, exact=True).count,
     }
+
+
+def report(res: dict) -> None:
+    print(f"     collection '{res['collection']}' {'vừa tạo' if res['created'] else 'đã có'}"
+          f" | dense='{DENSE_VECTOR}' ({EMBED_DIM}d) + sparse='{SPARSE_VECTOR}' (IDF)")
+    print(f"     upsert {res['n_points']} point | tổng trong collection: {res['total']}")
+    print(f"     model: {EMBED_MODEL}")
 
 
 def main(argv: list[str]) -> int:
@@ -158,29 +178,22 @@ def main(argv: list[str]) -> int:
     if not args:
         print(__doc__)
         print(f"file có sẵn trong {rel(PROCESSED_DIR)}:")
-        for n in listdir(PROCESSED_DIR, "*.chunks.jsonl"):
-            print(f"  - {n}")
+        for n in listdir(PROCESSED_DIR, "*.vectors.npz"):
+            print(f"  - {n.removesuffix('.vectors.npz')}")
         return 1
 
     try:
-        docs = load_chunks(args[0])
+        for i, name in enumerate(args):
+            doc_id = name.removesuffix(".chunks.jsonl").removesuffix(".vectors.npz")
+            res = index(doc_id, collection=COLLECTION, recreate=recreate and i == 0)
+            print(f"{doc_id}\n  -> qdrant {QDRANT_URL}")
+            report(res)
     except (FileNotFoundError, ValueError) as e:
         print(e, file=sys.stderr)
         return 1
-
-    print(f"{args[0]}\n     {len(docs)} chunk")
-    print(f"     dense  {EMBED_MODEL} ({EMBED_DIM} chiều)")
-    print(f"     sparse {SPARSE_MODEL}")
-    try:
-        result = index(docs, recreate=recreate)
-    except Exception as e:  # noqa: BLE001 - in gọn thay vì traceback
-        print(f"\nlỗi khi kết nối/ghi Qdrant ({QDRANT_URL}): {e}", file=sys.stderr)
-        print("Qdrant đã chạy chưa?  docker compose up -d", file=sys.stderr)
+    except Exception as e:  # noqa: BLE001
+        print(f"lỗi Qdrant: {e}\n  Qdrant chạy chưa? `docker compose up -d`", file=sys.stderr)
         return 1
-
-    print(f"  -> collection '{result['collection']}'"
-          f" ({'vừa tạo' if result['created'] else 'đã có sẵn'})")
-    print(f"     đã index {result['indexed']} | tổng trong collection: {result['count']}")
     return 0
 
 

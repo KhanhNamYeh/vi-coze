@@ -70,12 +70,18 @@ def build_chain(
         return result
 
     def _chunk(result: dict) -> dict:
-        chunks = chunking.split(result["ir"])
-        result["chunks"] = chunks
-        result["chunk_path"] = chunking.write_chunks(
-            chunks, out_dir=out_dir, doc_id=result["doc_id"]
-        )
-        result["warnings"] = [*result["warnings"], *chunking.check(chunks)]
+        chunks, parents = chunking.build(result["ir"])
+        doc_id = result["doc_id"]
+        result["chunks"], result["parents"] = chunks, parents
+        result["chunk_path"] = chunking.write_chunks(chunks, out_dir=out_dir, doc_id=doc_id)
+        if parents:
+            result["parent_path"] = chunking.write_chunks(
+                parents, out_dir=out_dir, doc_id=doc_id, suffix="parents"
+            )
+        result["warnings"] = [
+            *result["warnings"],
+            *chunking.check(chunks, parents=parents),
+        ]
         return result
 
     return (
@@ -128,6 +134,9 @@ def main(argv: list[str]) -> int:
             f"  chunk   -> {rel(result['chunk_path'])} | {len(sizes)} chunk"
             f" | p50={sizes[len(sizes) // 2] if sizes else 0} token"
         )
+        if result.get("parent_path"):
+            print(f"          -> {rel(result['parent_path'])} | "
+                  f"{len(result['parents'])} cha")
         for warning in result["warnings"]:
             print(f"  ! {warning}")
         if not ir["elements"]:

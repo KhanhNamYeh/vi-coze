@@ -65,6 +65,10 @@ class ParseCfg(BaseModel):
     suffixes: list[str]
     replacements: list[ReplaceCfg] = Field(default_factory=list)
 
+    # Chỉ dùng cho nguồn .xlsx: vai trò -> tên sheet. `dev` được dựng thành .md
+    # rồi đi tiếp vào chunk/index làm SQL sample; `test` chỉ sinh JSON để chấm.
+    sheets: dict[str, str] = Field(default_factory=dict)
+
     # Nhận diện dòng tên bảng trong output thô của markitdown, phải có nhóm
     # `name` là phần dùng làm tiêu đề. Tài liệu này viết "* 1. **Bảng X**" vì tên
     # bảng dùng style `normal` chứ không phải Heading. Đây là quy ước của MỘT bộ
@@ -161,6 +165,14 @@ class SplitRule(BaseModel):
     group: int = 10                # table_row: bao nhiêu hàng một mảnh
     repeat_header: bool = True     # table_row: lặp hàng tiêu đề vào mỗi mảnh
 
+    # length: ranh giới thử lần lượt, từ TO tới NHỎ. Dấu ngăn bị XOÁ khỏi nội
+    # dung sau khi cắt (giống `Delimiter` của Dify). Đặt cứng trong code là giả
+    # định văn xuôi: tài liệu code cần ["\nclass ", "\ndef "], văn bản pháp
+    # quy cần ["\nĐiều ", "\nKhoản "], log hội thoại cần cắt theo lượt nói.
+    separators: list[str] = Field(
+        default_factory=lambda: ["\n\n", "\n", ". ", " ", ""]
+    )
+
     model_config = {"extra": "forbid"}
 
 
@@ -235,15 +247,57 @@ class ContextCfg(BaseModel):
     model_config = {"extra": "forbid"}
 
 
-class ChunkCfg(BaseModel):
-    """IR -> chunk. Thang cắt + ngân sách + ngữ cảnh.
+class ParentCfg(BaseModel):
+    """Tầng CHA của chế độ parent-child.
 
-    Không có khoá `mode`: thang `split_on` đã nói đủ. Tài liệu có ranh giới rõ
-    khai `heading` trước; văn bản trôi chảy khai mỗi `length`.
+    Con dùng để KHỚP truy vấn (nhỏ nên vector đặc trưng, khớp chính xác), cha
+    được TRẢ VỀ cho LLM (lớn nên đủ ngữ cảnh để trả lời). Không có nó thì phải
+    chọn một trong hai: khớp chính xác mà thiếu ngữ cảnh, hoặc ngược lại.
     """
+
+    # paragraph  cắt cha theo `split_on`/`budget` riêng của tầng cha
+    # full_doc   cả tài liệu là MỘT cha, cắt cụt ở `max_tokens`
+    method: Literal["paragraph", "full_doc"] = "paragraph"
 
     split_on: list[SplitRule] = Field(default_factory=list)
     budget: BudgetCfg = Field(default_factory=BudgetCfg)
+
+    # Chỉ dùng cho `full_doc`, đo bằng đúng `budget.unit` của tầng cha. Dify cố
+    # định 10.000 token; ở đây theo đơn vị bạn khai. Cha quá dài thì vô dụng:
+    # nhét cả tài liệu vào prompt vừa tốn vừa làm loãng phần thật sự liên quan.
+    max_length: int = 10000
+
+    model_config = {"extra": "forbid"}
+
+    @model_validator(mode="after")
+    def _check(self):
+        if self.method == "paragraph" and not self.split_on:
+            raise ValueError("chunk.parent.method='paragraph' thì phải khai parent.split_on")
+        return self
+
+
+class ChunkCfg(BaseModel):
+    """IR -> chunk. Thang cắt + ngân sách + ngữ cảnh.
+
+    Hai chế độ, theo đúng cách Dify chia:
+
+        general       cắt phẳng, mọi chunk cùng một bộ tham số, khớp cái nào
+                      trả thẳng cái đó.
+        parent_child  hai tầng. `split_on`/`budget` ở đây là cách cắt CON;
+                      khối `parent` là cách dựng cha.
+    """
+
+    mode: Literal["general", "parent_child"] = "general"
+
+    split_on: list[SplitRule] = Field(default_factory=list)
+    budget: BudgetCfg = Field(default_factory=BudgetCfg)
+    parent: ParentCfg | None = None
+
+    # parent_child: tầng CON chỉ giữ element có role trong danh sách này; rỗng
+    # là giữ tất cả. Đây là chỗ khai "khớp bằng câu hỏi, trả về cả hàng": con
+    # chỉ gồm `sample_query` nên vector của nó thuần câu hỏi, không bị pha loãng
+    # bởi evidence và SQL - còn cha vẫn là cả mẫu.
+    child_roles: list[str] = Field(default_factory=list)
     filter: FilterCfg = Field(default_factory=FilterCfg)
     context: ContextCfg = Field(default_factory=ContextCfg)
 
@@ -253,6 +307,8 @@ class ChunkCfg(BaseModel):
     def _check(self):
         if not self.split_on:
             raise ValueError("chunk.split_on phải có ít nhất một bậc")
+        if self.mode == "parent_child" and self.parent is None:
+            raise ValueError("chunk.mode='parent_child' thì phải khai khối chunk.parent")
         # Chốt chặn chỉ cần khi thang THẬT SỰ đi xuống. `on_overflow: keep` là
         # kịch bản "cắt theo cấu trúc, kệ độ dài" - ở đó `length` là thừa.
         if self.budget.on_overflow == "descend" and self.split_on[-1].by != "length":
@@ -301,7 +357,11 @@ class EmbedCfg(BaseModel):
 # ---- chặng index ----------------------------------------------------------
 class IndexCfg(BaseModel):
     store: Literal["qdrant", "chroma"]
-    collection: str
+    collection: str                      # chunk tài liệu tri thức
+    # Chunk SQL sample. Để riêng chứ không dùng chung một collection + filter:
+    # IDF của BM25 tính trên toàn collection, trộn hai loại văn bản rất khác nhau
+    # vào một chỗ làm lệch trọng số từ khoá của cả hai.
+    sql_collection: str | None = None
     url: str = "http://localhost:6333"  # qdrant
     subdir: str = "chroma"              # chroma, nằm dưới data/index/
     dense_vector: str = "dense"
@@ -329,15 +389,73 @@ class RetrievalCfg(BaseModel):
     model_config = {"extra": "forbid"}
 
 
+# ---- knowledge ------------------------------------------------------------
+class KnowledgeCfg(BaseModel):
+    """Một BỘ TRI THỨC: một nguồn, một cách cắt, thuộc một hoặc nhiều dự án.
+
+    Đây là đơn vị khai báo của platform. Hai tài liệu khác nhau được quyền khai
+    cách xử lý khác nhau mà không phải tách profile: tài liệu schema cắt theo
+    heading, còn bộ SQL sample cắt parent-child với con là câu hỏi và cha là cả
+    hàng. Nhét cả hai vào một khối `chunk` duy nhất thì một trong hai phải chịu
+    cấu hình của cái kia.
+
+    `project` nhận số hoặc danh sách số, nên một bộ tri thức vừa dùng riêng vừa
+    dùng chung được: tài liệu .docx thuộc dự án 1, .pdf thuộc dự án 2, còn bộ
+    SQL sample khai `[1, 2]` và được index vào cả hai. Chép làm hai bản thì hai
+    bản sẽ lệch nhau, và không có gì báo.
+    """
+
+    id: str                              # định danh trong profile, vào payload
+    source: str                          # tên file trong `raw_dir`
+    project: int | list[int]
+
+    # Tên collection, có thể chứa `{project}`. Dùng chung một bộ tri thức cho
+    # nhiều dự án nghĩa là KHAI một lần rồi VẬT CHẤT HOÁ thành nhiều bản, không
+    # phải trỏ chung vào một kho: hai dự án là hai hộp đen, không được đọc trúng
+    # cùng một collection. Hiện không lộ gì chỉ vì nội dung tình cờ giống nhau
+    # là may mắn, không phải bảo đảm.
+    collection: str
+
+    # Cắt riêng. Bỏ trống thì dùng khối `chunk` mặc định của profile.
+    chunk: "ChunkCfg | None" = None
+
+    model_config = {"extra": "forbid"}
+
+    @property
+    def projects(self) -> list[int]:
+        return [self.project] if isinstance(self.project, int) else list(self.project)
+
+    def collection_for(self, project: int) -> str:
+        """Collection của bộ tri thức này TRONG một dự án."""
+        if project not in self.projects:
+            raise ValueError(f"bộ tri thức '{self.id}' không thuộc dự án {project}")
+        return self.collection.format(project=project)
+
+    @model_validator(mode="after")
+    def _cach_ly(self):
+        if len(self.projects) > 1 and "{project}" not in self.collection:
+            raise ValueError(
+                f"bộ tri thức '{self.id}' thuộc {len(self.projects)} dự án nhưng "
+                f"collection '{self.collection}' cố định - hai dự án sẽ dùng chung "
+                "một kho vật lý. Đặt tên có '{project}', ví dụ 'sqlp{project}__sql'."
+            )
+        return self
+
+
 # ---- profile --------------------------------------------------------------
 class KBConfig(BaseModel):
     """Một bộ tài liệu và toàn bộ cách xử lý nó."""
 
     kb: str
+    # Dự án đang chạy, đặt bằng `VI_COZE_PROJECT`. Artifact và collection tách
+    # hẳn theo nó: dự án 1 đọc .docx, dự án 2 đọc .pdf, hai bên là hai hộp đen
+    # và không có đường nào nhìn thấy dữ liệu của nhau.
+    project: int | None = None
     name: str
     description: str = ""
 
     parse: ParseCfg
+    knowledge: list[KnowledgeCfg] = Field(default_factory=list)
     extract: ExtractCfg = Field(default_factory=ExtractCfg)
     link: LinkCfg = Field(default_factory=LinkCfg)
     chunk: ChunkCfg
@@ -373,9 +491,23 @@ class KBConfig(BaseModel):
     def raw_dir(self) -> Path:
         return DATA_DIR / "raw" / self.kb
 
+    def knowledge_of(self, project: int) -> list[KnowledgeCfg]:
+        """Các bộ tri thức thuộc một dự án, theo thứ tự khai báo."""
+        return [k for k in self.knowledge if project in k.projects]
+
+    def chunk_of(self, knowledge: KnowledgeCfg) -> ChunkCfg:
+        """Cách cắt của một bộ tri thức, rơi về mặc định của profile nếu không khai."""
+        return knowledge.chunk or self.chunk
+
+    @property
+    def projects(self) -> list[int]:
+        return sorted({p for k in self.knowledge for p in k.projects})
+
     @property
     def processed_dir(self) -> Path:
-        return DATA_DIR / "processed" / self.kb
+        """Artifact tách theo dự án; nguồn và bộ đo dùng chung."""
+        base = DATA_DIR / "processed" / self.kb
+        return base / f"p{self.project}" if self.project is not None else base
 
     @property
     def knowledge_dir(self) -> Path:
@@ -409,6 +541,12 @@ class KBConfig(BaseModel):
                 f"profile có sẵn: {avail}"
             )
         cfg = cls.model_validate_json(path.read_text(encoding="utf-8"))
+        # Dự án đang chạy quyết định thư mục artifact và tên collection, nên nó
+        # phải được biết NGAY lúc nạp - mọi hằng số đường dẫn suy ra từ đây.
+        if (project := os.getenv("VI_COZE_PROJECT")) is not None:
+            cfg.project = int(project)
+        elif cfg.project is None and cfg.knowledge:
+            cfg.project = cfg.projects[0]
         # Biến môi trường thắng file, để deploy không phải sửa profile.
         if cfg.index.store == "qdrant" and (url := os.getenv("QDRANT_URL")):
             cfg.index.url = url

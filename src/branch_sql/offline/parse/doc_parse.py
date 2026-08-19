@@ -7,6 +7,7 @@ Chỉ cần tên file — mặc định tìm trong `RAW_DIR`, ghi .md sang `PROC
 Chọn loader theo đuôi file, rồi làm sạch bằng cùng một bộ luật cho mọi định dạng:
 
     .pdf         pdf_parse    docling, có mô hình layout   ~75 giây
+    .xlsx        xlsx_parse   openpyxl, mỗi hàng một mục   < 1 giây
     còn lại      docx_parse   markitdown                   < 1 giây
 
 Chỉ lo tới *văn bản*: chuyển định dạng, khôi phục cấp bậc tiêu đề, làm sạch. Việc
@@ -82,10 +83,15 @@ def to_markdown(src: Path) -> str:
             f"{src.name}: đuôi '{src.suffix}' không có trong parse.suffixes "
             f"({', '.join(sorted(DOC_SUFFIXES))})"
         )
-    if src.suffix.lower() == ".pdf":
+    suffix = src.suffix.lower()
+    if suffix == ".pdf":
         from . import pdf_parse
 
         return pdf_parse.to_markdown(src)
+    if suffix == ".xlsx":
+        from . import xlsx_parse
+
+        return xlsx_parse.to_markdown(src)
     return docx_parse.to_markdown(src)
 
 

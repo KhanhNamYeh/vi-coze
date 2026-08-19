@@ -1,12 +1,12 @@
-"""Chặng 6 — đối soát.
+"""Chặng `verify` — index đã dùng được chưa.
 
-CHƯA CÓ, cần bổ sung:
+    integrity.py  đối soát chunk <-> vector <-> point trong Qdrant
+    retrieval.py  đo và chỉnh tham số truy hồi trên tập dev
 
-    coverage.py  số bảng trong tài liệu = số chunk = số point trong store;
-                 mọi cột và mọi dòng "Mối liên kết"/"Ghi chú" đều xuất hiện lại
-    trace.py     lấy ngẫu nhiên point -> đi ngược provenance về dòng trong .md
+`integrity` trả lời "có mất mát hay hỏng hóc gì không": trùng chunk_id, chunk
+rỗng, vượt budget, lệch số lượng, sai chiều, NaN, point thiếu một trong hai
+vector, mất page_content hay metadata. Mã thoát khác 0 khi có lỗi.
 
-Hiện chỉ có `chunk/table_chunker.check()` cảnh báo chunk quá dài, quá ngắn hoặc
-trùng nội dung — đủ để phát hiện chunk hỏng, chưa đủ để chứng minh không mất
-tri thức.
+`retrieval` trả lời "truy hồi tốt tới đâu, và tham số nào là tốt nhất". Dev chỉ
+để CHỌN tham số; số đưa vào báo cáo phải đo trên `test.json`.
 """

@@ -5,7 +5,15 @@
 Đọc `<doc_id>.linked.json` — KHÔNG đọc lại markdown, và KHÔNG đọc `.extract.json`:
 element ở đó chưa có `section`/`table`, gom theo đơn vị sẽ ra rỗng.
 
-Cắt theo THANG `chunk.split_on`, thứ tự trong mảng là thứ tự ưu tiên:
+Hai chế độ, theo đúng cách Dify chia:
+
+    general       cắt phẳng, mọi chunk cùng một bộ tham số, khớp cái nào trả
+                  thẳng cái đó. Một artifact: `.chunks.jsonl`.
+    parent_child  hai tầng. CON nhỏ, đi vào vector store, dùng để khớp truy vấn.
+                  CHA lớn, nằm ở `.parents.jsonl`, được trả về cho LLM khi con
+                  khớp. Con mang `parent_chunk_id` trỏ về cha.
+
+Trong mỗi tầng, cắt theo THANG `split_on`, thứ tự trong mảng là thứ tự ưu tiên:
 
     heading      một heading cấp N = một đơn vị nội dung   (cắt theo cấu trúc)
     table_row    bảng quá dài -> từng nhóm hàng, lặp header
@@ -59,6 +67,14 @@ def measure(text: str, *, budget=None) -> int:
     return len(_tokenizer(EMBED_MODEL).encode(text, add_special_tokens=False))
 
 
+def truncate(text: str, limit: int, *, budget) -> str:
+    """Cắt cụt về đúng `limit` đơn vị. Chỉ `full_doc` dùng tới."""
+    if budget.unit == "char":
+        return text[:limit]
+    tok = _tokenizer(EMBED_MODEL)
+    return tok.decode(tok.encode(text, add_special_tokens=False)[:limit])
+
+
 # ---- dựng text ------------------------------------------------------------
 
 def common_prefix(names: list[str]) -> str:
@@ -95,18 +111,23 @@ def render(el: dict, *, restore_labels: bool = True) -> str:
     return f"{label} {el['text']}".strip() if label else el["text"]
 
 
-def group_by_unit(elements: list[dict]) -> list[list[dict]]:
+def render_all(elements: list[dict], *, restore_labels: bool = True) -> str:
+    return "\n".join(render(el, restore_labels=restore_labels) for el in elements).strip()
+
+
+def group_by_unit(elements: list[dict], *, unit_role: str | None = None) -> list[list[dict]]:
     """Gom phần tử theo đơn vị nội dung, giữ nguyên thứ tự đọc.
 
     Phần mở đầu của một nhóm (chưa thuộc đơn vị nào) bị bỏ - nó là câu dẫn,
     không phải nội dung của đơn vị nào cả.
     """
+    unit_role = unit_role or UNIT_ROLE
     groups: list[list[dict]] = []
     current: str | None = None
 
     for el in elements:
-        is_unit_heading = el["modality"] == "heading" and el.get("role") == UNIT_ROLE
-        owner = el["text"] if is_unit_heading else el.get(UNIT_ROLE)
+        is_unit_heading = el["modality"] == "heading" and el.get("role") == unit_role
+        owner = el["text"] if is_unit_heading else el.get(unit_role)
         if not owner:
             continue
         if is_unit_heading or owner != current:
@@ -149,38 +170,50 @@ def table_slices(el: dict, rule) -> list[str]:
     return out
 
 
-@lru_cache(maxsize=2)
-def _length_splitter(max_len: int, overlap: int, unit: str):
-    """Splitter của LangChain, đo bằng đúng đơn vị của ngân sách."""
+@lru_cache(maxsize=4)
+def _length_splitter(max_len: int, overlap: int, unit: str, separators: tuple[str, ...]):
+    """Splitter của LangChain, đo bằng đúng đơn vị của ngân sách.
+
+    `keep_separator=False`: dấu ngăn bị xoá khỏi nội dung sau khi cắt, giống
+    hành vi `Delimiter` của Dify.
+    """
     return RecursiveCharacterTextSplitter(
         chunk_size=max_len,
         chunk_overlap=overlap,
         length_function=len if unit == "char" else measure,
-        separators=["\n\n", "\n", ". ", " ", ""],
+        separators=list(separators),
+        keep_separator=False,
     )
 
 
-def split_unit(group: list[dict], cfg) -> list[tuple[str, list[dict]]]:
+def split_unit(group: list[dict], layer, *, reserve: int = 0) -> list[tuple[str, list[dict]]]:
     """Một đơn vị nội dung -> các mảnh `(text, element đã dùng)`.
 
+    `layer` là một ChunkCfg: ở chế độ general nó chính là cfg, ở parent-child
+    thì tầng cha và tầng con là hai bản sao khác `split_on`/`budget`.
     Xuống bậc sau của thang CHỈ khi mảnh hiện tại còn vượt trần.
-    """
-    budget, rules = cfg.budget, cfg.split_on
-    labels = cfg.context.restore_labels
-    text = "\n".join(render(el, restore_labels=labels) for el in group).strip()
 
-    if measure(text, budget=budget) <= budget.max or budget.on_overflow == "keep":
+    `reserve` là chỗ để dành cho breadcrumb và ngữ cảnh thừa hưởng - hai thứ
+    được ghép vào SAU khi cắt. Không trừ hao thì chunk cuối cùng vượt trần đúng
+    bằng phần đầu đó, và embedder cắt cụt phần đuôi mà không báo gì.
+    """
+    budget, rules = layer.budget, layer.split_on
+    labels = layer.context.restore_labels
+    ceiling = max(budget.max - reserve, 1)
+    text = render_all(group, restore_labels=labels)
+
+    if measure(text, budget=budget) <= ceiling or budget.on_overflow == "keep":
         return [(text, group)]
 
     # bậc table_row: tách văn xuôi khỏi bảng, cắt bảng theo nhóm hàng
-    atomic = set(cfg.filter.atomic_modalities)
+    atomic = set(layer.filter.atomic_modalities)
     row_rule = next((r for r in rules if r.by == "table_row"), None)
     tables = [el for el in group if el["modality"] == "table" and "table" not in atomic]
     parts: list[tuple[str, list[dict]]] = [(text, group)]
 
     if row_rule and tables:
         prose = [el for el in group if el["modality"] != "table"]
-        head = "\n".join(render(el, restore_labels=labels) for el in prose).strip()
+        head = render_all(prose, restore_labels=labels)
         sliced: list[tuple[str, list[dict]]] = []
         for el in tables:
             for i, piece in enumerate(table_slices(el, row_rule)):
@@ -188,11 +221,16 @@ def split_unit(group: list[dict], cfg) -> list[tuple[str, list[dict]]]:
                 sliced.append((body.strip(), prose + [el] if i == 0 else [el]))
         if sliced:
             parts = sliced
-            if all(measure(p, budget=budget) <= budget.max for p, _ in parts):
+            if all(measure(p, budget=budget) <= ceiling for p, _ in parts):
                 return parts
 
     # bậc length: chốt chặn cuối
-    splitter = _length_splitter(budget.max, budget.overlap, budget.unit)
+    len_rule = next((r for r in rules if r.by == "length"), None)
+    if len_rule is None:
+        return parts
+    splitter = _length_splitter(
+        ceiling, budget.overlap, budget.unit, tuple(len_rule.separators)
+    )
     out: list[tuple[str, list[dict]]] = []
     for piece, els in parts:
         out += [(p.strip(), els) for p in splitter.split_text(piece)]
@@ -201,74 +239,197 @@ def split_unit(group: list[dict], cfg) -> list[tuple[str, list[dict]]]:
 
 # ---- điều phối ------------------------------------------------------------
 
-def split(ir: dict, *, cfg=None) -> list[Document]:
-    """IR -> list[Document]. Chỉ cắt, kiểm tra ở `check()`."""
-    cfg = cfg or CHUNK
-    doc_id, title = ir["doc_id"], ir.get("title", ir["doc_id"])
-    inherit = cfg.context.inherit
+def _unit_role(split_on) -> str:
+    """Vai trò heading mà tầng này lấy làm đơn vị nội dung."""
+    rule = next((r for r in split_on if r.by == "heading"), None)
+    return HEADING_ROLES.get(rule.level, UNIT_ROLE) if rule else UNIT_ROLE
 
-    chunks: list[Document] = []
+
+def _numbering():
+    """`no` dạng `<thứ tự section>.<thứ tự đơn vị trong section>`."""
     per_section: dict[str | None, int] = {}
 
-    groups = group_by_unit(ir["elements"])
-    names = [
-        g[0]["text"] if g[0]["modality"] == "heading" else g[0].get(UNIT_ROLE, "")
+    def nxt(section: str | None) -> str:
+        per_section[section] = per_section.get(section, 0) + 1
+        return f"{len(per_section)}.{per_section[section]}"
+
+    return nxt
+
+
+def _emit(
+    group: list[dict],
+    *,
+    ir: dict,
+    cfg,
+    layer,
+    name: str,
+    section: str | None,
+    no: str,
+    parent_chunk_id: str | None = None,
+) -> list[Document]:
+    """Một đơn vị nội dung -> Document đã gắn ngữ cảnh và metadata."""
+    inherit = cfg.context.inherit
+    # Ngữ cảnh cho mảnh 2 trở đi: bảng bị cắt làm ba thì mảnh sau mất câu
+    # "Ý nghĩa của bảng: ...", đứng một mình chỉ còn là lưới ô.
+    carried = " ".join(
+        el["text"] for el in group if el.get("role") in inherit.from_roles
+    ).strip()[: inherit.max_chars]
+
+    # Phần đầu ghép vào sau khi cắt: breadcrumb (mọi mảnh) và ngữ cảnh thừa
+    # hưởng (mảnh 2 trở đi). Trừ hao trước, nếu không mảnh nào cũng vượt trần
+    # đúng bằng độ dài của nó.
+    crumb = ""
+    if cfg.context.breadcrumb.enabled:
+        crumb = context_prefix(
+            ir.get("title", ir["doc_id"]),
+            ChunkMeta(doc_id=ir["doc_id"], section=section, table_name=name),
+            separator=cfg.context.breadcrumb.separator,
+            include_doc_title=cfg.context.breadcrumb.include_doc_title,
+        )
+    overhead = f"{crumb}\n{carried}\n"
+    reserve = measure(overhead, budget=layer.budget) if crumb or carried else 0
+
+    out: list[Document] = []
+    parts = split_unit(group, layer, reserve=reserve)
+    for i, (body, els) in enumerate(parts, 1):
+        meta = ChunkMeta.build(
+            text=body,
+            doc_id=ir["doc_id"],
+            section=section,
+            table_name=name,
+            no=no,
+            part=f"{i}/{len(parts)}",
+            source_path=ir.get("source_name"),
+            element_ids=[el["id"] for el in els],
+            line_start=els[0].get("line_start"),
+            line_end=els[-1].get("line_end"),
+            parent_chunk_id=parent_chunk_id,
+        )
+        text = body if i == 1 or not carried else f"{carried}\n{body}"
+        if cfg.context.breadcrumb.enabled:
+            crumb = context_prefix(
+                ir.get("title", ir["doc_id"]),
+                meta,
+                separator=cfg.context.breadcrumb.separator,
+                include_doc_title=cfg.context.breadcrumb.include_doc_title,
+            )
+            text = f"{crumb}\n{text}" if crumb else text
+        if cfg.filter.drop_empty and not text.strip():
+            continue
+        out.append(Document(
+            page_content=text,
+            metadata=meta.with_rendered(
+                text, n_tokens=measure(text, budget=layer.budget)
+            ).model_dump(),
+        ))
+    return out
+
+
+def _units(elements: list[dict], layer):
+    """-> (nhóm element, tên đơn vị đã bỏ tiền tố chung)."""
+    role = _unit_role(layer.split_on)
+    groups = group_by_unit(elements, unit_role=role)
+    raw = [
+        g[0]["text"] if g[0]["modality"] == "heading" else g[0].get(role, "")
         for g in groups
     ]
-    prefix = common_prefix(names)
+    prefix = common_prefix(raw)
+    names = [n[len(prefix):].strip() if prefix else n.strip() for n in raw]
+    return list(zip(groups, names))
 
-    for group, name in zip(groups, names):
+
+def _flat(ir: dict, cfg, layer, *, parent_chunk_id: str | None = None) -> list[Document]:
+    nxt = _numbering()
+    out: list[Document] = []
+    for group, name in _units(ir["elements"], layer):
         section = group[0].get(SECTION_ROLE)
-        per_section[section] = per_section.get(section, 0) + 1
-        no = f"{len(per_section)}.{per_section[section]}"
+        out += _emit(
+            group, ir=ir, cfg=cfg, layer=layer, name=name,
+            section=section, no=nxt(section), parent_chunk_id=parent_chunk_id,
+        )
+    return out
 
-        # Ngữ cảnh cho mảnh 2 trở đi: bảng bị cắt làm ba thì mảnh sau mất câu
-        # "Ý nghĩa của bảng: ...", đứng một mình chỉ còn là lưới ô.
-        carried = " ".join(
-            el["text"] for el in group if el.get("role") in inherit.from_roles
-        ).strip()[: inherit.max_chars]
 
-        parts = split_unit(group, cfg)
-        for i, (body, els) in enumerate(parts, 1):
-            meta = ChunkMeta.build(
-                text=body,
-                doc_id=doc_id,
-                section=section,
-                table_name=name[len(prefix):].strip() if prefix else name.strip(),
-                no=no,
-                part=f"{i}/{len(parts)}",
-                source_path=ir.get("source_name"),
-                element_ids=[el["id"] for el in els],
-                line_start=els[0].get("line_start"),
-                line_end=els[-1].get("line_end"),
-            )
-            text = body if i == 1 or not carried else f"{carried}\n{body}"
-            if cfg.context.breadcrumb.enabled:
-                crumb = context_prefix(
-                    title,
-                    meta,
-                    separator=cfg.context.breadcrumb.separator,
-                    include_doc_title=cfg.context.breadcrumb.include_doc_title,
-                )
-                text = f"{crumb}\n{text}" if crumb else text
-            if cfg.filter.drop_empty and not text.strip():
-                continue
-            meta = meta.with_rendered(text, n_tokens=measure(text, budget=cfg.budget))
-            chunks.append(Document(page_content=text, metadata=meta.model_dump()))
+def _full_doc_parent(ir: dict, cfg) -> Document:
+    """Cả tài liệu là MỘT cha, cắt cụt ở `parent.max_length`."""
+    budget = cfg.parent.budget
+    elements = ir["elements"]
+    text = render_all(elements, restore_labels=cfg.context.restore_labels)
+    if measure(text, budget=budget) > cfg.parent.max_length:
+        text = truncate(text, cfg.parent.max_length, budget=budget)
 
-    return chunks
+    meta = ChunkMeta.build(
+        text=text,
+        doc_id=ir["doc_id"],
+        table_name=ir.get("title", ir["doc_id"]),
+        no="0.0",
+        part="1/1",
+        source_path=ir.get("source_name"),
+        element_ids=[el["id"] for el in elements],
+        line_start=elements[0].get("line_start") if elements else None,
+        line_end=elements[-1].get("line_end") if elements else None,
+    )
+    return Document(
+        page_content=text,
+        metadata=meta.with_rendered(text, n_tokens=measure(text, budget=budget)).model_dump(),
+    )
 
+
+def build(ir: dict, *, cfg=None) -> tuple[list[Document], list[Document]]:
+    """IR -> `(chunk để embed, chunk cha để trả về)`.
+
+    General: danh sách cha rỗng. Parent-child: con đi vào vector store, cha nằm
+    ở artifact riêng và được trả về khi con khớp.
+    """
+    cfg = cfg or CHUNK
+    if cfg.mode == "general":
+        return _flat(ir, cfg, cfg), []
+
+    parent_layer = cfg.model_copy(
+        update={"split_on": cfg.parent.split_on, "budget": cfg.parent.budget}
+    )
+
+    if cfg.parent.method == "full_doc":
+        parent = _full_doc_parent(ir, cfg)
+        pid = parent.metadata["chunk_id"]
+        if cfg.child_roles:
+            kept = [e for e in ir["elements"] if e.get("role") in cfg.child_roles]
+            ir = {**ir, "elements": kept or ir["elements"]}
+        return _flat(ir, cfg, cfg, parent_chunk_id=pid), [parent]
+
+    nxt = _numbering()
+    parents: list[Document] = []
+    children: list[Document] = []
+    for group, name in _units(ir["elements"], parent_layer):
+        section = group[0].get(SECTION_ROLE)
+        no = nxt(section)
+        made = _emit(group, ir=ir, cfg=cfg, layer=parent_layer,
+                     name=name, section=section, no=no)
+        parents += made
+        kids = [e for e in group if not cfg.child_roles or e.get("role") in cfg.child_roles]
+        children += _emit(kids or group, ir=ir, cfg=cfg, layer=cfg, name=name,
+                          section=section, no=no,
+                          parent_chunk_id=made[0].metadata["chunk_id"] if made else None)
+    return children, parents
+
+
+def split(ir: dict, *, cfg=None) -> list[Document]:
+    """Chỉ phần đi vào vector store. Lối tắt của `build()[0]`."""
+    return build(ir, cfg=cfg)[0]
+
+
+# ---- kiểm tra và ghi ------------------------------------------------------
 
 def _size(meta: dict, unit: str) -> int:
     return meta["n_tokens"] if unit == "token" else meta["n_chars"]
 
 
-def check(chunks: list[Document], *, cfg=None) -> list[str]:
+def check(chunks: list[Document], *, cfg=None, parents: list[Document] | None = None) -> list[str]:
     """Trả danh sách cảnh báo. Không tự sửa."""
     cfg = cfg or CHUNK
     budget = cfg.budget
     if not chunks:
-        return [f"0 chunk - IR không có heading vai trò '{UNIT_ROLE}'"]
+        return [f"0 chunk - IR không có heading vai trò '{_unit_role(cfg.split_on)}'"]
 
     warn: list[str] = []
     if over := [c for c in chunks if _size(c.metadata, budget.unit) > budget.max]:
@@ -288,12 +449,23 @@ def check(chunks: list[Document], *, cfg=None) -> list[str]:
         if h in seen:
             warn.append(f"{name} trùng nội dung với {seen[h]}")
         seen[h] = name
+
+    if cfg.mode == "parent_child":
+        if orphan := sum(1 for c in chunks if not c.metadata.get("parent_chunk_id")):
+            warn.append(f"{orphan} chunk con không có cha - retriever sẽ không nới được ngữ cảnh")
+        # Cha bị cắt làm nhiều mảnh thì con chỉ trỏ về mảnh đầu.
+        if parents and (multi := sum(1 for p in parents if p.metadata["part"] != "1/1")):
+            warn.append(
+                f"{multi} mảnh cha sinh ra do vượt parent.budget - "
+                "con chỉ trỏ về mảnh đầu, nới rộng parent.budget.max"
+            )
     return warn
 
 
-def write_chunks(chunks: list[Document], *, out_dir: Path = PROCESSED_DIR, doc_id: str) -> Path:
+def write_chunks(chunks: list[Document], *, out_dir: Path = PROCESSED_DIR, doc_id: str,
+                 suffix: str = "chunks") -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
-    dst = out_dir / f"{doc_id}.chunks.jsonl"
+    dst = out_dir / f"{doc_id}.{suffix}.jsonl"
     with dst.open("w", encoding="utf-8") as f:
         for c in chunks:
             row = {"page_content": c.page_content, "metadata": c.metadata}
@@ -301,19 +473,24 @@ def write_chunks(chunks: list[Document], *, out_dir: Path = PROCESSED_DIR, doc_i
     return dst
 
 
-def report(chunks: list[Document], warn: list[str], *, cfg=None) -> None:
+def report(chunks: list[Document], warn: list[str], *, cfg=None,
+           parents: list[Document] | None = None) -> None:
     cfg = cfg or CHUNK
     if not chunks:
-        print(f"     ! 0 chunk - IR không có heading vai trò '{UNIT_ROLE}'")
+        print(f"     ! 0 chunk - IR không có heading vai trò '{_unit_role(cfg.split_on)}'")
         return
 
     unit = cfg.budget.unit
     sizes = sorted(_size(c.metadata, unit) for c in chunks)
     pieces = sum(1 for c in chunks if c.metadata["part"] != "1/1")
-    print(f"     {len(chunks)} chunk | min={sizes[0]} p50={sizes[len(sizes) // 2]} "
-          f"max={sizes[-1]} {unit}")
+    print(f"     chế độ {cfg.mode} | {len(chunks)} chunk | min={sizes[0]} "
+          f"p50={sizes[len(sizes) // 2]} max={sizes[-1]} {unit}")
     print(f"     có table_name: {sum(1 for c in chunks if c.metadata['table_name'])}"
           f"/{len(chunks)} | mảnh của đơn vị bị cắt: {pieces}")
+    if parents:
+        psize = sorted(_size(p.metadata, unit) for p in parents)
+        print(f"     cha: {len(parents)} | min={psize[0]} p50={psize[len(psize) // 2]} "
+              f"max={psize[-1]} {unit}")
     for w in warn:
         print(f"     ! {w}")
 
@@ -333,12 +510,14 @@ def main(argv: list[str]) -> int:
         print(e, file=sys.stderr)
         return 1
 
-    chunks = split(ir)
-    warn = check(chunks)
+    chunks, parents = build(ir)
+    warn = check(chunks, parents=parents)
     dst = write_chunks(chunks, doc_id=doc_id)
 
     print(f"{doc_id}.linked.json\n  -> {rel(dst)}")
-    report(chunks, warn)
+    if parents:
+        print(f"  -> {rel(write_chunks(parents, doc_id=doc_id, suffix='parents'))}")
+    report(chunks, warn, parents=parents)
     return 1 if not chunks else 0
 
 

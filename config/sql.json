@@ -1,11 +1,12 @@
 {
   "kb": "sql",
-  "name": "Tài liệu mô tả schema CSDL",
-  "description": "Mỗi mục là một bảng: ý nghĩa, danh sách cột, mối liên kết, ghi chú nghiệp vụ. Cắt theo cấu trúc vì ranh giới bảng đã rõ sẵn.",
+  "name": "Nhánh SQL — hai dự án chatbot",
+  "description": "Dự án 1 đọc .docx, dự án 2 đọc .pdf. Bộ SQL sample dùng chung cho cả hai. Mỗi bộ tri thức khai cách cắt riêng.",
   "parse": {
     "suffixes": [
       ".docx",
-      ".pdf"
+      ".pdf",
+      ".xlsx"
     ],
     "table_heading": "^\\*\\s+\\d+\\.\\s+\\*\\*(?P<name>.+?)\\*\\*\\s*$",
     "replacements": [
@@ -17,8 +18,225 @@
         "pattern": "(?<=\\|\\s)Cột\\d+(?=\\s*\\|)",
         "replace": "Tên cột"
       }
-    ]
+    ],
+    "sheets": {
+      "dev": "from schema",
+      "test": "Sheet2"
+    }
   },
+  "knowledge": [
+    {
+      "id": "schema_docx",
+      "source": "Mô tả bảng BĐS (NEW).docx",
+      "project": 1,
+      "collection": "sqlp{project}__docs",
+      "chunk": {
+        "mode": "general",
+        "split_on": [
+          {
+            "by": "heading",
+            "level": 2
+          },
+          {
+            "by": "table_row",
+            "group": 10,
+            "repeat_header": true
+          },
+          {
+            "by": "length",
+            "separators": [
+              "\\n\\n",
+              "\\n",
+              ". ",
+              " ",
+              ""
+            ]
+          }
+        ],
+        "budget": {
+          "unit": "token",
+          "max": 2048,
+          "min": 120,
+          "overlap": 0,
+          "on_overflow": "keep",
+          "on_underflow": "keep"
+        },
+        "parent": {
+          "method": "paragraph",
+          "split_on": [
+            {
+              "by": "heading",
+              "level": 2
+            }
+          ],
+          "budget": {
+            "unit": "token",
+            "max": 4096,
+            "min": 0,
+            "overlap": 0,
+            "on_overflow": "keep",
+            "on_underflow": "keep"
+          },
+          "max_length": 10000
+        },
+        "filter": {
+          "atomic_modalities": [],
+          "drop_empty": true
+        },
+        "context": {
+          "breadcrumb": {
+            "enabled": true,
+            "separator": " > ",
+            "include_doc_title": true
+          },
+          "inherit": {
+            "from_roles": [
+              "table_meaning"
+            ],
+            "max_chars": 300
+          },
+          "restore_labels": true
+        }
+      }
+    },
+    {
+      "id": "schema_pdf",
+      "source": "Mô tả bảng BĐS (NEW).pdf",
+      "project": 2,
+      "collection": "sqlp{project}__docs",
+      "chunk": {
+        "mode": "general",
+        "split_on": [
+          {
+            "by": "heading",
+            "level": 2
+          },
+          {
+            "by": "table_row",
+            "group": 10,
+            "repeat_header": true
+          },
+          {
+            "by": "length",
+            "separators": [
+              "\\n\\n",
+              "\\n",
+              ". ",
+              " ",
+              ""
+            ]
+          }
+        ],
+        "budget": {
+          "unit": "token",
+          "max": 2048,
+          "min": 120,
+          "overlap": 0,
+          "on_overflow": "keep",
+          "on_underflow": "keep"
+        },
+        "parent": {
+          "method": "paragraph",
+          "split_on": [
+            {
+              "by": "heading",
+              "level": 2
+            }
+          ],
+          "budget": {
+            "unit": "token",
+            "max": 4096,
+            "min": 0,
+            "overlap": 0,
+            "on_overflow": "keep",
+            "on_underflow": "keep"
+          },
+          "max_length": 10000
+        },
+        "filter": {
+          "atomic_modalities": [],
+          "drop_empty": true
+        },
+        "context": {
+          "breadcrumb": {
+            "enabled": true,
+            "separator": " > ",
+            "include_doc_title": true
+          },
+          "inherit": {
+            "from_roles": [
+              "table_meaning"
+            ],
+            "max_chars": 300
+          },
+          "restore_labels": true
+        }
+      }
+    },
+    {
+      "id": "sql_sample",
+      "source": "Text2SQL_testcase.xlsx",
+      "project": [
+        1,
+        2
+      ],
+      "collection": "sqlp{project}__sql",
+      "chunk": {
+        "mode": "parent_child",
+        "split_on": [
+          {
+            "by": "heading",
+            "level": 2
+          }
+        ],
+        "budget": {
+          "unit": "token",
+          "max": 2048,
+          "min": 0,
+          "overlap": 0,
+          "on_overflow": "keep",
+          "on_underflow": "keep"
+        },
+        "parent": {
+          "method": "paragraph",
+          "split_on": [
+            {
+              "by": "heading",
+              "level": 2
+            }
+          ],
+          "budget": {
+            "unit": "token",
+            "max": 4096,
+            "min": 0,
+            "overlap": 0,
+            "on_overflow": "keep",
+            "on_underflow": "keep"
+          },
+          "max_length": 10000
+        },
+        "child_roles": [
+          "sample_query"
+        ],
+        "filter": {
+          "atomic_modalities": [],
+          "drop_empty": true
+        },
+        "context": {
+          "breadcrumb": {
+            "enabled": true,
+            "separator": " > ",
+            "include_doc_title": false
+          },
+          "inherit": {
+            "from_roles": [],
+            "max_chars": 300
+          },
+          "restore_labels": true
+        }
+      }
+    }
+  ],
   "extract": {
     "enabled": true,
     "extractor": "block_extract",
@@ -54,6 +272,24 @@
           "^Ghi chú\\s*:",
           "^Lưu ý\\s*:"
         ]
+      },
+      {
+        "role": "sample_query",
+        "match": [
+          "^query\\s*:"
+        ]
+      },
+      {
+        "role": "sample_evidence",
+        "match": [
+          "^evidence\\s*:"
+        ]
+      },
+      {
+        "role": "sample_sql",
+        "match": [
+          "^sql\\s*:"
+        ]
       }
     ]
   },
@@ -61,10 +297,26 @@
     "enabled": true
   },
   "chunk": {
+    "mode": "general",
     "split_on": [
       {
         "by": "heading",
         "level": 2
+      },
+      {
+        "by": "table_row",
+        "group": 10,
+        "repeat_header": true
+      },
+      {
+        "by": "length",
+        "separators": [
+          "\\n\\n",
+          "\\n",
+          ". ",
+          " ",
+          ""
+        ]
       }
     ],
     "budget": {
@@ -74,6 +326,24 @@
       "overlap": 0,
       "on_overflow": "keep",
       "on_underflow": "keep"
+    },
+    "parent": {
+      "method": "paragraph",
+      "split_on": [
+        {
+          "by": "heading",
+          "level": 2
+        }
+      ],
+      "budget": {
+        "unit": "token",
+        "max": 4096,
+        "min": 0,
+        "overlap": 0,
+        "on_overflow": "keep",
+        "on_underflow": "keep"
+      },
+      "max_length": 10000
     },
     "filter": {
       "atomic_modalities": [],
@@ -113,7 +383,7 @@
   },
   "index": {
     "store": "qdrant",
-    "collection": "sqldocs__vnemb_1024__c1",
+    "collection": "sqlbot1__docs",
     "url": "http://localhost:6333",
     "dense_vector": "dense",
     "sparse_vector": "bm25",
@@ -121,7 +391,8 @@
       "doc_id",
       "table_name",
       "section"
-    ]
+    ],
+    "sql_collection": "sqlbot1__sql"
   },
   "retrieval": {
     "mode": "hybrid",
