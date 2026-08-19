@@ -676,17 +676,17 @@ const API = {
 /* ---------- State + persist ---------- */
 const LS_KEY = 'vicoze_knowledge_studio_v1';
 const DEFAULT_FORM = {
-  kbName: 'Kiến thức tri thức v1',
-  files: ['d1','d2','d3','d4'],
-  strategy: 'fixed',
-  chunkSize: 512,
-  overlap: 64,
-  separator: '\\n\\n',
-  embedModel: 'bge-m3',
-  mode: 'hybrid',
-  ratio: 70,
-  topK: 5,
-  threshold: 0.45,
+  kbName: 'Knowledge v1', kid: 'kb_v1', source: '',
+  /* chunk — khớp 1-1 với ChunkCfg trong src/config.py */
+  mode: 'general',
+  useHeading: true,  headingLevel: 2,
+  useTableRow: false, group: 10, repeatHeader: true, overlapRows: 0,
+  useLength: true,   separators: '\n\n|\n|. | |',
+  unit: 'token', maxLen: 2048, minLen: 120, overlap: 0,
+  onOverflow: 'keep', onUnderflow: 'keep',
+  childRoles: '',
+  /* embed + retrieval */
+  embedModel: '', mode_r: 'hybrid', ratio: 50, topK: 5,
 };
 const state = {
   view: 'projects', tab: 'knowledge',
@@ -963,31 +963,40 @@ function renderLogsTab(){
 /* ================================================================
    OVERLAY: KNOWLEDGE SETTING (form + config/sql.json live)
    ================================================================ */
+function seps(f){
+  return f.separators.split('|').map(x => x.replace(/\n/g, String.fromCharCode(10)));
+}
+function chunkCfg(f){
+  const split_on = [];
+  if (f.useHeading)  split_on.push({ by:'heading', level:+f.headingLevel });
+  if (f.useTableRow) split_on.push({ by:'table_row', group:+f.group,
+                                     repeat_header:f.repeatHeader, overlap_rows:+f.overlapRows });
+  if (f.useLength)   split_on.push({ by:'length', separators: seps(f) });
+  const cfg = {
+    mode: f.mode,
+    split_on,
+    budget: { unit:f.unit, max:+f.maxLen, min:+f.minLen, overlap:+f.overlap,
+              on_overflow:f.onOverflow, on_underflow:f.onUnderflow },
+    filter: { atomic_modalities: [], drop_empty: true },
+    context: { breadcrumb:{ enabled:true, separator:' > ', include_doc_title:true },
+               inherit:{ from_roles:[], max_chars:300 }, restore_labels:true },
+  };
+  if (f.mode === 'parent_child'){
+    cfg.parent = { method:'paragraph', split_on:[{by:'heading', level:+f.headingLevel}],
+                   budget:{ unit:f.unit, max:+f.maxLen*2, min:0, overlap:0,
+                            on_overflow:'keep', on_underflow:'keep' },
+                   max_length: 10000 };
+    const roles = f.childRoles.split(',').map(x=>x.trim()).filter(Boolean);
+    if (roles.length) cfg.child_roles = roles;
+  }
+  return cfg;
+}
 function buildConfig(){
   const p = getProject(); const f = state.form;
-  const m = MODELS.find(x=>x.id===f.embedModel);
-  const dir = `data/processed/sql/${p.id}/`;
-  const sem = f.mode === 'hybrid' ? f.ratio/100 : (f.mode === 'vector' ? 1 : 0);
   return {
-    project_id: p.id,
-    knowledge: {
-      name: f.kbName,
-      chunking: {
-        strategy: STRATS[f.strategy].id,
-        chunk_size: f.chunkSize,
-        chunk_overlap: f.overlap,
-        separator: f.strategy === 'fixed' ? f.separator : '\\n\\n',
-      },
-      embedding: { model: m.name, dimension: m.dim, batch_size: 32, device: 'cpu' },
-      retrieval: {
-        mode: f.mode,
-        semantic_weight: +sem.toFixed(2),
-        keyword_weight: +(1-sem).toFixed(2),
-        top_k: f.topK,
-        score_threshold: f.threshold,
-      },
-      storage: { vector_store: 'sqlite-vec', fts: 'fts5', output_dir: dir },
-    },
+    id: f.kid, source: f.source, project: Number(p.id),
+    collection: `sqlp{project}__${f.kid}`,
+    chunk: chunkCfg(f),
   };
 }
 function updateJSON(){
@@ -1046,43 +1055,65 @@ function renderSettingForm(){
   <div class="f-sec">
     <div class="f-num">02 · NGUỒN TÀI LIỆU</div>
     <h3>Chọn tệp đầu vào</h3>
-    <p class="f-hint">Các tệp trong thư mục nguồn của dự án — pipeline sẽ đọc, làm sạch và đánh chỉ mục toàn bộ nội dung.</p>
-    <div class="docs">${DOCS.map(d => `
-      <label class="doc ${f.files.includes(d.id)?'on':''}" data-doc="${d.id}">
-        <span class="doc-ic">${ic('file',16)}</span>
-        <span class="doc-name"><b>${d.name}</b><i>${d.label} · ${d.type}</i></span>
-        <span class="doc-size">${kb(d.size)}</span>
-        <span class="doc-chk">${ic('check',12)}</span>
-      </label>`).join('')}
-    </div>
+    <p class="f-hint">Tệp trong <code>data/raw/sql/</code>. Đuôi phải nằm trong <code>parse.suffixes</code> của profile.</p>
+    <div class="docs" id="src-list"></div>
+    <div class="flbl"><span>Tải tệp mới lên</span></div>
+    <input type="file" id="f-upload" class="txt-in">
     <div class="doc-sum" id="doc-sum"></div>
   </div>
 
   <div class="f-sec">
     <div class="f-num">03 · CHUNKING</div>
     <h3>Tách đoạn văn bản</h3>
-    <p class="f-hint">Cách tài liệu được cắt thành các đoạn trước khi nhúng vector.</p>
-    <div class="flbl"><span>Chiến lược</span></div>
-    <div class="seg" id="f-strat">${Object.entries(STRATS).map(([k,v])=>`<button data-v="${k}" class="${f.strategy===k?'on':''}">${v.label}</button>`).join('')}</div>
+    <p class="f-hint">Khớp 1-1 với <code>ChunkCfg</code>. Thang cắt chạy theo thứ tự bậc; chỉ xuống bậc sau khi chunk vượt trần.</p>
 
-    <div class="flbl"><span>Kích thước đoạn</span><span class="fhint">128 – 2048 tokens</span></div>
+    <div class="flbl"><span>Chế độ</span><span class="fhint">parent-child: khớp bằng con, trả về cha</span></div>
+    <div class="seg" id="f-mode">
+      <button data-v="general" class="on">general</button>
+      <button data-v="parent_child">parent_child</button>
+    </div>
+
+    <div class="flbl"><span>Bậc 1 · heading</span><span class="fhint">một heading cấp N = một chunk</span></div>
     <div class="srow">
-      <input type="range" id="f-size" min="128" max="2048" step="32" value="${f.chunkSize}">
-      <span class="sval" id="f-size-v">${f.chunkSize}<small>tokens</small></span>
+      <label class="doc sm" id="f-use-heading"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>bật</b></span></label>
+      <input class="txt-in nb" id="f-hlevel" type="number" min="1" max="6" style="max-width:80px">
     </div>
 
-    <div class="flbl"><span>Chồng lấp (overlap)</span><span class="fhint">0 – 256 tokens</span></div>
+    <div class="flbl"><span>Bậc 2 · table_row</span><span class="fhint">bảng dài → nhóm hàng, lặp header</span></div>
     <div class="srow">
-      <input type="range" id="f-ov" min="0" max="256" step="16" value="${f.overlap}">
-      <span class="sval" id="f-ov-v">${f.overlap}<small>≈ ${numV(ovPct)}%</small></span>
+      <label class="doc sm" id="f-use-trow"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>bật</b></span></label>
+      <input class="txt-in nb" id="f-group" type="number" min="1" style="max-width:80px" title="hàng mỗi mảnh">
+      <input class="txt-in nb" id="f-ovrows" type="number" min="0" style="max-width:80px" title="overlap theo HÀNG">
     </div>
 
-    <div id="f-sep-wrap">
-      <div class="flbl"><span>Ký tự phân tách</span><span class="fhint">kiểu escape, vd \\n\\n</span></div>
-      <input class="txt-in" id="f-sep" style="max-width:240px" value="${esc(f.separator)}">
+    <div class="flbl"><span>Bậc 3 · length</span><span class="fhint">chốt chặn cuối; dấu ngăn cách nhau bằng |</span></div>
+    <div class="srow">
+      <label class="doc sm" id="f-use-length"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>bật</b></span></label>
+      <input class="txt-in" id="f-seps" style="flex:1" title="separators">
     </div>
 
-    <div class="cviz-wrap" id="cviz-wrap"></div>
+    <div class="flbl"><span>Ngân sách</span><span class="fhint">đơn vị · trần · sàn · overlap</span></div>
+    <div class="srow">
+      <div class="seg sm" id="f-unit"><button data-v="token" class="on">token</button><button data-v="char">char</button></div>
+      <input class="txt-in nb" id="f-max" type="number" min="1" style="max-width:96px" title="budget.max">
+      <input class="txt-in nb" id="f-min" type="number" min="0" style="max-width:96px" title="budget.min">
+      <input class="txt-in nb" id="f-ov" type="number" min="0" style="max-width:96px" title="budget.overlap">
+    </div>
+
+    <div class="flbl"><span>Vượt trần</span><span class="fhint">truncate là bảo đảm cứng duy nhất</span></div>
+    <div class="seg" id="f-over">
+      <button data-v="descend">descend</button><button data-v="keep" class="on">keep</button><button data-v="truncate">truncate</button>
+    </div>
+
+    <div class="flbl"><span>Hụt sàn</span><span class="fhint">merge gộp với chunk kề cùng section</span></div>
+    <div class="seg" id="f-under">
+      <button data-v="keep" class="on">keep</button><button data-v="merge">merge</button><button data-v="drop">drop</button>
+    </div>
+
+    <div id="f-cr-wrap" style="display:none">
+      <div class="flbl"><span>child_roles</span><span class="fhint">tầng con chỉ giữ role này, cách nhau bằng dấu phẩy</span></div>
+      <input class="txt-in" id="f-croles" placeholder="sample_query">
+    </div>
   </div>
 
   <div class="f-sec">
@@ -1139,96 +1170,99 @@ function renderSettingForm(){
     <button class="btn pri big" id="f-create">${ic('play',15)} Tạo Knowledge</button>`;
 
   /* ---- bindings ---- */
+  const seg = (id, key, after) => $$(`#${id} button`).forEach(btn =>
+    btn.addEventListener('click', () => {
+      $$(`#${id} button`).forEach(x => x.classList.remove('on'));
+      btn.classList.add('on'); f[key] = btn.dataset.v; after && after(); updateJSON();
+    }));
+  const num = (id, key) => {
+    const el = $(id); if (!el) return;
+    el.value = f[key];
+    el.addEventListener('input', () => { f[key] = +el.value || 0; updateJSON(); });
+  };
+  const toggle = (id, key) => {
+    const el = $(id); if (!el) return;
+    el.classList.toggle('on', !!f[key]);
+    el.addEventListener('click', () => { f[key] = !f[key]; el.classList.toggle('on', f[key]); updateJSON(); });
+  };
+
   const refreshDerived = () => {
-    const e = estChunks();
-    $('#doc-sum').innerHTML = `<span>${f.files.length}/${DOCS.length} tệp đã chọn</span><span>~<b>${fmt(e.chars)}</b> ký tự</span><span>≈ <b>${fmt(e.n)}</b> đoạn dự kiến</span><span>≈ <b>${fmt(e.tokens)}</b> tokens</span>`;
-    $('#f-est').textContent = e.n ? `sẽ tạo ≈ ${fmt(e.n)} vector · ${fmt(e.tokens)} tokens` : 'chưa chọn tệp nào';
-    $('#f-create').disabled = !f.files.length || !f.kbName.trim();
-    const ovP = Math.round(f.overlap/f.chunkSize*1000)/10;
-    const total = Math.max(1, Math.ceil((3200-f.chunkSize)/Math.max(1,f.chunkSize-f.overlap))+1);
-    $('#cviz-wrap').innerHTML = chunkVizSVG(f.chunkSize, f.overlap) +
-      `<div class="cviz-cap"><b>${Math.min(12,total)}/${total}</b> đoạn đầu của một tài liệu mẫu · phần đậm = chồng lấp <b>${numV(ovP)}%</b></div>`;
-    $('#f-sep-wrap').style.display = f.strategy === 'fixed' ? '' : 'none';
-    $('#m-note').textContent = `${model.desc} · ${model.vps} vec/s · batch 32 · cpu`;
+    $('#f-cr-wrap').style.display = f.mode === 'parent_child' ? '' : 'none';
+    $('#doc-sum').innerHTML = f.source
+      ? `<span>nguồn: <b>${esc(f.source)}</b></span>`
+      : `<span>chưa chọn nguồn</span>`;
+    $('#f-create').disabled = !f.source || !f.kbName.trim();
+    $('#f-est').textContent = f.source
+      ? `${f.mode} · ${chunkCfg(f).split_on.map(r=>r.by).join(' → ') || 'chưa bật bậc nào'}`
+      : 'chọn một tệp nguồn';
   };
-  $('#f-name').addEventListener('input', e => { f.kbName = e.target.value; $('#f-create').disabled = !f.files.length || !f.kbName.trim(); updateJSON(); });
-  $$('#set-form .doc').forEach(el => el.addEventListener('click', () => {
-    const id = el.dataset.doc;
-    const i = f.files.indexOf(id);
-    if (i >= 0){ f.files.splice(i,1); el.classList.remove('on'); } else { f.files.push(id); el.classList.add('on'); }
-    refreshDerived(); updateJSON();
-  }));
-  $('#f-strat').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    f.strategy = b.dataset.v;
-    $$('#f-strat button').forEach(x=>x.classList.toggle('on', x===b));
-    refreshDerived(); updateJSON();
-  });
-  const sizeR = $('#f-size');
-  sizeR.addEventListener('input', () => {
-    f.chunkSize = +sizeR.value;
-    if (f.overlap > f.chunkSize/2) f.overlap = Math.floor(f.chunkSize/4/16)*16, $('#f-ov').value = f.overlap;
-    $('#f-size-v').innerHTML = `${f.chunkSize}<small>tokens</small>`;
-    paintRange(sizeR, (f.chunkSize-128)/(2048-128)*100);
-    refreshDerived(); updateJSON();
-  });
-  paintRange(sizeR, (f.chunkSize-128)/(2048-128)*100);
-  const ovR = $('#f-ov');
-  ovR.addEventListener('input', () => {
-    f.overlap = +ovR.value;
-    $('#f-ov-v').innerHTML = `${f.overlap}<small>≈ ${numV(Math.round(f.overlap/f.chunkSize*1000)/10)}%</small>`;
-    paintRange(ovR, f.overlap/256*100);
-    refreshDerived(); updateJSON();
-  });
-  paintRange(ovR, f.overlap/256*100);
-  $('#f-sep').addEventListener('input', e => { f.separator = e.target.value || '\\n\\n'; updateJSON(); });
-  /* model select */
-  const msel = $('#msel');
-  msel.querySelector('.msel-btn').addEventListener('click', e => { e.stopPropagation(); msel.classList.toggle('open'); });
-  msel.querySelectorAll('[data-m]').forEach(b => b.addEventListener('click', () => {
-    f.embedModel = b.dataset.m; msel.classList.remove('open');
-    renderSettingForm(); updateJSON();
-  }));
-  /* mode + ratio */
-  $('#f-mode').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    f.mode = b.dataset.v;
-    $$('#f-mode button').forEach(x=>x.classList.toggle('on', x===b));
-    const hyb = $('#hyb');
-    hyb.classList.toggle('hyb-off', f.mode!=='hybrid');
-    hyb.querySelector('.hyb-note')?.remove();
-    if (f.mode!=='hybrid') hyb.insertAdjacentHTML('beforeend','<div class="hyb-note">Tỉ lệ trộn chỉ áp dụng cho chế độ Hybrid.</div>');
-    else hyb.querySelector('.hyb-note')?.remove();
-    updateJSON();
-  });
-  const ratioR = $('#f-ratio');
-  const paintRatio = () => {
-    paintRange(ratioR, f.ratio);
-    $('#hyb-v').textContent = f.ratio + '%';
-    $('#hyb-k').textContent = (100 - f.ratio) + '%';
-    const a = (f.ratio/100).toFixed(2).replace('.',',');
-    const b = (1 - f.ratio/100).toFixed(2).replace('.',',');
-    $('#hyb-f').innerHTML = `score = <b>${a}</b> × cosine(q, v) + <b>${b}</b> × bm25(q, d)`;
+
+  /* nguồn: lấy thật từ API */
+  const paintSources = (rows) => {
+    $('#src-list').innerHTML = rows.map(r => `
+      <label class="doc ${f.source===r.name?'on':''} ${r.supported?'':'dis'}" data-src="${esc(r.name)}">
+        <span class="doc-ic">${ic('file',16)}</span>
+        <span class="doc-name"><b>${esc(r.name)}</b><i>${r.supported?'hỗ trợ':'đuôi không khai trong parse.suffixes'}</i></span>
+        <span class="doc-size">${kb(r.size)}</span>
+        <span class="doc-chk">${ic('check',12)}</span>
+      </label>`).join('');
+    $$('#src-list .doc').forEach(el => el.addEventListener('click', () => {
+      if (el.classList.contains('dis')) return toast('Đuôi file không có trong parse.suffixes', 'err');
+      f.source = el.dataset.src;
+      $$('#src-list .doc').forEach(x => x.classList.remove('on')); el.classList.add('on');
+      refreshDerived(); updateJSON();
+    }));
   };
-  ratioR.addEventListener('input', () => { f.ratio = +ratioR.value; paintRatio(); updateJSON(); });
-  paintRatio();
-  /* top-k */
-  const tk = $('#f-topk');
-  const setTk = v => { f.topK = Math.min(20, Math.max(1, v)); tk.value = f.topK; updateJSON(); };
-  $('#tk-m').addEventListener('click', () => setTk(f.topK - 1));
-  $('#tk-p').addEventListener('click', () => setTk(f.topK + 1));
-  tk.addEventListener('change', () => setTk(+tk.value || 5));
-  /* threshold */
-  const thR = $('#f-th');
-  thR.addEventListener('input', () => { f.threshold = +thR.value; $('#f-th-v').textContent = numV(f.threshold.toFixed(2)); paintRange(thR, f.threshold/0.9*100); updateJSON(); });
-  paintRange(thR, f.threshold/0.9*100);
+  API.sources().then(paintSources).catch(e => toast('Không đọc được nguồn: ' + e, 'err'));
+
+  $('#f-upload').addEventListener('change', async e => {
+    const file = e.target.files[0]; if (!file) return;
+    const fd = new FormData(); fd.append('file', file);
+    const r = await fetch('/api/sources', { method:'POST', body: fd });
+    if (!r.ok){ toast(`Tải lên hỏng: ${await r.text()}`, 'err'); return; }
+    toast(`Đã tải ${file.name}`, 'ok');
+    API.sources().then(paintSources);
+  });
+
+  /* tên + id */
+  $('#f-name').value = f.kbName;
+  $('#f-name').addEventListener('input', e => {
+    f.kbName = e.target.value;
+    f.kid = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,40) || 'kb';
+    refreshDerived(); updateJSON();
+  });
+
+  /* chunk */
+  seg('f-mode', 'mode', refreshDerived);
+  seg('f-unit', 'unit'); seg('f-over', 'onOverflow'); seg('f-under', 'onUnderflow');
+  toggle('#f-use-heading','useHeading'); toggle('#f-use-trow','useTableRow'); toggle('#f-use-length','useLength');
+  num('#f-hlevel','headingLevel'); num('#f-group','group'); num('#f-ovrows','overlapRows');
+  num('#f-max','maxLen'); num('#f-min','minLen'); num('#f-ov','overlap');
+  $('#f-seps').value = f.separators;
+  $('#f-seps').addEventListener('input', e => { f.separators = e.target.value; updateJSON(); });
+  $('#f-croles').value = f.childRoles;
+  $('#f-croles').addEventListener('input', e => { f.childRoles = e.target.value; updateJSON(); });
+  $$('#f-mode button, #f-unit button, #f-over button, #f-under button').forEach(btn => {
+    const key = btn.closest('.seg').id.replace('f-','');
+    const map = { mode:'mode', unit:'unit', over:'onOverflow', under:'onUnderflow' };
+    btn.classList.toggle('on', f[map[key]] === btn.dataset.v);
+  });
+
   /* actions */
-  $('#f-reset').addEventListener('click', () => { state.form = { ...DEFAULT_FORM }; renderSettingForm(); updateJSON(); toast('Đã đặt lại cấu hình mặc định'); });
-  $('#f-create').addEventListener('click', () => {
-    if (!f.files.length || !f.kbName.trim()) return;
+  $('#f-reset').addEventListener('click', () => {
+    state.form = { ...DEFAULT_FORM }; renderSettingForm(); updateJSON();
+    toast('Đã đặt lại cấu hình mặc định');
+  });
+  $('#f-create').addEventListener('click', async () => {
+    if (!f.source || !f.kbName.trim()) return;
+    const p = getProject();
+    try{
+      await API.post(`/api/projects/${p.id}/knowledge`, buildConfig());
+      await loadState();
+    }catch(e){ toast('Tạo knowledge hỏng: ' + e, 'err'); return; }
     persist();
     $('#ovl-setting').classList.add('hidden');
-    openPipeline();
+    openPipeline(f.kid);
   });
   refreshDerived();
 }
@@ -1256,7 +1290,7 @@ function updatePipeHead(){
   $('#pl-bar-fill').style.width = (PL.totalP*100) + '%';
 }
 
-async function openPipeline(){
+async function openPipeline(kidArg){
   const f = state.form; const p = getProject();
   const docs = DOCS.filter(d => f.files.includes(d.id));
   const model = MODELS.find(m => m.id === f.embedModel);
@@ -1292,7 +1326,7 @@ async function openPipeline(){
      được thì rơi về chế độ mô phỏng để giao diện vẫn xem được, và nói rõ. */
   PL.stageOrder = ['parse','extract','link','chunk','embed','index'];
   PL.logOffset = 0;
-  const kid = (state.knowledges[p.id] || [])[0]?.id;
+  const kid = kidArg || (state.knowledges[p.id] || [])[0]?.id;
   if (kid){
     try{
       const run = await API.startRun({ project: Number(p.id), knowledge_id: kid });
