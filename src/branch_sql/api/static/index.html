@@ -968,7 +968,12 @@ async function renderLogsTab(){
    OVERLAY: KNOWLEDGE SETTING (form + config/sql.json live)
    ================================================================ */
 function seps(f){
-  return f.separators.split('|').map(x => x.replace(/\n/g, String.fromCharCode(10)));
+  /* Form nhập ký tự thoát dạng VĂN BẢN (hai ký tự: gạch chéo + n). Đổi thành
+     ký tự thật trước khi gửi, nếu không splitter sẽ đi tìm đúng chuỗi hai ký
+     tự đó trong tài liệu và gần như không bao giờ khớp. */
+  const ESC = { n: String.fromCharCode(10), t: String.fromCharCode(9), r: String.fromCharCode(13) };
+  return f.separators.split('|').map(x =>
+    x.replace(new RegExp(String.fromCharCode(92, 92) + '([ntr])', 'g'), (_, c) => ESC[c]));
 }
 function chunkCfg(f){
   const split_on = [];
@@ -1580,8 +1585,7 @@ async function awaitRealStage(def, idx){
     const newLog = await API.log(PL.runId, PL.logOffset).catch(() => '');
     if (newLog){
       PL.logOffset += new TextEncoder().encode(newLog).length;
-      newLog.split('
-').filter(l => l.trim()).forEach(l =>
+      newLog.split(String.fromCharCode(10)).filter(l => l.trim()).forEach(l =>
         appendLog(l.trim().startsWith('!') ? 'WARN' : 'INFO', stage, l.trim()));
     }
 

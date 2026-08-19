@@ -1,0 +1,13 @@
+dự án 1 | 1 bộ tri thức | artifact: data/processed/sql/p1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 391/391 [00:00<00:00, 6607.62it/s]
+
+  schema_docx (mo_ta_bang_bds_new__docx)
+    chunk  -> data/processed/sql/p1/mo_ta_bang_bds_new__docx.chunks.jsonl | chế độ general | 18 chunk
+    index  -> sqlp1__docs | 18 point | tổng 18
+    ! bỏ 18 dải gạch ngang ngăn mục
+    ! sửa 1 chỗ khớp /(?<=\|\s\*\*)Cột\d+(?=\*\*\s\|)/ -> 'Tên cột'
+
+qdrant: http://localhost:6333
