@@ -139,6 +139,9 @@ def group_by_unit(elements: list[dict], *, unit_role: str | None = None) -> list
 
 # ---- thang cắt ------------------------------------------------------------
 
+NEWLINE = chr(10)
+
+
 def _cell(text: str) -> str:
     """Escape dấu ngăn cột khi dựng lại hàng, nếu không ô chứa nó tạo cột giả."""
     return text.replace("|", "\\|")
@@ -159,14 +162,23 @@ def table_slices(el: dict, rule) -> list[str]:
         "| " + " | ".join(_cell(c) for c in columns) + " |",
         "| " + " | ".join("---" for _ in columns) + " |",
     ]
+    # `overlap_rows` lặp N hàng cuối của mảnh trước vào đầu mảnh sau. Overlap
+    # của bậc `length` đo bằng ký tự nên cắt ngang một hàng; ở đây đơn vị là
+    # HÀNG nên mảnh sau luôn còn nguyên vài dòng ngữ cảnh phía trước.
+    step = max(1, rule.group - max(0, rule.overlap_rows))
     out = []
-    for i in range(0, len(rows), rule.group):
+    for i in range(0, len(rows), step):
+        window = rows[i : i + rule.group]
+        if not window:
+            break
         body = [
             "| " + " | ".join(_cell(c) for c in row) + " |"
-            for row in rows[i : i + rule.group]
+            for row in window
         ]
         keep_header = rule.repeat_header or i == 0
-        out.append("\n".join((header if keep_header else []) + body))
+        out.append(NEWLINE.join((header if keep_header else []) + body))
+        if i + rule.group >= len(rows):
+            break
     return out
 
 
@@ -268,6 +280,7 @@ def _emit(
     parent_chunk_id: str | None = None,
 ) -> list[Document]:
     """Một đơn vị nội dung -> Document đã gắn ngữ cảnh và metadata."""
+    budget = layer.budget
     inherit = cfg.context.inherit
     # Ngữ cảnh cho mảnh 2 trở đi: bảng bị cắt làm ba thì mảnh sau mất câu
     # "Ý nghĩa của bảng: ...", đứng một mình chỉ còn là lưới ô.
@@ -316,6 +329,10 @@ def _emit(
             text = f"{crumb}\n{text}" if crumb else text
         if cfg.filter.drop_empty and not text.strip():
             continue
+        # Bảo đảm cứng: cắt cụt ở ĐÂY, sau khi đã ghép breadcrumb và ngữ cảnh
+        # thừa hưởng, vì đó mới là chuỗi thật sự đi vào embedder.
+        if budget.on_overflow == "truncate" and measure(text, budget=budget) > budget.max:
+            text = truncate(text, budget.max, budget=budget)
         out.append(Document(
             page_content=text,
             metadata=meta.with_rendered(
@@ -383,7 +400,7 @@ def build(ir: dict, *, cfg=None) -> tuple[list[Document], list[Document]]:
     """
     cfg = cfg or CHUNK
     if cfg.mode == "general":
-        return _flat(ir, cfg, cfg), []
+        return link_neighbors(merge_underflow(_flat(ir, cfg, cfg), cfg)), []
 
     parent_layer = cfg.model_copy(
         update={"split_on": cfg.parent.split_on, "budget": cfg.parent.budget}
@@ -395,7 +412,9 @@ def build(ir: dict, *, cfg=None) -> tuple[list[Document], list[Document]]:
         if cfg.child_roles:
             kept = [e for e in ir["elements"] if e.get("role") in cfg.child_roles]
             ir = {**ir, "elements": kept or ir["elements"]}
-        return _flat(ir, cfg, cfg, parent_chunk_id=pid), [parent]
+        kids = link_neighbors(merge_underflow(
+            _flat(ir, cfg, cfg, parent_chunk_id=pid), cfg))
+        return kids, [parent]
 
     nxt = _numbering()
     parents: list[Document] = []
@@ -419,6 +438,70 @@ def split(ir: dict, *, cfg=None) -> list[Document]:
 
 
 # ---- kiểm tra và ghi ------------------------------------------------------
+
+def merge_underflow(docs: list[Document], cfg) -> list[Document]:
+    """Gộp chunk dưới sàn với chunk liền kề CÙNG section.
+
+    Gộp lùi vào chunk trước; chunk đầu tiên thì gộp tới chunk sau. Không gộp
+    xuyên section vì hai section là hai chủ đề - ghép chúng lại tạo ra một chunk
+    nói hai chuyện, tệ hơn một chunk ngắn.
+
+    Chạy SAU khi đã cắt xong chứ không lồng vào thang: gộp trong lúc cắt thì
+    một mảnh vừa bị cắt ra đã bị gộp lại ngay, và thang mất ý nghĩa.
+    """
+    budget = cfg.budget
+    if budget.on_underflow != "merge" or len(docs) < 2:
+        return docs
+
+    out: list[Document] = []
+    for doc in docs:
+        size = _size(doc.metadata, budget.unit)
+        prev = out[-1] if out else None
+        fits = (
+            prev is not None
+            and prev.metadata["section"] == doc.metadata["section"]
+            and _size(prev.metadata, budget.unit) + size <= budget.max
+        )
+        if size >= budget.min or not fits:
+            out.append(doc)
+            continue
+        out[-1] = _join(prev, doc, cfg)
+    return out
+
+
+def _join(a: Document, b: Document, cfg) -> Document:
+    """Hai chunk -> một. Metadata phải dựng lại, không chắp vá được."""
+    text = f"{a.page_content}\n{b.page_content}"
+    meta = ChunkMeta.build(
+        text=text,
+        doc_id=a.metadata["doc_id"],
+        section=a.metadata["section"],
+        table_name=a.metadata["table_name"],
+        no=a.metadata["no"],
+        part=a.metadata["part"],
+        source_path=a.metadata["source_path"],
+        element_ids=[*a.metadata["element_ids"], *b.metadata["element_ids"]],
+        line_start=a.metadata["line_start"],
+        line_end=b.metadata["line_end"],
+        parent_chunk_id=a.metadata.get("parent_chunk_id"),
+    )
+    return Document(
+        page_content=text,
+        metadata=meta.with_rendered(
+            text, n_tokens=measure(text, budget=cfg.budget)).model_dump(),
+    )
+
+
+def link_neighbors(docs: list[Document]) -> list[Document]:
+    """Gắn `prev_chunk_id`/`next_chunk_id` theo thứ tự đọc trong cùng tài liệu.
+
+    Chạy cuối cùng, sau khi gộp, vì gộp làm đổi cả số lượng lẫn `chunk_id`.
+    """
+    for before, doc, after in zip([None, *docs], docs, [*docs[1:], None]):
+        doc.metadata["prev_chunk_id"] = before.metadata["chunk_id"] if before else None
+        doc.metadata["next_chunk_id"] = after.metadata["chunk_id"] if after else None
+    return docs
+
 
 def _size(meta: dict, unit: str) -> int:
     return meta["n_tokens"] if unit == "token" else meta["n_chars"]

@@ -256,6 +256,96 @@ class TestSeparators:
         assert "một" in joined and "ba" in joined
 
 
+class TestOverlapRows:
+    """Overlap của bậc `length` đo bằng ký tự nên cắt giữa một hàng bảng;
+    `overlap_rows` lặp nguyên HÀNG nên mảnh sau còn ngữ cảnh dòng trước."""
+
+    def test_lap_hang_cuoi_sang_manh_sau(self):
+        rule = SplitRule(by="table_row", group=3, repeat_header=True, overlap_rows=1)
+        pieces = tc.table_slices(table("el_1", ROWS), rule)
+        assert "COT_2" in pieces[0] and "COT_2" in pieces[1]   # hàng cuối lặp lại
+        assert "COT_3" in pieces[1]
+
+    def test_khong_overlap_thi_khong_lap(self):
+        rule = SplitRule(by="table_row", group=3, overlap_rows=0)
+        pieces = tc.table_slices(table("el_1", ROWS), rule)
+        assert "COT_2" in pieces[0] and "COT_2" not in pieces[1]
+
+    def test_khong_lap_vo_han(self):
+        rule = SplitRule(by="table_row", group=2, overlap_rows=5)   # overlap > group
+        assert len(tc.table_slices(table("el_1", ROWS), rule)) < 20
+
+
+class TestTruncate:
+    def test_cat_cut_ve_dung_tran(self):
+        """Bảo đảm cứng duy nhất rằng không chunk nào vượt context limit."""
+        c = cfg(max=80, on_overflow="truncate")
+        docs = tc.split(TestSplit.IR, cfg=c)
+        assert docs and all(len(d.page_content) <= 80 for d in docs)
+
+    def test_keep_thi_khong_cat(self):
+        docs = tc.split(TestSplit.IR, cfg=cfg(max=80, on_overflow="keep"))
+        assert any(len(d.page_content) > 80 for d in docs)
+
+
+class TestMergeUnderflow:
+    def test_gop_chunk_duoi_san_vao_chunk_truoc(self):
+        ir = {**TestSplit.IR, "elements": [
+            heading("el_1", "Bảng T"), text("el_2", "x" * 300),
+            heading("el_3", "Bảng U"), text("el_4", "ngắn", owner="Bảng U"),
+        ]}
+        c = cfg(max=2000, min=200, on_underflow="merge")
+        docs = tc.split(ir, cfg=c)
+        assert len(docs) == 1                       # cái ngắn bị gộp vào cái trước
+        assert "ngắn" in docs[0].page_content
+        assert docs[0].metadata["element_ids"] == ["el_1", "el_2", "el_3", "el_4"]
+
+    def test_keep_thi_giu_nguyen(self):
+        ir = {**TestSplit.IR, "elements": [
+            heading("el_1", "Bảng T"), text("el_2", "x" * 300),
+            heading("el_3", "Bảng U"), text("el_4", "ngắn", owner="Bảng U"),
+        ]}
+        assert len(tc.split(ir, cfg=cfg(max=2000, min=200))) == 2
+
+    def test_khong_gop_xuyen_section(self):
+        """Hai section là hai chủ đề; ghép lại tạo chunk nói hai chuyện."""
+        a = heading("el_1", "Bảng T"); b = heading("el_3", "Bảng U")
+        b["section"] = "Nhóm khác"
+        t2 = text("el_4", "ngắn", owner="Bảng U"); t2["section"] = "Nhóm khác"
+        ir = {**TestSplit.IR, "elements": [a, text("el_2", "x" * 300), b, t2]}
+        c = cfg(max=2000, min=200, on_underflow="merge")
+        assert len(tc.split(ir, cfg=c)) == 2
+
+    def test_khong_gop_neu_vuot_tran(self):
+        ir = {**TestSplit.IR, "elements": [
+            heading("el_1", "Bảng T"), text("el_2", "x" * 300),
+            heading("el_3", "Bảng U"), text("el_4", "ngắn", owner="Bảng U"),
+        ]}
+        c = cfg(max=320, min=200, on_overflow="keep", on_underflow="merge")
+        assert len(tc.split(ir, cfg=c)) == 2
+
+
+class TestNeighbors:
+    def test_noi_hang_xom_theo_thu_tu_doc(self):
+        ir = {**TestSplit.IR, "elements": [
+            heading("el_1", "Bảng T"), text("el_2", "a" * 200),
+            heading("el_3", "Bảng U"), text("el_4", "b" * 200, owner="Bảng U"),
+            heading("el_5", "Bảng V"), text("el_6", "c" * 200, owner="Bảng V"),
+        ]}
+        docs = tc.split(ir, cfg=cfg(max=2000))
+        ids = [d.metadata["chunk_id"] for d in docs]
+        assert len(ids) == 3
+        assert docs[0].metadata["prev_chunk_id"] is None
+        assert docs[0].metadata["next_chunk_id"] == ids[1]
+        assert docs[1].metadata["prev_chunk_id"] == ids[0]
+        assert docs[2].metadata["next_chunk_id"] is None
+
+    def test_mot_chunk_thi_hai_dau_deu_none(self):
+        doc = tc.split(TestSplit.IR, cfg=cfg())[0]
+        assert doc.metadata["prev_chunk_id"] is None
+        assert doc.metadata["next_chunk_id"] is None
+
+
 class TestConfig:
     def test_descend_thi_bac_cuoi_phai_la_length(self):
         with pytest.raises(ValueError, match=r"phải\s+là .length."):

@@ -164,6 +164,10 @@ class SplitRule(BaseModel):
     level: int | None = None       # heading: cấp nào là một đơn vị nội dung
     group: int = 10                # table_row: bao nhiêu hàng một mảnh
     repeat_header: bool = True     # table_row: lặp hàng tiêu đề vào mỗi mảnh
+    # table_row: lặp N hàng cuối của mảnh trước vào đầu mảnh sau. Overlap của
+    # bậc `length` đo bằng ký tự nên cắt giữa một hàng bảng; ở đây đơn vị là
+    # HÀNG, nên mảnh sau luôn còn nguyên ngữ cảnh của vài dòng trước đó.
+    overlap_rows: int = 0
 
     # length: ranh giới thử lần lượt, từ TO tới NHỎ. Dấu ngăn bị XOÁ khỏi nội
     # dung sau khi cắt (giống `Delimiter` của Dify). Đặt cứng trong code là giả
@@ -188,10 +192,21 @@ class BudgetCfg(BaseModel):
     max: int = 1024
     min: int = 120
     overlap: int = 0
-    # Vượt trần: `descend` xuống bậc cắt sau, `keep` giữ nguyên và cảnh báo.
-    on_overflow: Literal["descend", "keep"] = "descend"
-    # Hụt sàn: `keep` giữ và cảnh báo, `drop` bỏ hẳn chunk.
-    on_underflow: Literal["keep", "drop"] = "keep"
+    # Vượt trần:
+    #   descend   xuống bậc cắt sau của thang
+    #   keep      giữ nguyên và cảnh báo - độ dài không bị cưỡng chế
+    #   truncate  cắt cụt về đúng trần. Đây là BẢO ĐẢM cứng duy nhất rằng không
+    #             chunk nào vượt context limit của embedder; cắt cụt âm thầm ở
+    #             tầng embed là kiểu hỏng tệ nhất của RAG nên thà cắt ở đây, có
+    #             cảnh báo, còn hơn để model tự nuốt mất phần đuôi.
+    on_overflow: Literal["descend", "keep", "truncate"] = "descend"
+    # Hụt sàn:
+    #   keep   giữ và cảnh báo
+    #   drop   bỏ hẳn chunk - mất dữ liệu, chỉ dùng khi chắc chắn là rác
+    #   merge  gộp với chunk liền kề cùng section. Tài liệu nhiều mục ngắn cho ra
+    #          hàng loạt chunk 30 token; ở cỡ đó vector gần như không mang tín
+    #          hiệu phân biệt vì phần lớn nội dung embedding là breadcrumb.
+    on_underflow: Literal["keep", "drop", "merge"] = "keep"
 
     model_config = {"extra": "forbid"}
 

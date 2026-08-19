@@ -32,6 +32,13 @@ class ChunkMeta(BaseModel):
     # cảnh. None nghĩa là chunk phẳng, hoặc chính nó là cha.
     parent_chunk_id: str | None = None
 
+    # Hàng xóm theo thứ tự đọc trong cùng tài liệu. Truy hồi thường trả về một
+    # chunk trả lời được nửa câu hỏi, nửa còn lại nằm ở chunk kế bên; có hai
+    # trường này thì retriever nới cửa sổ bằng một phép tra, không phải sắp xếp
+    # lại cả tài liệu.
+    prev_chunk_id: str | None = None
+    next_chunk_id: str | None = None
+
     n_chars: int = 0
     n_tokens: int | None = None
     chunk_id: str = ""
