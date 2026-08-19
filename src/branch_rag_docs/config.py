@@ -34,8 +34,8 @@ MERGED = PROCESSED_DIR / "merged_documents.jsonl"   # extract
 CHUNKS = PROCESSED_DIR / "chunked.jsonl"            # chunk
 
 # ---- chunking -------------------------------------------------------------
-CHUNK_SIZE = CFG.chunk.chunk_size
-CHUNK_OVERLAP = CFG.chunk.overlap
+CHUNK_SIZE = CFG.chunk.budget.max
+CHUNK_OVERLAP = CFG.chunk.budget.overlap
 
 # ---- embedding ------------------------------------------------------------
 # TODO: nhánh SQL dùng AITeamVN/Vietnamese_Embedding. Còn khác model thì vector

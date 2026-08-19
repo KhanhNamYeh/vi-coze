@@ -1,14 +1,10 @@
 """Các chặng offline của nhánh SQL. Mỗi thư mục con là một chặng.
 
-    parse    .docx          -> markdown có heading
-    extract  markdown       -> schema.json                    (CHƯA CÓ)
-    link     markdown       -> knowledge graph                (cờ --kg)
-    chunk    markdown       -> chunk, 1 bảng = 1 chunk
-    embed    chunk          -> vector dense + BM25 thưa
-    index    vector         -> Qdrant
-    verify   tất cả         -> đối soát ngược về tài liệu gốc (CHƯA CÓ)
+    parse    PDF/DOCX       -> canonical Markdown
+    extract  Markdown       -> independent structured elements
+    link     elements       -> parent-child + tên tổ tiên
+    graph    knowledge graph, có gọi LLM  (prototype, ngoài pipeline)
 
-Thứ tự điều phối nằm ở `pipeline.py`, không nằm ở đây. Nhánh PDF có bộ chặng
-riêng ở `src/branch_rag_docs/offline/`: cùng tên chặng, khác cách làm, nên
-không dùng chung module.
+Thứ tự điều phối nằm ở `pipeline.py`: raw -> parse -> extract -> link. Ba chặng
+đó tất định; `graph` gọi LLM nên đứng riêng, không nằm trong chain.
 """

@@ -25,10 +25,13 @@ def search(
     prefetch: int = 20,
     mode: str = "hybrid",
     section: str | None = None,
+    collection: str = COLLECTION,
 ) -> list[tuple[float, Document]]:
     """Trả [(score, Document)] đã sắp giảm dần.
 
     mode "dense" và "sparse" dùng để so sánh khi tune; production dùng "hybrid".
+    `collection` để bộ đo chạy được trên collection chunk ví dụ, mặc định vẫn là
+    collection schema.
     """
     from qdrant_client import models
 
@@ -44,20 +47,20 @@ def search(
 
     if mode == "dense":
         res = client.query_points(
-            COLLECTION, query=embed_query(query), using=DENSE_VECTOR,
+            collection, query=embed_query(query), using=DENSE_VECTOR,
             limit=k, query_filter=flt, with_payload=True,
         )
     elif mode == "sparse":
         sv = encode_query(query)
         res = client.query_points(
-            COLLECTION,
+            collection,
             query=models.SparseVector(indices=sv.indices, values=sv.values),
             using=SPARSE_VECTOR, limit=k, query_filter=flt, with_payload=True,
         )
     else:
         sv = encode_query(query)
         res = client.query_points(
-            COLLECTION,
+            collection,
             # lấy dư `prefetch` ở mỗi nhánh rồi để RRF chọn lại `k`
             prefetch=[
                 models.Prefetch(query=embed_query(query), using=DENSE_VECTOR, limit=prefetch, filter=flt),

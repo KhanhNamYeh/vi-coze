@@ -2,42 +2,98 @@
   "kb": "sql",
   "name": "Tài liệu mô tả schema CSDL",
   "description": "Mỗi mục là một bảng: ý nghĩa, danh sách cột, mối liên kết, ghi chú nghiệp vụ. Cắt theo cấu trúc vì ranh giới bảng đã rõ sẵn.",
-
   "parse": {
-    "loader": "docx_markitdown",
-    "suffixes": [".docx", ".doc", ".pdf", ".pptx", ".xlsx", ".html", ".htm"],
-    "clean": {
-      "normalize_nfc": true,
-      "strip_invisible": true,
-      "strip_html": true,
-      "block_injection": true
-    }
+    "suffixes": [
+      ".docx",
+      ".pdf"
+    ],
+    "table_heading": "^\\*\\s+\\d+\\.\\s+\\*\\*(?P<name>.+?)\\*\\*\\s*$",
+    "replacements": [
+      {
+        "pattern": "(?<=\\|\\s\\*\\*)Cột\\d+(?=\\*\\*\\s\\|)",
+        "replace": "Tên cột"
+      },
+      {
+        "pattern": "(?<=\\|\\s)Cột\\d+(?=\\s*\\|)",
+        "replace": "Tên cột"
+      }
+    ]
   },
-
   "extract": {
-    "enabled": false,
-    "extractor": "schema_extract"
+    "enabled": true,
+    "extractor": "block_extract",
+    "heading_roles": {
+      "1": "section",
+      "2": "table"
+    },
+    "strip_cell_emphasis": true,
+    "roles": [
+      {
+        "role": "table_meaning",
+        "match": [
+          "^Ý nghĩa của bảng\\s*:",
+          "^Ý nghĩa\\s*:"
+        ]
+      },
+      {
+        "role": "column_intro",
+        "match": [
+          "^Chi tiết các cột( trong bảng)?\\s*:"
+        ]
+      },
+      {
+        "role": "relation_hint",
+        "match": [
+          "^Mối liên kết\\s*:",
+          "^Liên kết\\s*:"
+        ]
+      },
+      {
+        "role": "business_rule",
+        "match": [
+          "^Ghi chú\\s*:",
+          "^Lưu ý\\s*:"
+        ]
+      }
+    ]
   },
-
   "link": {
-    "enabled": false,
-    "builder": "knowledge_graph",
-    "llm": {
-      "base_url": "http://localhost:11434/v1",
-      "model": "llama3",
-      "temperature": 0.1
+    "enabled": true
+  },
+  "chunk": {
+    "split_on": [
+      {
+        "by": "heading",
+        "level": 2
+      }
+    ],
+    "budget": {
+      "unit": "token",
+      "max": 2048,
+      "min": 120,
+      "overlap": 0,
+      "on_overflow": "keep",
+      "on_underflow": "keep"
+    },
+    "filter": {
+      "atomic_modalities": [],
+      "drop_empty": true
+    },
+    "context": {
+      "breadcrumb": {
+        "enabled": true,
+        "separator": " > ",
+        "include_doc_title": true
+      },
+      "inherit": {
+        "from_roles": [
+          "table_meaning"
+        ],
+        "max_chars": 300
+      },
+      "restore_labels": true
     }
   },
-
-  "chunk": {
-    "mode": "structural",
-    "headers": [["#", "section"], ["##", "table"]],
-    "strip_headers": false,
-    "overlap": 0,
-    "max_chars": 6000,
-    "min_chars": 200
-  },
-
   "embed": {
     "dense": {
       "model": "AITeamVN/Vietnamese_Embedding",
@@ -55,21 +111,26 @@
       "b": 0.0
     }
   },
-
   "index": {
     "store": "qdrant",
     "collection": "sqldocs__vnemb_1024__c1",
     "url": "http://localhost:6333",
     "dense_vector": "dense",
     "sparse_vector": "bm25",
-    "payload_index_fields": ["doc_id", "table_name", "section"]
+    "payload_index_fields": [
+      "doc_id",
+      "table_name",
+      "section"
+    ]
   },
-
   "retrieval": {
     "mode": "hybrid",
     "candidate_k": 20,
     "rrf_k": 40,
-    "rrf_weights": [0.5, 0.5],
+    "rrf_weights": [
+      0.5,
+      0.5
+    ],
     "rerank": {
       "model": "AITeamVN/Vietnamese_Reranker",
       "top_n": 5

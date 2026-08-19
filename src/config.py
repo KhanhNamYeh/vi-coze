@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 from typing import Literal
 
@@ -38,31 +39,91 @@ PROFILE_DIR = ROOT / "config"
 
 
 # ---- chặng parse ----------------------------------------------------------
-class CleanCfg(BaseModel):
-    """Làm sạch sau khi chuyển sang text. Tắt cái nào thì bỏ cảnh báo cái đó."""
+class ReplaceCfg(BaseModel):
+    """Sửa lỗi gõ của tài liệu nguồn, áp lên markdown trước khi tách block.
 
-    normalize_nfc: bool = True
-    strip_invisible: bool = True
-    strip_html: bool = True
-    block_injection: bool = True
+    Ở profile chứ không ở code: "Cột2" là lỗi của MỘT file, không phải luật của
+    markdown. Để nguyên thì nó thành token rác trong cả embedding lẫn BM25.
+    """
+
+    pattern: str   # regex
+    replace: str
 
     model_config = {"extra": "forbid"}
 
 
 class ParseCfg(BaseModel):
-    loader: Literal["docx_markitdown", "pdf_docling"]
+    """Chuẩn hoá NFC, bỏ ký tự vô hình / HTML / gạch ngang luôn chạy — chúng đúng
+    với mọi tài liệu nên không có cờ bật tắt. Chỉ phần phụ thuộc tài liệu cụ thể
+    mới nằm ở đây.
+
+    Không có khoá `loader`: loader chọn theo ĐUÔI FILE, không theo khai báo. Một
+    khoá mà code không đọc còn tệ hơn không có khoá, vì nó trông như đang điều
+    khiển thứ gì đó.
+    """
+
     suffixes: list[str]
-    clean: CleanCfg = Field(default_factory=CleanCfg)
+    replacements: list[ReplaceCfg] = Field(default_factory=list)
+
+    # Nhận diện dòng tên bảng trong output thô của markitdown, phải có nhóm
+    # `name` là phần dùng làm tiêu đề. Tài liệu này viết "* 1. **Bảng X**" vì tên
+    # bảng dùng style `normal` chứ không phải Heading. Đây là quy ước của MỘT bộ
+    # tài liệu nên nó phải nằm ở profile, không nằm trong code.
+    table_heading: str | None = None
 
     model_config = {"extra": "forbid"}
 
+    @property
+    def table_heading_re(self) -> re.Pattern | None:
+        return re.compile(self.table_heading) if self.table_heading else None
+
 
 # ---- chặng extract / link -------------------------------------------------
+class RoleCfg(BaseModel):
+    """Nhãn ngữ nghĩa cho một block văn bản, nhận diện bằng biểu thức chính quy.
+
+    Đây là chỗ DUY NHẤT biết tài liệu này viết "Mối liên kết:" hay "Relations:".
+    Code chỉ biết "có nhãn thì gán role", không biết nhãn nào mang nghĩa gì.
+
+    Tài liệu hay dùng hai kiểu nhãn, `match` xử được cả hai:
+
+        "Ý nghĩa: Lưu trữ..."   nhãn và nội dung cùng dòng
+        "Mối liên kết:"         nhãn đứng riêng, nội dung ở các dòng sau
+        "Liên kết qua cột X."
+
+    Kiểu thứ hai mà nội dung nằm ở block KHÁC thì `extract` để nhãn đứng một
+    mình với `text` rỗng; ghép nó với nội dung hoặc đối tượng là việc của `link`,
+    vì chỉ chặng đó dựng cây cha–con và quan hệ giữa các element.
+    """
+
+    role: str
+    match: list[str]                # regex, thử theo thứ tự, khớp cái đầu tiên
+    strip_label: bool = True        # bỏ phần nhãn khỏi text sau khi khớp
+
+    model_config = {"extra": "forbid"}
+
+    @property
+    def patterns(self) -> list[re.Pattern]:
+        return [re.compile(p, re.IGNORECASE) for p in self.match]
+
+
 class ExtractCfg(BaseModel):
-    """Văn bản -> cấu trúc. `enabled: false` nghĩa là chặng này bị bỏ qua."""
+    """Block -> nội dung theo modality. `enabled: false` thì bỏ qua chặng này."""
 
     enabled: bool = False
-    extractor: str | None = None  # "schema_extract" | "merge_documents"
+    extractor: str | None = None  # "block_extract" | "merge_documents"
+
+    # Cấp heading -> vai trò ngữ nghĩa. Đây là cấu hình của extract vì chính
+    # extract đọc heading và tạo structured element; không được đọc ngược
+    # `chunk.headers` của một chặng phía sau.
+    heading_roles: dict[int, str] = Field(default_factory=dict)
+
+    # Nhãn của block văn bản. Rỗng thì mọi paragraph đều role = null, chặng vẫn
+    # chạy và vẫn tách được bảng - chỉ là không có ngữ nghĩa nào được gán.
+    roles: list[RoleCfg] = Field(default_factory=list)
+
+    # Bỏ dấu nhấn mạnh trong ô tiêu đề bảng: "**Tên cột**" -> "Tên cột".
+    strip_cell_emphasis: bool = True
 
     model_config = {"extra": "forbid"}
 
@@ -86,40 +147,120 @@ class LinkCfg(BaseModel):
 
 
 # ---- chặng chunk ----------------------------------------------------------
-class ChunkCfg(BaseModel):
-    """`structural` cắt theo heading, `recursive` cắt theo độ dài.
+class SplitRule(BaseModel):
+    """Một bậc trong thang cắt. Thứ tự trong `split_on` LÀ thứ tự ưu tiên.
 
-    Tài liệu có ranh giới rõ (mỗi bảng một mục) thì dùng `structural` và để
-    overlap = 0. Văn bản trôi chảy thì dùng `recursive` và phải có overlap.
+    Bậc đầu cắt theo cấu trúc; chỉ khi chunk vẫn vượt ngân sách mới xuống bậc
+    sau. Nhờ vậy tài liệu có ranh giới rõ không bao giờ bị cắt giữa chừng, còn
+    tài liệu có bảng khổng lồ vẫn không sinh ra chunk quá dài.
     """
 
-    mode: Literal["structural", "recursive"] = "structural"
+    by: Literal["heading", "table_row", "length"]
 
-    # structural
-    headers: list[list[str]] = Field(default_factory=list)  # [["#","section"], ...]
-    strip_headers: bool = False
-
-    # recursive
-    chunk_size: int = 1000
-
-    # cả hai
-    overlap: int = 0
-    max_chars: int = 6000  # vượt thì cảnh báo, không tự cắt
-    min_chars: int = 200
+    level: int | None = None       # heading: cấp nào là một đơn vị nội dung
+    group: int = 10                # table_row: bao nhiêu hàng một mảnh
+    repeat_header: bool = True     # table_row: lặp hàng tiêu đề vào mỗi mảnh
 
     model_config = {"extra": "forbid"}
 
-    @property
-    def headers_to_split_on(self) -> list[tuple[str, str]]:
-        """MarkdownHeaderTextSplitter cần tuple, JSON chỉ có list."""
-        return [(h[0], h[1]) for h in self.headers]
+
+class BudgetCfg(BaseModel):
+    """Ngân sách độ dài của một chunk.
+
+    `unit: token` đếm bằng CHÍNH tokenizer của `embed.dense.model`, không phải
+    một xấp xỉ. Đây là lý do không có khoá `tokenizer` riêng: ngân sách chỉ có
+    nghĩa khi nó nói cùng ngôn ngữ với cái model sẽ đọc chunk.
+    """
+
+    unit: Literal["token", "char"] = "token"
+    max: int = 1024
+    min: int = 120
+    overlap: int = 0
+    # Vượt trần: `descend` xuống bậc cắt sau, `keep` giữ nguyên và cảnh báo.
+    on_overflow: Literal["descend", "keep"] = "descend"
+    # Hụt sàn: `keep` giữ và cảnh báo, `drop` bỏ hẳn chunk.
+    on_underflow: Literal["keep", "drop"] = "keep"
+
+    model_config = {"extra": "forbid"}
 
     @model_validator(mode="after")
     def _check(self):
-        if self.mode == "structural" and not self.headers:
-            raise ValueError("chunk.mode = 'structural' thì phải khai báo chunk.headers")
-        if self.min_chars >= self.max_chars:
-            raise ValueError("chunk.min_chars phải nhỏ hơn chunk.max_chars")
+        if self.min >= self.max:
+            raise ValueError("chunk.budget.min phải nhỏ hơn chunk.budget.max")
+        if self.overlap >= self.max:
+            raise ValueError("chunk.budget.overlap phải nhỏ hơn chunk.budget.max")
+        return self
+
+
+class FilterCfg(BaseModel):
+    """Element nào không được đụng vào, chunk nào bị bỏ."""
+
+    # Modality không bao giờ bị cắt nhỏ dù vượt ngân sách.
+    atomic_modalities: list[str] = Field(default_factory=list)
+    drop_empty: bool = True
+
+    model_config = {"extra": "forbid"}
+
+
+class BreadcrumbCfg(BaseModel):
+    """Đường dẫn tiêu đề prepend vào text trước khi embed."""
+
+    enabled: bool = True
+    separator: str = " > "
+    include_doc_title: bool = True
+
+    model_config = {"extra": "forbid"}
+
+
+class InheritCfg(BaseModel):
+    """Ngữ cảnh mà các mảnh sau của một đơn vị thừa hưởng từ mảnh đầu.
+
+    Bảng bị cắt làm ba thì mảnh 2 và 3 mất câu "Ý nghĩa của bảng: ..." - đứng
+    một mình chúng chỉ còn là lưới ô, không truy hồi được. `from_roles` khai
+    role nào mang ngữ cảnh đó.
+    """
+
+    from_roles: list[str] = Field(default_factory=list)
+    max_chars: int = 300
+
+    model_config = {"extra": "forbid"}
+
+
+class ContextCfg(BaseModel):
+    breadcrumb: BreadcrumbCfg = Field(default_factory=BreadcrumbCfg)
+    inherit: InheritCfg = Field(default_factory=InheritCfg)
+    # Dựng lại nhãn `strip_label` đã cắt: "Ý nghĩa của bảng:" là ngữ cảnh thật.
+    restore_labels: bool = True
+
+    model_config = {"extra": "forbid"}
+
+
+class ChunkCfg(BaseModel):
+    """IR -> chunk. Thang cắt + ngân sách + ngữ cảnh.
+
+    Không có khoá `mode`: thang `split_on` đã nói đủ. Tài liệu có ranh giới rõ
+    khai `heading` trước; văn bản trôi chảy khai mỗi `length`.
+    """
+
+    split_on: list[SplitRule] = Field(default_factory=list)
+    budget: BudgetCfg = Field(default_factory=BudgetCfg)
+    filter: FilterCfg = Field(default_factory=FilterCfg)
+    context: ContextCfg = Field(default_factory=ContextCfg)
+
+    model_config = {"extra": "forbid"}
+
+    @model_validator(mode="after")
+    def _check(self):
+        if not self.split_on:
+            raise ValueError("chunk.split_on phải có ít nhất một bậc")
+        # Chốt chặn chỉ cần khi thang THẬT SỰ đi xuống. `on_overflow: keep` là
+        # kịch bản "cắt theo cấu trúc, kệ độ dài" - ở đó `length` là thừa.
+        if self.budget.on_overflow == "descend" and self.split_on[-1].by != "length":
+            raise ValueError(
+                "budget.on_overflow='descend' thì bậc cuối của chunk.split_on phải "
+                "là 'length', nếu không chunk vượt trần không còn cách nào cắt nhỏ. "
+                "Muốn cắt thuần theo cấu trúc thì đặt on_overflow='keep'."
+            )
         return self
 
 
@@ -205,6 +346,22 @@ class KBConfig(BaseModel):
     retrieval: RetrievalCfg = Field(default_factory=RetrievalCfg)
 
     model_config = {"extra": "forbid"}
+
+    @model_validator(mode="after")
+    def _bac_heading_khop_extract(self):
+        """Cấp heading dùng để cắt phải là cấp mà `extract` có gán vai trò.
+
+        Hai khoá này ở hai chặng khác nhau nên rất dễ lệch: sửa
+        `extract.heading_roles` thành `{1: section, 3: table}` mà quên
+        `chunk.split_on` thì chunker im lặng cho ra 0 chunk.
+        """
+        for rule in self.chunk.split_on:
+            if rule.by == "heading" and rule.level not in self.extract.heading_roles:
+                raise ValueError(
+                    f"chunk.split_on cắt ở heading cấp {rule.level} nhưng "
+                    f"extract.heading_roles chỉ khai {sorted(self.extract.heading_roles)}"
+                )
+        return self
 
     # ---- đường dẫn: suy từ `kb`, không lưu trong JSON để profile không dính
     # đường dẫn tuyệt đối của máy nào cả

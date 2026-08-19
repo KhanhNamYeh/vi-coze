@@ -20,22 +20,21 @@ src/
 │
 ├── branch_sql/                 NHÁNH tài liệu mô tả schema CSDL (.docx)
 │   ├── config.py                   nạp config/sql.json
-│   ├── offline/                parse -> chunk -> [link] -> embed -> index
+│   ├── offline/                raw -> parse -> extract -> link -> chunk
 │   │   ├── pipeline.py             điều phối, nối bằng LCEL
 │   │   ├── parse/
-│   │   │   └── docx_parse.py           .docx -> markdown có heading
-│   │   ├── extract/                    (CHƯA CÓ: markdown -> schema.json)
+│   │   │   ├── doc_parse.py            PDF/DOCX -> canonical Markdown
+│   │   │   ├── docx_parse.py           loader DOCX
+│   │   │   └── pdf_parse.py            loader PDF
+│   │   ├── extract/
+│   │   │   ├── blocks.py               Markdown -> block trong bộ nhớ
+│   │   │   └── block_extract.py        block -> independent elements
 │   │   ├── link/
-│   │   │   └── knowledge_graph.py      graph node-link, cờ --kg
+│   │   │   └── hierarchy.py            elements -> cây cha-con
 │   │   ├── chunk/
-│   │   │   └── table_chunker.py        1 bảng = 1 chunk, overlap 0
-│   │   ├── embed/
-│   │   │   ├── dense.py                dùng chung index + query
-│   │   │   ├── sparse.py               BM25
-│   │   │   └── kg_embedder.py          embed triple (prototype)
-│   │   ├── index/
-│   │   │   └── qdrant_store.py         dense + sparse -> Qdrant
-│   │   └── verify/                     (CHƯA CÓ: coverage, trace)
+│   │   │   └── table_chunker.py        elements -> chunk + metadata
+│   │   └── graph/
+│   │       └── knowledge_graph.py      knowledge graph, có LLM (prototype)
 │   └── online/                 query -> hybrid -> RRF -> rerank
 │       ├── pipeline.py             điều phối
 │       ├── qdrant_retriever.py     hybrid dense + BM25
@@ -64,10 +63,9 @@ src/
         └── bge_reranker.py         cross-encoder bge
 ```
 
-Thư mục chặng rỗng là chỗ đứng đã đặt sẵn chứ chưa có nội dung: nhánh SQL còn
-thiếu `extract/` và `verify/` — hai chặng cần để chứng minh tri thức không mất
-mát; nhánh PDF chưa có `link/`. Xem docstring trong `__init__.py` của từng chặng
-để biết cần bổ sung gì.
+Luồng SQL kết thúc ở `chunk`; các module embed/index và `graph/` không nằm trong
+pipeline `raw -> parse -> extract -> link -> chunk` này. Bốn chặng trong pipeline
+đều tất định — `graph/` gọi LLM nên đứng ngoài.
 
 ## config/ — profile
 
@@ -77,22 +75,19 @@ Tham số không nằm trong code. Mỗi bộ tài liệu là một **profile** 
 
 ```
 config/
-├── sql.json         parse docx · chunk theo heading · Vietnamese_Embedding + BM25 · Qdrant · hybrid
+├── sql.json         parse PDF/DOCX · extract elements · link relationships
 └── rag_docs.json    parse pdf  · chunk theo token   · bge-m3                     · Chroma · dense
 ```
 
 ```jsonc
 {
   "kb": "sql",
-  "parse":     { "loader": "docx_markitdown", "clean": { "block_injection": true } },
-  "extract":   { "enabled": false, "extractor": "schema_extract" },
-  "link":      { "enabled": false, "builder": "knowledge_graph" },
-  "chunk":     { "mode": "structural", "headers": [["#","section"],["##","table"]], "overlap": 0 },
-  "embed":     { "dense": { "model": "AITeamVN/Vietnamese_Embedding", "dim": 1024 },
-                 "sparse": { "model": "Qdrant/bm25", "k": 1.2, "b": 0.0 } },
-  "index":     { "store": "qdrant", "collection": "sqldocs__vnemb_1024__c1" },
-  "retrieval": { "mode": "hybrid", "candidate_k": 20, "rrf_k": 40,
-                 "rerank": { "model": "AITeamVN/Vietnamese_Reranker", "top_n": 5 } }
+  "parse":     { "suffixes": [".docx", ".pdf"] },
+  "extract":   { "enabled": true, "extractor": "block_extract",
+                   "heading_roles": { "1": "section", "2": "table" } },
+  "link":      { "enabled": true },
+  "chunk":     { "split_on": [{ "by": "heading", "level": 2 }],
+                   "budget": { "unit": "token", "max": 2048, "on_overflow": "keep" } }
 }
 ```
 
@@ -102,7 +97,7 @@ ngay chứ không chạy sai âm thầm:
 ```python
 from src.config import KBConfig
 cfg = KBConfig.load("sql")
-cfg.chunk.max_chars      # 6000
+cfg.extract.heading_roles  # {1: "section", 2: "table"}
 cfg.processed_dir        # <repo>/data/processed/sql
 cfg.save()               # ghi ngược ra JSON, dùng khi người dùng chỉnh qua UI
 ```
@@ -110,8 +105,8 @@ cfg.save()               # ghi ngược ra JSON, dùng khi người dùng chỉn
 Thêm cách xử lý mới thì thêm một file JSON, không phải sửa code:
 
 ```bash
-cp config/sql.json config/sql_chunk_nho.json     # rồi sửa chunk.max_chars
-VI_COZE_PROFILE=sql_chunk_nho uv run python -m src.branch_sql.offline "file.docx"
+cp config/sql.json config/sql_custom.json
+VI_COZE_PROFILE=sql_custom uv run python -m src.branch_sql.offline "file.docx"
 ```
 
 Đường dẫn **không** nằm trong JSON — suy ra từ `kb`, để profile không dính đường
@@ -139,10 +134,8 @@ data/
 
 ```bash
 uv sync                              # nhánh sql
-docker compose up -d                 # Qdrant
 
 uv run python -m src.branch_sql.offline "Mô tả bảng BĐS (NEW).docx"
-uv run python -m src.branch_sql.online  "Bảng nào lưu doanh thu tài khoản chính?"
 ```
 
 ```bash
@@ -154,10 +147,10 @@ uv run python -m src.branch_rag_docs.online  "RAG gồm những thành phần n�
 Từng chặng vẫn chạy riêng được để tune:
 
 ```bash
-uv run python -m src.branch_sql.offline.parse.docx_parse    "Mô tả bảng BĐS (NEW).docx"
-uv run python -m src.branch_sql.offline.chunk.table_chunker mo_ta_bang_bds_new.md
-uv run python -m src.branch_sql.offline.index.qdrant_store  mo_ta_bang_bds_new.chunks.jsonl
-uv run python -m src.branch_sql.online.qdrant_retriever     "bảng nào lưu doanh thu TKC"
+uv run python -m src.branch_sql.offline.parse.doc_parse "Mô tả bảng BĐS (NEW).docx"
+uv run python -m src.branch_sql.offline.extract.block_extract mo_ta_bang_bds_new__docx
+uv run python -m src.branch_sql.offline.link.hierarchy mo_ta_bang_bds_new__docx
+uv run python -m src.branch_sql.offline.chunk.table_chunker mo_ta_bang_bds_new__docx
 ```
 
 Chi tiết: [docs/README-sql-pipeline.md](docs/README-sql-pipeline.md) ·

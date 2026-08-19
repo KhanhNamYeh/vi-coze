@@ -2,39 +2,51 @@
   "kb": "rag_docs",
   "name": "Tài liệu PDF",
   "description": "Văn bản trôi chảy, không có ranh giới cấu trúc sẵn như bảng, nên cắt theo độ dài và phải có overlap để câu bị cắt giữa chừng vẫn còn ngữ cảnh.",
-
   "parse": {
-    "loader": "pdf_docling",
-    "suffixes": [".pdf"],
-    "clean": {
-      "normalize_nfc": true,
-      "strip_invisible": true,
-      "strip_html": true,
-      "block_injection": true
-    }
+    "suffixes": [
+      ".pdf"
+    ]
   },
-
   "extract": {
     "enabled": true,
     "extractor": "merge_documents"
   },
-
   "link": {
     "enabled": false,
     "builder": null,
     "llm": null
   },
-
   "chunk": {
-    "mode": "recursive",
-    "headers": [],
-    "strip_headers": false,
-    "chunk_size": 1000,
-    "overlap": 150,
-    "max_chars": 6000,
-    "min_chars": 100
+    "split_on": [
+      {
+        "by": "length"
+      }
+    ],
+    "budget": {
+      "unit": "char",
+      "max": 1000,
+      "min": 100,
+      "overlap": 150,
+      "on_overflow": "descend",
+      "on_underflow": "keep"
+    },
+    "filter": {
+      "atomic_modalities": [],
+      "drop_empty": true
+    },
+    "context": {
+      "breadcrumb": {
+        "enabled": false,
+        "separator": " > ",
+        "include_doc_title": false
+      },
+      "inherit": {
+        "from_roles": [],
+        "max_chars": 300
+      },
+      "restore_labels": false
+    }
   },
-
   "embed": {
     "dense": {
       "model": "BAAI/bge-m3",
@@ -47,19 +59,20 @@
     },
     "sparse": null
   },
-
   "index": {
     "store": "chroma",
     "collection": "rag_documents",
     "subdir": "chroma",
     "payload_index_fields": []
   },
-
   "retrieval": {
     "mode": "dense",
     "candidate_k": 20,
     "rrf_k": 40,
-    "rrf_weights": [1.0, 0.0],
+    "rrf_weights": [
+      1.0,
+      0.0
+    ],
     "rerank": {
       "model": "BAAI/bge-reranker-v2-m3",
       "top_n": 5

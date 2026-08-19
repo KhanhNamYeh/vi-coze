@@ -4,7 +4,7 @@ Tham số thật nằm ở `config/sql.json`, không nằm ở đây. File này 
 lên thành object và trải ra thành hằng số cho các chặng dùng:
 
     from .config import CFG          # object, có kiểu, đọc được cả cây
-    from .config import MAX_CHARS    # lối tắt cho một giá trị lẻ
+    from .config import BUDGET_MAX   # lối tắt cho một giá trị lẻ
 
 Chạy profile khác mà không sửa code:
 
@@ -42,12 +42,16 @@ KG_INDEX = INDEX_DIR / "kb_index.npz"
 
 DOC_SUFFIXES = set(CFG.parse.suffixes)
 
-# ---- chunking -------------------------------------------------------------
-HEADERS_TO_SPLIT_ON = CFG.chunk.headers_to_split_on
-STRIP_HEADERS = CFG.chunk.strip_headers
-CHUNK_OVERLAP = CFG.chunk.overlap
-MAX_CHARS = CFG.chunk.max_chars
-MIN_CHARS = CFG.chunk.min_chars
+# ---- cấu trúc heading -----------------------------------------------------
+# Extract là chặng đọc heading, nên mapping này thuộc `extract.heading_roles`.
+# Các module cũ phía sau nếu được gọi riêng chỉ tiêu thụ kết quả đó, không còn
+# là nguồn cấu hình ngược cho extract.
+HEADING_ROLES = CFG.extract.heading_roles
+
+# ---- chunk ----------------------------------------------------------------
+CHUNK = CFG.chunk
+BUDGET_MAX = CFG.chunk.budget.max
+BUDGET_MIN = CFG.chunk.budget.min
 
 # ---- embedding ------------------------------------------------------------
 # Đổi model thì phải đổi `index.collection` trong profile và index lại toàn bộ.
