@@ -20,8 +20,8 @@
       }
     ],
     "sheets": {
-      "dev": "from schema",
-      "test": "Sheet2"
+      "dev": "dev",
+      "test": "test"
     }
   },
   "knowledge": [
@@ -383,7 +383,7 @@
   },
   "index": {
     "store": "qdrant",
-    "collection": "sqlbot1__docs",
+    "collection": "sqlp{project}__docs",
     "url": "http://localhost:6333",
     "dense_vector": "dense",
     "sparse_vector": "bm25",
@@ -392,7 +392,7 @@
       "table_name",
       "section"
     ],
-    "sql_collection": "sqlbot1__sql"
+    "sql_collection": "sqlp{project}__sql"
   },
   "retrieval": {
     "mode": "hybrid",

@@ -26,6 +26,7 @@ import numpy as np
 
 from ...config import (
     BUDGET_MAX,
+    CFG,
     CHUNK,
     COLLECTION,
     DENSE_VECTOR,
@@ -99,13 +100,33 @@ def check_vectors(rows: list[dict], vectors: dict[str, np.ndarray]) -> list[str]
     return err
 
 
-def check_index(rows: list[dict], client) -> list[str]:
+def collection_of(doc_id: str) -> str:
+    """Collection của bộ tri thức sinh ra `doc_id` này.
+
+    KHÔNG dùng hằng `index.collection` của profile: từ khi mỗi bộ tri thức khai
+    collection riêng, khoá đó là tàn dư và trỏ vào một tên không tồn tại. Tra
+    ngược từ `source` của knowledge là cách duy nhất còn đúng.
+    """
+    from ..parse.doc_parse import doc_id_of
+
+    if CFG.project is None:
+        return COLLECTION
+    for k in CFG.knowledge_of(CFG.project):
+        if doc_id_of(Path(k.source)) == doc_id:
+            return k.collection_for(CFG.project)
+    raise ValueError(
+        f"không bộ tri thức nào của dự án {CFG.project} sinh ra '{doc_id}' - "
+        f"kiểm tra `knowledge[].source` trong profile"
+    )
+
+
+def check_index(rows: list[dict], client, collection: str) -> list[str]:
     """Point trong Qdrant phải có ĐỦ hai vector và giữ được payload."""
     err: list[str] = []
     want = {r["metadata"]["chunk_id"] for r in rows}
     ids = [point_id(c) for c in want]
 
-    found = client.retrieve(COLLECTION, ids=ids, with_payload=True, with_vectors=True)
+    found = client.retrieve(collection, ids=ids, with_payload=True, with_vectors=True)
     by_pid = {str(p.id): p for p in found}
 
     if lost := [c for c in want if point_id(c) not in by_pid]:
@@ -140,19 +161,22 @@ def check_index(rows: list[dict], client) -> list[str]:
     return err
 
 
-def run(doc_id: str, *, base: Path = PROCESSED_DIR, with_index: bool = True) -> dict:
+def run(doc_id: str, *, base: Path = PROCESSED_DIR, with_index: bool = True,
+        collection: str | None = None) -> dict:
     rows = load_chunks(doc_id, base=base)
     vectors = load_vectors(doc_id, base=base)
 
     errors = check_chunks(rows) + check_vectors(rows, vectors)
     indexed = None
     if with_index:
+        collection = collection or collection_of(doc_id)
         client = get_client()
-        errors += check_index(rows, client)
-        indexed = client.count(COLLECTION, exact=True).count
+        errors += check_index(rows, client, collection)
+        indexed = client.count(collection, exact=True).count
 
     return {
         "doc_id": doc_id,
+        "collection": collection,
         "n_chunks": len(rows),
         "n_vectors": len(vectors),
         "n_points": indexed,
@@ -162,7 +186,8 @@ def run(doc_id: str, *, base: Path = PROCESSED_DIR, with_index: bool = True) -> 
 
 def report(res: dict) -> None:
     print(f"     chunk={res['n_chunks']} vector={res['n_vectors']}"
-          + (f" point(collection)={res['n_points']}" if res["n_points"] is not None else ""))
+          + (f" point={res['n_points']} @ {res['collection']}"
+             if res["n_points"] is not None else ""))
     if not res["errors"]:
         print("     ✓ toàn vẹn - index dùng được")
         return

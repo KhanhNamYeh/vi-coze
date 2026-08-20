@@ -29,7 +29,7 @@ import argparse
 import json
 import sys
 
-from ...config import CANDIDATE_K, EVAL_DIR, RRF_K, rel
+from ...config import CANDIDATE_K, CFG, EVAL_DIR, RRF_K, rel
 from ...eval import metrics as M
 from ...eval.normalize import table_key
 from ...online.qdrant_retriever import search
@@ -50,12 +50,26 @@ def load_dev(path=None) -> list[dict]:
     return cases
 
 
+def docs_collection(project: int | None = None) -> str:
+    """Collection TÀI LIỆU của một dự án. Không dùng hằng `index.collection`:
+    nguồn sự thật là `knowledge[].collection`, hằng kia chỉ là mặc định."""
+    project = project if project is not None else CFG.project
+    if project is None:
+        raise ValueError("chưa biết dự án - đặt VI_COZE_PROJECT hoặc truyền --project")
+    for k in CFG.knowledge_of(project):
+        name = k.collection_for(project)
+        if not name.endswith("__sql"):
+            return name
+    raise ValueError(f"dự án {project} không có bộ tri thức tài liệu nào")
+
+
 def ranked_tables(query: str, *, k: int, doc_id: str | None, **kw) -> list[str]:
     """Kết quả truy hồi -> danh sách tên bảng đã chuẩn hoá, giữ thứ hạng, bỏ trùng.
 
     Bỏ trùng vì cùng một bảng có thể ra từ nhiều chunk (bản DOCX và bản PDF của
     cùng tài liệu). Đếm nó hai lần là tự thổi phồng precision.
     """
+    kw.setdefault("collection", docs_collection())
     hits = search(query, k=k, doc_id=doc_id, **kw)
     out: list[str] = []
     for _, doc in hits:

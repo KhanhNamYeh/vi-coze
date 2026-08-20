@@ -74,7 +74,10 @@ BM25_B = _sparse.b if _sparse else 0.0
 QDRANT_URL = CFG.index.url
 DENSE_VECTOR = CFG.index.dense_vector
 SPARSE_VECTOR = CFG.index.sparse_vector
-COLLECTION = CFG.index.collection
+# `{project}` phải được thay NGAY ở đây. Để nguyên thì mọi consumer của hằng số
+# này gửi lên Qdrant một tên chứa dấu ngoặc và nhận 404 rất khó lần ra nguồn.
+COLLECTION = CFG.index.collection.format(project=CFG.project or "")
+SQL_COLLECTION = (CFG.index.sql_collection or "").format(project=CFG.project or "") or None
 PAYLOAD_INDEX_FIELDS = CFG.index.payload_index_fields
 
 # ---- online / search ------------------------------------------------------

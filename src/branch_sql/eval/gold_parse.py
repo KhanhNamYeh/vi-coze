@@ -10,9 +10,9 @@ SAU pipeline offline chứ không nằm trong pipeline đó.
 Nguồn nằm ở `RAW_DIR` vì đó là file người soạn, pipeline không ghi vào. Hai sheet
 sinh ra ba file, vì sheet mẫu gánh hai vai trò khác nhau:
 
-    "from schema" -> PROCESSED_DIR/fewshot.chunks.json  tri thức, đem đi index
-                  -> EVAL_DIR/dev.json                  bộ chỉnh tham số
-    "Sheet2"      -> EVAL_DIR/test.json                 bộ báo cáo cuối
+    parse.sheets["dev"]  -> PROCESSED_DIR/fewshot.chunks.json  tri thức, đem đi index
+                         -> EVAL_DIR/dev.json                  bộ chỉnh tham số
+    parse.sheets["test"] -> EVAL_DIR/test.json                 bộ báo cáo cuối
 
 `fewshot` và `dev` cùng 18 dòng nhưng khác vai trò nên tách đường dẫn: một cái là
 tri thức nạp vào hệ thống, một cái là câu hỏi dùng để chấm hệ thống. Cả hai sinh
@@ -31,7 +31,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from ..config import EVAL_DIR, PROCESSED_DIR, RAW_DIR, rel
+from ..config import CFG, EVAL_DIR, PROCESSED_DIR, RAW_DIR, rel
 from .normalize import table_key
 
 SOURCE_NAME = "Text2SQL_testcase.xlsx"
@@ -48,10 +48,15 @@ class Output:
     role: str
 
 
+# Tên sheet lấy từ `parse.sheets` của profile, KHÔNG khai lại ở đây. Khai hai nơi
+# thì đổi tên sheet trong Excel chỉ sửa được một chỗ, và chỗ còn lại hỏng im lặng
+# - đã xảy ra thật khi sheet đổi từ "from schema"/"Sheet2" sang "dev"/"test".
+_SHEETS = CFG.parse.sheets
+
 OUTPUTS = (
-    Output("from schema", PROCESSED_DIR, "fewshot.chunks.json", "tri thức, đem đi index"),
-    Output("from schema", EVAL_DIR, "dev.json", "chỉnh tham số"),
-    Output("Sheet2", EVAL_DIR, "test.json", "báo cáo cuối, chạm càng ít càng tốt"),
+    Output(_SHEETS["dev"], PROCESSED_DIR, "fewshot.chunks.json", "tri thức, đem đi index"),
+    Output(_SHEETS["dev"], EVAL_DIR, "dev.json", "chỉnh tham số"),
+    Output(_SHEETS["test"], EVAL_DIR, "test.json", "báo cáo cuối, chạm càng ít càng tốt"),
 )
 
 

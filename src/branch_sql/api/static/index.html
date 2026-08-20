@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -408,12 +408,12 @@ input[type=range].mini{max-width:130px}
       <div class="brand-mark" id="brand-mark"></div>
       <b>vi-coze</b><span class="badge-off">OFFLINE</span>
     </div>
-    <span class="hint">KNOWLEDGE STUDIO · CHẠY HOÀN TOÀN TRÊN MÁY CỦA BẠN</span>
+    <span class="hint">KNOWLEDGE STUDIO · RUNS ENTIRELY ON YOUR DEVICE</span>
   </div>
   <div class="pj-head">
     <div>
-      <h1 class="display">Dự án</h1>
-      <p class="pj-sub">Tạo chatbot tri thức riêng tư: đánh chỉ mục tài liệu, tách đoạn và nhúng vector ngay trên máy — không cần internet, không gửi dữ liệu đi đâu.</p>
+      <h1 class="display">Projects</h1>
+      <p class="pj-sub">Build a private knowledge chatbot: index documents, split text, and generate vector embeddings locally — no internet required and no data leaves your device.</p>
     </div>
     <button class="btn pri big" id="btn-newpj"></button>
   </div>
@@ -427,12 +427,12 @@ input[type=range].mini{max-width:130px}
       <div class="brand-mark sm" id="brand-mark2"></div>
       <b>vi-coze</b>
     </div>
-    <div class="side-sep">DỰ ÁN</div>
+    <div class="side-sep">PROJECT</div>
     <div class="proj-pick" id="proj-pick">
       <button id="proj-pick-btn"></button>
       <div class="proj-menu" id="proj-menu"></div>
     </div>
-    <div class="side-sep">KHÔNG GIAN LÀM VIỆC</div>
+    <div class="side-sep">WORKSPACE</div>
     <nav class="snav">
       <button data-tab="knowledge" class="on" id="nav-kb"></button>
       <button data-tab="logs" id="nav-lg"></button>
@@ -464,7 +464,7 @@ input[type=range].mini{max-width:130px}
     <div class="set-head">
       <div>
         <div class="set-crumb" id="set-crumb"></div>
-        <div class="set-title">Thiết lập Knowledge</div>
+        <div class="set-title">Knowledge Settings</div>
       </div>
       <button class="btn ghost" id="set-close" style="margin-left:auto"></button>
     </div>
@@ -512,7 +512,7 @@ input[type=range].mini{max-width:130px}
           <span class="cons-path" id="cons-path"></span>
           <div class="cons-tools">
             <div class="cflt" id="cons-flt">
-              <button data-fl="ALL" class="on">TẤT CẢ</button>
+              <button data-fl="ALL" class="on">ALL</button>
               <button data-fl="INFO">INFO</button>
               <button data-fl="WARN">WARN</button>
               <button data-fl="OK">OK</button>
@@ -530,21 +530,21 @@ input[type=range].mini{max-width:130px}
 <!-- ================= MODAL: TẠO DỰ ÁN ================= -->
 <div id="modal-pj" class="modal-bg hidden">
   <div class="modal">
-    <h3>Tạo dự án mới</h3>
-    <p class="m-sub">Mỗi dự án chứa chatbot và kho tri thức riêng của bạn.</p>
+    <h3>Create a new project</h3>
+    <p class="m-sub">Each project contains its own chatbot and knowledge bases.</p>
     <form id="pj-form" novalidate>
       <div class="fld">
-        <label for="pj-name">Tên dự án</label>
-        <input id="pj-name" type="text" placeholder="VD: Trợ lý CSKH cửa hàng" autocomplete="off" maxlength="60">
-        <div class="err" id="pj-err">Vui lòng đặt tên cho dự án.</div>
+        <label for="pj-name">Project name</label>
+        <input id="pj-name" type="text" placeholder="Example: Store support assistant" autocomplete="off" maxlength="60">
+        <div class="err" id="pj-err">Please enter a project name.</div>
       </div>
       <div class="fld">
-        <label for="pj-desc">Mô tả ngắn <span style="color:var(--tx3);text-transform:none;letter-spacing:0">(không bắt buộc)</span></label>
-        <textarea id="pj-desc" rows="2" placeholder="Chatbot này trả lời về điều gì?"></textarea>
+        <label for="pj-desc">Short description <span style="color:var(--tx3);text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea id="pj-desc" rows="2" placeholder="What does this chatbot answer questions about?"></textarea>
       </div>
       <div class="m-actions">
-        <button type="button" class="btn ghost" id="pj-cancel">Huỷ</button>
-        <button type="submit" class="btn pri" id="pj-submit">Tạo dự án</button>
+        <button type="button" class="btn ghost" id="pj-cancel">Cancel</button>
+        <button type="submit" class="btn pri" id="pj-submit">Create project</button>
       </div>
     </form>
   </div>
@@ -583,16 +583,16 @@ const ic = (n, s=16, cls='') => `<svg class="ic ${cls}" width="${s}" height="${s
 const $  = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const fmt = n => Math.round(n).toLocaleString('vi-VN');
-const kb  = b => (b/1024).toFixed(1).replace('.',',') + ' KB';
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const kb  = b => (b/1024).toFixed(1) + ' KB';
 const pad = n => String(n).padStart(2,'0');
 const ts  = () => { const d = new Date(); return d.toTimeString().slice(0,8) + '.' + String(d.getMilliseconds()).padStart(3,'0'); };
 const dts = (d=new Date()) => `${pad(d.getDate())}/${pad(d.getMonth()+1)} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 const runId = (d=new Date()) => `knowledge_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
 const chip = t => `<span class="chip">${t}</span>`;
-const numV = n => String(n).replace('.', ','); // hiển thị số thập phân kiểu vi
+const numV = n => String(n);
 
-function copyText(text, label='Đã sao chép vào clipboard'){
+function copyText(text, label='Copied to clipboard'){
   const done = () => toast(label, 'ok');
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
@@ -602,7 +602,7 @@ function fallbackCopy(text, done){
   const ta = document.createElement('textarea');
   ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
   document.body.appendChild(ta); ta.select();
-  try{ document.execCommand('copy'); done(); }catch(e){ toast('Không sao chép được', ''); }
+  try{ document.execCommand('copy'); done(); }catch(e){ toast('Unable to copy', ''); }
   ta.remove();
 }
 function toast(msg, type=''){
@@ -615,32 +615,32 @@ function toast(msg, type=''){
 
 /* ---------- Dữ liệu mô phỏng ---------- */
 const DOCS = [
-  { id:'d1', name:'chinh-sach-doi-tra.md',   label:'Chính sách đổi trả & bảo hành',      size: 48213,  type:'Markdown' },
-  { id:'d2', name:'faq-khach-hang.txt',      label:'FAQ khách hàng · 214 câu hỏi',       size:126400,  type:'Text' },
-  { id:'d3', name:'huong-dan-san-pham.pdf',  label:'Hướng dẫn sử dụng sản phẩm',         size:302118,  type:'PDF' },
-  { id:'d4', name:'quy-trinh-xu-ly-don.docx',label:'Quy trình xử lý đơn hàng',           size: 88560,  type:'DOCX' },
-  { id:'d5', name:'loi-thuong-gap.md',       label:'Mục kỹ thuật & lỗi thường gặp',      size: 64290,  type:'Markdown' },
+  { id:'d1', name:'chinh-sach-doi-tra.md',   label:'Returns & warranty policy',          size: 48213,  type:'Markdown' },
+  { id:'d2', name:'faq-khach-hang.txt',      label:'Customer FAQ · 214 questions',       size:126400,  type:'Text' },
+  { id:'d3', name:'huong-dan-san-pham.pdf',  label:'Product user guide',                 size:302118,  type:'PDF' },
+  { id:'d4', name:'quy-trinh-xu-ly-don.docx',label:'Order processing workflow',          size: 88560,  type:'DOCX' },
+  { id:'d5', name:'loi-thuong-gap.md',       label:'Technical topics & common issues',   size: 64290,  type:'Markdown' },
 ];
 const MODELS = [
-  { id:'bge-m3',    name:'BAAI/bge-m3',                                dim:1024, vps:420, desc:'Đa ngôn ngữ · mạnh cho tiếng Việt · khuyến nghị' },
-  { id:'e5-lg',     name:'intfloat/multilingual-e5-large',              dim:1024, vps:350, desc:'Cân bằng chất lượng và tốc độ' },
-  { id:'minilm',    name:'paraphrase-multilingual-MiniLM-L12-v2',       dim:384,  vps:890, desc:'Nhẹ · tốt cho máy cấu hình thấp' },
-  { id:'vi-sent',   name:'keepitreal/vietnamese-sentence-embedding',    dim:768,  vps:510, desc:'Fine-tune riêng trên văn bản tiếng Việt' },
+  { id:'bge-m3',    name:'BAAI/bge-m3',                                dim:1024, vps:420, desc:'Multilingual · strong Vietnamese support · recommended' },
+  { id:'e5-lg',     name:'intfloat/multilingual-e5-large',              dim:1024, vps:350, desc:'Balanced quality and speed' },
+  { id:'minilm',    name:'paraphrase-multilingual-MiniLM-L12-v2',       dim:384,  vps:890, desc:'Lightweight · ideal for lower-spec devices' },
+  { id:'vi-sent',   name:'keepitreal/vietnamese-sentence-embedding',    dim:768,  vps:510, desc:'Fine-tuned specifically for Vietnamese text' },
 ];
 const STRATS = {
-  fixed:   { id:'fixed_size', label:'Kích thước cố định' },
-  para:    { id:'paragraph',  label:'Theo đoạn văn' },
-  recur:   { id:'recursive',  label:'Đệ quy nhiều mức' },
+  fixed:   { id:'fixed_size', label:'Fixed size' },
+  para:    { id:'paragraph',  label:'By paragraph' },
+  recur:   { id:'recursive',  label:'Multi-level recursive' },
 };
-const RETRIEVAL = { vector:'Vector', hybrid:'Hybrid', keyword:'Từ khoá' };
+const RETRIEVAL = { vector:'Vector', hybrid:'Hybrid', keyword:'Keyword' };
 const CLEAN_RULES = [
-  'Chuẩn hoá Unicode NFC',
-  'Thu gọn khoảng trắng & dòng trống',
-  'Loại bỏ header/footer trùng lặp',
-  'Tách bảng trong PDF thành văn bản có cấu trúc',
-  'Chuẩn hoá dấu câu tiếng Việt',
+  'Normalize Unicode NFC',
+  'Collapse whitespace & blank lines',
+  'Remove duplicate headers/footers',
+  'Convert PDF tables into structured text',
+  'Normalize Vietnamese punctuation',
 ];
-const SAMPLE_TEXT = 'Khách hàng có thể yêu cầu đổi trả sản phẩm trong vòng 30 ngày kể từ ngày nhận hàng. Sản phẩm cần còn đầy đủ tem mác, hoá đơn mua hàng và chưa qua sử dụng. Với các sản phẩm lỗi do nhà sản xuất, công ty hỗ trợ đổi mới miễn phí trong 7 ngày đầu tiên. Đối với yêu cầu hoàn tiền, bộ phận kế toán sẽ xử lý trong 3 đến 5 ngày làm việc kể từ khi yêu cầu được phê duyệt. Trường hợp đơn hàng giao trễ quá 5 ngày so với cam kết, khách hàng được áp dụng mã giảm giá 10% cho lần mua tiếp theo. Mọi khiếu nại về chất lượng sản phẩm cần kèm hình ảnh hoặc video quay rõ tình trạng sản phẩm tại thời điểm nhận hàng.';
+const SAMPLE_TEXT = 'Customers may request a product return within 30 days of delivery. Products must retain all tags, include the purchase receipt, and remain unused. For manufacturer defects, the company provides a free replacement within the first 7 days. Refund requests are processed by accounting within 3 to 5 business days after approval. If an order arrives more than 5 days later than promised, the customer receives a 10% discount code for their next purchase. Product quality claims must include clear photos or video showing the product condition at delivery.';
 const SAMPLE_VECS = [
   [0.0231,-0.0872, 0.1145, 0.0519,-0.1330, 0.0902, 0.0447,-0.0168],
   [-0.0563, 0.1021,-0.0290, 0.0874, 0.0115,-0.0944, 0.1260, 0.0337],
@@ -711,9 +711,9 @@ async function loadState(){
   state.logRuns = [];
 }
 function seed(){
-  state.projects = [{ id:'prj_nhan_su', name:'Cẩm nang nhân sự', desc:'Chính sách nội bộ, quy trình nghỉ phép, phúc lợi nhân viên', created:'02/06 · 10:12' }];
+  state.projects = [{ id:'prj_nhan_su', name:'Employee handbook', desc:'Internal policies, leave procedures, and employee benefits', created:'02/06 · 10:12' }];
   state.knowledges = { prj_nhan_su: [{
-    id:'kb_ns1', name:'Nhân sự KB v1', docsCount:3, chunks:214, dims:1024,
+    id:'kb_ns1', name:'HR KB v1', docsCount:3, chunks:214, dims:1024,
     mode:'hybrid · 70/30', created:'02/06 · 10:14', runId:'run_seed', time:'9,8s', size:'0,9 MB',
   }]};
   state.logRuns = [makeSeedRun()];
@@ -722,18 +722,18 @@ function seed(){
 function makeSeedRun(){
   const dir = 'data/processed/sql/prj_nhan_su/knowledge_20250602_101244/';
   const lines = [
-    { t:'10:12:44.102', lvl:'INFO', src:'load',  msg:'Đọc nhan-su-nghi-phuc-loi.docx (74,3 KB) → 76.140 ký tự' },
-    { t:'10:12:44.861', lvl:'INFO', src:'load',  msg:'Đọc chinh-sach-noi-bo.md (31,0 KB) → 31.744 ký tự' },
-    { t:'10:12:45.402', lvl:'INFO', src:'load',  msg:'Đọc quy-trinh-tuyen-dung.pdf (58,2 KB) → 59.596 ký tự' },
-    { t:'10:12:45.911', lvl:'INFO', src:'clean', msg:'Chuẩn hoá Unicode NFC · 167.480 ký tự' },
-    { t:'10:12:46.220', lvl:'WARN', src:'clean', msg:'Phát hiện 6 bảng trong quy-trinh-tuyen-dung.pdf — chuyển đổi sang văn bản có cấu trúc' },
+    { t:'10:12:44.102', lvl:'INFO', src:'load',  msg:'Read nhan-su-nghi-phuc-loi.docx (74.3 KB) → 76,140 characters' },
+    { t:'10:12:44.861', lvl:'INFO', src:'load',  msg:'Read chinh-sach-noi-bo.md (31.0 KB) → 31,744 characters' },
+    { t:'10:12:45.402', lvl:'INFO', src:'load',  msg:'Read quy-trinh-tuyen-dung.pdf (58.2 KB) → 59,596 characters' },
+    { t:'10:12:45.911', lvl:'INFO', src:'clean', msg:'Normalized Unicode NFC · 167,480 characters' },
+    { t:'10:12:46.220', lvl:'WARN', src:'clean', msg:'Detected 6 tables in quy-trinh-tuyen-dung.pdf — converting to structured text' },
     { t:'10:12:46.845', lvl:'INFO', src:'chunk', msg:'Chiến lược fixed_size · size 512 · overlap 64' },
     { t:'10:12:47.512', lvl:'INFO', src:'chunk', msg:'Đoạn #214 · 118 tokens · offset 106.176' },
     { t:'10:12:48.104', lvl:'INFO', src:'embed', msg:'Batch 7/7 · 22 vectors · 415 vec/s' },
     { t:'10:12:52.338', lvl:'INFO', src:'index', msg:'INSERT INTO vec_chunks — 214 rows · 0,9 MB' },
-    { t:'10:12:53.105', lvl:'INFO', src:'index', msg:'Tạo chỉ mục FTS5 (bm25) cho truy vấn từ khoá' },
-    { t:'10:12:53.640', lvl:'INFO', src:'save',  msg:'Ghi config/sql.json' },
-    { t:'10:12:53.912', lvl:'OK',   src:'save',  msg:'Hoàn tất indexing "Nhân sự KB v1" · 214 đoạn · 9,8s — sẵn sàng truy vấn' },
+    { t:'10:12:53.105', lvl:'INFO', src:'index', msg:'Created FTS5 (bm25) index for keyword queries' },
+    { t:'10:12:53.640', lvl:'INFO', src:'save',  msg:'Wrote config/sql.json' },
+    { t:'10:12:53.912', lvl:'OK',   src:'save',  msg:'Finished indexing "HR KB v1" · 214 chunks · 9.8s — ready for queries' },
   ];
   return {
     id:'run_seed', projectId:'prj_nhan_su', dir,
@@ -741,7 +741,7 @@ function makeSeedRun(){
       { name:'processing.log', type:'log', lines },
       { name:'config.json', type:'json', obj: {
         project_id:'prj_nhan_su',
-        knowledge:{ name:'Nhân sự KB v1',
+        knowledge:{ name:'HR KB v1',
           chunking:{ strategy:'fixed_size', chunk_size:512, chunk_overlap:64, separator:'\\n\\n' },
           embedding:{ model:'BAAI/bge-m3', dimension:1024, batch_size:32, device:'cpu' },
           retrieval:{ mode:'hybrid', semantic_weight:0.7, keyword_weight:0.3, top_k:5, score_threshold:0.45 },
@@ -771,7 +771,7 @@ function openWorkspace(pid){
   state.currentProjectId = pid;
   const p = getProject();
   $('#ws-name').textContent = p.name;
-  $('#ws-desc').textContent = p.desc || 'Chưa có mô tả';
+  $('#ws-desc').textContent = p.desc || 'No description';
   $('#proj-pick-btn').innerHTML = `${ic('box',15)} <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</span> ${ic('chevD',14)}`;
   switchTab(state.tab === 'logs' && !state.logRuns.length ? 'knowledge' : state.tab);
   showView('workspace');
@@ -796,18 +796,18 @@ function renderProjects(){
     return `<div class="pj-row" data-open-pj="${p.id}">
       <div>
         <div class="pj-name">${ic('box',16)} ${esc(p.name)}</div>
-        <div class="pj-desc">${esc(p.desc || 'Chưa có mô tả')}</div>
+        <div class="pj-desc">${esc(p.desc || 'No description')}</div>
       </div>
       <div class="pj-side">
         <div class="pj-kb">${n} knowledge${n===1?'':'s'}</div>
         <div class="pj-time">${p.created}</div>
       </div>
     </div>`;
-  }).join('') || '<p style="color:var(--tx2)">Chưa có dự án nào — tạo dự án đầu tiên của bạn.</p>';
+  }).join('') || '<p style="color:var(--tx2)">No projects yet — create your first project.</p>';
   document.querySelector('.pj-count')?.remove();
   const c = document.createElement('div');
   c.className = 'pj-count';
-  c.textContent = `${state.projects.length} dự án · ${totalKb} knowledge · runtime local`;
+  c.textContent = `${state.projects.length} projects · ${totalKb} knowledge bases · local runtime`;
   $('#view-projects .pj-head').appendChild(c);
 }
 
@@ -819,15 +819,15 @@ function renderKnowledgeTab(){
   const list = state.knowledges[p.id] || [];
   const pane = $('#tab-knowledge');
   let html = `<div class="pane-head">
-    <div><h2>Knowledge</h2><p>Kho tri thức được đánh chỉ mục offline của dự án «${esc(p.name)}».</p></div>
-    <button class="btn pri" id="btn-open-setting">${ic('plus',15)} Tạo Knowledge</button>
+    <div><h2>Knowledge</h2><p>Offline-indexed knowledge bases for “${esc(p.name)}”.</p></div>
+    <button class="btn pri" id="btn-open-setting">${ic('plus',15)} Create Knowledge</button>
   </div>`;
   if (!list.length){
     html += `<div class="empty">
       <div class="e-ic">${ic('layers',28)}</div>
-      <h3>Chưa có Knowledge nào</h3>
-      <p>Thiết lập chunking, chọn mô hình embedding và chế độ truy xuất hybrid — sau đó để pipeline offline xử lý tài liệu của bạn thành kho tri thức.</p>
-      <button class="btn pri big" id="btn-open-setting2">${ic('play',15)} Thiết lập Knowledge</button>
+      <h3>No knowledge bases yet</h3>
+      <p>Configure chunking, choose an embedding model and retrieval mode, then let the offline pipeline turn your documents into a knowledge base.</p>
+      <button class="btn pri big" id="btn-open-setting2">${ic('play',15)} Set up Knowledge</button>
     </div>`;
   } else {
     html += `<div class="kb-list">` + list.map(k => `
@@ -839,12 +839,12 @@ function renderKnowledgeTab(){
             <span>${esc(k.source || '—')}</span>
             <span>chunk: ${esc(k.chunkMode || '—')}</span>
             <span>${esc(k.collection || '—')}</span>
-            <span>${k.origin === 'profile' ? 'khai trong profile' : 'tạo từ Studio'}</span>
+            <span>${k.origin === 'profile' ? 'defined in profile' : 'created in Studio'}</span>
           </div>
         </div>
         <div class="kb-right">
-          <button class="btn" data-run-kid="${esc(k.id)}">${ic('play',14)} Chạy lại</button>
-          <button class="btn ghost" data-log-kid="${esc(k.id)}">${ic('term',14)} Nhật ký</button>
+          <button class="btn" data-run-kid="${esc(k.id)}">${ic('play',14)} Run again</button>
+          <button class="btn ghost" data-log-kid="${esc(k.id)}">${ic('term',14)} Logs</button>
         </div>
       </div>`).join('') + `</div>`;
   }
@@ -900,14 +900,14 @@ async function renderLogsTab(){
   let runs = [], files = [];
   try{
     [runs, files] = await Promise.all([API.runs(p.id), API.get(`/api/projects/${p.id}/artifacts`)]);
-  }catch(e){ pane.innerHTML = `<div class="logs-empty"><h4>Không đọc được nhật ký</h4><p>${esc(String(e))}</p></div>`; return; }
+  }catch(e){ pane.innerHTML = `<div class="logs-empty"><h4>Unable to load logs</h4><p>${esc(String(e))}</p></div>`; return; }
 
   if (!runs.length && !files.length){
     pane.innerHTML = `<div class="logs-empty">
       <div class="e-ic">${ic('folder',24)}</div>
-      <h4>Chưa có nhật ký xử lý</h4>
-      <p>Artifact được ghi vào <span class="mono" style="color:var(--am)">data/processed/sql/p${p.id}/</span> sau lần chạy đầu tiên.</p>
-      <button class="btn pri" id="lg-cta">${ic('arrowR',14)} Đến Knowledge</button>
+      <h4>No processing logs yet</h4>
+      <p>Artifacts are written to <span class="mono" style="color:var(--am)">data/processed/sql/p${p.id}/</span> after the first run.</p>
+      <button class="btn pri" id="lg-cta">${ic('arrowR',14)} Go to Knowledge</button>
     </div>`;
     $('#lg-cta').addEventListener('click', () => switchTab('knowledge'));
     return;
@@ -919,12 +919,12 @@ async function renderLogsTab(){
 
   const badge = st => ({completed:'ok', error:'err', running:'run', queued:'pend'}[st] || '');
   const tree = `<div class="lt-root">${ic('folder',14)} data/processed/sql/p${p.id}/</div>` +
-    `<div class="lt-proj">Lần chạy (${runs.length})</div>` +
+    `<div class="lt-proj">Runs (${runs.length})</div>` +
     runs.map(r => `<div class="lt-run">
         <button data-run-t="${r.id}" class="${badge(r.status)}">${ic(r.status==='error'?'x':'check',12)} ${esc(r.id)}
           <i style="opacity:.6"> · ${esc(r.status)}${r.stage?' @ '+esc(r.stage):''}</i></button>
       </div>`).join('') +
-    `<div class="lt-proj">Artifact (${files.length})</div>` +
+    `<div class="lt-proj">Artifacts (${files.length})</div>` +
     files.map(f => `<div class="lt-run"><button data-file="${esc(f.name)}" class="${f.name===sel?'on':''}">
         ${ic(fileIcon(f.kind==='jsonl'?'jsonl':f.kind==='json'?'json':'log'),13)} ${esc(f.name)}
         <i style="opacity:.55"> · ${kb(f.size)}</i></button></div>`).join('');
@@ -939,10 +939,10 @@ async function renderLogsTab(){
   else if (sel.endsWith('.json'))
     body = renderJSONLines(JSON.parse(raw || '{}'));
   else
-    body = `<pre class="mono" style="margin:0;padding:14px;white-space:pre-wrap;line-height:1.6">${esc(raw) || '(rỗng)'}</pre>`;
+    body = `<pre class="mono" style="margin:0;padding:14px;white-space:pre-wrap;line-height:1.6">${esc(raw) || '(empty)'}</pre>`;
 
   pane.innerHTML = `<div class="pane-head">
-      <div><h2>Nhật ký xử lý</h2><p>Đọc trực tiếp từ đĩa — <span class="mono">data/processed/sql/p${p.id}/</span></p></div>
+      <div><h2>Processing logs</h2><p>Read directly from disk — <span class="mono">data/processed/sql/p${p.id}/</span></p></div>
     </div>
     <div class="logs-grid">
       <div class="ltree">${tree}</div>
@@ -950,7 +950,7 @@ async function renderLogsTab(){
         <div class="lview-head">
           ${ic('file',14)}
           <span class="p">data/processed/sql/p${p.id}/${esc(sel)}</span>
-          <button class="btn" id="lv-copy">${ic('copy',13)} Sao chép</button>
+          <button class="btn" id="lv-copy">${ic('copy',13)} Copy</button>
         </div>
         <div class="lview-body">${body}</div>
       </div>
@@ -965,7 +965,7 @@ async function renderLogsTab(){
     renderLogsTab();
     toast(`${b.dataset.runT}: ${Object.keys(st).filter(k=>!['doc_id','dir'].includes(k)).join(' · ')}`, 'ok');
   }));
-  $('#lv-copy').addEventListener('click', () => copyText(raw, 'Đã sao chép ' + sel));
+  $('#lv-copy').addEventListener('click', () => copyText(raw, 'Copied ' + sel));
 }
 
 
@@ -1063,53 +1063,53 @@ function renderSettingForm(){
 
   $('#set-form').innerHTML = `
   <div class="f-sec">
-    <div class="f-num">01 · THÔNG TIN</div>
-    <h3>Knowledge cơ bản</h3>
-    <p class="f-hint">Tên hiển thị của kho tri thức trong dự án này.</p>
-    <input class="txt-in" id="f-name" value="${esc(f.kbName)}" maxlength="60" placeholder="Tên knowledge">
+    <div class="f-num">01 · INFORMATION</div>
+    <h3>Knowledge basics</h3>
+    <p class="f-hint">The display name of this knowledge base in the project.</p>
+    <input class="txt-in" id="f-name" value="${esc(f.kbName)}" maxlength="60" placeholder="Knowledge name">
   </div>
 
   <div class="f-sec">
-    <div class="f-num">02 · NGUỒN TÀI LIỆU</div>
-    <h3>Chọn tệp đầu vào</h3>
-    <p class="f-hint">Tệp trong <code>data/raw/sql/</code>. Đuôi phải nằm trong <code>parse.suffixes</code> của profile.</p>
+    <div class="f-num">02 · DOCUMENT SOURCE</div>
+    <h3>Select an input file</h3>
+    <p class="f-hint">Files in <code>data/raw/sql/</code>. The extension must be included in the profile's <code>parse.suffixes</code>.</p>
     <div class="docs" id="src-list"></div>
-    <div class="flbl"><span>Tải tệp mới lên</span></div>
+    <div class="flbl"><span>Upload a new file</span></div>
     <input type="file" id="f-upload" class="txt-in">
     <div class="doc-sum" id="doc-sum"></div>
   </div>
 
   <div class="f-sec">
     <div class="f-num">03 · CHUNKING</div>
-    <h3>Tách đoạn văn bản</h3>
-    <p class="f-hint">Khớp 1-1 với <code>ChunkCfg</code>. Thang cắt chạy theo thứ tự bậc; chỉ xuống bậc sau khi chunk vượt trần.</p>
+    <h3>Split text into chunks</h3>
+    <p class="f-hint">Maps directly to <code>ChunkCfg</code>. Split rules run in order and proceed to the next level only when a chunk exceeds the maximum.</p>
 
-    <div class="flbl"><span>Chế độ</span><span class="fhint">parent-child: khớp bằng con, trả về cha</span></div>
+    <div class="flbl"><span>Mode</span><span class="fhint">parent-child: match children, return parents</span></div>
     <div class="seg" id="f-mode">
       <button data-v="general" class="on">general</button>
       <button data-v="parent_child">parent_child</button>
     </div>
 
-    <div class="flbl"><span>Bậc 1 · heading</span><span class="fhint">một heading cấp N = một chunk</span></div>
+    <div class="flbl"><span>Level 1 · heading</span><span class="fhint">one level-N heading = one chunk</span></div>
     <div class="srow">
-      <label class="doc sm" id="f-use-heading"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>bật</b></span></label>
+      <label class="doc sm" id="f-use-heading"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>enabled</b></span></label>
       <input class="txt-in nb" id="f-hlevel" type="number" min="1" max="6" style="max-width:80px">
     </div>
 
-    <div class="flbl"><span>Bậc 2 · table_row</span><span class="fhint">bảng dài → nhóm hàng, lặp header</span></div>
+    <div class="flbl"><span>Level 2 · table_row</span><span class="fhint">long tables → group rows, repeat header</span></div>
     <div class="srow">
-      <label class="doc sm" id="f-use-trow"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>bật</b></span></label>
-      <input class="txt-in nb" id="f-group" type="number" min="1" style="max-width:80px" title="hàng mỗi mảnh">
-      <input class="txt-in nb" id="f-ovrows" type="number" min="0" style="max-width:80px" title="overlap theo HÀNG">
+      <label class="doc sm" id="f-use-trow"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>enabled</b></span></label>
+      <input class="txt-in nb" id="f-group" type="number" min="1" style="max-width:80px" title="rows per chunk">
+      <input class="txt-in nb" id="f-ovrows" type="number" min="0" style="max-width:80px" title="overlap by ROW">
     </div>
 
-    <div class="flbl"><span>Bậc 3 · length</span><span class="fhint">chốt chặn cuối; dấu ngăn cách nhau bằng |</span></div>
+    <div class="flbl"><span>Level 3 · length</span><span class="fhint">final fallback; separate delimiters with |</span></div>
     <div class="srow">
-      <label class="doc sm" id="f-use-length"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>bật</b></span></label>
+      <label class="doc sm" id="f-use-length"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>enabled</b></span></label>
       <input class="txt-in" id="f-seps" style="flex:1" title="separators">
     </div>
 
-    <div class="flbl"><span>Ngân sách</span><span class="fhint">đơn vị · trần · sàn · overlap</span></div>
+    <div class="flbl"><span>Budget</span><span class="fhint">unit · maximum · minimum · overlap</span></div>
     <div class="srow">
       <div class="seg sm" id="f-unit"><button data-v="token" class="on">token</button><button data-v="char">char</button></div>
       <input class="txt-in nb" id="f-max" type="number" min="1" style="max-width:96px" title="budget.max">
@@ -1117,26 +1117,26 @@ function renderSettingForm(){
       <input class="txt-in nb" id="f-ov" type="number" min="0" style="max-width:96px" title="budget.overlap">
     </div>
 
-    <div class="flbl"><span>Vượt trần</span><span class="fhint">truncate là bảo đảm cứng duy nhất</span></div>
+    <div class="flbl"><span>Over maximum</span><span class="fhint">truncate is the only strict guarantee</span></div>
     <div class="seg" id="f-over">
       <button data-v="descend">descend</button><button data-v="keep" class="on">keep</button><button data-v="truncate">truncate</button>
     </div>
 
-    <div class="flbl"><span>Hụt sàn</span><span class="fhint">merge gộp với chunk kề cùng section</span></div>
+    <div class="flbl"><span>Under minimum</span><span class="fhint">merge combines adjacent chunks in the same section</span></div>
     <div class="seg" id="f-under">
       <button data-v="keep" class="on">keep</button><button data-v="merge">merge</button><button data-v="drop">drop</button>
     </div>
 
     <div id="f-cr-wrap" style="display:none">
-      <div class="flbl"><span>child_roles</span><span class="fhint">tầng con chỉ giữ role này, cách nhau bằng dấu phẩy</span></div>
+      <div class="flbl"><span>child_roles</span><span class="fhint">keep only these roles in children, separated by commas</span></div>
       <input class="txt-in" id="f-croles" placeholder="sample_query">
     </div>
   </div>
 
   <div class="f-sec">
     <div class="f-num">04 · EMBEDDING</div>
-    <h3>Mô hình nhúng vector</h3>
-    <p class="f-hint">Chạy hoàn toàn offline trên CPU của máy bạn.</p>
+    <h3>Vector embedding model</h3>
+    <p class="f-hint">Runs entirely offline on your device's CPU.</p>
     <div class="msel" id="msel">
       <button type="button" class="msel-btn">${esc(model.name)} <span class="dim">${model.dim}d</span> ${ic('chevD',15)}</button>
       <div class="msel-menu">${MODELS.map(m=>`
@@ -1149,31 +1149,31 @@ function renderSettingForm(){
   </div>
 
   <div class="f-sec">
-    <div class="f-num">05 · TRUY XUẤT</div>
-    <h3>Chế độ tìm kiếm</h3>
-    <p class="f-hint">Cách chatbot truy vấn lại kho tri thức khi trả lời.</p>
+    <div class="f-num">05 · RETRIEVAL</div>
+    <h3>Search mode</h3>
+    <p class="f-hint">How the chatbot retrieves information from the knowledge base when answering.</p>
     <div class="seg" id="f-mode">${Object.entries(RETRIEVAL).map(([k,v])=>`<button data-v="${k}" class="${f.mode===k?'on':''}">${v}</button>`).join('')}</div>
 
     <div class="hyb ${f.mode==='hybrid'?'':'hyb-off'}" id="hyb">
       <div class="hyb-inner">
         <div class="hyb-labels">
-          <span class="l-vec">Ngữ nghĩa (vector) · <span id="hyb-v">${f.ratio}%</span></span>
-          <span class="l-kw">Từ khoá (BM25) · <span id="hyb-k">${100-f.ratio}%</span></span>
+          <span class="l-vec">Semantic (vector) · <span id="hyb-v">${f.ratio}%</span></span>
+          <span class="l-kw">Keyword (BM25) · <span id="hyb-k">${100-f.ratio}%</span></span>
         </div>
         <input type="range" id="f-ratio" min="0" max="100" step="5" value="${f.ratio}">
         <div class="hyb-formula" id="hyb-f"></div>
       </div>
-      ${f.mode!=='hybrid' ? `<div class="hyb-note">Tỉ lệ trộn chỉ áp dụng cho chế độ Hybrid.</div>` : ''}
+      ${f.mode!=='hybrid' ? `<div class="hyb-note">The blend ratio only applies to Hybrid mode.</div>` : ''}
     </div>
 
-    <div class="flbl"><span>Số kết quả trả về (top-k)</span></div>
+    <div class="flbl"><span>Number of results (top-k)</span></div>
     <div class="num-in">
       <button type="button" id="tk-m">−</button>
       <input id="f-topk" type="number" min="1" max="20" value="${f.topK}">
       <button type="button" id="tk-p">+</button>
     </div>
 
-    <div class="flbl"><span>Ngưỡng điểm (score threshold)</span><span class="fhint">bỏ qua kết quả dưới ngưỡng</span></div>
+    <div class="flbl"><span>Score threshold</span><span class="fhint">ignore results below the threshold</span></div>
     <div class="srow">
       <input type="range" id="f-th" min="0" max="0.9" step="0.05" value="${f.threshold}">
       <span class="sval" id="f-th-v">${numV(f.threshold.toFixed(2))}</span>
@@ -1181,10 +1181,10 @@ function renderSettingForm(){
   </div>`;
 
   $('#set-actions').innerHTML = `
-    <button class="btn ghost" id="f-reset">${ic('back',14)} Mặc định</button>
+    <button class="btn ghost" id="f-reset">${ic('back',14)} Reset to defaults</button>
     <span style="flex:1"></span>
     <span class="mono" id="f-est" style="font-size:11.5px;color:var(--tx3)"></span>
-    <button class="btn pri big" id="f-create">${ic('play',15)} Tạo Knowledge</button>`;
+    <button class="btn pri big" id="f-create">${ic('play',15)} Create Knowledge</button>`;
 
   /* ---- bindings ---- */
   const seg = (id, key, after) => $$(`#${id} button`).forEach(btn =>
@@ -1206,12 +1206,12 @@ function renderSettingForm(){
   const refreshDerived = () => {
     $('#f-cr-wrap').style.display = f.mode === 'parent_child' ? '' : 'none';
     $('#doc-sum').innerHTML = f.source
-      ? `<span>nguồn: <b>${esc(f.source)}</b></span>`
-      : `<span>chưa chọn nguồn</span>`;
+      ? `<span>source: <b>${esc(f.source)}</b></span>`
+      : `<span>no source selected</span>`;
     $('#f-create').disabled = !f.source || !f.kbName.trim();
     $('#f-est').textContent = f.source
-      ? `${f.mode} · ${chunkCfg(f).split_on.map(r=>r.by).join(' → ') || 'chưa bật bậc nào'}`
-      : 'chọn một tệp nguồn';
+      ? `${f.mode} · ${chunkCfg(f).split_on.map(r=>r.by).join(' → ') || 'no levels enabled'}`
+      : 'select a source file';
   };
 
   /* nguồn: lấy thật từ API */
@@ -1219,25 +1219,25 @@ function renderSettingForm(){
     $('#src-list').innerHTML = rows.map(r => `
       <label class="doc ${f.source===r.name?'on':''} ${r.supported?'':'dis'}" data-src="${esc(r.name)}">
         <span class="doc-ic">${ic('file',16)}</span>
-        <span class="doc-name"><b>${esc(r.name)}</b><i>${r.supported?'hỗ trợ':'đuôi không khai trong parse.suffixes'}</i></span>
+        <span class="doc-name"><b>${esc(r.name)}</b><i>${r.supported?'supported':'extension not listed in parse.suffixes'}</i></span>
         <span class="doc-size">${kb(r.size)}</span>
         <span class="doc-chk">${ic('check',12)}</span>
       </label>`).join('');
     $$('#src-list .doc').forEach(el => el.addEventListener('click', () => {
-      if (el.classList.contains('dis')) return toast('Đuôi file không có trong parse.suffixes', 'err');
+      if (el.classList.contains('dis')) return toast('File extension is not included in parse.suffixes', 'err');
       f.source = el.dataset.src;
       $$('#src-list .doc').forEach(x => x.classList.remove('on')); el.classList.add('on');
       refreshDerived(); updateJSON();
     }));
   };
-  API.sources().then(paintSources).catch(e => toast('Không đọc được nguồn: ' + e, 'err'));
+  API.sources().then(paintSources).catch(e => toast('Unable to load sources: ' + e, 'err'));
 
   $('#f-upload').addEventListener('change', async e => {
     const file = e.target.files[0]; if (!file) return;
     const fd = new FormData(); fd.append('file', file);
     const r = await fetch('/api/sources', { method:'POST', body: fd });
-    if (!r.ok){ toast(`Tải lên hỏng: ${await r.text()}`, 'err'); return; }
-    toast(`Đã tải ${file.name}`, 'ok');
+    if (!r.ok){ toast(`Upload failed: ${await r.text()}`, 'err'); return; }
+    toast(`Uploaded ${file.name}`, 'ok');
     API.sources().then(paintSources);
   });
 
@@ -1268,7 +1268,7 @@ function renderSettingForm(){
   /* actions */
   $('#f-reset').addEventListener('click', () => {
     state.form = { ...DEFAULT_FORM }; renderSettingForm(); updateJSON();
-    toast('Đã đặt lại cấu hình mặc định');
+    toast('Default settings restored');
   });
   $('#f-create').addEventListener('click', async () => {
     if (!f.source || !f.kbName.trim()) return;
@@ -1276,7 +1276,7 @@ function renderSettingForm(){
     try{
       await API.post(`/api/projects/${p.id}/knowledge`, buildConfig());
       await loadState();
-    }catch(e){ toast('Tạo knowledge hỏng: ' + e, 'err'); return; }
+    }catch(e){ toast('Unable to create knowledge: ' + e, 'err'); return; }
     persist();
     $('#ovl-setting').classList.add('hidden');
     openPipeline(f.kid);
@@ -1326,7 +1326,7 @@ async function openPipeline(kidArg){
 
   /* --- header console --- */
   $('#pl-title').innerHTML = `${ic('layers',18)} ${esc(f.kbName)}`;
-  $('#pl-sub').textContent = `${p.name} · indexing offline · ${fmt(nChunks)} vector dự kiến`;
+  $('#pl-sub').textContent = `${p.name} · offline indexing · ${fmt(nChunks)} estimated vectors`;
   $('#cons-tab').innerHTML = `${ic('term',13)} processing.log`;
   $('#cons-path').textContent = dir + 'processing.log';
   $('#cons-body').innerHTML = ''; $('#cons-body').dataset.fl = 'ALL';
@@ -1337,7 +1337,7 @@ async function openPipeline(kidArg){
   $$('#pl-speed button').forEach(b => b.classList.toggle('on', b.dataset.sp === '1'));
   $('#ovl-pipeline').classList.remove('hidden');
 
-  appendLog('INFO','boot', `Khởi động pipeline offline · dự án ${p.id}`);
+  appendLog('INFO','boot', `Starting offline pipeline · project ${p.id}`);
 
   /* Gửi job thật rồi cho engine chạy theo trạng thái server trả về. Không gửi
      được thì rơi về chế độ mô phỏng để giao diện vẫn xem được, và nói rõ. */
@@ -1349,19 +1349,19 @@ async function openPipeline(kidArg){
       const run = await API.startRun({ project: Number(p.id), knowledge_id: kid });
       PL.runId = run.id;
       $('#cons-path').textContent = `data/processed/sql/p${p.id}/runs/${run.id}.log`;
-      appendLog('INFO','api', `Đã xếp hàng ${run.id} · hàng đợi ${run.queue_depth}`);
+      appendLog('INFO','api', `Queued ${run.id} · queue depth ${run.queue_depth}`);
     }catch(e){
-      appendLog('WARN','api', `Không gửi được job (${e}) — chạy chế độ mô phỏng`);
+      appendLog('WARN','api', `Unable to submit job (${e}) — running in simulation mode`);
     }
   } else {
-    appendLog('WARN','api', 'Dự án chưa có knowledge nào — chạy chế độ mô phỏng');
+    appendLog('WARN','api', 'This project has no knowledge bases — running in simulation mode');
   }
 
   /* --- định nghĩa 6 stage --- */
   const SQL_LINE = `INSERT INTO vec_chunks(chunk_id, embedding) SELECT chunk_id, vec_f32(embedding) FROM staging;`;
   const stageDefs = [
   { /* 1 · LOAD */
-    title:'parse · Tài liệu → Markdown', desc:`${docs.length} tệp · ${kb(charsIn)} · UTF-8`, dur:2000,
+    title:'parse · Documents → Markdown', desc:`${docs.length} files · ${kb(charsIn)} · UTF-8`, dur:2000,
     detail(){ return `<div class="frows">${PL.docs.map((d,i)=>`
         <div class="frow2" data-fi="${i}">${ic('file',13)}<span class="fr-name">${d.name}</span><span class="fr-st">—</span></div>`).join('')}
       </div><div class="chips" data-chips></div>`; },
@@ -1371,15 +1371,15 @@ async function openPipeline(kidArg){
       this.rows.forEach((r,i)=>{
         const st = r.querySelector('.fr-st');
         r.classList.toggle('ok', i<done); r.classList.toggle('run', i===done && p<1);
-        if (i<done) st.innerHTML = `${ic('check',11)} ${fmt(PL.docs[i].size)} ký tự`;
-        else if (i===done) st.textContent = 'đang đọc…';
+        if (i<done) st.innerHTML = `${ic('check',11)} ${fmt(PL.docs[i].size)} characters`;
+        else if (i===done) st.textContent = 'reading…';
       });
-      b.querySelector('[data-chips]').innerHTML = chip(`<b>${done}/${PL.docs.length}</b> tệp`) + chip(`<b>${fmt(charsIn)}</b> ký tự`);
+      b.querySelector('[data-chips]').innerHTML = chip(`<b>${done}/${PL.docs.length}</b> files`) + chip(`<b>${fmt(charsIn)}</b> characters`);
     },
-    logs: docs.map((d,i)=>({ at:(i+0.92)/docs.length, lvl:'INFO', src:'load', msg:`Đọc ${d.name} (${kb(d.size)}) → ${fmt(d.size)} ký tự` })),
+    logs: docs.map((d,i)=>({ at:(i+0.92)/docs.length, lvl:'INFO', src:'load', msg:`Read ${d.name} (${kb(d.size)}) → ${fmt(d.size)} characters` })),
   },
   { /* 2 · CLEAN */
-    title:'extract · Markdown → structured elements', desc:'Unicode · khoảng trắng · bảng biểu', dur:1600,
+    title:'extract · Markdown → structured elements', desc:'Unicode · whitespace · tables', dur:1600,
     detail(){ return `<div class="frows">${CLEAN_RULES.map((r,i)=>`
         <div class="frow2" data-ri="${i}"><span class="fr-name">${r}</span><span class="fr-st">—</span></div>`).join('')}
       </div><div class="chips" data-chips></div>`; },
@@ -1393,31 +1393,31 @@ async function openPipeline(kidArg){
         else if (i===done) st.textContent = '…';
       });
       const cur = Math.round(charsIn + (charsOut-charsIn)*p);
-      b.querySelector('[data-chips]').innerHTML = chip(`<b>${fmt(cur)}</b> ký tự`) + chip(`−<b>4,2%</b> sau làm sạch`);
+      b.querySelector('[data-chips]').innerHTML = chip(`<b>${fmt(cur)}</b> characters`) + chip(`−<b>4.2%</b> after cleaning`);
     },
     logs: CLEAN_RULES.map((r,i)=>({
       at:(i+0.92)/5,
-      lvl: r.includes('bảng') ? 'WARN' : 'INFO', src:'clean',
-      msg: r.includes('bảng') ? 'Phát hiện 14 bảng trong huong-dan-san-pham.pdf — chuyển đổi sang văn bản có cấu trúc' : r + ' · OK'
+      lvl: r.includes('tables') ? 'WARN' : 'INFO', src:'clean',
+      msg: r.includes('tables') ? 'Detected 14 tables in huong-dan-san-pham.pdf — converting to structured text' : r + ' · OK'
     })),
   },
   { /* 3 · LINK */
-    title:'link · Gắn cây cha–con', desc:`${STRATS[f.strategy].label} · size ${f.chunkSize} · overlap ${f.overlap} tokens`, dur:2100,
-    detail(){ return `<div class="chunk-live"><span class="cl-num" data-n>0</span><span class="cl-lbl">đoạn được tạo</span></div>
+    title:'link · Build parent–child tree', desc:`${STRATS[f.strategy].label} · size ${f.chunkSize} · overlap ${f.overlap} tokens`, dur:2100,
+    detail(){ return `<div class="chunk-live"><span class="cl-num" data-n>0</span><span class="cl-lbl">chunks created</span></div>
       <div class="cl-viz">${chunkVizSVG(f.chunkSize, f.overlap, 3200, true)}</div><div class="chips" data-chips></div>`; },
     progress(p, b){
       const c = Math.floor(p * PL.nChunks);
       const el = b.querySelector('[data-n]'); if (el) el.textContent = fmt(c);
       b.querySelectorAll('[data-ci]').forEach(rc => { if (+rc.dataset.ci < Math.floor(p*12)) rc.classList.add('on'); });
       b.querySelector('[data-chips]').innerHTML =
-        chip(`<b>${fmt(PL.nChunks)}</b> đoạn`) + chip(`size <b>${f.chunkSize}</b>`) + chip(`overlap <b>${f.overlap}</b>`) + chip(`<b>${fmt(PL.tokens)}</b> tokens`);
+        chip(`<b>${fmt(PL.nChunks)}</b> chunks`) + chip(`size <b>${f.chunkSize}</b>`) + chip(`overlap <b>${f.overlap}</b>`) + chip(`<b>${fmt(PL.tokens)}</b> tokens`);
     },
     logs: Array.from({length:13}, (_,i)=>({ at: 0.04 + i*0.072, lvl:'INFO', src:'chunk',
       msg: (()=>{ const idx = Math.max(1, Math.floor((0.04+i*0.072)*PL.nChunks));
-        return `Đoạn #${fmt(idx)} · ${f.chunkSize} tokens · offset ${fmt(idx*PL.step)}`; })() })),
+        return `Chunk #${fmt(idx)} · ${f.chunkSize} tokens · offset ${fmt(idx*PL.step)}`; })() })),
   },
   { /* 4 · CHUNK */
-    title:'chunk · Elements → chunk' + model.name.split('/').pop(), desc:`${model.dim} chiều · batch 32 · cpu`, dur:5200,
+    title:'chunk · Elements → chunk' + model.name.split('/').pop(), desc:`${model.dim} dimensions · batch 32 · cpu`, dur:5200,
     detail(){ return `<div class="chips" data-chips></div><div class="bgrid" data-bg>${
         Array.from({length:nBatches},()=>'<span class="bcell"></span>').join('')}</div>`; },
     progress(p, b){
@@ -1442,22 +1442,22 @@ async function openPipeline(kidArg){
         chip(`INSERT <b>${fmt(rows)}/${fmt(PL.nChunks)}</b> rows`) + chip(`db <b>${numV((dbMB*p).toFixed(1))} MB</b>`) + chip(`FTS5 <b>${p>0.8?'OK':'…'}</b>`);
     },
     logs: [
-      { at:0.02, lvl:'INFO', src:'index', msg:`Khởi tạo ${dir}index.sqlite (sqlite-vec v0.1.6)` },
+      { at:0.02, lvl:'INFO', src:'index', msg:`Initialized ${dir}index.sqlite (sqlite-vec v0.1.6)` },
       { at:0.10, lvl:'INFO', src:'index', msg:'CREATE TABLE vec_chunks (id INTEGER PRIMARY KEY, chunk_id TEXT, embedding BLOB)' },
-      { at:0.55, lvl:'INFO', src:'index', msg:`INSERT INTO vec_chunks — ${fmt(PL.nChunks)} rows theo batch 500/txn` },
-      { at:0.80, lvl:'INFO', src:'index', msg:'CREATE VIRTUAL TABLE chunks_fts USING fts5(chunk_id, text) — cho truy vấn BM25' },
-      { at:0.96, lvl:'OK',   src:'index', msg:`ANALYZE + VACUUM hoàn tất · ${numV(dbMB.toFixed(1))} MB` },
+      { at:0.55, lvl:'INFO', src:'index', msg:`INSERT INTO vec_chunks — ${fmt(PL.nChunks)} rows in batches of 500/txn` },
+      { at:0.80, lvl:'INFO', src:'index', msg:'CREATE VIRTUAL TABLE chunks_fts USING fts5(chunk_id, text) — for BM25 queries' },
+      { at:0.96, lvl:'OK',   src:'index', msg:`ANALYZE + VACUUM completed · ${numV(dbMB.toFixed(1))} MB` },
     ],
   },
   { /* 6 · INDEX */
-    title:'index · Vào Qdrant', desc:'config/sql.json · ' + dir, dur:1500,
+    title:'index · Write to Qdrant', desc:'config/sql.json · ' + dir, dur:1500,
     detail(){
       const paths = [
-        ['config/sql.json', 'snapshot cấu hình knowledge'],
+        ['config/sql.json', 'knowledge configuration snapshot'],
         [dir + 'index.sqlite', `${fmt(PL.nChunks)} vectors · ${numV(dbMB.toFixed(1))} MB`],
-        [dir + 'processing.log', 'nhật ký pipeline'],
-        [dir + 'chunks_sample.jsonl', ' mẫu các đoạn đã tách'],
-        [dir + 'index.meta.json', 'siêu dữ liệu chỉ mục'],
+        [dir + 'processing.log', 'pipeline log'],
+        [dir + 'chunks_sample.jsonl', 'sample chunks'],
+        [dir + 'index.meta.json', 'index metadata'],
       ];
       return `<div class="frows">${paths.map(([pa,d])=>`
         <div class="frow2" data-pa="${pa}">${ic('file',13)}<span class="fr-name">${pa}</span><span class="fr-st">${esc(d)}</span></div>`).join('')}
@@ -1473,10 +1473,10 @@ async function openPipeline(kidArg){
       });
     },
     logs: [
-      { at:0.15, lvl:'INFO', src:'save', msg:'Ghi config/sql.json — snapshot cấu hình knowledge' },
-      { at:0.35, lvl:'INFO', src:'save', msg:`Đồng bộ index.sqlite → ${dir}` },
-      { at:0.55, lvl:'INFO', src:'save', msg:`Ghi processing.log · ${'{L}'} dòng` },
-      { at:0.75, lvl:'INFO', src:'save', msg:'Ghi chunks_sample.jsonl + index.meta.json' },
+      { at:0.15, lvl:'INFO', src:'save', msg:'Wrote config/sql.json — knowledge configuration snapshot' },
+      { at:0.35, lvl:'INFO', src:'save', msg:`Synced index.sqlite → ${dir}` },
+      { at:0.55, lvl:'INFO', src:'save', msg:`Wrote processing.log · ${'{L}'} lines` },
+      { at:0.75, lvl:'INFO', src:'save', msg:'Wrote chunks_sample.jsonl + index.meta.json' },
     ],
   },
   ];
@@ -1545,27 +1545,27 @@ async function openPipeline(kidArg){
 /* Panel chi tiết vẽ từ số liệu THẬT của artifact. Chặng chưa ghi xong thì
    không có khoá tương ứng trong /stats - hiện "đang chạy" chứ không bịa số. */
 const STAT_ROWS = {
-  parse:   st => [['ký tự', fmt(st.chars)], ['dòng', fmt(st.lines)],
-                  ['heading #', st.h1], ['heading ##', st.h2], ['dòng bảng', fmt(st.tables)]],
-  extract: st => [['element', fmt(st.elements)], ['hàng dữ liệu', fmt(st.rows)],
+  parse:   st => [['characters', fmt(st.chars)], ['lines', fmt(st.lines)],
+                  ['heading #', st.h1], ['heading ##', st.h2], ['table rows', fmt(st.tables)]],
+  extract: st => [['elements', fmt(st.elements)], ['data rows', fmt(st.rows)],
                   ...Object.entries(st.modality).map(([k,v]) => [k, fmt(v)]),
                   ...Object.entries(st.roles).slice(0,4).map(([k,v]) => ['role ' + k, fmt(v)])],
-  link:    st => [['element', fmt(st.elements)], ['gốc', st.roots],
-                  ['có cha', st.with_parent], ['mang tổ tiên', st.ancestors]],
+  link:    st => [['elements', fmt(st.elements)], ['roots', st.roots],
+                  ['with parent', st.with_parent], ['with ancestors', st.ancestors]],
   chunk:   st => [['chunk', fmt(st.n)], ['token min', st.min], ['token p50', st.p50],
-                  ['token max', st.max], ['mảnh của đơn vị bị cắt', st.split_units],
-                  ['có hàng xóm', `${st.with_neighbor}/${st.n}`],
+                  ['token max', st.max], ['split unit fragments', st.split_units],
+                  ['with neighbors', `${st.with_neighbor}/${st.n}`],
                   ...(st.parents ? [['chunk cha', st.parents]] : [])],
-  embed:   st => [['vector', fmt(st.vectors)], ['chiều', st.dim], ['kiểu', st.dtype],
-                  ['hữu hạn', st.finite ? 'đủ' : 'CÓ NaN/Inf'], ['model', st.model.split('/').pop()]],
-  index:   st => st.error ? [['collection', st.collection], ['lỗi', st.error.slice(0,80)]]
+  embed:   st => [['vectors', fmt(st.vectors)], ['dimensions', st.dim], ['type', st.dtype],
+                  ['finite', st.finite ? 'yes' : 'HAS NaN/Inf'], ['model', st.model.split('/').pop()]],
+  index:   st => st.error ? [['collection', st.collection], ['error', st.error.slice(0,80)]]
                           : [['collection', st.collection], ['point', fmt(st.points)],
                              ['dense', st.vectors.join(',')], ['sparse', st.sparse.join(',')]],
 };
 
 function statPanel(stage, stats){
   const st = stats && stats[stage];
-  if (!st) return `<div class="frows"><div class="frow2"><span class="fr-name">đang chạy…</span></div></div>`;
+  if (!st) return `<div class="frows"><div class="frow2"><span class="fr-name">running…</span></div></div>`;
   const rows = STAT_ROWS[stage](st);
   let html = `<div class="frows">${rows.map(([k,v]) =>
     `<div class="frow2 ok">${ic('check',11)}<span class="fr-name">${esc(k)}</span><span class="fr-st">${esc(String(v))}</span></div>`).join('')}</div>`;
@@ -1598,9 +1598,9 @@ async function awaitRealStage(def, idx){
     }
 
     if (run.status === 'error'){
-      appendLog('ERR', stage, run.error || 'job hỏng');
+      appendLog('ERR', stage, run.error || 'job failed');
       def.el.classList.remove('run'); def.el.classList.add('err');
-      throw new Error(run.error || 'job hỏng');
+      throw new Error(run.error || 'job failed');
     }
     if (run.stages && run.stages[stage]){
       try{
@@ -1622,38 +1622,38 @@ function onPipelineDone(){
   PL.done = true;
   const f = state.form; const p = getProject();
   const timeS = numV((PL.simMs/1000).toFixed(1));
-  appendLog('OK','save', `Hoàn tất indexing "${f.kbName}" · ${fmt(PL.nChunks)} đoạn · ${timeS}s — sẵn sàng truy vấn`);
+  appendLog('OK','save', `Finished indexing "${f.kbName}" · ${fmt(PL.nChunks)} chunks · ${timeS}s — ready for queries`);
   $('#pl-close').disabled = false;
   commitPipeline();
   /* khối tổng kết */
   const stats = [
-    ['Tệp nguồn',   `<b>${PL.docs.length}</b> <small>tệp</small>`],
-    ['Đoạn văn bản',`<b>${fmt(PL.nChunks)}</b> <small>chunks</small>`],
+    ['Source files', `<b>${PL.docs.length}</b> <small>files</small>`],
+    ['Text chunks',  `<b>${fmt(PL.nChunks)}</b> <small>chunks</small>`],
     ['Vectors',     `<b>${fmt(PL.nChunks)}</b> <small>× ${PL.model.dim}d</small>`],
     ['Tokens',      `<b>${fmt(PL.tokens)}</b> <small>tok</small>`],
     ['Embedding',   `<small>${esc(PL.model.name.split('/').pop())}</small>`],
-    ['Truy xuất',   `<small>${RETRIEVAL[f.mode]}${f.mode==='hybrid'?` ${f.ratio}/${100-f.ratio}`:''}</small>`],
-    ['Dung lượng',  `<b>${numV(PL.dbMB.toFixed(1))}</b> <small>MB</small>`],
-    ['Thời gian',   `<b>${timeS}</b> <small>giây</small>`],
+    ['Retrieval',    `<small>${RETRIEVAL[f.mode]}${f.mode==='hybrid'?` ${f.ratio}/${100-f.ratio}`:''}</small>`],
+    ['Size',         `<b>${numV(PL.dbMB.toFixed(1))}</b> <small>MB</small>`],
+    ['Duration',     `<b>${timeS}</b> <small>seconds</small>`],
   ];
   const done = document.createElement('div');
   done.className = 'pl-done';
   done.innerHTML = `
     <div class="pl-done-head">
       <div class="pd-ic">${ic('check',20)}</div>
-      <div><h4>Knowledge sẵn sàng truy vấn</h4><p>${fmt(PL.nChunks)} vectors đã được đánh chỉ mục vào sqlite-vec · ${esc(f.kbName)}</p></div>
+      <div><h4>Knowledge is ready for queries</h4><p>${fmt(PL.nChunks)} vectors indexed in sqlite-vec · ${esc(f.kbName)}</p></div>
     </div>
     <div class="stat-grid">${stats.map(([l,v])=>`<div class="stat"><div class="st-l">${l}</div><div class="st-v">${v}</div></div>`).join('')}</div>
-    <div class="path-box">${ic('folder',14)}<span>${PL.dir}</span><button id="pd-copy" title="Sao chép đường dẫn">${ic('copy',14)}</button></div>
+    <div class="path-box">${ic('folder',14)}<span>${PL.dir}</span><button id="pd-copy" title="Copy path">${ic('copy',14)}</button></div>
     <div class="pl-done-actions">
-      <button class="btn" id="pd-logs">${ic('term',14)} Mở nhật ký xử lý</button>
-      <button class="btn pri" id="pd-finish">${ic('check',14)} Hoàn tất</button>
+      <button class="btn" id="pd-logs">${ic('term',14)} Open processing logs</button>
+      <button class="btn pri" id="pd-finish">${ic('check',14)} Finish</button>
     </div>`;
   $('#pl-stages').appendChild(done);
   done.scrollIntoView({block:'nearest', behavior:'smooth'});
-  $('#pd-copy').addEventListener('click', () => copyText(PL.dir, 'Đã sao chép đường dẫn logs'));
+  $('#pd-copy').addEventListener('click', () => copyText(PL.dir, 'Log path copied'));
   $('#pd-logs').addEventListener('click', () => { closePipeline(); openRunLogs(PL.rId, 'processing.log'); });
-  $('#pd-finish').addEventListener('click', () => { closePipeline(); switchTab('knowledge'); toast('Knowledge «' + f.kbName + '» đã sẵn sàng', 'ok'); });
+  $('#pd-finish').addEventListener('click', () => { closePipeline(); switchTab('knowledge'); toast('Knowledge “' + f.kbName + '” is ready', 'ok'); });
 }
 function commitPipeline(){
   if (PL.committed) return; PL.committed = true;
@@ -1696,15 +1696,15 @@ function closePipeline(){
 function initChrome(){
   $('#brand-mark').innerHTML = ic('layers',19);
   $('#brand-mark2').innerHTML = ic('layers',16);
-  $('#btn-newpj').innerHTML = ic('plus',15) + ' Tạo dự án mới';
+  $('#btn-newpj').innerHTML = ic('plus',15) + ' Create new project';
   $('#nav-kb').innerHTML = ic('layers',16) + ' Knowledge';
-  $('#nav-lg').innerHTML = ic('term',16) + ' Nhật ký xử lý';
+  $('#nav-lg').innerHTML = ic('term',16) + ' Processing logs';
   $('#ws-back').innerHTML = ic('back',17);
-  $('#set-close').innerHTML = ic('x',15) + ' Đóng';
-  $('#json-copy').innerHTML = ic('copy',13) + ' Sao chép';
-  $('#pl-close').innerHTML = ic('x',14) + ' Đóng';
-  $('#cons-autos').innerHTML = ic('clock',12) + ' Tự cuộn';
-  $('#cons-copy').innerHTML = ic('copy',12) + ' Sao chép';
+  $('#set-close').innerHTML = ic('x',15) + ' Close';
+  $('#json-copy').innerHTML = ic('copy',13) + ' Copy';
+  $('#pl-close').innerHTML = ic('x',14) + ' Close';
+  $('#cons-autos').innerHTML = ic('clock',12) + ' Auto-scroll';
+  $('#cons-copy').innerHTML = ic('copy',12) + ' Copy';
   /* nav */
   $('#ws-back').addEventListener('click', openProjects);
   $$('.snav button').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
@@ -1723,7 +1723,7 @@ function initChrome(){
     persist();
     $('#pj-form').reset();
     $('#modal-pj').classList.add('hidden');
-    toast('Đã tạo dự án «' + name + '»', 'ok');
+    toast('Created project “' + name + '”', 'ok');
     state.tab = 'knowledge';
     openWorkspace(pid);
   });
@@ -1741,13 +1741,13 @@ function initChrome(){
   });
   /* setting */
   $('#set-close').addEventListener('click', () => $('#ovl-setting').classList.add('hidden'));
-  $('#json-copy').addEventListener('click', () => copyText(JSON.stringify(buildConfig(), null, 2), 'Đã sao chép config/sql.json'));
+  $('#json-copy').addEventListener('click', () => copyText(JSON.stringify(buildConfig(), null, 2), 'Copied config/sql.json'));
   /* pipeline tools */
   $('#pl-speed').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b || !PL) return;
     PL.speed = +b.dataset.sp;
     $$('#pl-speed button').forEach(x => x.classList.toggle('on', x === b));
-    toast('Tốc độ mô phỏng: ' + b.dataset.sp + '×');
+    toast('Simulation speed: ' + b.dataset.sp + '×');
   });
   $('#pl-close').addEventListener('click', closePipeline);
   $('#cons-flt').addEventListener('click', e => {
@@ -1761,7 +1761,7 @@ function initChrome(){
   });
   $('#cons-copy').addEventListener('click', () => {
     if (!PL) return;
-    copyText(PL.logs.map(l=>`${l.t} [${l.lvl}] [${l.src}] ${l.msg}`).join('\n'), 'Đã sao chép processing.log');
+    copyText(PL.logs.map(l=>`${l.t} [${l.lvl}] [${l.src}] ${l.msg}`).join('\n'), 'Copied processing.log');
   });
   /* phím tắt */
   document.addEventListener('keydown', e => {
@@ -1774,7 +1774,7 @@ function initChrome(){
 function renderProjMenu(){
   $('#proj-menu').innerHTML =
     state.projects.map(p => `<button class="${p.id===state.currentProjectId?'cur':''}" data-go="${p.id}">${ic('box',14)} ${esc(p.name)}</button>`).join('') +
-    `<hr><button data-go="__all__">${ic('arrowR',14)} Tất cả dự án</button>`;
+    `<hr><button data-go="__all__">${ic('arrowR',14)} All projects</button>`;
   $$('#proj-menu [data-go]').forEach(b => b.addEventListener('click', () => {
     $('#proj-menu').classList.remove('open');
     if (b.dataset.go === '__all__') openProjects();
@@ -1800,7 +1800,7 @@ function showError(where, err){
   }
   bar.textContent = `[${where}] ${err && err.stack ? err.stack : err}`;
 }
-window.addEventListener('error', e => showError('lỗi JS', e.error || e.message));
+window.addEventListener('error', e => showError('JavaScript error', e.error || e.message));
 window.addEventListener('unhandledrejection', e => showError('promise', e.reason));
 
 /* ---- boot ---- */
@@ -1810,8 +1810,8 @@ loadState().then(() => {
 }).catch(err => {
   document.body.insertAdjacentHTML('afterbegin',
     `<div style="padding:18px;background:#3b1113;color:#ffb4b4;font:14px ui-monospace">
-       Không gọi được API: ${String(err)}<br>
-       Chạy server: <b>uv run --extra api python -m src.branch_sql.api</b>
+       Unable to reach the API: ${String(err)}<br>
+       Start the server with: <b>uv run --extra api python -m src.branch_sql.api</b>
      </div>`);
 });
 </script>
