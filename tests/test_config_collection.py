@@ -128,6 +128,26 @@ class TestTenSheetChiKhaiMotNoi:
             wb.close()
 
 
+class TestBoDongRong:
+    """Dòng chỉ có mã mà không có câu hỏi phải bị bỏ.
+
+    Đã xảy ra: sheet `test` có SQL_048/049/050 đánh sẵn mã, chưa soạn nội dung.
+    Chúng lọt vào bộ đo thành câu hỏi rỗng, chấm 0 tuyệt đối và kéo trung bình
+    xuống - trông như truy hồi kém chứ không như dữ liệu thiếu.
+    """
+
+    def test_moi_case_deu_co_query_va_bang_gold(self, cfg):
+        for split in ("dev", "test"):
+            path = cfg.eval_dir / f"{split}.json"
+            if not path.exists():
+                pytest.skip("chưa có bộ đo")
+            for c in json.loads(path.read_text(encoding="utf-8")):
+                assert c["query"].strip(), f"{split}: {c['test_case_id']} không có câu hỏi"
+                assert c["relevant_chunks"], f"{split}: {c['test_case_id']} không có bảng gold"
+                assert c["relevant_chunks"] != ["None"], (
+                    f"{split}: {c['test_case_id']} có bảng gold là chuỗi 'None'")
+
+
 class TestBoDoKhopExcel:
     def test_dev_va_test_sinh_ra_tu_dung_sheet(self, cfg):
         openpyxl = pytest.importorskip("openpyxl")
@@ -137,11 +157,15 @@ class TestBoDoKhopExcel:
 
         wb = openpyxl.load_workbook(src, read_only=True, data_only=True)
         try:
-            counts = {
-                role: sum(1 for r in wb[sheet].iter_rows(values_only=True)
-                          if r and str(r[0] or "").strip()) - 1
-                for role, sheet in cfg.parse.sheets.items()
-            }
+            # Đếm theo CÂU HỎI chứ không theo mã: sheet hay có dòng đánh sẵn
+            # mã mà chưa soạn nội dung, và `gold_parse` cố ý bỏ chúng.
+            counts = {}
+            for role, sheet in cfg.parse.sheets.items():
+                rows = list(wb[sheet].iter_rows(values_only=True))[1:]
+                counts[role] = sum(
+                    1 for r in rows
+                    if r and str(r[0] or "").strip() and str(r[1] or "").strip()
+                )
         finally:
             wb.close()
 
@@ -149,5 +173,6 @@ class TestBoDoKhopExcel:
             got = len(json.loads((cfg.eval_dir / f"{role}.json").read_text(encoding="utf-8")))
             assert got == counts[role], (
                 f"{role}.json có {got} dòng nhưng sheet "
-                f"'{cfg.parse.sheets[role]}' có {counts[role]} - chạy lại gold_parse"
+                f"'{cfg.parse.sheets[role]}' có {counts[role]} dòng có câu hỏi "
+                "- chạy lại gold_parse"
             )
