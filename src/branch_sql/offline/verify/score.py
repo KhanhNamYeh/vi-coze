@@ -28,7 +28,7 @@ import argparse
 import json
 import sys
 
-from ...config import CFG, EVAL_DIR, rel
+from ...config import CFG, EVAL_DIR, collections_of, rel
 from ...eval import metrics as M
 from ...eval.normalize import table_key
 from ...online.qdrant_retriever import search
@@ -45,20 +45,6 @@ def load_split(split: str) -> list[dict]:
     if not cases:
         raise ValueError(f"{rel(src)}: rỗng")
     return cases
-
-
-def collections_of(project: int) -> tuple[str, str]:
-    """-> (collection tài liệu, collection SQL sample) của một dự án."""
-    docs = sql = None
-    for k in CFG.knowledge_of(project):
-        name = k.collection_for(project)
-        (sql := name) if name.endswith("__sql") else (docs := name)
-    if not docs or not sql:
-        raise ValueError(
-            f"dự án {project} thiếu collection: docs={docs} sql={sql} - "
-            "khai đủ hai bộ tri thức trong `knowledge[]`"
-        )
-    return docs, sql
 
 
 def sample_tables(cases: list[dict]) -> dict[str, set[str]]:

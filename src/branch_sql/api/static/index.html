@@ -249,6 +249,10 @@ input[type=range].mini{max-width:130px}
 .jl .ln{width:46px;flex:none;text-align:right;padding-right:15px;color:#514a3a;user-select:none}
 .j-key{color:#d6ccba}.j-str{color:#a5c98f}.j-num{color:var(--am2)}.j-bool{color:var(--tx2);font-style:italic}
 .form-actions{padding:24px 32px;display:flex;gap:12px;align-items:center;position:sticky;bottom:0;background:linear-gradient(to top,var(--bg) 75%,transparent)}
+.layer-box{margin-top:22px;padding:18px;border:1px solid var(--line2);border-radius:12px;background:var(--panel)}
+.layer-box h4{font:700 15px var(--f-d);margin-bottom:4px}
+.layer-box>p{color:var(--tx3);font-size:12px;margin-bottom:14px}
+.layer-box .flbl:first-of-type{margin-top:12px}
 
 /* ============ PIPELINE ============ */
 .pl-panel{margin:18px;width:calc(100vw - 36px)}
@@ -685,6 +689,10 @@ const DEFAULT_FORM = {
   unit: 'token', maxLen: 2048, minLen: 120, overlap: 0,
   onOverflow: 'keep', onUnderflow: 'keep',
   childRoles: '',
+  /* parent_child — cấu hình riêng cho tầng cha */
+  parentMethod: 'paragraph', parentHeadingLevel: 2,
+  parentUnit: 'token', parentMaxLen: 4096, parentMinLen: 0, parentOverlap: 0,
+  parentOnOverflow: 'keep', parentOnUnderflow: 'keep', parentMaxLength: 10000,
   /* embed + retrieval */
   embedModel: '', mode_r: 'hybrid', ratio: 50, topK: 5, threshold: 0.45,
 };
@@ -996,10 +1004,16 @@ function chunkCfg(f){
                inherit:{ from_roles:[], max_chars:300 }, restore_labels:true },
   };
   if (f.mode === 'parent_child'){
-    cfg.parent = { method:'paragraph', split_on:[{by:'heading', level:+f.headingLevel}],
-                   budget:{ unit:f.unit, max:+f.maxLen*2, min:0, overlap:0,
-                            on_overflow:'keep', on_underflow:'keep' },
-                   max_length: 10000 };
+    cfg.parent = {
+      method: f.parentMethod,
+      split_on: f.parentMethod === 'paragraph'
+        ? [{ by:'heading', level:+f.parentHeadingLevel }]
+        : [],
+      budget: { unit:f.parentUnit, max:+f.parentMaxLen, min:+f.parentMinLen,
+                overlap:+f.parentOverlap, on_overflow:f.parentOnOverflow,
+                on_underflow:f.parentOnUnderflow },
+      max_length: +f.parentMaxLength,
+    };
     const roles = f.childRoles.split(',').map(x=>x.trim()).filter(Boolean);
     if (roles.length) cfg.child_roles = roles;
   }
@@ -1090,6 +1104,8 @@ function renderSettingForm(){
       <button data-v="parent_child">parent_child</button>
     </div>
 
+    <div class="flbl" id="f-child-label" style="display:none"><span>Child chunk settings</span><span class="fhint">used for matching queries</span></div>
+
     <div class="flbl"><span>Level 1 · heading</span><span class="fhint">one level-N heading = one chunk</span></div>
     <div class="srow">
       <label class="doc sm" id="f-use-heading"><span class="doc-chk">${ic('check',12)}</span><span class="doc-name"><b>enabled</b></span></label>
@@ -1131,6 +1147,49 @@ function renderSettingForm(){
       <div class="flbl"><span>child_roles</span><span class="fhint">keep only these roles in children, separated by commas</span></div>
       <input class="txt-in" id="f-croles" placeholder="sample_query">
     </div>
+
+    <div class="layer-box" id="f-parent-wrap" style="display:none">
+      <h4>Parent chunk settings</h4>
+      <p>Parent chunks are returned to the chatbot after a child chunk matches the query.</p>
+
+      <div class="flbl"><span>Parent method</span><span class="fhint">paragraph or the entire document</span></div>
+      <div class="seg" id="f-parent-method">
+        <button data-v="paragraph" class="on">paragraph</button>
+        <button data-v="full_doc">full_doc</button>
+      </div>
+
+      <div class="flbl"><span>Unit</span><span class="fhint">used to measure parent length</span></div>
+      <div class="seg sm" id="f-parent-unit">
+        <button data-v="token" class="on">token</button><button data-v="char">char</button>
+      </div>
+
+      <div id="f-parent-paragraph">
+        <div class="flbl"><span>Heading level</span><span class="fhint">defines each parent section</span></div>
+        <input class="txt-in nb" id="f-parent-hlevel" type="number" min="1" max="6" style="max-width:96px">
+
+        <div class="flbl"><span>Parent budget</span><span class="fhint">maximum · minimum · overlap</span></div>
+        <div class="srow">
+          <input class="txt-in nb" id="f-parent-max" type="number" min="1" style="max-width:110px" title="parent.budget.max">
+          <input class="txt-in nb" id="f-parent-min" type="number" min="0" style="max-width:110px" title="parent.budget.min">
+          <input class="txt-in nb" id="f-parent-ov" type="number" min="0" style="max-width:110px" title="parent.budget.overlap">
+        </div>
+
+        <div class="flbl"><span>Parent over maximum</span></div>
+        <div class="seg" id="f-parent-over">
+          <button data-v="descend">descend</button><button data-v="keep" class="on">keep</button><button data-v="truncate">truncate</button>
+        </div>
+
+        <div class="flbl"><span>Parent under minimum</span></div>
+        <div class="seg" id="f-parent-under">
+          <button data-v="keep" class="on">keep</button><button data-v="merge">merge</button><button data-v="drop">drop</button>
+        </div>
+      </div>
+
+      <div id="f-parent-full" style="display:none">
+        <div class="flbl"><span>Maximum parent length</span><span class="fhint">the full document is truncated at this limit</span></div>
+        <input class="txt-in nb" id="f-parent-max-length" type="number" min="1" style="max-width:140px" title="parent.max_length">
+      </div>
+    </div>
   </div>
 
   <div class="f-sec">
@@ -1152,9 +1211,9 @@ function renderSettingForm(){
     <div class="f-num">05 · RETRIEVAL</div>
     <h3>Search mode</h3>
     <p class="f-hint">How the chatbot retrieves information from the knowledge base when answering.</p>
-    <div class="seg" id="f-mode">${Object.entries(RETRIEVAL).map(([k,v])=>`<button data-v="${k}" class="${f.mode===k?'on':''}">${v}</button>`).join('')}</div>
+    <div class="seg" id="f-retrieval-mode">${Object.entries(RETRIEVAL).map(([k,v])=>`<button data-v="${k}" class="${f.mode_r===k?'on':''}">${v}</button>`).join('')}</div>
 
-    <div class="hyb ${f.mode==='hybrid'?'':'hyb-off'}" id="hyb">
+    <div class="hyb ${f.mode_r==='hybrid'?'':'hyb-off'}" id="hyb">
       <div class="hyb-inner">
         <div class="hyb-labels">
           <span class="l-vec">Semantic (vector) · <span id="hyb-v">${f.ratio}%</span></span>
@@ -1163,7 +1222,7 @@ function renderSettingForm(){
         <input type="range" id="f-ratio" min="0" max="100" step="5" value="${f.ratio}">
         <div class="hyb-formula" id="hyb-f"></div>
       </div>
-      ${f.mode!=='hybrid' ? `<div class="hyb-note">The blend ratio only applies to Hybrid mode.</div>` : ''}
+      <div class="hyb-note" id="hyb-note" style="display:${f.mode_r==='hybrid'?'none':''}">The blend ratio only applies to Hybrid mode.</div>
     </div>
 
     <div class="flbl"><span>Number of results (top-k)</span></div>
@@ -1179,6 +1238,9 @@ function renderSettingForm(){
       <span class="sval" id="f-th-v">${numV(f.threshold.toFixed(2))}</span>
     </div>
   </div>`;
+
+  /* Parent được cấu hình trước Child để đúng thứ tự đọc của parent_child. */
+  $('#f-child-label').before($('#f-parent-wrap'));
 
   $('#set-actions').innerHTML = `
     <button class="btn ghost" id="f-reset">${ic('back',14)} Reset to defaults</button>
@@ -1204,7 +1266,12 @@ function renderSettingForm(){
   };
 
   const refreshDerived = () => {
-    $('#f-cr-wrap').style.display = f.mode === 'parent_child' ? '' : 'none';
+    const parentChild = f.mode === 'parent_child';
+    $('#f-child-label').style.display = parentChild ? '' : 'none';
+    $('#f-cr-wrap').style.display = parentChild ? '' : 'none';
+    $('#f-parent-wrap').style.display = parentChild ? '' : 'none';
+    $('#f-parent-paragraph').style.display = f.parentMethod === 'paragraph' ? '' : 'none';
+    $('#f-parent-full').style.display = f.parentMethod === 'full_doc' ? '' : 'none';
     $('#doc-sum').innerHTML = f.source
       ? `<span>source: <b>${esc(f.source)}</b></span>`
       : `<span>no source selected</span>`;
@@ -1212,6 +1279,10 @@ function renderSettingForm(){
     $('#f-est').textContent = f.source
       ? `${f.mode} · ${chunkCfg(f).split_on.map(r=>r.by).join(' → ') || 'no levels enabled'}`
       : 'select a source file';
+  };
+  const refreshRetrieval = () => {
+    $('#hyb').classList.toggle('hyb-off', f.mode_r !== 'hybrid');
+    $('#hyb-note').style.display = f.mode_r === 'hybrid' ? 'none' : '';
   };
 
   /* nguồn: lấy thật từ API */
@@ -1252,18 +1323,27 @@ function renderSettingForm(){
   /* chunk */
   seg('f-mode', 'mode', refreshDerived);
   seg('f-unit', 'unit'); seg('f-over', 'onOverflow'); seg('f-under', 'onUnderflow');
+  seg('f-parent-method', 'parentMethod', refreshDerived);
+  seg('f-parent-unit', 'parentUnit');
+  seg('f-parent-over', 'parentOnOverflow');
+  seg('f-parent-under', 'parentOnUnderflow');
   toggle('#f-use-heading','useHeading'); toggle('#f-use-trow','useTableRow'); toggle('#f-use-length','useLength');
   num('#f-hlevel','headingLevel'); num('#f-group','group'); num('#f-ovrows','overlapRows');
   num('#f-max','maxLen'); num('#f-min','minLen'); num('#f-ov','overlap');
+  num('#f-parent-hlevel','parentHeadingLevel');
+  num('#f-parent-max','parentMaxLen'); num('#f-parent-min','parentMinLen');
+  num('#f-parent-ov','parentOverlap'); num('#f-parent-max-length','parentMaxLength');
   $('#f-seps').value = f.separators;
   $('#f-seps').addEventListener('input', e => { f.separators = e.target.value; updateJSON(); });
   $('#f-croles').value = f.childRoles;
   $('#f-croles').addEventListener('input', e => { f.childRoles = e.target.value; updateJSON(); });
-  $$('#f-mode button, #f-unit button, #f-over button, #f-under button').forEach(btn => {
-    const key = btn.closest('.seg').id.replace('f-','');
-    const map = { mode:'mode', unit:'unit', over:'onOverflow', under:'onUnderflow' };
-    btn.classList.toggle('on', f[map[key]] === btn.dataset.v);
-  });
+  const activateSeg = (id, key) => $$(`#${id} button`).forEach(btn =>
+    btn.classList.toggle('on', f[key] === btn.dataset.v));
+  activateSeg('f-mode','mode'); activateSeg('f-unit','unit');
+  activateSeg('f-over','onOverflow'); activateSeg('f-under','onUnderflow');
+  activateSeg('f-parent-method','parentMethod'); activateSeg('f-parent-unit','parentUnit');
+  activateSeg('f-parent-over','parentOnOverflow'); activateSeg('f-parent-under','parentOnUnderflow');
+  seg('f-retrieval-mode','mode_r', refreshRetrieval);
 
   /* actions */
   $('#f-reset').addEventListener('click', () => {

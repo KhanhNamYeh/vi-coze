@@ -96,6 +96,7 @@ class TestDungThat:
         assert r.returncode == 0, r.stderr[-1500:]
         out = r.stdout
         assert "FORM_OK" in out, "form không dựng được: " + out + r.stderr[-800:]
+        assert "PARENT_OK" in out, "setting tầng cha không hoạt động: " + out
         assert "NO_ERROR" in out, "có lỗi runtime: " + out
 
 
@@ -132,6 +133,15 @@ setTimeout(() => {
       const secs = d.querySelectorAll('#set-form .f-num').length;
       if (form && form.innerHTML.length > 2000 && secs >= 4) console.log('FORM_OK', secs);
       else console.log('FORM_TRONG', form ? form.innerHTML.length : 'khong co', secs);
+      const pc = d.querySelector('#f-mode [data-v="parent_child"]');
+      if (pc) pc.dispatchEvent(new w.MouseEvent('click', {bubbles: true}));
+      const parent = d.getElementById('f-parent-wrap');
+      const child = d.getElementById('f-child-label');
+      const cfg = w.buildConfig && w.buildConfig().chunk.parent;
+      const parentBeforeChild = !!(parent.compareDocumentPosition(child) & w.Node.DOCUMENT_POSITION_FOLLOWING);
+      if (parent && parent.style.display !== 'none' && parentBeforeChild && cfg && cfg.budget.max === 4096)
+        console.log('PARENT_OK', cfg.method, cfg.budget.max);
+      else console.log('PARENT_HONG', parent && parent.style.display, JSON.stringify(cfg));
       console.log(errors.length ? 'ERRORS ' + errors.slice(0,2).join(' ~~ ') : 'NO_ERROR');
       process.exit(0);
     }, 300);
@@ -143,8 +153,15 @@ setTimeout(() => {
 class TestFormChunk:
     def test_form_sinh_dung_hinh_dang_chunkcfg(self, script):
         for key in ("split_on", "on_overflow", "on_underflow", "overlap_rows",
-                    "child_roles", "repeat_header"):
+                    "child_roles", "repeat_header", "parentMethod",
+                    "parentHeadingLevel", "parentMaxLen", "parentMaxLength"):
             assert key in script, f"form thiếu {key}"
+
+    def test_parent_child_co_cau_hinh_cha_rieng(self, html, script):
+        assert "Parent chunk settings" in html
+        assert "max:+f.parentMaxLen" in script
+        assert "level:+f.parentHeadingLevel" in script
+        assert "max_length: +f.parentMaxLength" in script
 
     def test_dau_ngan_doi_thanh_ky_tu_that(self, script):
         r"""Form nhập `\n` dạng VĂN BẢN (hai ký tự). Không đổi thành ký tự thật

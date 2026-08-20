@@ -81,6 +81,35 @@ COLLECTION = CFG.index.collection.format(project=CFG.project or "")
 SQL_COLLECTION = (CFG.index.sql_collection or "").format(project=CFG.project or "") or None
 
 
+def collections_of(project: int | None = None) -> tuple[str, str | None]:
+    """-> `(collection tài liệu, collection SQL sample)` của một dự án.
+
+    Nhận diện vế SQL sample bằng hậu tố `__sql` của tên collection. Trả `None`
+    cho vế đó nếu dự án không khai bộ SQL sample - truy hồi vẫn chạy được với
+    một vế, chỉ là mất phần mẫu.
+
+    Đặt cạnh `collection_of` vì cả `online/` lẫn `verify/` đều cần. Khai hai bản
+    là mời một bản lệch đi khi profile đổi - đã xảy ra ba lần trong repo này.
+    """
+    project = project if project is not None else CFG.project
+    if project is None:
+        return COLLECTION, SQL_COLLECTION
+
+    docs = sql = None
+    for k in CFG.knowledge_of(project):
+        name = k.collection_for(project)
+        if name.endswith("__sql"):
+            sql = name
+        else:
+            docs = name
+    if not docs:
+        raise ValueError(
+            f"dự án {project} không có bộ tri thức tài liệu nào - "
+            "kiểm tra `knowledge[]` trong profile"
+        )
+    return docs, sql
+
+
 def collection_of(doc_id: str, *, project: int | None = None) -> str:
     """Collection của bộ tri thức sinh ra `doc_id` này.
 
