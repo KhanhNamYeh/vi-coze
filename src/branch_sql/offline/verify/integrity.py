@@ -26,9 +26,8 @@ import numpy as np
 
 from ...config import (
     BUDGET_MAX,
-    CFG,
     CHUNK,
-    COLLECTION,
+    collection_of,
     DENSE_VECTOR,
     EMBED_DIM,
     PROCESSED_DIR,
@@ -98,26 +97,6 @@ def check_vectors(rows: list[dict], vectors: dict[str, np.ndarray]) -> list[str]
     if zero := [cid for cid, v in vectors.items() if not np.abs(v).sum()]:
         err.append(f"{len(zero)} vector toàn số 0: {_fmt(zero)}")
     return err
-
-
-def collection_of(doc_id: str) -> str:
-    """Collection của bộ tri thức sinh ra `doc_id` này.
-
-    KHÔNG dùng hằng `index.collection` của profile: từ khi mỗi bộ tri thức khai
-    collection riêng, khoá đó là tàn dư và trỏ vào một tên không tồn tại. Tra
-    ngược từ `source` của knowledge là cách duy nhất còn đúng.
-    """
-    from ..parse.doc_parse import doc_id_of
-
-    if CFG.project is None:
-        return COLLECTION
-    for k in CFG.knowledge_of(CFG.project):
-        if doc_id_of(Path(k.source)) == doc_id:
-            return k.collection_for(CFG.project)
-    raise ValueError(
-        f"không bộ tri thức nào của dự án {CFG.project} sinh ra '{doc_id}' - "
-        f"kiểm tra `knowledge[].source` trong profile"
-    )
 
 
 def check_index(rows: list[dict], client, collection: str) -> list[str]:

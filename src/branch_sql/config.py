@@ -21,6 +21,7 @@ Chạy profile khác mà không sửa code:
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from ..config import KBConfig, listdir, rel, require, resolve  # noqa: F401  (re-export)
 
@@ -78,6 +79,32 @@ SPARSE_VECTOR = CFG.index.sparse_vector
 # này gửi lên Qdrant một tên chứa dấu ngoặc và nhận 404 rất khó lần ra nguồn.
 COLLECTION = CFG.index.collection.format(project=CFG.project or "")
 SQL_COLLECTION = (CFG.index.sql_collection or "").format(project=CFG.project or "") or None
+
+
+def collection_of(doc_id: str, *, project: int | None = None) -> str:
+    """Collection của bộ tri thức sinh ra `doc_id` này.
+
+    Nguồn sự thật là `knowledge[].collection`, KHÔNG phải hằng `COLLECTION` ở
+    trên - hằng đó chỉ là mặc định của profile. Từ khi mỗi bộ tri thức khai
+    collection riêng, dùng hằng nghĩa là mọi tài liệu đều đổ vào collection của
+    bộ ĐẦU TIÊN: chạy CLI index cho bộ SQL sample sẽ ghi nhầm nó vào collection
+    tài liệu, và không có lỗi nào báo.
+
+    Đặt ở đây chứ không ở `verify/` vì cả `index/` lẫn `verify/` đều cần, mà hai
+    bên import lẫn nhau - khai hai bản là mời một bản lệch đi.
+    """
+    from .offline.parse.doc_parse import doc_id_of
+
+    project = project if project is not None else CFG.project
+    if project is None:
+        return COLLECTION
+    for k in CFG.knowledge_of(project):
+        if doc_id_of(Path(k.source)) == doc_id:
+            return k.collection_for(project)
+    raise ValueError(
+        f"không bộ tri thức nào của dự án {project} sinh ra '{doc_id}' - "
+        f"kiểm tra `knowledge[].source` trong profile"
+    )
 PAYLOAD_INDEX_FIELDS = CFG.index.payload_index_fields
 
 # ---- online / search ------------------------------------------------------

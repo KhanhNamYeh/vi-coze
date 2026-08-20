@@ -30,6 +30,7 @@ from pathlib import Path
 
 from ...config import (
     COLLECTION,
+    collection_of,
     DENSE_VECTOR,
     EMBED_DIM,
     EMBED_MODEL,
@@ -210,7 +211,8 @@ def main(argv: list[str]) -> int:
     try:
         for i, name in enumerate(args):
             doc_id = name.removesuffix(".chunks.jsonl").removesuffix(".vectors.npz")
-            res = index(doc_id, collection=COLLECTION, recreate=recreate and i == 0)
+            res = index(doc_id, collection=collection_of(doc_id),
+                        recreate=recreate and i == 0)
             print(f"{doc_id}\n  -> qdrant {QDRANT_URL}")
             report(res)
     except (FileNotFoundError, ValueError) as e:
