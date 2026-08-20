@@ -154,32 +154,5 @@
       "PRECINCT",
       "V_USER_PRECINCT_PERMISSION"
     ]
-  },
-  {
-    "test_case_id": "SQL_048",
-    "query": "None",
-    "evidence": "None",
-    "sql": "None",
-    "relevant_chunks": [
-      "None"
-    ]
-  },
-  {
-    "test_case_id": "SQL_049",
-    "query": "None",
-    "evidence": "None",
-    "sql": "None",
-    "relevant_chunks": [
-      "None"
-    ]
-  },
-  {
-    "test_case_id": "SQL_050",
-    "query": "None",
-    "evidence": "None",
-    "sql": "None",
-    "relevant_chunks": [
-      "None"
-    ]
   }
 ]

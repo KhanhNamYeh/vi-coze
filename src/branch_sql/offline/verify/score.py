@@ -95,9 +95,18 @@ def sql_tables(query: str, collection: str, *, exclude: str, by_id: dict[str, se
     return found, used
 
 
-def evaluate(cases: list[dict], project: int, **kw) -> dict:
+def evaluate(cases: list[dict], project: int, *, indexed: list[dict] | None = None,
+             **kw) -> dict:
+    """Chấm một tập câu hỏi.
+
+    `indexed` là các mẫu THẬT SỰ nằm trong collection SQL sample - luôn là bộ
+    `dev`, vì đó là sheet duy nhất được dựng thành .md và đem đi index. Dùng
+    chính `cases` để tra tên bảng là sai khi chấm tập test: mẫu tìm được mang mã
+    SQL_001..033 còn `cases` là SQL_034..050, nên MỌI mẫu đều bị loại và vế
+    sample ra 0 tuyệt đối - trông như truy hồi hỏng chứ không như lỗi đối chiếu.
+    """
     docs_coll, sql_coll = collections_of(project)
-    by_id = sample_tables(cases)
+    by_id = sample_tables(indexed if indexed is not None else cases)
 
     per_case = []
     for case in cases:
@@ -165,7 +174,9 @@ def main(argv: list[str]) -> int:
 
     try:
         cases = load_split(args.split)
-        res = evaluate(cases, args.project, mode=args.mode)
+        # Mẫu trong index luôn là bộ dev, kể cả khi đang chấm tập test.
+        indexed = load_split("dev")
+        res = evaluate(cases, args.project, indexed=indexed, mode=args.mode)
     except (FileNotFoundError, ValueError) as e:
         print(e, file=sys.stderr)
         return 1

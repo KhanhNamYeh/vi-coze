@@ -60,18 +60,34 @@ OUTPUTS = (
 )
 
 
-def read_sheet(src: Path, sheet: str) -> list[tuple]:
-    """Đọc sheet, bỏ dòng đệm rỗng của Excel."""
+def read_sheet(src: Path, sheet: str) -> tuple[list[tuple], list[str]]:
+    """Đọc sheet -> (các dòng hợp lệ, mã của dòng bị bỏ).
+
+    Dòng phải có CẢ mã lẫn câu hỏi. Lọc theo mỗi cột mã là chưa đủ: người soạn
+    hay đánh sẵn mã cho vài dòng rồi để trống nội dung, và những dòng đó lọt vào
+    bộ đo thành câu hỏi rỗng - chấm ra 0 điểm tuyệt đối, kéo trung bình xuống mà
+    trông như truy hồi kém chứ không như dữ liệu thiếu.
+    """
     import openpyxl
 
     wb = openpyxl.load_workbook(src, data_only=True)
     if sheet not in wb.sheetnames:
         raise ValueError(f"{src.name}: không có sheet '{sheet}' (có: {', '.join(wb.sheetnames)})")
-    return [r[:COLS] for r in wb[sheet].iter_rows(min_row=2, values_only=True) if r[0]]
+
+    rows, skipped = [], []
+    for r in wb[sheet].iter_rows(min_row=2, values_only=True):
+        if not r or not str(r[0] or "").strip():
+            continue
+        if not str(r[1] or "").strip():
+            skipped.append(str(r[0]).strip())
+            continue
+        rows.append(r[:COLS])
+    return rows, skipped
 
 
-def build(src: Path, sheet: str) -> list[dict]:
-    """Một sheet -> list chunk, mỗi chunk đúng 5 cột của Excel."""
+def build(src: Path, sheet: str) -> tuple[list[dict], list[str]]:
+    """Một sheet -> (list chunk đúng 5 cột của Excel, mã dòng đã bỏ)."""
+    rows, skipped = read_sheet(src, sheet)
     return [
         {
             "test_case_id": str(tid).strip(),
@@ -81,8 +97,8 @@ def build(src: Path, sheet: str) -> list[dict]:
             # ô Excel là chuỗi ngăn bằng "|", tách ra cho đúng dạng JSON
             "relevant_chunks": [t.strip() for t in str(relevant).split("|") if t.strip()],
         }
-        for tid, query, evidence, sql, relevant in read_sheet(src, sheet)
-    ]
+        for tid, query, evidence, sql, relevant in rows
+    ], skipped
 
 
 def write(records: list[dict], *, out_dir: Path, out_name: str) -> Path:
@@ -128,17 +144,21 @@ def main(argv: list[str]) -> int:
     # mà không rõ nguyên nhân.
     known = known_tables(PROCESSED_DIR / "mo_ta_bang_bds_new.chunks.jsonl")
     cache: dict[str, list[dict]] = {}
+    dropped: dict[str, list[str]] = {}
     seen: dict[str, str] = {}
     print(SOURCE_NAME)
 
     for out in OUTPUTS:
         if out.sheet not in cache:
             try:
-                cache[out.sheet] = build(src, out.sheet)
+                cache[out.sheet], dropped[out.sheet] = build(src, out.sheet)
             except ValueError as e:
                 print(e, file=sys.stderr)
                 return 1
             check(out.sheet, cache[out.sheet], known, seen)
+            if ids := dropped[out.sheet]:
+                print(f"  ! sheet '{out.sheet}': bỏ {len(ids)} dòng chỉ có mã, "
+                      f"không có câu hỏi - {', '.join(ids)}")
 
         records = cache[out.sheet]
         dst = write(records, out_dir=out.out_dir, out_name=out.out_name)
