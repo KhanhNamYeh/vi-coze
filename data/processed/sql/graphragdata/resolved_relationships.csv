@@ -1,0 +1,665 @@
+source,target,description,weight
+precinct_code,precinct_name,Liên kết với các bảng khác qua cột PRECINCT_CODE,5
+precinct,other_tables,Liên kết với các bảng khác qua cột CODE,5
+precinct,nan,Liên kết với các bảng khác qua cột CODE,5
+sale_code,nan,Mã điểm bán,5
+point_of_sale,address,Mối liên kết với các bảng khác qua cột SALE_CODE và PRECINCT_CODE,5
+mô tả,bảng,Chi tiết các cột trong bảng,5
+employee,branch,An employee is assigned to a branch,5
+employee,hub,An employee is working in a hub,5
+employee,sales,An employee is a sales person,5
+employee,hub_leader,An employee is led by a hub leader,5
+branch,hub,A branch is part of a hub,5
+hub,employee,A hub has employees,5
+hub,hub_leader,A hub has a leader,5
+employee_sales,sales_code,An employee sales record is associated with a sales code,5
+employee_sales,sales_name,An employee sales record is associated with a sales person,5
+precinct_code,mã phường/xã,Liên kết với các bảng khác qua cột PRECINCT_CODE,5
+nan,nan,,5
+public_location,precinct_code,Mối liên kết: Liên kết với các bảng khác qua cột PRECINCT_CODE,5
+precinct_code,nan,Liên kết với các bảng khác qua cột PRECINCT_CODE,5
+precinct_code,precinct_name,Mã phường/xã được liên kết với Tên phường/xã qua cột mã.,5
+precinct_code,vlr,Mã phường/xã được liên kết với VLR qua cột mã.,5
+date,vlr,ngày phát triển thuê bao được liên kết với VLR qua cột ngày.,5
+pck_report_chatbox.get_vlr_data_by_precinct,table,"TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))",5
+precinct code,precinct name,Mã phường/xã liên kết với tên phường/xã,5
+precinct_code,precinct_name,Liên kết với các bảng khác qua cột PRECINCT_CODE,5
+location_group,id,The location group is associated with the ID.,5
+location_group,name,The location group is associated with the Name.,5
+location_group,objects,The location group is associated with the objects.,5
+location_group,names,The location group is associated with the names.,5
+location_group,items,The location group is associated with the items.,5
+location_group,concepts,The location group is associated with the concepts.,5
+location_group,bảng bđs (new],The location group is associated with the table.,5
+bảng bđs (new),location_group,The table is associated with the location group.,5
+location_group,quản lý công việc và dự án,The location group is associated with the project category.,5
+quản lý công việc và dự án,location_group,The project category is associated with the location group.,5
+bảng project,id,Khoá chính,5
+bảng project,name,Tên dự án,5
+bảng project,location_group_id,Mã nhóm địa điểm liên kết,5
+bảng project,location_group_id,Link to các bảng khác,5
+mô tả bảng bđs,bậng project,Lưu trữ thông tin dự án.,5
+bậng project,name,Tên dự án,5
+bậng project,location_group_id,Mã nhóm địa điểm liên kết,5
+bậng project,id,Khoá chính,5
+id,location_group_id,"Liên kết với bảng khác qua cột ID, LOCATION_GROUP_ID",5
+id,precinct_name,"Liên kết với bảng khác qua cột ID, PRECINCT_NAME",5
+bàng,quản lý công việc và dự án,Liên kết với Quản lý công việc và dự án qua cột LOCATION,5
+bảng v_man_task,id, Liên kết với các bảng khác qua cột ID,5
+bảng v_man_task,progress_id,Liên kết với các bảng khác qua cột PROGRESS_ID,5
+bảng v_man_task,location_id,Liên kết với các bảng khác qua cột LOCATION_ID,5
+bảng v_man_task,project_id,Liên kết với các bảng khác qua cột PROJECT_ID,5
+bảng v_man_task,assigner_staff_id,Liên kết với các bảng khác qua cột assigner_staff_id,5
+bảng v_man_task,assignee_staff_id,Liên kết với các bảng khác qua cột assignee_staff_id,5
+bảng v_man_task,id,Liên kết với các bảng khác qua cột ID,5
+bảng v_man_task,progress_id,Liên kết với các bảng khác qua cột PROGRESS_ID,5
+bảng v_man_task,location_id,Liên kết với các bảng khác qua cột LOCATION_ID,5
+bảng v_man_task,project_id,Liên kết với các bảng khác qua cột PROJECT_ID,5
+bảng v_man_task,assigner_staff_id,Liên kết với các bảng khác qua cột assigner_staff_id,5
+bảng v_man_task,assignee_staff_id,Liên kết với các bảng khác qua cột assignee_staff_id,5
+v_cat_staff,other tables, Liên kết với các bảng khác qua cột ID,5
+mf_quantity_all_year,last_date_last_week,co-occurrence,1
+mf_quantity_all_year,start_date_this_week,co-occurrence,1
+mf_quantity_all_year,mc_quantity_month,co-occurrence,1
+mf_quantity_all_year,all_quantity_all_year,co-occurrence,1
+mf_quantity_all_year,mc_quantity_day,co-occurrence,1
+mf_quantity_all_year,last_date_this_week,co-occurrence,1
+mf_quantity_all_year,all_quantity_month,co-occurrence,1
+mf_quantity_all_year,sum_date,co-occurrence,1
+mf_quantity_all_year,mf_quantity_last_week,co-occurrence,1
+last_date_last_week,start_date_this_week,co-occurrence,1
+last_date_last_week,mc_quantity_month,co-occurrence,1
+last_date_last_week,all_quantity_all_year,co-occurrence,1
+last_date_last_week,mc_quantity_day,co-occurrence,1
+last_date_last_week,last_date_this_week,co-occurrence,1
+last_date_last_week,all_quantity_month,co-occurrence,1
+last_date_last_week,sum_date,co-occurrence,1
+last_date_last_week,mf_quantity_last_week,co-occurrence,1
+start_date_this_week,mc_quantity_month,co-occurrence,1
+start_date_this_week,all_quantity_all_year,co-occurrence,1
+start_date_this_week,mc_quantity_day,co-occurrence,1
+start_date_this_week,last_date_this_week,co-occurrence,1
+start_date_this_week,all_quantity_month,co-occurrence,1
+start_date_this_week,sum_date,co-occurrence,1
+start_date_this_week,mf_quantity_last_week,co-occurrence,1
+mc_quantity_month,all_quantity_all_year,co-occurrence,1
+mc_quantity_month,mc_quantity_day,co-occurrence,1
+mc_quantity_month,last_date_this_week,co-occurrence,1
+mc_quantity_month,all_quantity_month,co-occurrence,1
+mc_quantity_month,sum_date,co-occurrence,1
+mc_quantity_month,mf_quantity_last_week,co-occurrence,1
+all_quantity_all_year,mc_quantity_day,co-occurrence,1
+all_quantity_all_year,last_date_this_week,co-occurrence,1
+all_quantity_all_year,all_quantity_month,co-occurrence,1
+all_quantity_all_year,sum_date,co-occurrence,1
+all_quantity_all_year,mf_quantity_last_week,co-occurrence,1
+mc_quantity_day,last_date_this_week,co-occurrence,1
+mc_quantity_day,all_quantity_month,co-occurrence,1
+mc_quantity_day,sum_date,co-occurrence,1
+mc_quantity_day,mf_quantity_last_week,co-occurrence,1
+last_date_this_week,all_quantity_month,co-occurrence,1
+last_date_this_week,sum_date,co-occurrence,1
+last_date_this_week,mf_quantity_last_week,co-occurrence,1
+all_quantity_month,sum_date,co-occurrence,1
+all_quantity_month,mf_quantity_last_week,co-occurrence,1
+sum_date,mf_quantity_last_week,co-occurrence,1
+precinct_name,parent_sale_code,co-occurrence,1
+precinct_name,nvbh_code,co-occurrence,1
+precinct_name,parent_sale_name,co-occurrence,1
+precinct_name,hub,co-occurrence,1
+precinct_name,lat,co-occurrence,1
+precinct_name,sale_name,co-occurrence,1
+precinct_name,emp_name,co-occurrence,1
+precinct_name,phone_number,co-occurrence,1
+precinct_name,sale_type,co-occurrence,1
+parent_sale_code,nvbh_code,co-occurrence,1
+parent_sale_code,parent_sale_name,co-occurrence,1
+parent_sale_code,hub,co-occurrence,1
+parent_sale_code,lat,co-occurrence,1
+parent_sale_code,sale_name,co-occurrence,1
+parent_sale_code,emp_name,co-occurrence,1
+parent_sale_code,phone_number,co-occurrence,1
+parent_sale_code,sale_type,co-occurrence,1
+nvbh_code,parent_sale_name,co-occurrence,1
+nvbh_code,hub,co-occurrence,1
+nvbh_code,lat,co-occurrence,1
+nvbh_code,sale_name,co-occurrence,1
+nvbh_code,emp_name,co-occurrence,1
+nvbh_code,phone_number,co-occurrence,1
+nvbh_code,sale_type,co-occurrence,1
+parent_sale_name,hub,co-occurrence,1
+parent_sale_name,lat,co-occurrence,1
+parent_sale_name,sale_name,co-occurrence,1
+parent_sale_name,emp_name,co-occurrence,1
+parent_sale_name,phone_number,co-occurrence,1
+parent_sale_name,sale_type,co-occurrence,1
+hub,lat,co-occurrence,1
+hub,sale_name,co-occurrence,1
+hub,emp_name,co-occurrence,1
+hub,phone_number,co-occurrence,1
+hub,sale_type,co-occurrence,1
+lat,sale_name,co-occurrence,1
+lat,emp_name,co-occurrence,1
+lat,phone_number,co-occurrence,1
+lat,sale_type,co-occurrence,1
+sale_name,emp_name,co-occurrence,1
+sale_name,phone_number,co-occurrence,1
+sale_name,sale_type,co-occurrence,1
+emp_name,phone_number,co-occurrence,1
+emp_name,sale_type,co-occurrence,1
+phone_number,sale_type,co-occurrence,1
+precinct_name,n,co-occurrence,1
+precinct_name,pck_report_chatbox.get_vlr_data_by_precinct,co-occurrence,1
+precinct_name,mobifone_vlr_quantity_day,co-occurrence,1
+precinct_name,sum_date,co-occurrence,1
+precinct_name,saymee_vlr_quantity_day,co-occurrence,1
+precinct_name,date,co-occurrence,1
+precinct_name,bảng đs (new),co-occurrence,1
+precinct_name,precinct,co-occurrence,1
+precinct_name,tkc,co-occurrence,1
+n,pck_report_chatbox.get_vlr_data_by_precinct,co-occurrence,1
+n,mobifone_vlr_quantity_day,co-occurrence,1
+n,sum_date,co-occurrence,1
+n,saymee_vlr_quantity_day,co-occurrence,1
+n,date,co-occurrence,1
+n,bảng đs (new),co-occurrence,1
+n,precinct,co-occurrence,1
+n,tkc,co-occurrence,1
+pck_report_chatbox.get_vlr_data_by_precinct,mobifone_vlr_quantity_day,co-occurrence,1
+pck_report_chatbox.get_vlr_data_by_precinct,sum_date,co-occurrence,1
+pck_report_chatbox.get_vlr_data_by_precinct,saymee_vlr_quantity_day,co-occurrence,1
+pck_report_chatbox.get_vlr_data_by_precinct,date,co-occurrence,1
+pck_report_chatbox.get_vlr_data_by_precinct,bảng đs (new),co-occurrence,1
+pck_report_chatbox.get_vlr_data_by_precinct,precinct,co-occurrence,1
+pck_report_chatbox.get_vlr_data_by_precinct,tkc,co-occurrence,1
+mobifone_vlr_quantity_day,sum_date,co-occurrence,1
+mobifone_vlr_quantity_day,saymee_vlr_quantity_day,co-occurrence,1
+mobifone_vlr_quantity_day,date,co-occurrence,1
+mobifone_vlr_quantity_day,bảng đs (new),co-occurrence,1
+mobifone_vlr_quantity_day,precinct,co-occurrence,1
+mobifone_vlr_quantity_day,tkc,co-occurrence,1
+sum_date,saymee_vlr_quantity_day,co-occurrence,1
+sum_date,date,co-occurrence,1
+sum_date,bảng đs (new),co-occurrence,1
+sum_date,precinct,co-occurrence,1
+sum_date,tkc,co-occurrence,1
+saymee_vlr_quantity_day,date,co-occurrence,1
+saymee_vlr_quantity_day,bảng đs (new),co-occurrence,1
+saymee_vlr_quantity_day,precinct,co-occurrence,1
+saymee_vlr_quantity_day,tkc,co-occurrence,1
+date,bảng đs (new),co-occurrence,1
+date,precinct,co-occurrence,1
+date,tkc,co-occurrence,1
+bảng đs (new),precinct,co-occurrence,1
+bảng đs (new),tkc,co-occurrence,1
+precinct,tkc,co-occurrence,1
+precinct_name,bhm_rev_day,co-occurrence,1
+precinct_name,saymee_tkc_rev_month,co-occurrence,1
+precinct_name,bhm revenue (day),co-occurrence,1
+precinct_name,mobifone tkc revenue (day),co-occurrence,1
+precinct_name,saymee_tkc_rev_day,co-occurrence,1
+precinct_name,upper,co-occurrence,1
+precinct_name,precinct name,co-occurrence,1
+precinct_name,sum_date,co-occurrence,1
+precinct_name,to_date,co-occurrence,1
+bhm_rev_day,saymee_tkc_rev_month,co-occurrence,1
+bhm_rev_day,bhm revenue (day),co-occurrence,1
+bhm_rev_day,mobifone tkc revenue (day),co-occurrence,1
+bhm_rev_day,saymee_tkc_rev_day,co-occurrence,1
+bhm_rev_day,upper,co-occurrence,1
+bhm_rev_day,precinct name,co-occurrence,1
+bhm_rev_day,sum_date,co-occurrence,1
+bhm_rev_day,to_date,co-occurrence,1
+saymee_tkc_rev_month,bhm revenue (day),co-occurrence,1
+saymee_tkc_rev_month,mobifone tkc revenue (day),co-occurrence,1
+saymee_tkc_rev_month,saymee_tkc_rev_day,co-occurrence,1
+saymee_tkc_rev_month,upper,co-occurrence,1
+saymee_tkc_rev_month,precinct name,co-occurrence,1
+saymee_tkc_rev_month,sum_date,co-occurrence,1
+saymee_tkc_rev_month,to_date,co-occurrence,1
+bhm revenue (day),mobifone tkc revenue (day),co-occurrence,1
+bhm revenue (day),saymee_tkc_rev_day,co-occurrence,1
+bhm revenue (day),upper,co-occurrence,1
+bhm revenue (day),precinct name,co-occurrence,1
+bhm revenue (day),sum_date,co-occurrence,1
+bhm revenue (day),to_date,co-occurrence,1
+mobifone tkc revenue (day),saymee_tkc_rev_day,co-occurrence,1
+mobifone tkc revenue (day),upper,co-occurrence,1
+mobifone tkc revenue (day),precinct name,co-occurrence,1
+mobifone tkc revenue (day),sum_date,co-occurrence,1
+mobifone tkc revenue (day),to_date,co-occurrence,1
+saymee_tkc_rev_day,upper,co-occurrence,1
+saymee_tkc_rev_day,precinct name,co-occurrence,1
+saymee_tkc_rev_day,sum_date,co-occurrence,1
+saymee_tkc_rev_day,to_date,co-occurrence,1
+upper,precinct name,co-occurrence,1
+upper,sum_date,co-occurrence,1
+upper,to_date,co-occurrence,1
+precinct name,sum_date,co-occurrence,1
+precinct name,to_date,co-occurrence,1
+sum_date,to_date,co-occurrence,1
+all_quantity_month,sum_date,co-occurrence,1
+all_quantity_month,mf_quantity_month,co-occurrence,1
+all_quantity_month,branch_code,co-occurrence,1
+all_quantity_month,mc_quantity_day,co-occurrence,1
+all_quantity_month,name,co-occurrence,1
+all_quantity_month,shop_code,co-occurrence,1
+all_quantity_month,all_quantity_day,co-occurrence,1
+all_quantity_month,precinct_code,co-occurrence,1
+all_quantity_month,latitude,co-occurrence,1
+sum_date,mf_quantity_month,co-occurrence,1
+sum_date,branch_code,co-occurrence,1
+sum_date,mc_quantity_day,co-occurrence,1
+sum_date,name,co-occurrence,1
+sum_date,shop_code,co-occurrence,1
+sum_date,all_quantity_day,co-occurrence,1
+sum_date,precinct_code,co-occurrence,1
+sum_date,latitude,co-occurrence,1
+mf_quantity_month,branch_code,co-occurrence,1
+mf_quantity_month,mc_quantity_day,co-occurrence,1
+mf_quantity_month,name,co-occurrence,1
+mf_quantity_month,shop_code,co-occurrence,1
+mf_quantity_month,all_quantity_day,co-occurrence,1
+mf_quantity_month,precinct_code,co-occurrence,1
+mf_quantity_month,latitude,co-occurrence,1
+branch_code,mc_quantity_day,co-occurrence,1
+branch_code,name,co-occurrence,1
+branch_code,shop_code,co-occurrence,1
+branch_code,all_quantity_day,co-occurrence,1
+branch_code,precinct_code,co-occurrence,1
+branch_code,latitude,co-occurrence,1
+mc_quantity_day,name,co-occurrence,1
+mc_quantity_day,shop_code,co-occurrence,1
+mc_quantity_day,all_quantity_day,co-occurrence,1
+mc_quantity_day,precinct_code,co-occurrence,1
+mc_quantity_day,latitude,co-occurrence,1
+name,shop_code,co-occurrence,1
+name,all_quantity_day,co-occurrence,1
+name,precinct_code,co-occurrence,1
+name,latitude,co-occurrence,1
+shop_code,all_quantity_day,co-occurrence,1
+shop_code,precinct_code,co-occurrence,1
+shop_code,latitude,co-occurrence,1
+all_quantity_day,precinct_code,co-occurrence,1
+all_quantity_day,latitude,co-occurrence,1
+precinct_code,latitude,co-occurrence,1
+bảng project,name,co-occurrence,1
+bảng project,location_group_id,co-occurrence,1
+bảng project,id,co-occurrence,1
+bảng project,bậng project,co-occurrence,1
+name,location_group_id,co-occurrence,1
+name,id,co-occurrence,1
+name,bậng project,co-occurrence,1
+location_group_id,id,co-occurrence,1
+location_group_id,bậng project,co-occurrence,1
+id,bậng project,co-occurrence,1
+branch_code,precinct_name,co-occurrence,1
+branch_code,user_id,co-occurrence,1
+branch_code,precinct_code,co-occurrence,1
+branch_code,branch_name,co-occurrence,1
+branch_code,hub_code,co-occurrence,1
+branch_code,user_name,co-occurrence,1
+precinct_name,user_id,co-occurrence,1
+precinct_name,precinct_code,co-occurrence,1
+precinct_name,branch_name,co-occurrence,1
+precinct_name,hub_code,co-occurrence,1
+precinct_name,user_name,co-occurrence,1
+user_id,precinct_code,co-occurrence,1
+user_id,branch_name,co-occurrence,1
+user_id,hub_code,co-occurrence,1
+user_id,user_name,co-occurrence,1
+precinct_code,branch_name,co-occurrence,1
+precinct_code,hub_code,co-occurrence,1
+precinct_code,user_name,co-occurrence,1
+branch_name,hub_code,co-occurrence,1
+branch_name,user_name,co-occurrence,1
+hub_code,user_name,co-occurrence,1
+cell_site,longitude,co-occurrence,1
+cell_site,sum_date,co-occurrence,1
+cell_site,vlr_all_day,co-occurrence,1
+cell_site,vlr_3g_day,co-occurrence,1
+cell_site,vlr_3g_month,co-occurrence,1
+cell_site,vlr_all_month,co-occurrence,1
+cell_site,branch_code,co-occurrence,1
+cell_site,cltc_month,co-occurrence,1
+cell_site,cltc,co-occurrence,1
+longitude,sum_date,co-occurrence,1
+longitude,vlr_all_day,co-occurrence,1
+longitude,vlr_3g_day,co-occurrence,1
+longitude,vlr_3g_month,co-occurrence,1
+longitude,vlr_all_month,co-occurrence,1
+longitude,branch_code,co-occurrence,1
+longitude,cltc_month,co-occurrence,1
+longitude,cltc,co-occurrence,1
+sum_date,vlr_all_day,co-occurrence,1
+sum_date,vlr_3g_day,co-occurrence,1
+sum_date,vlr_3g_month,co-occurrence,1
+sum_date,vlr_all_month,co-occurrence,1
+sum_date,branch_code,co-occurrence,1
+sum_date,cltc_month,co-occurrence,1
+sum_date,cltc,co-occurrence,1
+vlr_all_day,vlr_3g_day,co-occurrence,1
+vlr_all_day,vlr_3g_month,co-occurrence,1
+vlr_all_day,vlr_all_month,co-occurrence,1
+vlr_all_day,branch_code,co-occurrence,1
+vlr_all_day,cltc_month,co-occurrence,1
+vlr_all_day,cltc,co-occurrence,1
+vlr_3g_day,vlr_3g_month,co-occurrence,1
+vlr_3g_day,vlr_all_month,co-occurrence,1
+vlr_3g_day,branch_code,co-occurrence,1
+vlr_3g_day,cltc_month,co-occurrence,1
+vlr_3g_day,cltc,co-occurrence,1
+vlr_3g_month,vlr_all_month,co-occurrence,1
+vlr_3g_month,branch_code,co-occurrence,1
+vlr_3g_month,cltc_month,co-occurrence,1
+vlr_3g_month,cltc,co-occurrence,1
+vlr_all_month,branch_code,co-occurrence,1
+vlr_all_month,cltc_month,co-occurrence,1
+vlr_all_month,cltc,co-occurrence,1
+branch_code,cltc_month,co-occurrence,1
+branch_code,cltc,co-occurrence,1
+cltc_month,cltc,co-occurrence,1
+dữ liệu điểm bán,mô tả bảng bđs (new),co-occurrence,1
+dữ liệu điểm bán,**kiểu dữ liệu**,co-occurrence,1
+dữ liệu điểm bán,**mô tả**,co-occurrence,1
+dữ liệu điểm bán,nguoi_giao_ke_hoach,co-occurrence,1
+dữ liệu điểm bán,mô tả,co-occurrence,1
+dữ liệu điểm bán,ten_diem_ban,co-occurrence,1
+dữ liệu điểm bán,chi tiết các cột trong bảng,co-occurrence,1
+dữ liệu điểm bán,ý nghĩa của bảng,co-occurrence,1
+dữ liệu điểm bán,ma_nhan_vien_cham_soc,co-occurrence,1
+mô tả bảng bđs (new),**kiểu dữ liệu**,co-occurrence,1
+mô tả bảng bđs (new),**mô tả**,co-occurrence,1
+mô tả bảng bđs (new),nguoi_giao_ke_hoach,co-occurrence,1
+mô tả bảng bđs (new),mô tả,co-occurrence,1
+mô tả bảng bđs (new),ten_diem_ban,co-occurrence,1
+mô tả bảng bđs (new),chi tiết các cột trong bảng,co-occurrence,1
+mô tả bảng bđs (new),ý nghĩa của bảng,co-occurrence,1
+mô tả bảng bđs (new),ma_nhan_vien_cham_soc,co-occurrence,1
+**kiểu dữ liệu**,**mô tả**,co-occurrence,1
+**kiểu dữ liệu**,nguoi_giao_ke_hoach,co-occurrence,1
+**kiểu dữ liệu**,mô tả,co-occurrence,1
+**kiểu dữ liệu**,ten_diem_ban,co-occurrence,1
+**kiểu dữ liệu**,chi tiết các cột trong bảng,co-occurrence,1
+**kiểu dữ liệu**,ý nghĩa của bảng,co-occurrence,1
+**kiểu dữ liệu**,ma_nhan_vien_cham_soc,co-occurrence,1
+**mô tả**,nguoi_giao_ke_hoach,co-occurrence,1
+**mô tả**,mô tả,co-occurrence,1
+**mô tả**,ten_diem_ban,co-occurrence,1
+**mô tả**,chi tiết các cột trong bảng,co-occurrence,1
+**mô tả**,ý nghĩa của bảng,co-occurrence,1
+**mô tả**,ma_nhan_vien_cham_soc,co-occurrence,1
+nguoi_giao_ke_hoach,mô tả,co-occurrence,1
+nguoi_giao_ke_hoach,ten_diem_ban,co-occurrence,1
+nguoi_giao_ke_hoach,chi tiết các cột trong bảng,co-occurrence,1
+nguoi_giao_ke_hoach,ý nghĩa của bảng,co-occurrence,1
+nguoi_giao_ke_hoach,ma_nhan_vien_cham_soc,co-occurrence,1
+mô tả,ten_diem_ban,co-occurrence,1
+mô tả,chi tiết các cột trong bảng,co-occurrence,1
+mô tả,ý nghĩa của bảng,co-occurrence,1
+mô tả,ma_nhan_vien_cham_soc,co-occurrence,1
+ten_diem_ban,chi tiết các cột trong bảng,co-occurrence,1
+ten_diem_ban,ý nghĩa của bảng,co-occurrence,1
+ten_diem_ban,ma_nhan_vien_cham_soc,co-occurrence,1
+chi tiết các cột trong bảng,ý nghĩa của bảng,co-occurrence,1
+chi tiết các cột trong bảng,ma_nhan_vien_cham_soc,co-occurrence,1
+ý nghĩa của bảng,ma_nhan_vien_cham_soc,co-occurrence,1
+isdn,gender,co-occurrence,1
+isdn,full_name,co-occurrence,1
+isdn,id,co-occurrence,1
+gender,full_name,co-occurrence,1
+gender,id,co-occurrence,1
+full_name,id,co-occurrence,1
+location_id,end_date,co-occurrence,1
+location_id,name,co-occurrence,1
+location_id,assigner_staff_id,co-occurrence,1
+location_id,assignee_staff_id,co-occurrence,1
+location_id,created_date,co-occurrence,1
+location_id,progress_id,co-occurrence,1
+location_id,start_date,co-occurrence,1
+location_id,id,co-occurrence,1
+location_id,bảng v_man_task,co-occurrence,1
+end_date,name,co-occurrence,1
+end_date,assigner_staff_id,co-occurrence,1
+end_date,assignee_staff_id,co-occurrence,1
+end_date,created_date,co-occurrence,1
+end_date,progress_id,co-occurrence,1
+end_date,start_date,co-occurrence,1
+end_date,id,co-occurrence,1
+end_date,bảng v_man_task,co-occurrence,1
+name,assigner_staff_id,co-occurrence,1
+name,assignee_staff_id,co-occurrence,1
+name,created_date,co-occurrence,1
+name,progress_id,co-occurrence,1
+name,start_date,co-occurrence,1
+name,id,co-occurrence,1
+name,bảng v_man_task,co-occurrence,1
+assigner_staff_id,assignee_staff_id,co-occurrence,1
+assigner_staff_id,created_date,co-occurrence,1
+assigner_staff_id,progress_id,co-occurrence,1
+assigner_staff_id,start_date,co-occurrence,1
+assigner_staff_id,id,co-occurrence,1
+assigner_staff_id,bảng v_man_task,co-occurrence,1
+assignee_staff_id,created_date,co-occurrence,1
+assignee_staff_id,progress_id,co-occurrence,1
+assignee_staff_id,start_date,co-occurrence,1
+assignee_staff_id,id,co-occurrence,1
+assignee_staff_id,bảng v_man_task,co-occurrence,1
+created_date,progress_id,co-occurrence,1
+created_date,start_date,co-occurrence,1
+created_date,id,co-occurrence,1
+created_date,bảng v_man_task,co-occurrence,1
+progress_id,start_date,co-occurrence,1
+progress_id,id,co-occurrence,1
+progress_id,bảng v_man_task,co-occurrence,1
+start_date,id,co-occurrence,1
+start_date,bảng v_man_task,co-occurrence,1
+id,bảng v_man_task,co-occurrence,1
+precinct_name,name,co-occurrence,1
+precinct_name,location_group_id,co-occurrence,1
+precinct_name,id,co-occurrence,1
+precinct_name,branch_name,co-occurrence,1
+precinct_name,hub,co-occurrence,1
+precinct_name,lon,co-occurrence,1
+precinct_name,project_id,co-occurrence,1
+precinct_name,lat,co-occurrence,1
+precinct_name,new,co-occurrence,1
+name,location_group_id,co-occurrence,1
+name,id,co-occurrence,1
+name,branch_name,co-occurrence,1
+name,hub,co-occurrence,1
+name,lon,co-occurrence,1
+name,project_id,co-occurrence,1
+name,lat,co-occurrence,1
+name,new,co-occurrence,1
+location_group_id,id,co-occurrence,1
+location_group_id,branch_name,co-occurrence,1
+location_group_id,hub,co-occurrence,1
+location_group_id,lon,co-occurrence,1
+location_group_id,project_id,co-occurrence,1
+location_group_id,lat,co-occurrence,1
+location_group_id,new,co-occurrence,1
+id,branch_name,co-occurrence,1
+id,hub,co-occurrence,1
+id,lon,co-occurrence,1
+id,project_id,co-occurrence,1
+id,lat,co-occurrence,1
+id,new,co-occurrence,1
+branch_name,hub,co-occurrence,1
+branch_name,lon,co-occurrence,1
+branch_name,project_id,co-occurrence,1
+branch_name,lat,co-occurrence,1
+branch_name,new,co-occurrence,1
+hub,lon,co-occurrence,1
+hub,project_id,co-occurrence,1
+hub,lat,co-occurrence,1
+hub,new,co-occurrence,1
+lon,project_id,co-occurrence,1
+lon,lat,co-occurrence,1
+lon,new,co-occurrence,1
+project_id,lat,co-occurrence,1
+project_id,new,co-occurrence,1
+lat,new,co-occurrence,1
+branch_code,name,co-occurrence,1
+branch_code,precinct,co-occurrence,1
+branch_code,branch_name,co-occurrence,1
+branch_code,hub,co-occurrence,1
+branch_code,id,co-occurrence,1
+branch_code,code,co-occurrence,1
+branch_code,new,co-occurrence,1
+name,precinct,co-occurrence,1
+name,branch_name,co-occurrence,1
+name,hub,co-occurrence,1
+name,id,co-occurrence,1
+name,code,co-occurrence,1
+name,new,co-occurrence,1
+precinct,branch_name,co-occurrence,1
+precinct,hub,co-occurrence,1
+precinct,id,co-occurrence,1
+precinct,code,co-occurrence,1
+precinct,new,co-occurrence,1
+branch_name,hub,co-occurrence,1
+branch_name,id,co-occurrence,1
+branch_name,code,co-occurrence,1
+branch_name,new,co-occurrence,1
+hub,id,co-occurrence,1
+hub,code,co-occurrence,1
+hub,new,co-occurrence,1
+id,code,co-occurrence,1
+id,new,co-occurrence,1
+code,new,co-occurrence,1
+public_location,type_name,co-occurrence,1
+public_location,brand_code,co-occurrence,1
+public_location,precinct_name,co-occurrence,1
+public_location,name,co-occurrence,1
+public_location,precinct_code,co-occurrence,1
+public_location,latitude,co-occurrence,1
+public_location,hub,co-occurrence,1
+public_location,id,co-occurrence,1
+public_location,type,co-occurrence,1
+type_name,brand_code,co-occurrence,1
+type_name,precinct_name,co-occurrence,1
+type_name,name,co-occurrence,1
+type_name,precinct_code,co-occurrence,1
+type_name,latitude,co-occurrence,1
+type_name,hub,co-occurrence,1
+type_name,id,co-occurrence,1
+type_name,type,co-occurrence,1
+brand_code,precinct_name,co-occurrence,1
+brand_code,name,co-occurrence,1
+brand_code,precinct_code,co-occurrence,1
+brand_code,latitude,co-occurrence,1
+brand_code,hub,co-occurrence,1
+brand_code,id,co-occurrence,1
+brand_code,type,co-occurrence,1
+precinct_name,name,co-occurrence,1
+precinct_name,precinct_code,co-occurrence,1
+precinct_name,latitude,co-occurrence,1
+precinct_name,hub,co-occurrence,1
+precinct_name,id,co-occurrence,1
+precinct_name,type,co-occurrence,1
+name,precinct_code,co-occurrence,1
+name,latitude,co-occurrence,1
+name,hub,co-occurrence,1
+name,id,co-occurrence,1
+name,type,co-occurrence,1
+precinct_code,latitude,co-occurrence,1
+precinct_code,hub,co-occurrence,1
+precinct_code,id,co-occurrence,1
+precinct_code,type,co-occurrence,1
+latitude,hub,co-occurrence,1
+latitude,id,co-occurrence,1
+latitude,type,co-occurrence,1
+hub,id,co-occurrence,1
+hub,type,co-occurrence,1
+id,type,co-occurrence,1
+sales,employee,co-occurrence,1
+sales,emp_code,co-occurrence,1
+sales,branch_name,co-occurrence,1
+sales,hub_leader,co-occurrence,1
+sales,hub,co-occurrence,1
+sales,sales_code,co-occurrence,1
+sales,branch,co-occurrence,1
+sales,id,co-occurrence,1
+sales,employee_sales,co-occurrence,1
+employee,emp_code,co-occurrence,1
+employee,branch_name,co-occurrence,1
+employee,hub_leader,co-occurrence,1
+employee,hub,co-occurrence,1
+employee,sales_code,co-occurrence,1
+employee,branch,co-occurrence,1
+employee,id,co-occurrence,1
+employee,employee_sales,co-occurrence,1
+emp_code,branch_name,co-occurrence,1
+emp_code,hub_leader,co-occurrence,1
+emp_code,hub,co-occurrence,1
+emp_code,sales_code,co-occurrence,1
+emp_code,branch,co-occurrence,1
+emp_code,id,co-occurrence,1
+emp_code,employee_sales,co-occurrence,1
+branch_name,hub_leader,co-occurrence,1
+branch_name,hub,co-occurrence,1
+branch_name,sales_code,co-occurrence,1
+branch_name,branch,co-occurrence,1
+branch_name,id,co-occurrence,1
+branch_name,employee_sales,co-occurrence,1
+hub_leader,hub,co-occurrence,1
+hub_leader,sales_code,co-occurrence,1
+hub_leader,branch,co-occurrence,1
+hub_leader,id,co-occurrence,1
+hub_leader,employee_sales,co-occurrence,1
+hub,sales_code,co-occurrence,1
+hub,branch,co-occurrence,1
+hub,id,co-occurrence,1
+hub,employee_sales,co-occurrence,1
+sales_code,branch,co-occurrence,1
+sales_code,id,co-occurrence,1
+sales_code,employee_sales,co-occurrence,1
+branch,id,co-occurrence,1
+branch,employee_sales,co-occurrence,1
+id,employee_sales,co-occurrence,1
+concepts,name,co-occurrence,1
+concepts,quản lý công việc và dự án,co-occurrence,1
+concepts,mô tả,co-occurrence,1
+concepts,objects,co-occurrence,1
+concepts,items,co-occurrence,1
+concepts,bảng bđs (new),co-occurrence,1
+concepts,location_groups,co-occurrence,1
+concepts,location_group,co-occurrence,1
+concepts,names,co-occurrence,1
+name,quản lý công việc và dự án,co-occurrence,1
+name,mô tả,co-occurrence,1
+name,objects,co-occurrence,1
+name,items,co-occurrence,1
+name,bảng bđs (new),co-occurrence,1
+name,location_groups,co-occurrence,1
+name,location_group,co-occurrence,1
+name,names,co-occurrence,1
+quản lý công việc và dự án,mô tả,co-occurrence,1
+quản lý công việc và dự án,objects,co-occurrence,1
+quản lý công việc và dự án,items,co-occurrence,1
+quản lý công việc và dự án,bảng bđs (new),co-occurrence,1
+quản lý công việc và dự án,location_groups,co-occurrence,1
+quản lý công việc và dự án,location_group,co-occurrence,1
+quản lý công việc và dự án,names,co-occurrence,1
+mô tả,objects,co-occurrence,1
+mô tả,items,co-occurrence,1
+mô tả,bảng bđs (new),co-occurrence,1
+mô tả,location_groups,co-occurrence,1
+mô tả,location_group,co-occurrence,1
+mô tả,names,co-occurrence,1
+objects,items,co-occurrence,1
+objects,bảng bđs (new),co-occurrence,1
+objects,location_groups,co-occurrence,1
+objects,location_group,co-occurrence,1
+objects,names,co-occurrence,1
+items,bảng bđs (new),co-occurrence,1
+items,location_groups,co-occurrence,1
+items,location_group,co-occurrence,1
+items,names,co-occurrence,1
+bảng bđs (new),location_groups,co-occurrence,1
+bảng bđs (new),location_group,co-occurrence,1
+bảng bđs (new),names,co-occurrence,1
+location_groups,location_group,co-occurrence,1
+location_groups,names,co-occurrence,1
+location_group,names,co-occurrence,1

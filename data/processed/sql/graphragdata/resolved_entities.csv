@@ -1,0 +1,166 @@
+name,description
+**kiểu dữ liệu**,Data type.
+**mô tả**,Column description.
+**tên cột**,Column name.
+address,Địa chỉ điểm bán | Địa chỉ cửa hàng | Địa chỉ | Địa chỉ địa điểm.
+all_quantity_all_year,Tổng lũy kế thuê bao trong tất cả các năm.
+all_quantity_day,Tổng số thuê bao trong ngày hiện tại | Tổng số thuê bao trong ngày.
+all_quantity_last_week,Tổng số thuê bao trong tuần trước.
+all_quantity_month,Tổng số thuê bao trong tháng hiện tại | Tổng số thuê bao trong tháng.
+all_quantity_this_week,Tổng số thuê bao trong tuần hiện tại.
+all_quantity_year,Tổng số thuê bao trong năm hiện tại.
+assignee_staff_id,Mã Người nhận.
+assigner_staff_id,Mã Người giao.
+bhm revenue (day),Doanh thu BHM trong ngày.
+bhm revenue (month),Doanh thu BHM trong tháng.
+bhm_rev_day,Doanh thu BHM trong ngày.
+bhm_rev_month,Doanh thu BHM trong tháng.
+branch,A business center.
+branch_code,"Here is a summarized paragraph:
+
+The ""branch_code"" entity represents the branch code of a commune/ward that a user has access to. This branch code is categorized under the type of Trung Tâm Kinh Doanh (TTKD), specifically identifying the user's access to one of the following branches: Trung Tâm Kinh Doanh Sài Gòn, Gia Định, Bến Thành, Gò Vấp, Thủ Đức, Bình Dương, or Vũng Tàu. The branch code is comprised of the Mã TTKD and Mã TTKD/chi nhánh, providing a unique identifier for each branch."
+branch_name,"Here is a professional summary of the descriptions:
+
+The entity ""branch_name"" refers to the various branch offices of TTKD, consisting of seven values that encompass the names and designations of each branch."
+brand_code,Mã TTKD/chi nhánh.
+bảng,Chi tiết các cột trong bảng | Lưu trữ thông tin doanh thu tài khoản chính.
+bảng bđs (new),Table storing information about location groups.
+bảng nhan_vien_cham_soc_long,Store history of point-of-sale staff care data.
+bảng project,Lưu trữ thông tin dự án.
+bảng table,Lưu trữ thông tin số lượng VLR.
+bảng v_bds_site,Lưu trữ thông tin về cell/trạm BTS.
+bảng v_man_task,Lưu trữ thông tin các công việc được khai báo.
+bảng đs (new),Mô tả bảng BĐS (NEW).
+bậng project,Lưu trữ thông tin dự án.
+cell_site,Mã trạm BTS / Cell Site.
+chi tiết các cột trong bảng,Column details table.
+cltc,Chỉ số chất lượng chênh lệch thu chi.
+cltc_month,Tháng ghi nhận chênh lệch thu chi.
+code,Mã phường xã.
+colum_name,Tên cột.
+concepts,The concepts associated with this location group.
+created_date,Thời gian tạo bản ghi.
+data_type,Kiểu dữ liệu.
+date,ngày phát triển thuê bao | Ngày báo cáo doanh thu.
+description,Mô tả.
+dữ liệu điểm bán,Point-of-sale data table.
+emp_code,Employee code.
+emp_name,Tên nhân viên phụ trách.
+employee,A member of staff.
+employee_sales,Table for storing employee sales information.
+end_date,Ngày kết thúc công việc.
+full_name,Họ và tên người dùng.
+gender,Giới tính.
+hub,Tên Hub | Hub quản lý | A managerial area | Name of the hub.
+hub_code,Hub quản lý (mã hub) của phường/xã mà user được truy cập (ví dụ: VT.1).
+hub_leader,Tên trưởng Hub | Name or code of the hub leader.
+id,Khóa chính | Mã định danh điểm bán | Unique identifier | Khoá chính | Primary key. | Mã định danh địa điểm | Mã định danh công việc | Mã định danh người dùng.
+insert_date,Date of data recording.
+isdn,Số thuê bao/số điện thoại.
+items,The items associated with this location group.
+last_date_last_week,Ngày kết thúc tuần trước.
+last_date_this_week,Ngày kết thúc tuần hiện tại.
+lat,Vĩ độ.
+latitude,Vĩ độ.
+location_group,Table storing information about location groups.
+location_group_id,Mã nhóm địa điểm liên kết | Mã nhóm địa điểm.
+location_groups,Table storing information about location groups.
+location_id,Mã địa điểm.
+lon,Kinh độ.
+longitude,Kinh độ.
+ma_diem_ban,Point-of-sale code.
+ma_nhan_vien_cham_soc,Staff identification code.
+mc_quantity_all_year,Tổng số thuê bao trả trước trong tất cả các năm.
+mc_quantity_day,Số lượng thuê bao trả trước trong ngày hiện tại | Số lượng thuê bao trả trước trong ngày.
+mc_quantity_last_week,Số lượng thuê bao trả trước trong tuần trước.
+mc_quantity_month,Số lượng thuê bao trả trước trong tháng hiện tại | Số lượng thuê bao trả trước trong tháng.
+mc_quantity_this_week,Số lượng thuê bao trả trước trong tuần hiện tại.
+mc_quantity_year,Số lượng thuê bao trả trước trong năm hiện tại.
+mf_quantity_all_year,Lũy kế thuê bao trả sau trong tất cả các năm.
+mf_quantity_day,Số lượng thuê bao trả sau trong ngày hiện tại | Số lượng thuê bao trả sau trong ngày.
+mf_quantity_last_week,Số lượng thuê bao trả sau trong tuần trước.
+mf_quantity_month,Số lượng thuê bao trả sau trong tháng hiện tại | Số lượng thuê bao trả sau trong tháng.
+mf_quantity_this_week,Số lượng thuê bao trả sau trong tuần hiện tại.
+mf_quantity_year,Số lượng thuê bao trả sau trong năm hiện tại.
+mobifone,MobiFone (telecom company).
+mobifone tkc revenue (day),Doanh thu TKC MobiFone trong ngày.
+mobifone tkc revenue (month),Doanh thu TKC MobiFone trong tháng.
+mobifone_tkc_rev_day,Doanh thu TKC MobiFone trong ngày.
+mobifone_tkc_rev_month,Doanh thu TKC MobiFone trong tháng.
+mobifone_vlr_quantity_day,Số lượng VLR MobiFone trong ngày.
+mobifone_vlr_quantity_month,Số lượng VLR MobiFone trong tháng.
+mô tả,Ý nghĩa của bảng: Lưu trữ thông tin của các điểm bán | Description | Description of the table.
+mô tả bảng bđs (new),Description of table.
+n,Ngày phát triển thuê bao.
+n-2,Dữ liệu mới nhất là ngày N-2.
+name,Tên phường xã | Tên cửa hàng | Tên địa điểm | Name of the location group. | Tên dự án | Tên công việc.
+names,The names associated with this location group.
+new,Tô tả bảng BĐS | Mô tả bảng BĐS.
+ngay_cham_soc,Date of staff care at point-of-sale.
+nguoi_giao_ke_hoach,Person responsible for planning care.
+nhan_vien_cham_soc,Staff name.
+nvbh_code,Mã nhân viên bán hàng.
+objects,The objects associated with this location group.
+parent_sale_code,Mã nhân viên/quản lý cấp trên.
+parent_sale_name,Tên nhân viên/quản lý cấp trên.
+pck_report_chatbox,Hàm xử lý báo cáo doanh thu TKC.
+pck_report_chatbox.get_vlr_data_by_precinct,"TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))."
+phone_number,Số điện thoại điểm bán.
+point_of_sale,Lưu trữ thông tin của các điểm bán.
+precinct,Lưu trữ thông tin của các phường/xã | Precinct (administrative division).
+precinct code,Mã phường/xã.
+precinct name,Tên phường/xã.
+precinct user permission,Bảng V_USER_PRECINCT_PERMISSION.
+precinct_code,Mã phường/xã mà user được truy cập (ví dụ: VTAU) | Mã phường/xã.
+precinct_name,Tên phường/xã mà user được truy cập (ví dụ: Phường Vũng Tàu) | Tên phường/xã.
+priority,Mức độ ưu tiên.
+progress_id,Tiến độ thực hiện.
+project_id,Mã dự án.
+public_location,Lưu trữ thông tin các điểm dữ liệu địa lý hành chính dùng để hiển thị lên bản đồ số.
+quản lý công việc và dự án,Category of the table.
+sale_code,Mã điểm bán.
+sale_name,Tên điểm bán.
+sale_point_quantity_last_week,"Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần trước."
+sale_point_quantity_this_week,"Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần hiện tại."
+sale_type,Loại điểm bán.
+sales,A sales point.
+sales_code,Sales code.
+sales_name,Name of the sales person.
+saymee,Saymee (telecom company).
+saymee tkc revenue (day),Doanh thu TKC Saymee trong ngày.
+saymee tkc revenue (month),Doanh thu TKC Saymee trong tháng.
+saymee_tkc_rev_day,Doanh thu TKC Saymee trong ngày.
+saymee_tkc_rev_month,Doanh thu TKC Saymee trong tháng.
+saymee_vlr_quantity_day,Số lượng VLR Saymee trong ngày.
+saymee_vlr_quantity_month,Số lượng VLR Saymee trong tháng.
+shop_code,Mã cửa hàng.
+shop_type,"Loại cửa hàng (101: cửa hàng, 201: đại lý uỷ quyền, 202: đại lý chuyên)."
+start_date,Ngày bắt đầu công việc.
+start_date_last_week,Ngày bắt đầu tuần trước.
+start_date_this_week,Ngày bắt đầu tuần hiện tại.
+status,"Trạng thái cửa hàng | Trạng thái | Trạng thái trạm (1: đang hoạt động, 0: không hoạt động/OFF)."
+sum_date,Ngày tổng hợp dữ liệu | Ngày báo cáo dữ liệu VLR | Ngày báo cáo doanh thu.
+sum_month,Tháng tổng hợp dữ liệu | Tháng báo cáo dữ liệu VLR | Tháng báo cáo doanh thu.
+sum_year,Năm tổng hợp dữ liệu.
+ten_diem_ban,Point-of-sale name.
+tkc,Báo cáo doanh thu TKC.
+to_char,Конвертация тип строк.
+to_date,Дата конвертация.
+type,"Loại địa điểm, bao gồm các giá trị: 'TTHC', 'CA', 'CB', 'BV', 'CD', 'PCCC', 'DN', 'DH'."
+type_name,"Tên loại địa điểm, bao gồm các giá trị: 'Trung tâm hành chính', 'Trụ sở công an', 'Cảng biển', 'Bệnh viện', 'Cao đẳng', 'Trạm PCCC', 'Doanh Nghiệp', 'Đại học'."
+upper,Конвертация тип строк.
+user name,user name | Tên người dùng được truy cập.
+user_id,Mã định danh user.
+user_name,Mã user (ví dụ: HUY.NGUYEN).
+v_user_precinct_permission,Lưu trữ thông tin phân quyền.
+vlr,Volume of Long Reach (VLR).
+vlr_2g_month,VLR 2G trong tháng.
+vlr_3g_day,VLR 3G trong ngày.
+vlr_3g_month,VLR 3G trong tháng.
+vlr_4g_day,VLR 4G trong ngày.
+vlr_4g_month,VLR 4G trong tháng.
+vlr_5g_day,VLR 5G trong ngày.
+vlr_5g_month,VLR 5G trong tháng.
+vlr_all_day,Tổng VLR trong ngày.
+vlr_all_month,Tổng VLR trong tháng.
+ý nghĩa của bảng,Table meaning description.

@@ -1,0 +1,3754 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2026-08-23">
+    <creator>NetworkX 3.6.1</creator>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="4" title="description" type="string" />
+    </attributes>
+    <attributes mode="static" class="node">
+      <attribute id="0" title="display_name" type="string" />
+      <attribute id="1" title="description" type="string" />
+      <attribute id="2" title="community_level_0" type="long" />
+      <attribute id="3" title="community_level_1" type="long" />
+    </attributes>
+    <nodes>
+      <node id="**kiểu dữ liệu**" label="**kiểu dữ liệu**">
+        <attvalues>
+          <attvalue for="0" value="**kiểu dữ liệu**" />
+          <attvalue for="1" value="Data type." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="14" />
+        </attvalues>
+      </node>
+      <node id="**mô tả**" label="**mô tả**">
+        <attvalues>
+          <attvalue for="0" value="**mô tả**" />
+          <attvalue for="1" value="Column description." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="17" />
+        </attvalues>
+      </node>
+      <node id="address" label="address">
+        <attvalues>
+          <attvalue for="0" value="address" />
+          <attvalue for="1" value="Địa chỉ điểm bán | Địa chỉ cửa hàng | Địa chỉ | Địa chỉ địa điểm." />
+          <attvalue for="2" value="1" />
+        </attvalues>
+      </node>
+      <node id="all_quantity_all_year" label="all_quantity_all_year">
+        <attvalues>
+          <attvalue for="0" value="all_quantity_all_year" />
+          <attvalue for="1" value="Tổng lũy kế thuê bao trong tất cả các năm." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="24" />
+        </attvalues>
+      </node>
+      <node id="all_quantity_day" label="all_quantity_day">
+        <attvalues>
+          <attvalue for="0" value="all_quantity_day" />
+          <attvalue for="1" value="Tổng số thuê bao trong ngày hiện tại | Tổng số thuê bao trong ngày." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="34" />
+        </attvalues>
+      </node>
+      <node id="all_quantity_month" label="all_quantity_month">
+        <attvalues>
+          <attvalue for="0" value="all_quantity_month" />
+          <attvalue for="1" value="Tổng số thuê bao trong tháng hiện tại | Tổng số thuê bao trong tháng." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="31" />
+        </attvalues>
+      </node>
+      <node id="assignee_staff_id" label="assignee_staff_id">
+        <attvalues>
+          <attvalue for="0" value="assignee_staff_id" />
+          <attvalue for="1" value="Mã Người nhận." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="35" />
+        </attvalues>
+      </node>
+      <node id="assigner_staff_id" label="assigner_staff_id">
+        <attvalues>
+          <attvalue for="0" value="assigner_staff_id" />
+          <attvalue for="1" value="Mã Người giao." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="38" />
+        </attvalues>
+      </node>
+      <node id="bhm revenue (day)" label="bhm revenue (day)">
+        <attvalues>
+          <attvalue for="0" value="bhm revenue (day)" />
+          <attvalue for="1" value="Doanh thu BHM trong ngày." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="41" />
+        </attvalues>
+      </node>
+      <node id="bhm_rev_day" label="bhm_rev_day">
+        <attvalues>
+          <attvalue for="0" value="bhm_rev_day" />
+          <attvalue for="1" value="Doanh thu BHM trong ngày." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="42" />
+        </attvalues>
+      </node>
+      <node id="branch" label="branch">
+        <attvalues>
+          <attvalue for="0" value="branch" />
+          <attvalue for="1" value="A business center." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="49" />
+        </attvalues>
+      </node>
+      <node id="branch_code" label="branch_code">
+        <attvalues>
+          <attvalue for="0" value="branch_code" />
+          <attvalue for="1" value="Here is a summarized paragraph:&#10;&#10;The &quot;branch_code&quot; entity represents the branch code of a commune/ward that a user has access to. This branch code is categorized under the type of Trung Tâm Kinh Doanh (TTKD), specifically identifying the user's access to one of the following branches: Trung Tâm Kinh Doanh Sài Gòn, Gia Định, Bến Thành, Gò Vấp, Thủ Đức, Bình Dương, or Vũng Tàu. The branch code is comprised of the Mã TTKD and Mã TTKD/chi nhánh, providing a unique identifier for each branch." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="56" />
+        </attvalues>
+      </node>
+      <node id="branch_name" label="branch_name">
+        <attvalues>
+          <attvalue for="0" value="branch_name" />
+          <attvalue for="1" value="Here is a professional summary of the descriptions:&#10;&#10;The entity &quot;branch_name&quot; refers to the various branch offices of TTKD, consisting of seven values that encompass the names and designations of each branch." />
+          <attvalue for="2" value="3" />
+        </attvalues>
+      </node>
+      <node id="brand_code" label="brand_code">
+        <attvalues>
+          <attvalue for="0" value="brand_code" />
+          <attvalue for="1" value="Mã TTKD/chi nhánh." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="68" />
+        </attvalues>
+      </node>
+      <node id="bảng" label="bảng">
+        <attvalues>
+          <attvalue for="0" value="bảng" />
+          <attvalue for="1" value="Chi tiết các cột trong bảng | Lưu trữ thông tin doanh thu tài khoản chính." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="23" />
+        </attvalues>
+      </node>
+      <node id="bảng bđs (new)" label="bảng bđs (new)">
+        <attvalues>
+          <attvalue for="0" value="bảng bđs (new)" />
+          <attvalue for="1" value="Table storing information about location groups." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="70" />
+        </attvalues>
+      </node>
+      <node id="bảng project" label="bảng project">
+        <attvalues>
+          <attvalue for="0" value="bảng project" />
+          <attvalue for="1" value="Lưu trữ thông tin dự án." />
+          <attvalue for="2" value="10" />
+          <attvalue for="3" value="81" />
+        </attvalues>
+      </node>
+      <node id="bảng v_man_task" label="bảng v_man_task">
+        <attvalues>
+          <attvalue for="0" value="bảng v_man_task" />
+          <attvalue for="1" value="Lưu trữ thông tin các công việc được khai báo." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="40" />
+        </attvalues>
+      </node>
+      <node id="bảng đs (new)" label="bảng đs (new)">
+        <attvalues>
+          <attvalue for="0" value="bảng đs (new)" />
+          <attvalue for="1" value="Mô tả bảng BĐS (NEW)." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="84" />
+        </attvalues>
+      </node>
+      <node id="bậng project" label="bậng project">
+        <attvalues>
+          <attvalue for="0" value="bậng project" />
+          <attvalue for="1" value="Lưu trữ thông tin dự án." />
+          <attvalue for="2" value="10" />
+          <attvalue for="3" value="82" />
+        </attvalues>
+      </node>
+      <node id="cell_site" label="cell_site">
+        <attvalues>
+          <attvalue for="0" value="cell_site" />
+          <attvalue for="1" value="Mã trạm BTS / Cell Site." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="57" />
+        </attvalues>
+      </node>
+      <node id="chi tiết các cột trong bảng" label="chi tiết các cột trong bảng">
+        <attvalues>
+          <attvalue for="0" value="chi tiết các cột trong bảng" />
+          <attvalue for="1" value="Column details table." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="20" />
+        </attvalues>
+      </node>
+      <node id="cltc" label="cltc">
+        <attvalues>
+          <attvalue for="0" value="cltc" />
+          <attvalue for="1" value="Chỉ số chất lượng chênh lệch thu chi." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="64" />
+        </attvalues>
+      </node>
+      <node id="cltc_month" label="cltc_month">
+        <attvalues>
+          <attvalue for="0" value="cltc_month" />
+          <attvalue for="1" value="Tháng ghi nhận chênh lệch thu chi." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="63" />
+        </attvalues>
+      </node>
+      <node id="code" label="code">
+        <attvalues>
+          <attvalue for="0" value="code" />
+          <attvalue for="1" value="Mã phường xã." />
+          <attvalue for="2" value="3" />
+        </attvalues>
+      </node>
+      <node id="concepts" label="concepts">
+        <attvalues>
+          <attvalue for="0" value="concepts" />
+          <attvalue for="1" value="The concepts associated with this location group." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="72" />
+        </attvalues>
+      </node>
+      <node id="created_date" label="created_date">
+        <attvalues>
+          <attvalue for="0" value="created_date" />
+          <attvalue for="1" value="Thời gian tạo bản ghi." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="37" />
+        </attvalues>
+      </node>
+      <node id="date" label="date">
+        <attvalues>
+          <attvalue for="0" value="date" />
+          <attvalue for="1" value="ngày phát triển thuê bao | Ngày báo cáo doanh thu." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="89" />
+        </attvalues>
+      </node>
+      <node id="dữ liệu điểm bán" label="dữ liệu điểm bán">
+        <attvalues>
+          <attvalue for="0" value="dữ liệu điểm bán" />
+          <attvalue for="1" value="Point-of-sale data table." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="15" />
+        </attvalues>
+      </node>
+      <node id="emp_code" label="emp_code">
+        <attvalues>
+          <attvalue for="0" value="emp_code" />
+          <attvalue for="1" value="Employee code." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="53" />
+        </attvalues>
+      </node>
+      <node id="emp_name" label="emp_name">
+        <attvalues>
+          <attvalue for="0" value="emp_name" />
+          <attvalue for="1" value="Tên nhân viên phụ trách." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="92" />
+        </attvalues>
+      </node>
+      <node id="employee" label="employee">
+        <attvalues>
+          <attvalue for="0" value="employee" />
+          <attvalue for="1" value="A member of staff." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="50" />
+        </attvalues>
+      </node>
+      <node id="employee_sales" label="employee_sales">
+        <attvalues>
+          <attvalue for="0" value="employee_sales" />
+          <attvalue for="1" value="Table for storing employee sales information." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="55" />
+        </attvalues>
+      </node>
+      <node id="end_date" label="end_date">
+        <attvalues>
+          <attvalue for="0" value="end_date" />
+          <attvalue for="1" value="Ngày kết thúc công việc." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="37" />
+        </attvalues>
+      </node>
+      <node id="full_name" label="full_name">
+        <attvalues>
+          <attvalue for="0" value="full_name" />
+          <attvalue for="1" value="Họ và tên người dùng." />
+          <attvalue for="2" value="13" />
+        </attvalues>
+      </node>
+      <node id="gender" label="gender">
+        <attvalues>
+          <attvalue for="0" value="gender" />
+          <attvalue for="1" value="Giới tính." />
+          <attvalue for="2" value="13" />
+        </attvalues>
+      </node>
+      <node id="hub" label="hub">
+        <attvalues>
+          <attvalue for="0" value="hub" />
+          <attvalue for="1" value="Tên Hub | Hub quản lý | A managerial area | Name of the hub." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="51" />
+        </attvalues>
+      </node>
+      <node id="hub_code" label="hub_code">
+        <attvalues>
+          <attvalue for="0" value="hub_code" />
+          <attvalue for="1" value="Hub quản lý (mã hub) của phường/xã mà user được truy cập (ví dụ: VT.1)." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="67" />
+        </attvalues>
+      </node>
+      <node id="hub_leader" label="hub_leader">
+        <attvalues>
+          <attvalue for="0" value="hub_leader" />
+          <attvalue for="1" value="Tên trưởng Hub | Name or code of the hub leader." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="54" />
+        </attvalues>
+      </node>
+      <node id="id" label="id">
+        <attvalues>
+          <attvalue for="0" value="id" />
+          <attvalue for="1" value="Khóa chính | Mã định danh điểm bán | Unique identifier | Khoá chính | Primary key. | Mã định danh địa điểm | Mã định danh công việc | Mã định danh người dùng." />
+          <attvalue for="2" value="10" />
+          <attvalue for="3" value="79" />
+        </attvalues>
+      </node>
+      <node id="isdn" label="isdn">
+        <attvalues>
+          <attvalue for="0" value="isdn" />
+          <attvalue for="1" value="Số thuê bao/số điện thoại." />
+          <attvalue for="2" value="13" />
+        </attvalues>
+      </node>
+      <node id="items" label="items">
+        <attvalues>
+          <attvalue for="0" value="items" />
+          <attvalue for="1" value="The items associated with this location group." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="75" />
+        </attvalues>
+      </node>
+      <node id="last_date_last_week" label="last_date_last_week">
+        <attvalues>
+          <attvalue for="0" value="last_date_last_week" />
+          <attvalue for="1" value="Ngày kết thúc tuần trước." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="26" />
+        </attvalues>
+      </node>
+      <node id="last_date_this_week" label="last_date_this_week">
+        <attvalues>
+          <attvalue for="0" value="last_date_this_week" />
+          <attvalue for="1" value="Ngày kết thúc tuần hiện tại." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="30" />
+        </attvalues>
+      </node>
+      <node id="lat" label="lat">
+        <attvalues>
+          <attvalue for="0" value="lat" />
+          <attvalue for="1" value="Vĩ độ." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="91" />
+        </attvalues>
+      </node>
+      <node id="latitude" label="latitude">
+        <attvalues>
+          <attvalue for="0" value="latitude" />
+          <attvalue for="1" value="Vĩ độ." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="34" />
+        </attvalues>
+      </node>
+      <node id="location_group" label="location_group">
+        <attvalues>
+          <attvalue for="0" value="location_group" />
+          <attvalue for="1" value="Table storing information about location groups." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="71" />
+        </attvalues>
+      </node>
+      <node id="location_group_id" label="location_group_id">
+        <attvalues>
+          <attvalue for="0" value="location_group_id" />
+          <attvalue for="1" value="Mã nhóm địa điểm liên kết | Mã nhóm địa điểm." />
+          <attvalue for="2" value="10" />
+          <attvalue for="3" value="80" />
+        </attvalues>
+      </node>
+      <node id="location_groups" label="location_groups">
+        <attvalues>
+          <attvalue for="0" value="location_groups" />
+          <attvalue for="1" value="Table storing information about location groups." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="76" />
+        </attvalues>
+      </node>
+      <node id="location_id" label="location_id">
+        <attvalues>
+          <attvalue for="0" value="location_id" />
+          <attvalue for="1" value="Mã địa điểm." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="36" />
+        </attvalues>
+      </node>
+      <node id="lon" label="lon">
+        <attvalues>
+          <attvalue for="0" value="lon" />
+          <attvalue for="1" value="Kinh độ." />
+          <attvalue for="2" value="3" />
+        </attvalues>
+      </node>
+      <node id="longitude" label="longitude">
+        <attvalues>
+          <attvalue for="0" value="longitude" />
+          <attvalue for="1" value="Kinh độ." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="58" />
+        </attvalues>
+      </node>
+      <node id="ma_nhan_vien_cham_soc" label="ma_nhan_vien_cham_soc">
+        <attvalues>
+          <attvalue for="0" value="ma_nhan_vien_cham_soc" />
+          <attvalue for="1" value="Staff identification code." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="22" />
+        </attvalues>
+      </node>
+      <node id="mc_quantity_day" label="mc_quantity_day">
+        <attvalues>
+          <attvalue for="0" value="mc_quantity_day" />
+          <attvalue for="1" value="Số lượng thuê bao trả trước trong ngày hiện tại | Số lượng thuê bao trả trước trong ngày." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="29" />
+        </attvalues>
+      </node>
+      <node id="mc_quantity_month" label="mc_quantity_month">
+        <attvalues>
+          <attvalue for="0" value="mc_quantity_month" />
+          <attvalue for="1" value="Số lượng thuê bao trả trước trong tháng hiện tại | Số lượng thuê bao trả trước trong tháng." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="28" />
+        </attvalues>
+      </node>
+      <node id="mf_quantity_all_year" label="mf_quantity_all_year">
+        <attvalues>
+          <attvalue for="0" value="mf_quantity_all_year" />
+          <attvalue for="1" value="Lũy kế thuê bao trả sau trong tất cả các năm." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="25" />
+        </attvalues>
+      </node>
+      <node id="mf_quantity_last_week" label="mf_quantity_last_week">
+        <attvalues>
+          <attvalue for="0" value="mf_quantity_last_week" />
+          <attvalue for="1" value="Số lượng thuê bao trả sau trong tuần trước." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="33" />
+        </attvalues>
+      </node>
+      <node id="mf_quantity_month" label="mf_quantity_month">
+        <attvalues>
+          <attvalue for="0" value="mf_quantity_month" />
+          <attvalue for="1" value="Số lượng thuê bao trả sau trong tháng hiện tại | Số lượng thuê bao trả sau trong tháng." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="34" />
+        </attvalues>
+      </node>
+      <node id="mobifone tkc revenue (day)" label="mobifone tkc revenue (day)">
+        <attvalues>
+          <attvalue for="0" value="mobifone tkc revenue (day)" />
+          <attvalue for="1" value="Doanh thu TKC MobiFone trong ngày." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="44" />
+        </attvalues>
+      </node>
+      <node id="mobifone_vlr_quantity_day" label="mobifone_vlr_quantity_day">
+        <attvalues>
+          <attvalue for="0" value="mobifone_vlr_quantity_day" />
+          <attvalue for="1" value="Số lượng VLR MobiFone trong ngày." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="87" />
+        </attvalues>
+      </node>
+      <node id="mô tả" label="mô tả">
+        <attvalues>
+          <attvalue for="0" value="mô tả" />
+          <attvalue for="1" value="Ý nghĩa của bảng: Lưu trữ thông tin của các điểm bán | Description | Description of the table." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="23" />
+        </attvalues>
+      </node>
+      <node id="mô tả bảng bđs (new)" label="mô tả bảng bđs (new)">
+        <attvalues>
+          <attvalue for="0" value="mô tả bảng bđs (new)" />
+          <attvalue for="1" value="Description of table." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="16" />
+        </attvalues>
+      </node>
+      <node id="n" label="n">
+        <attvalues>
+          <attvalue for="0" value="n" />
+          <attvalue for="1" value="Ngày phát triển thuê bao." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="85" />
+        </attvalues>
+      </node>
+      <node id="name" label="name">
+        <attvalues>
+          <attvalue for="0" value="name" />
+          <attvalue for="1" value="Tên phường xã | Tên cửa hàng | Tên địa điểm | Name of the location group. | Tên dự án | Tên công việc." />
+          <attvalue for="2" value="10" />
+          <attvalue for="3" value="78" />
+        </attvalues>
+      </node>
+      <node id="names" label="names">
+        <attvalues>
+          <attvalue for="0" value="names" />
+          <attvalue for="1" value="The names associated with this location group." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="77" />
+        </attvalues>
+      </node>
+      <node id="new" label="new">
+        <attvalues>
+          <attvalue for="0" value="new" />
+          <attvalue for="1" value="Tô tả bảng BĐS | Mô tả bảng BĐS." />
+          <attvalue for="2" value="3" />
+        </attvalues>
+      </node>
+      <node id="nguoi_giao_ke_hoach" label="nguoi_giao_ke_hoach">
+        <attvalues>
+          <attvalue for="0" value="nguoi_giao_ke_hoach" />
+          <attvalue for="1" value="Person responsible for planning care." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="18" />
+        </attvalues>
+      </node>
+      <node id="nvbh_code" label="nvbh_code">
+        <attvalues>
+          <attvalue for="0" value="nvbh_code" />
+          <attvalue for="1" value="Mã nhân viên bán hàng." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="94" />
+        </attvalues>
+      </node>
+      <node id="objects" label="objects">
+        <attvalues>
+          <attvalue for="0" value="objects" />
+          <attvalue for="1" value="The objects associated with this location group." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="74" />
+        </attvalues>
+      </node>
+      <node id="parent_sale_code" label="parent_sale_code">
+        <attvalues>
+          <attvalue for="0" value="parent_sale_code" />
+          <attvalue for="1" value="Mã nhân viên/quản lý cấp trên." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="93" />
+        </attvalues>
+      </node>
+      <node id="parent_sale_name" label="parent_sale_name">
+        <attvalues>
+          <attvalue for="0" value="parent_sale_name" />
+          <attvalue for="1" value="Tên nhân viên/quản lý cấp trên." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="95" />
+        </attvalues>
+      </node>
+      <node id="pck_report_chatbox.get_vlr_data_by_precinct" label="pck_report_chatbox.get_vlr_data_by_precinct">
+        <attvalues>
+          <attvalue for="0" value="pck_report_chatbox.get_vlr_data_by_precinct" />
+          <attvalue for="1" value="TABLE(pck_report_chatbox.get_vlr_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="86" />
+        </attvalues>
+      </node>
+      <node id="phone_number" label="phone_number">
+        <attvalues>
+          <attvalue for="0" value="phone_number" />
+          <attvalue for="1" value="Số điện thoại điểm bán." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="97" />
+        </attvalues>
+      </node>
+      <node id="point_of_sale" label="point_of_sale">
+        <attvalues>
+          <attvalue for="0" value="point_of_sale" />
+          <attvalue for="1" value="Lưu trữ thông tin của các điểm bán." />
+          <attvalue for="2" value="1" />
+        </attvalues>
+      </node>
+      <node id="precinct" label="precinct">
+        <attvalues>
+          <attvalue for="0" value="precinct" />
+          <attvalue for="1" value="Lưu trữ thông tin của các phường/xã | Precinct (administrative division)." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="83" />
+        </attvalues>
+      </node>
+      <node id="precinct code" label="precinct code">
+        <attvalues>
+          <attvalue for="0" value="precinct code" />
+          <attvalue for="1" value="Mã phường/xã." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="48" />
+        </attvalues>
+      </node>
+      <node id="precinct name" label="precinct name">
+        <attvalues>
+          <attvalue for="0" value="precinct name" />
+          <attvalue for="1" value="Tên phường/xã." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="48" />
+        </attvalues>
+      </node>
+      <node id="precinct_code" label="precinct_code">
+        <attvalues>
+          <attvalue for="0" value="precinct_code" />
+          <attvalue for="1" value="Mã phường/xã mà user được truy cập (ví dụ: VTAU) | Mã phường/xã." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="65" />
+        </attvalues>
+      </node>
+      <node id="precinct_name" label="precinct_name">
+        <attvalues>
+          <attvalue for="0" value="precinct_name" />
+          <attvalue for="1" value="Tên phường/xã mà user được truy cập (ví dụ: Phường Vũng Tàu) | Tên phường/xã." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="66" />
+        </attvalues>
+      </node>
+      <node id="progress_id" label="progress_id">
+        <attvalues>
+          <attvalue for="0" value="progress_id" />
+          <attvalue for="1" value="Tiến độ thực hiện." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="39" />
+        </attvalues>
+      </node>
+      <node id="project_id" label="project_id">
+        <attvalues>
+          <attvalue for="0" value="project_id" />
+          <attvalue for="1" value="Mã dự án." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="40" />
+        </attvalues>
+      </node>
+      <node id="public_location" label="public_location">
+        <attvalues>
+          <attvalue for="0" value="public_location" />
+          <attvalue for="1" value="Lưu trữ thông tin các điểm dữ liệu địa lý hành chính dùng để hiển thị lên bản đồ số." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="69" />
+        </attvalues>
+      </node>
+      <node id="quản lý công việc và dự án" label="quản lý công việc và dự án">
+        <attvalues>
+          <attvalue for="0" value="quản lý công việc và dự án" />
+          <attvalue for="1" value="Category of the table." />
+          <attvalue for="2" value="9" />
+          <attvalue for="3" value="73" />
+        </attvalues>
+      </node>
+      <node id="sale_name" label="sale_name">
+        <attvalues>
+          <attvalue for="0" value="sale_name" />
+          <attvalue for="1" value="Tên điểm bán." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="96" />
+        </attvalues>
+      </node>
+      <node id="sale_type" label="sale_type">
+        <attvalues>
+          <attvalue for="0" value="sale_type" />
+          <attvalue for="1" value="Loại điểm bán." />
+          <attvalue for="2" value="12" />
+          <attvalue for="3" value="98" />
+        </attvalues>
+      </node>
+      <node id="sales" label="sales">
+        <attvalues>
+          <attvalue for="0" value="sales" />
+          <attvalue for="1" value="A sales point." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="52" />
+        </attvalues>
+      </node>
+      <node id="sales_code" label="sales_code">
+        <attvalues>
+          <attvalue for="0" value="sales_code" />
+          <attvalue for="1" value="Sales code." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="55" />
+        </attvalues>
+      </node>
+      <node id="sales_name" label="sales_name">
+        <attvalues>
+          <attvalue for="0" value="sales_name" />
+          <attvalue for="1" value="Name of the sales person." />
+          <attvalue for="2" value="6" />
+          <attvalue for="3" value="55" />
+        </attvalues>
+      </node>
+      <node id="saymee_tkc_rev_day" label="saymee_tkc_rev_day">
+        <attvalues>
+          <attvalue for="0" value="saymee_tkc_rev_day" />
+          <attvalue for="1" value="Doanh thu TKC Saymee trong ngày." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="45" />
+        </attvalues>
+      </node>
+      <node id="saymee_tkc_rev_month" label="saymee_tkc_rev_month">
+        <attvalues>
+          <attvalue for="0" value="saymee_tkc_rev_month" />
+          <attvalue for="1" value="Doanh thu TKC Saymee trong tháng." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="43" />
+        </attvalues>
+      </node>
+      <node id="saymee_vlr_quantity_day" label="saymee_vlr_quantity_day">
+        <attvalues>
+          <attvalue for="0" value="saymee_vlr_quantity_day" />
+          <attvalue for="1" value="Số lượng VLR Saymee trong ngày." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="88" />
+        </attvalues>
+      </node>
+      <node id="shop_code" label="shop_code">
+        <attvalues>
+          <attvalue for="0" value="shop_code" />
+          <attvalue for="1" value="Mã cửa hàng." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="34" />
+        </attvalues>
+      </node>
+      <node id="start_date" label="start_date">
+        <attvalues>
+          <attvalue for="0" value="start_date" />
+          <attvalue for="1" value="Ngày bắt đầu công việc." />
+          <attvalue for="2" value="4" />
+          <attvalue for="3" value="37" />
+        </attvalues>
+      </node>
+      <node id="start_date_this_week" label="start_date_this_week">
+        <attvalues>
+          <attvalue for="0" value="start_date_this_week" />
+          <attvalue for="1" value="Ngày bắt đầu tuần hiện tại." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="27" />
+        </attvalues>
+      </node>
+      <node id="sum_date" label="sum_date">
+        <attvalues>
+          <attvalue for="0" value="sum_date" />
+          <attvalue for="1" value="Ngày tổng hợp dữ liệu | Ngày báo cáo dữ liệu VLR | Ngày báo cáo doanh thu." />
+          <attvalue for="2" value="2" />
+          <attvalue for="3" value="32" />
+        </attvalues>
+      </node>
+      <node id="ten_diem_ban" label="ten_diem_ban">
+        <attvalues>
+          <attvalue for="0" value="ten_diem_ban" />
+          <attvalue for="1" value="Point-of-sale name." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="19" />
+        </attvalues>
+      </node>
+      <node id="tkc" label="tkc">
+        <attvalues>
+          <attvalue for="0" value="tkc" />
+          <attvalue for="1" value="Báo cáo doanh thu TKC." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="90" />
+        </attvalues>
+      </node>
+      <node id="to_date" label="to_date">
+        <attvalues>
+          <attvalue for="0" value="to_date" />
+          <attvalue for="1" value="Дата конвертация." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="47" />
+        </attvalues>
+      </node>
+      <node id="type" label="type">
+        <attvalues>
+          <attvalue for="0" value="type" />
+          <attvalue for="1" value="Loại địa điểm, bao gồm các giá trị: 'TTHC', 'CA', 'CB', 'BV', 'CD', 'PCCC', 'DN', 'DH'." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="68" />
+        </attvalues>
+      </node>
+      <node id="type_name" label="type_name">
+        <attvalues>
+          <attvalue for="0" value="type_name" />
+          <attvalue for="1" value="Tên loại địa điểm, bao gồm các giá trị: 'Trung tâm hành chính', 'Trụ sở công an', 'Cảng biển', 'Bệnh viện', 'Cao đẳng', 'Trạm PCCC', 'Doanh Nghiệp', 'Đại học'." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="68" />
+        </attvalues>
+      </node>
+      <node id="upper" label="upper">
+        <attvalues>
+          <attvalue for="0" value="upper" />
+          <attvalue for="1" value="Конвертация тип строк." />
+          <attvalue for="2" value="5" />
+          <attvalue for="3" value="46" />
+        </attvalues>
+      </node>
+      <node id="user_id" label="user_id">
+        <attvalues>
+          <attvalue for="0" value="user_id" />
+          <attvalue for="1" value="Mã định danh user." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="67" />
+        </attvalues>
+      </node>
+      <node id="user_name" label="user_name">
+        <attvalues>
+          <attvalue for="0" value="user_name" />
+          <attvalue for="1" value="Mã user (ví dụ: HUY.NGUYEN)." />
+          <attvalue for="2" value="8" />
+          <attvalue for="3" value="67" />
+        </attvalues>
+      </node>
+      <node id="vlr" label="vlr">
+        <attvalues>
+          <attvalue for="0" value="vlr" />
+          <attvalue for="1" value="Volume of Long Reach (VLR)." />
+          <attvalue for="2" value="11" />
+          <attvalue for="3" value="89" />
+        </attvalues>
+      </node>
+      <node id="vlr_3g_day" label="vlr_3g_day">
+        <attvalues>
+          <attvalue for="0" value="vlr_3g_day" />
+          <attvalue for="1" value="VLR 3G trong ngày." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="60" />
+        </attvalues>
+      </node>
+      <node id="vlr_3g_month" label="vlr_3g_month">
+        <attvalues>
+          <attvalue for="0" value="vlr_3g_month" />
+          <attvalue for="1" value="VLR 3G trong tháng." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="61" />
+        </attvalues>
+      </node>
+      <node id="vlr_all_day" label="vlr_all_day">
+        <attvalues>
+          <attvalue for="0" value="vlr_all_day" />
+          <attvalue for="1" value="Tổng VLR trong ngày." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="59" />
+        </attvalues>
+      </node>
+      <node id="vlr_all_month" label="vlr_all_month">
+        <attvalues>
+          <attvalue for="0" value="vlr_all_month" />
+          <attvalue for="1" value="Tổng VLR trong tháng." />
+          <attvalue for="2" value="7" />
+          <attvalue for="3" value="62" />
+        </attvalues>
+      </node>
+      <node id="ý nghĩa của bảng" label="ý nghĩa của bảng">
+        <attvalues>
+          <attvalue for="0" value="ý nghĩa của bảng" />
+          <attvalue for="1" value="Table meaning description." />
+          <attvalue for="2" value="0" />
+          <attvalue for="3" value="21" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="**kiểu dữ liệu**" target="dữ liệu điểm bán" id="0" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="mô tả bảng bđs (new)" id="1" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="**mô tả**" id="2" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="nguoi_giao_ke_hoach" id="3" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="mô tả" id="4" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="ten_diem_ban" id="5" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="chi tiết các cột trong bảng" id="6" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="ý nghĩa của bảng" id="7" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**kiểu dữ liệu**" target="ma_nhan_vien_cham_soc" id="8" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="dữ liệu điểm bán" id="9" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="mô tả bảng bđs (new)" id="10" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="nguoi_giao_ke_hoach" id="11" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="mô tả" id="12" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="ten_diem_ban" id="13" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="chi tiết các cột trong bảng" id="14" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="ý nghĩa của bảng" id="15" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="**mô tả**" target="ma_nhan_vien_cham_soc" id="16" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="address" target="point_of_sale" id="17" weight="5">
+        <attvalues>
+          <attvalue for="4" value="Mối liên kết với các bảng khác qua cột SALE_CODE và PRECINCT_CODE" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="mf_quantity_all_year" id="18" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="last_date_last_week" id="19" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="start_date_this_week" id="20" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="mc_quantity_month" id="21" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="mc_quantity_day" id="22" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="last_date_this_week" id="23" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="all_quantity_month" id="24" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="sum_date" id="25" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_all_year" target="mf_quantity_last_week" id="26" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="all_quantity_month" id="27" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="sum_date" id="28" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="mf_quantity_month" id="29" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="branch_code" id="30" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="mc_quantity_day" id="31" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="name" id="32" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="shop_code" id="33" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="precinct_code" id="34" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_day" target="latitude" id="35" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="mf_quantity_all_year" id="36" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="last_date_last_week" id="37" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="start_date_this_week" id="38" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="mc_quantity_month" id="39" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="mc_quantity_day" id="40" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="last_date_this_week" id="41" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="sum_date" id="42" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="mf_quantity_last_week" id="43" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="mf_quantity_month" id="44" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="branch_code" id="45" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="name" id="46" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="shop_code" id="47" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="precinct_code" id="48" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="all_quantity_month" target="latitude" id="49" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="bảng v_man_task" id="50" weight="11">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với các bảng khác qua cột assignee_staff_id" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="location_id" id="51" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="end_date" id="52" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="name" id="53" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="assigner_staff_id" id="54" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="created_date" id="55" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="progress_id" id="56" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="start_date" id="57" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assignee_staff_id" target="id" id="58" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="bảng v_man_task" id="59" weight="11">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với các bảng khác qua cột assigner_staff_id" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="location_id" id="60" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="end_date" id="61" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="name" id="62" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="created_date" id="63" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="progress_id" id="64" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="start_date" id="65" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="assigner_staff_id" target="id" id="66" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="precinct_name" id="67" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="bhm_rev_day" id="68" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="saymee_tkc_rev_month" id="69" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="mobifone tkc revenue (day)" id="70" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="saymee_tkc_rev_day" id="71" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="upper" id="72" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="precinct name" id="73" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="sum_date" id="74" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm revenue (day)" target="to_date" id="75" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="precinct_name" id="76" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="saymee_tkc_rev_month" id="77" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="mobifone tkc revenue (day)" id="78" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="saymee_tkc_rev_day" id="79" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="upper" id="80" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="precinct name" id="81" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="sum_date" id="82" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bhm_rev_day" target="to_date" id="83" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="employee" id="84" weight="6">
+        <attvalues>
+          <attvalue for="4" value="An employee is assigned to a branch" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="hub" id="85" weight="6">
+        <attvalues>
+          <attvalue for="4" value="A branch is part of a hub" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="sales" id="86" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="emp_code" id="87" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="branch_name" id="88" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="hub_leader" id="89" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="sales_code" id="90" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="id" id="91" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch" target="employee_sales" id="92" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="sum_date" id="93" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="mf_quantity_month" id="94" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="mc_quantity_day" id="95" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="name" id="96" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="shop_code" id="97" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="precinct_code" id="98" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="latitude" id="99" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="precinct_name" id="100" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="user_id" id="101" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="branch_name" id="102" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="hub_code" id="103" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="user_name" id="104" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="cell_site" id="105" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="longitude" id="106" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="vlr_all_day" id="107" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="vlr_3g_day" id="108" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="vlr_3g_month" id="109" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="vlr_all_month" id="110" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="cltc_month" id="111" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="cltc" id="112" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="precinct" id="113" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="hub" id="114" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="id" id="115" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="code" id="116" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_code" target="new" id="117" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="precinct_name" id="118" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="user_id" id="119" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="precinct_code" id="120" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="hub_code" id="121" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="user_name" id="122" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="name" id="123" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="location_group_id" id="124" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="id" id="125" weight="3">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="hub" id="126" weight="3">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="lon" id="127" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="project_id" id="128" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="lat" id="129" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="new" id="130" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="precinct" id="131" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="code" id="132" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="sales" id="133" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="employee" id="134" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="emp_code" id="135" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="hub_leader" id="136" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="sales_code" id="137" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="branch_name" target="employee_sales" id="138" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="public_location" id="139" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="type_name" id="140" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="precinct_name" id="141" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="name" id="142" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="precinct_code" id="143" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="latitude" id="144" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="hub" id="145" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="id" id="146" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="brand_code" target="type" id="147" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng" target="mô tả" id="148" weight="5">
+        <attvalues>
+          <attvalue for="4" value="Chi tiết các cột trong bảng" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="location_group" id="149" weight="6">
+        <attvalues>
+          <attvalue for="4" value="The table is associated with the location group." />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="concepts" id="150" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="name" id="151" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="quản lý công việc và dự án" id="152" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="mô tả" id="153" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="objects" id="154" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="items" id="155" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="location_groups" id="156" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng bđs (new)" target="names" id="157" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng project" target="id" id="158" weight="6">
+        <attvalues>
+          <attvalue for="4" value="Khoá chính" />
+        </attvalues>
+      </edge>
+      <edge source="bảng project" target="name" id="159" weight="6">
+        <attvalues>
+          <attvalue for="4" value="Tên dự án" />
+        </attvalues>
+      </edge>
+      <edge source="bảng project" target="location_group_id" id="160" weight="11">
+        <attvalues>
+          <attvalue for="4" value="Mã nhóm địa điểm liên kết" />
+        </attvalues>
+      </edge>
+      <edge source="bảng project" target="bậng project" id="161" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="id" id="162" weight="11">
+        <attvalues>
+          <attvalue for="4" value=" Liên kết với các bảng khác qua cột ID" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="progress_id" id="163" weight="11">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với các bảng khác qua cột PROGRESS_ID" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="location_id" id="164" weight="11">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với các bảng khác qua cột LOCATION_ID" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="project_id" id="165" weight="10">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với các bảng khác qua cột PROJECT_ID" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="end_date" id="166" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="name" id="167" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="created_date" id="168" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng v_man_task" target="start_date" id="169" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="precinct_name" id="170" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="n" id="171" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="pck_report_chatbox.get_vlr_data_by_precinct" id="172" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="mobifone_vlr_quantity_day" id="173" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="sum_date" id="174" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="saymee_vlr_quantity_day" id="175" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="date" id="176" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="precinct" id="177" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bảng đs (new)" target="tkc" id="178" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="bậng project" target="name" id="179" weight="6">
+        <attvalues>
+          <attvalue for="4" value="Tên dự án" />
+        </attvalues>
+      </edge>
+      <edge source="bậng project" target="location_group_id" id="180" weight="6">
+        <attvalues>
+          <attvalue for="4" value="Mã nhóm địa điểm liên kết" />
+        </attvalues>
+      </edge>
+      <edge source="bậng project" target="id" id="181" weight="6">
+        <attvalues>
+          <attvalue for="4" value="Khoá chính" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="longitude" id="182" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="sum_date" id="183" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="vlr_all_day" id="184" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="vlr_3g_day" id="185" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="vlr_3g_month" id="186" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="vlr_all_month" id="187" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="cltc_month" id="188" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cell_site" target="cltc" id="189" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="chi tiết các cột trong bảng" target="dữ liệu điểm bán" id="190" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="chi tiết các cột trong bảng" target="mô tả bảng bđs (new)" id="191" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="chi tiết các cột trong bảng" target="nguoi_giao_ke_hoach" id="192" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="chi tiết các cột trong bảng" target="mô tả" id="193" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="chi tiết các cột trong bảng" target="ten_diem_ban" id="194" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="chi tiết các cột trong bảng" target="ý nghĩa của bảng" id="195" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="chi tiết các cột trong bảng" target="ma_nhan_vien_cham_soc" id="196" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc" target="longitude" id="197" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc" target="sum_date" id="198" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc" target="vlr_all_day" id="199" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc" target="vlr_3g_day" id="200" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc" target="vlr_3g_month" id="201" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc" target="vlr_all_month" id="202" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc" target="cltc_month" id="203" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc_month" target="longitude" id="204" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc_month" target="sum_date" id="205" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc_month" target="vlr_all_day" id="206" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc_month" target="vlr_3g_day" id="207" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc_month" target="vlr_3g_month" id="208" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="cltc_month" target="vlr_all_month" id="209" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="code" target="name" id="210" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="code" target="precinct" id="211" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="code" target="hub" id="212" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="code" target="id" id="213" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="code" target="new" id="214" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="location_group" id="215" weight="6">
+        <attvalues>
+          <attvalue for="4" value="The location group is associated with the concepts." />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="name" id="216" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="quản lý công việc và dự án" id="217" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="mô tả" id="218" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="objects" id="219" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="items" id="220" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="location_groups" id="221" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="concepts" target="names" id="222" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="created_date" target="location_id" id="223" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="created_date" target="end_date" id="224" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="created_date" target="name" id="225" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="created_date" target="progress_id" id="226" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="created_date" target="start_date" id="227" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="created_date" target="id" id="228" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="vlr" id="229" weight="5">
+        <attvalues>
+          <attvalue for="4" value="ngày phát triển thuê bao được liên kết với VLR qua cột ngày." />
+        </attvalues>
+      </edge>
+      <edge source="date" target="precinct_name" id="230" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="n" id="231" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="pck_report_chatbox.get_vlr_data_by_precinct" id="232" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="mobifone_vlr_quantity_day" id="233" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="sum_date" id="234" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="saymee_vlr_quantity_day" id="235" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="precinct" id="236" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="date" target="tkc" id="237" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="dữ liệu điểm bán" target="mô tả bảng bđs (new)" id="238" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="dữ liệu điểm bán" target="nguoi_giao_ke_hoach" id="239" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="dữ liệu điểm bán" target="mô tả" id="240" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="dữ liệu điểm bán" target="ten_diem_ban" id="241" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="dữ liệu điểm bán" target="ý nghĩa của bảng" id="242" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="dữ liệu điểm bán" target="ma_nhan_vien_cham_soc" id="243" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_code" target="sales" id="244" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_code" target="employee" id="245" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_code" target="hub_leader" id="246" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_code" target="hub" id="247" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_code" target="sales_code" id="248" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_code" target="id" id="249" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_code" target="employee_sales" id="250" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="precinct_name" id="251" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="parent_sale_code" id="252" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="nvbh_code" id="253" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="parent_sale_name" id="254" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="hub" id="255" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="lat" id="256" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="sale_name" id="257" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="phone_number" id="258" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="emp_name" target="sale_type" id="259" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="employee" target="hub" id="260" weight="11">
+        <attvalues>
+          <attvalue for="4" value="An employee is working in a hub" />
+        </attvalues>
+      </edge>
+      <edge source="employee" target="sales" id="261" weight="6">
+        <attvalues>
+          <attvalue for="4" value="An employee is a sales person" />
+        </attvalues>
+      </edge>
+      <edge source="employee" target="hub_leader" id="262" weight="6">
+        <attvalues>
+          <attvalue for="4" value="An employee is led by a hub leader" />
+        </attvalues>
+      </edge>
+      <edge source="employee" target="sales_code" id="263" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="employee" target="id" id="264" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="employee" target="employee_sales" id="265" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="employee_sales" target="sales_code" id="266" weight="6">
+        <attvalues>
+          <attvalue for="4" value="An employee sales record is associated with a sales code" />
+        </attvalues>
+      </edge>
+      <edge source="employee_sales" target="sales_name" id="267" weight="5">
+        <attvalues>
+          <attvalue for="4" value="An employee sales record is associated with a sales person" />
+        </attvalues>
+      </edge>
+      <edge source="employee_sales" target="sales" id="268" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="employee_sales" target="hub_leader" id="269" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="employee_sales" target="hub" id="270" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="employee_sales" target="id" id="271" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="end_date" target="location_id" id="272" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="end_date" target="name" id="273" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="end_date" target="progress_id" id="274" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="end_date" target="start_date" id="275" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="end_date" target="id" id="276" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="full_name" target="isdn" id="277" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="full_name" target="gender" id="278" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="full_name" target="id" id="279" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="gender" target="isdn" id="280" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="gender" target="id" id="281" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="hub_leader" id="282" weight="6">
+        <attvalues>
+          <attvalue for="4" value="A hub has a leader" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="precinct_name" id="283" weight="3">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="parent_sale_code" id="284" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="nvbh_code" id="285" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="parent_sale_name" id="286" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="lat" id="287" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="sale_name" id="288" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="phone_number" id="289" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="sale_type" id="290" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="name" id="291" weight="3">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="location_group_id" id="292" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="id" id="293" weight="4">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="lon" id="294" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="project_id" id="295" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="new" id="296" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="precinct" id="297" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="public_location" id="298" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="type_name" id="299" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="precinct_code" id="300" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="latitude" id="301" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="type" id="302" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="sales" id="303" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub" target="sales_code" id="304" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub_code" target="precinct_name" id="305" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub_code" target="user_id" id="306" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub_code" target="precinct_code" id="307" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub_code" target="user_name" id="308" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub_leader" target="sales" id="309" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub_leader" target="sales_code" id="310" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="hub_leader" target="id" id="311" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="location_group" id="312" weight="5">
+        <attvalues>
+          <attvalue for="4" value="The location group is associated with the ID." />
+        </attvalues>
+      </edge>
+      <edge source="id" target="location_group_id" id="313" weight="7">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với bảng khác qua cột ID, LOCATION_GROUP_ID" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="precinct_name" id="314" weight="7">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với bảng khác qua cột ID, PRECINCT_NAME" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="name" id="315" weight="5">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="isdn" id="316" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="location_id" id="317" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="progress_id" id="318" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="start_date" id="319" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="lon" id="320" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="project_id" id="321" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="lat" id="322" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="new" id="323" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="precinct" id="324" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="public_location" id="325" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="type_name" id="326" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="precinct_code" id="327" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="latitude" id="328" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="type" id="329" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="sales" id="330" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="id" target="sales_code" id="331" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="items" target="location_group" id="332" weight="6">
+        <attvalues>
+          <attvalue for="4" value="The location group is associated with the items." />
+        </attvalues>
+      </edge>
+      <edge source="items" target="name" id="333" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="items" target="quản lý công việc và dự án" id="334" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="items" target="mô tả" id="335" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="items" target="objects" id="336" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="items" target="location_groups" id="337" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="items" target="names" id="338" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_last_week" target="mf_quantity_all_year" id="339" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_last_week" target="start_date_this_week" id="340" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_last_week" target="mc_quantity_month" id="341" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_last_week" target="mc_quantity_day" id="342" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_last_week" target="last_date_this_week" id="343" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_last_week" target="sum_date" id="344" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_last_week" target="mf_quantity_last_week" id="345" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_this_week" target="mf_quantity_all_year" id="346" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_this_week" target="start_date_this_week" id="347" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_this_week" target="mc_quantity_month" id="348" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_this_week" target="mc_quantity_day" id="349" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_this_week" target="sum_date" id="350" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="last_date_this_week" target="mf_quantity_last_week" id="351" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="precinct_name" id="352" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="parent_sale_code" id="353" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="nvbh_code" id="354" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="parent_sale_name" id="355" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="sale_name" id="356" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="phone_number" id="357" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="sale_type" id="358" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="name" id="359" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="location_group_id" id="360" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="lon" id="361" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="project_id" id="362" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lat" target="new" id="363" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="sum_date" id="364" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="mf_quantity_month" id="365" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="mc_quantity_day" id="366" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="name" id="367" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="shop_code" id="368" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="precinct_code" id="369" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="public_location" id="370" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="type_name" id="371" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="precinct_name" id="372" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="latitude" target="type" id="373" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_group" target="name" id="374" weight="6">
+        <attvalues>
+          <attvalue for="4" value="The location group is associated with the Name." />
+        </attvalues>
+      </edge>
+      <edge source="location_group" target="objects" id="375" weight="6">
+        <attvalues>
+          <attvalue for="4" value="The location group is associated with the objects." />
+        </attvalues>
+      </edge>
+      <edge source="location_group" target="names" id="376" weight="6">
+        <attvalues>
+          <attvalue for="4" value="The location group is associated with the names." />
+        </attvalues>
+      </edge>
+      <edge source="location_group" target="quản lý công việc và dự án" id="377" weight="11">
+        <attvalues>
+          <attvalue for="4" value="The location group is associated with the project category." />
+        </attvalues>
+      </edge>
+      <edge source="location_group" target="mô tả" id="378" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_group" target="location_groups" id="379" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_group_id" target="name" id="380" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_group_id" target="precinct_name" id="381" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_group_id" target="lon" id="382" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_group_id" target="project_id" id="383" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_group_id" target="new" id="384" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_groups" target="name" id="385" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_groups" target="quản lý công việc và dự án" id="386" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_groups" target="mô tả" id="387" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_groups" target="objects" id="388" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_groups" target="names" id="389" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_id" target="name" id="390" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_id" target="progress_id" id="391" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="location_id" target="start_date" id="392" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lon" target="precinct_name" id="393" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lon" target="name" id="394" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lon" target="project_id" id="395" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="lon" target="new" id="396" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="longitude" target="sum_date" id="397" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="longitude" target="vlr_all_day" id="398" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="longitude" target="vlr_3g_day" id="399" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="longitude" target="vlr_3g_month" id="400" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="longitude" target="vlr_all_month" id="401" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="ma_nhan_vien_cham_soc" target="mô tả bảng bđs (new)" id="402" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="ma_nhan_vien_cham_soc" target="nguoi_giao_ke_hoach" id="403" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="ma_nhan_vien_cham_soc" target="mô tả" id="404" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="ma_nhan_vien_cham_soc" target="ten_diem_ban" id="405" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="ma_nhan_vien_cham_soc" target="ý nghĩa của bảng" id="406" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="mf_quantity_all_year" id="407" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="start_date_this_week" id="408" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="mc_quantity_month" id="409" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="sum_date" id="410" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="mf_quantity_last_week" id="411" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="mf_quantity_month" id="412" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="name" id="413" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="shop_code" id="414" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_day" target="precinct_code" id="415" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_month" target="mf_quantity_all_year" id="416" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_month" target="start_date_this_week" id="417" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_month" target="sum_date" id="418" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mc_quantity_month" target="mf_quantity_last_week" id="419" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_all_year" target="start_date_this_week" id="420" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_all_year" target="sum_date" id="421" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_all_year" target="mf_quantity_last_week" id="422" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_last_week" target="start_date_this_week" id="423" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_last_week" target="sum_date" id="424" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_month" target="sum_date" id="425" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_month" target="name" id="426" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_month" target="shop_code" id="427" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mf_quantity_month" target="precinct_code" id="428" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone tkc revenue (day)" target="precinct_name" id="429" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone tkc revenue (day)" target="saymee_tkc_rev_month" id="430" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone tkc revenue (day)" target="saymee_tkc_rev_day" id="431" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone tkc revenue (day)" target="upper" id="432" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone tkc revenue (day)" target="precinct name" id="433" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone tkc revenue (day)" target="sum_date" id="434" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone tkc revenue (day)" target="to_date" id="435" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone_vlr_quantity_day" target="precinct_name" id="436" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone_vlr_quantity_day" target="n" id="437" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone_vlr_quantity_day" target="pck_report_chatbox.get_vlr_data_by_precinct" id="438" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone_vlr_quantity_day" target="sum_date" id="439" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone_vlr_quantity_day" target="saymee_vlr_quantity_day" id="440" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone_vlr_quantity_day" target="precinct" id="441" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mobifone_vlr_quantity_day" target="tkc" id="442" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="mô tả bảng bđs (new)" id="443" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="nguoi_giao_ke_hoach" id="444" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="ten_diem_ban" id="445" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="ý nghĩa của bảng" id="446" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="name" id="447" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="quản lý công việc và dự án" id="448" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="objects" id="449" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả" target="names" id="450" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả bảng bđs (new)" target="nguoi_giao_ke_hoach" id="451" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả bảng bđs (new)" target="ten_diem_ban" id="452" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="mô tả bảng bđs (new)" target="ý nghĩa của bảng" id="453" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="n" target="precinct_name" id="454" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="n" target="pck_report_chatbox.get_vlr_data_by_precinct" id="455" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="n" target="sum_date" id="456" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="n" target="saymee_vlr_quantity_day" id="457" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="n" target="precinct" id="458" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="n" target="tkc" id="459" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="sum_date" id="460" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="shop_code" id="461" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="precinct_code" id="462" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="progress_id" id="463" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="start_date" id="464" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="precinct_name" id="465" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="project_id" id="466" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="new" id="467" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="precinct" id="468" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="public_location" id="469" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="type_name" id="470" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="type" id="471" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="quản lý công việc và dự án" id="472" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="objects" id="473" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="name" target="names" id="474" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="names" target="quản lý công việc và dự án" id="475" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="names" target="objects" id="476" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="new" target="precinct_name" id="477" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="new" target="project_id" id="478" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="new" target="precinct" id="479" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nguoi_giao_ke_hoach" target="ten_diem_ban" id="480" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nguoi_giao_ke_hoach" target="ý nghĩa của bảng" id="481" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nvbh_code" target="precinct_name" id="482" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nvbh_code" target="parent_sale_code" id="483" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nvbh_code" target="parent_sale_name" id="484" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nvbh_code" target="sale_name" id="485" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nvbh_code" target="phone_number" id="486" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="nvbh_code" target="sale_type" id="487" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="objects" target="quản lý công việc và dự án" id="488" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_code" target="precinct_name" id="489" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_code" target="parent_sale_name" id="490" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_code" target="sale_name" id="491" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_code" target="phone_number" id="492" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_code" target="sale_type" id="493" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_name" target="precinct_name" id="494" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_name" target="sale_name" id="495" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_name" target="phone_number" id="496" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="parent_sale_name" target="sale_type" id="497" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="pck_report_chatbox.get_vlr_data_by_precinct" target="precinct_name" id="498" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="pck_report_chatbox.get_vlr_data_by_precinct" target="sum_date" id="499" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="pck_report_chatbox.get_vlr_data_by_precinct" target="saymee_vlr_quantity_day" id="500" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="pck_report_chatbox.get_vlr_data_by_precinct" target="precinct" id="501" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="pck_report_chatbox.get_vlr_data_by_precinct" target="tkc" id="502" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="phone_number" target="precinct_name" id="503" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="phone_number" target="sale_name" id="504" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="phone_number" target="sale_type" id="505" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct" target="precinct_name" id="506" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct" target="sum_date" id="507" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct" target="saymee_vlr_quantity_day" id="508" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct" target="tkc" id="509" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct code" target="precinct name" id="510" weight="5">
+        <attvalues>
+          <attvalue for="4" value="Mã phường/xã liên kết với tên phường/xã" />
+        </attvalues>
+      </edge>
+      <edge source="precinct name" target="precinct_name" id="511" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct name" target="saymee_tkc_rev_month" id="512" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct name" target="saymee_tkc_rev_day" id="513" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct name" target="upper" id="514" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct name" target="sum_date" id="515" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct name" target="to_date" id="516" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="precinct_name" id="517" weight="17">
+        <attvalues>
+          <attvalue for="4" value="Liên kết với các bảng khác qua cột PRECINCT_CODE" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="public_location" id="518" weight="6">
+        <attvalues>
+          <attvalue for="4" value="Mối liên kết: Liên kết với các bảng khác qua cột PRECINCT_CODE" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="vlr" id="519" weight="5">
+        <attvalues>
+          <attvalue for="4" value="Mã phường/xã được liên kết với VLR qua cột mã." />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="sum_date" id="520" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="shop_code" id="521" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="user_id" id="522" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="user_name" id="523" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="type_name" id="524" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_code" target="type" id="525" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="sale_name" id="526" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="sale_type" id="527" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="sum_date" id="528" weight="2">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="saymee_vlr_quantity_day" id="529" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="tkc" id="530" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="saymee_tkc_rev_month" id="531" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="saymee_tkc_rev_day" id="532" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="upper" id="533" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="to_date" id="534" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="user_id" id="535" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="user_name" id="536" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="project_id" id="537" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="public_location" id="538" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="type_name" id="539" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="precinct_name" target="type" id="540" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="progress_id" target="start_date" id="541" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="public_location" target="type_name" id="542" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="public_location" target="type" id="543" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sale_name" target="sale_type" id="544" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sales" target="sales_code" id="545" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_tkc_rev_day" target="saymee_tkc_rev_month" id="546" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_tkc_rev_day" target="upper" id="547" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_tkc_rev_day" target="sum_date" id="548" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_tkc_rev_day" target="to_date" id="549" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_tkc_rev_month" target="upper" id="550" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_tkc_rev_month" target="sum_date" id="551" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_tkc_rev_month" target="to_date" id="552" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_vlr_quantity_day" target="sum_date" id="553" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="saymee_vlr_quantity_day" target="tkc" id="554" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="shop_code" target="sum_date" id="555" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="start_date_this_week" target="sum_date" id="556" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sum_date" target="tkc" id="557" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sum_date" target="upper" id="558" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sum_date" target="to_date" id="559" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sum_date" target="vlr_all_day" id="560" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sum_date" target="vlr_3g_day" id="561" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sum_date" target="vlr_3g_month" id="562" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="sum_date" target="vlr_all_month" id="563" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="ten_diem_ban" target="ý nghĩa của bảng" id="564" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="to_date" target="upper" id="565" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="type" target="type_name" id="566" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="user_id" target="user_name" id="567" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="vlr_3g_day" target="vlr_all_day" id="568" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="vlr_3g_day" target="vlr_3g_month" id="569" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="vlr_3g_day" target="vlr_all_month" id="570" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="vlr_3g_month" target="vlr_all_day" id="571" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="vlr_3g_month" target="vlr_all_month" id="572" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+      <edge source="vlr_all_day" target="vlr_all_month" id="573" weight="1">
+        <attvalues>
+          <attvalue for="4" value="co-occurrence" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

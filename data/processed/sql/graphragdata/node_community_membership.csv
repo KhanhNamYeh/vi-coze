@@ -1,0 +1,110 @@
+node,level_0,level_1
+**kiểu dữ liệu**,0,14.0
+dữ liệu điểm bán,0,15.0
+mô tả bảng bđs (new),0,16.0
+**mô tả**,0,17.0
+nguoi_giao_ke_hoach,0,18.0
+mô tả,0,23.0
+ten_diem_ban,0,19.0
+chi tiết các cột trong bảng,0,20.0
+ý nghĩa của bảng,0,21.0
+ma_nhan_vien_cham_soc,0,22.0
+bảng,0,23.0
+address,1,
+point_of_sale,1,
+all_quantity_all_year,2,24.0
+mf_quantity_all_year,2,25.0
+last_date_last_week,2,26.0
+start_date_this_week,2,27.0
+mc_quantity_month,2,28.0
+mc_quantity_day,2,29.0
+last_date_this_week,2,30.0
+all_quantity_month,2,31.0
+sum_date,2,32.0
+mf_quantity_last_week,2,33.0
+all_quantity_day,2,34.0
+mf_quantity_month,2,34.0
+shop_code,2,34.0
+latitude,2,34.0
+branch_name,3,
+code,3,
+new,3,
+lon,3,
+assignee_staff_id,4,35.0
+bảng v_man_task,4,40.0
+location_id,4,36.0
+end_date,4,37.0
+assigner_staff_id,4,38.0
+created_date,4,37.0
+progress_id,4,39.0
+start_date,4,37.0
+project_id,4,40.0
+bhm revenue (day),5,41.0
+bhm_rev_day,5,42.0
+saymee_tkc_rev_month,5,43.0
+mobifone tkc revenue (day),5,44.0
+saymee_tkc_rev_day,5,45.0
+upper,5,46.0
+precinct name,5,48.0
+to_date,5,47.0
+precinct code,5,48.0
+branch,6,49.0
+employee,6,50.0
+hub,6,51.0
+sales,6,52.0
+emp_code,6,53.0
+hub_leader,6,54.0
+sales_code,6,55.0
+employee_sales,6,55.0
+sales_name,6,55.0
+branch_code,7,56.0
+cell_site,7,57.0
+longitude,7,58.0
+vlr_all_day,7,59.0
+vlr_3g_day,7,60.0
+vlr_3g_month,7,61.0
+vlr_all_month,7,62.0
+cltc_month,7,63.0
+cltc,7,64.0
+precinct_code,8,65.0
+precinct_name,8,66.0
+user_id,8,67.0
+hub_code,8,67.0
+user_name,8,67.0
+brand_code,8,68.0
+public_location,8,69.0
+type_name,8,68.0
+type,8,68.0
+bảng bđs (new),9,70.0
+location_group,9,71.0
+concepts,9,72.0
+quản lý công việc và dự án,9,73.0
+objects,9,74.0
+items,9,75.0
+location_groups,9,76.0
+names,9,77.0
+name,10,78.0
+id,10,79.0
+location_group_id,10,80.0
+bảng project,10,81.0
+bậng project,10,82.0
+precinct,11,83.0
+bảng đs (new),11,84.0
+n,11,85.0
+pck_report_chatbox.get_vlr_data_by_precinct,11,86.0
+mobifone_vlr_quantity_day,11,87.0
+saymee_vlr_quantity_day,11,88.0
+date,11,89.0
+tkc,11,90.0
+vlr,11,89.0
+lat,12,91.0
+emp_name,12,92.0
+parent_sale_code,12,93.0
+nvbh_code,12,94.0
+parent_sale_name,12,95.0
+sale_name,12,96.0
+phone_number,12,97.0
+sale_type,12,98.0
+full_name,13,
+isdn,13,
+gender,13,
