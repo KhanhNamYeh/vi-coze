@@ -1,0 +1,40 @@
+{
+  "enabled": true,
+  "source_kinds": [
+    "docs",
+    "sql"
+  ],
+  "method": "llm",
+  "provider": "openai",
+  "model": "gpt-5.6-luna",
+  "temperature": 0.0,
+  "output_retries": 1,
+  "entity_types": [
+    "table",
+    "column",
+    "metric",
+    "business_rule",
+    "filter_value",
+    "sql_function"
+  ],
+  "relationship_types": [
+    "table_has_column",
+    "foreign_key_to",
+    "joins_with",
+    "metric_uses_column",
+    "rule_applies_to",
+    "derived_from",
+    "uses",
+    "filters_by",
+    "aliases"
+  ],
+  "community_algorithm": "greedy_modularity",
+  "community_resolution": 1.0,
+  "random_seed": 42,
+  "generate_reports": true,
+  "max_reports": 30,
+  "max_chunks": 0,
+  "visualization_max_nodes": 120,
+  "agent_prompt": "You are a neutral SQL knowledge-graph agent. Extract only facts explicitly supported by the supplied chunk. Use only the allowed entity and relationship types, make every relationship endpoint exactly match an extracted entity name, and attach a short verbatim evidence span to every entity and relationship. Do not infer missing schema.",
+  "report_prompt": "You are the same neutral SQL knowledge-graph agent. Summarize only the supplied graph community for retrieval. Preserve table, column, join, metric and business-rule facts; do not add facts that are absent from the community."
+}

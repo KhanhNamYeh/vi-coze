@@ -1,0 +1,289 @@
+[
+  {
+    "provider": "google",
+    "model": "gemini-3.5-flash-lite",
+    "probes": [
+      {
+        "name": "text",
+        "ok": true,
+        "seconds": 1.3205740998964757,
+        "detail": "SQL JOIN dùng để kết hợp dữ liệu từ hai hoặc nhiều bảng khác nhau dựa trên một c…",
+        "error": ""
+      },
+      {
+        "name": "structured/auto",
+        "ok": true,
+        "seconds": 1.047735899919644,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.95",
+        "error": ""
+      },
+      {
+        "name": "structured/json_schema",
+        "ok": true,
+        "seconds": 1.0217680000932887,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.95",
+        "error": ""
+      },
+      {
+        "name": "structured/function_calling",
+        "ok": true,
+        "seconds": 0.8203001000219956,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=1.0",
+        "error": ""
+      },
+      {
+        "name": "tool_call",
+        "ok": true,
+        "seconds": 0.8201289001153782,
+        "detail": "lookup_table_schema",
+        "error": ""
+      }
+    ]
+  },
+  {
+    "provider": "google",
+    "model": "gemma-4-26b-a4b-it",
+    "probes": [
+      {
+        "name": "text",
+        "ok": true,
+        "seconds": 8.880451899953187,
+        "detail": "SQL JOIN dùng để kết hợp dữ liệu từ nhiều bảng dựa trên một cột liên quan giữa c…",
+        "error": ""
+      },
+      {
+        "name": "structured/auto",
+        "ok": true,
+        "seconds": 1.819236999959685,
+        "detail": "intent=data tables=['khach_hang', 'don_hang', 'san_pham'] join=True conf=0.95",
+        "error": ""
+      },
+      {
+        "name": "structured/json_schema",
+        "ok": true,
+        "seconds": 1.7732452999334782,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.95",
+        "error": ""
+      },
+      {
+        "name": "structured/function_calling",
+        "ok": true,
+        "seconds": 2.245405799942091,
+        "detail": "intent=data tables=['khach_hang', 'don_hang', ''] join=True conf=0.8",
+        "error": ""
+      },
+      {
+        "name": "tool_call",
+        "ok": true,
+        "seconds": 2.354920299956575,
+        "detail": "lookup_table_schema",
+        "error": ""
+      }
+    ]
+  },
+  {
+    "provider": "openrouter",
+    "model": "nvidia/nemotron-3.5-lightning:free",
+    "probes": [
+      {
+        "name": "text",
+        "ok": true,
+        "seconds": 10.8897315999493,
+        "detail": "SQL JOIN dùng để kết hợp dữ liệu từ hai bảng trở lên dựa trên cột liên quan.",
+        "error": ""
+      },
+      {
+        "name": "structured/auto",
+        "ok": true,
+        "seconds": 28.092063499963842,
+        "detail": "intent=data tables=['don_hang', 'khach_hang', 'san_pham'] join=True conf=0.98",
+        "error": ""
+      },
+      {
+        "name": "structured/json_schema",
+        "ok": true,
+        "seconds": 31.18376399995759,
+        "detail": "intent=schema tables=['don_hang', 'khach_hang', 'san_pham'] join=True conf=0.97",
+        "error": ""
+      },
+      {
+        "name": "structured/function_calling",
+        "ok": true,
+        "seconds": 6.29448699997738,
+        "detail": "intent=data tables=['don_hang', 'khach_hang'] join=True conf=0.95",
+        "error": ""
+      },
+      {
+        "name": "tool_call",
+        "ok": true,
+        "seconds": 1.9625059000682086,
+        "detail": "lookup_table_schema",
+        "error": ""
+      }
+    ]
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "probes": [
+      {
+        "name": "text",
+        "ok": true,
+        "seconds": 9.0013093999587,
+        "detail": "SQL JOIN dùng để kết hợp dữ liệu từ hai bảng hoặc nhiều hơn dựa trên cột chung.",
+        "error": ""
+      },
+      {
+        "name": "structured/auto",
+        "ok": true,
+        "seconds": 49.67652780003846,
+        "detail": "intent=schema tables=['don_hang', 'khach_hang'] join=False conf=0.98",
+        "error": ""
+      },
+      {
+        "name": "structured/json_schema",
+        "ok": true,
+        "seconds": 16.181787200039253,
+        "detail": "intent=chitchat tables=['khach_hang', 'don_hang', 'san_pham'] join=True conf=0.98",
+        "error": ""
+      },
+      {
+        "name": "structured/function_calling",
+        "ok": false,
+        "seconds": 45.24826310004573,
+        "detail": "",
+        "error": "Exception: [400] {'message': 'unknown field `guided_json`, expected one of `greed_sampling`, `use_raw_prompt`, `annotations`, `backend_instance_id`, `token_data`, `max_thi…"
+      },
+      {
+        "name": "tool_call",
+        "ok": true,
+        "seconds": 6.5957855000160635,
+        "detail": "lookup_table_schema",
+        "error": ""
+      }
+    ]
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.6-terra",
+    "probes": [
+      {
+        "name": "text",
+        "ok": true,
+        "seconds": 3.145817800075747,
+        "detail": "SQL JOIN dùng để kết hợp dữ liệu từ nhiều bảng dựa trên cột liên quan.",
+        "error": ""
+      },
+      {
+        "name": "structured/auto",
+        "ok": true,
+        "seconds": 2.6732703000307083,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.99",
+        "error": ""
+      },
+      {
+        "name": "structured/json_schema",
+        "ok": true,
+        "seconds": 1.6376463000196964,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.99",
+        "error": ""
+      },
+      {
+        "name": "structured/function_calling",
+        "ok": true,
+        "seconds": 2.3540505999699235,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.99",
+        "error": ""
+      },
+      {
+        "name": "tool_call",
+        "ok": true,
+        "seconds": 2.00498470000457,
+        "detail": "lookup_table_schema",
+        "error": ""
+      }
+    ]
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "probes": [
+      {
+        "name": "text",
+        "ok": true,
+        "seconds": 1.550050500081852,
+        "detail": "SQL JOIN dùng để kết hợp dữ liệu từ hai hoặc nhiều bảng dựa trên các cột liên qu…",
+        "error": ""
+      },
+      {
+        "name": "structured/auto",
+        "ok": true,
+        "seconds": 1.6387770000146702,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.99",
+        "error": ""
+      },
+      {
+        "name": "structured/json_schema",
+        "ok": true,
+        "seconds": 1.1438940999796614,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.98",
+        "error": ""
+      },
+      {
+        "name": "structured/function_calling",
+        "ok": true,
+        "seconds": 1.4161839000880718,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.99",
+        "error": ""
+      },
+      {
+        "name": "tool_call",
+        "ok": true,
+        "seconds": 1.3272255000192672,
+        "detail": "lookup_table_schema",
+        "error": ""
+      }
+    ]
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "probes": [
+      {
+        "name": "text",
+        "ok": true,
+        "seconds": 1.9442018000409007,
+        "detail": "SQL JOIN dùng để kết hợp dữ liệu từ hai hoặc nhiều bảng dựa trên cột liên quan g…",
+        "error": ""
+      },
+      {
+        "name": "structured/auto",
+        "ok": true,
+        "seconds": 1.436083099921234,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.98",
+        "error": ""
+      },
+      {
+        "name": "structured/json_schema",
+        "ok": true,
+        "seconds": 1.4328163999598473,
+        "detail": "intent=data tables=['khach_hang', 'don_hang'] join=True conf=0.97",
+        "error": ""
+      },
+      {
+        "name": "structured/function_calling",
+        "ok": true,
+        "seconds": 2.113490300020203,
+        "detail": "intent=data tables=['don_hang', 'khach_hang'] join=True conf=0.98",
+        "error": ""
+      },
+      {
+        "name": "tool_call",
+        "ok": true,
+        "seconds": 1.474469400011003,
+        "detail": "lookup_table_schema",
+        "error": ""
+      }
+    ]
+  }
+]

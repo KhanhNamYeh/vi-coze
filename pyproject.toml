@@ -15,14 +15,18 @@ requires-python = ">=3.11,<3.14"  # onnxruntime (qua markitdown) chưa có wheel
 #     uv sync --all-extras         tất cả
 dependencies = [
     "markitdown[docx,pdf]>=0.1.1",    # docs -> markdown (pdf: pdfminer.six, nhẹ)
+    "openpyxl>=3.1",                  # XLSX -> markdown trong branch_sql_MVP
     "markdown-it-py>=3.0",            # markdown -> block (parse/blocks.py)
     "langchain-core>=1.0",            # Document, Runnable/LCEL
     "langchain-text-splitters>=1.0",  # MarkdownHeaderTextSplitter
     "langchain-huggingface>=0.3",     # HuggingFaceEmbeddings
     "langchain-classic>=1.0.8",       # EnsembleRetriever, CrossEncoderReranker
     "sentence-transformers>=3.0",     # backend cho embedding + reranker
+    "torch==2.11.0",                  # CUDA wheel: dense + reranker chạy GPU
+    "torchvision==0.26.0",            # khớp torch 2.11, Docling cũng sử dụng
     "qdrant-client>=1.12",            # vector store
     "fastembed>=0.8.0",               # BM25 sparse
+    "networkx>=3.2",                  # GraphRAG MVP + community detection
     "pydantic>=2.9",
     "sentencepiece>=0.2.2",
 ]
@@ -31,10 +35,17 @@ dependencies = [
 # src/retrieval/knowledge.py + kg_* — knowledge graph, chạy LLM qua endpoint OpenAI-compatible
 kg = [
     "openai>=1.40",
-    "networkx>=3.2",
     "pyvis>=0.3.2",
     "rank-bm25>=0.2.2",
     "numpy>=1.26",
+]
+
+# src/branch_sql/online/llm — binding LangChain cho 4 provider trong .env.
+# ChatOpenAI dùng chung cho cả OpenAI lẫn OpenRouter (endpoint OpenAI-compatible).
+llm = [
+    "langchain-openai>=1.6",
+    "langchain-google-genai>=4.3",
+    "langchain-nvidia-ai-endpoints>=1.4",
 ]
 
 # src/branch_sql/eval/gold_parse.py — đọc bộ testcase .xlsx
@@ -46,6 +57,7 @@ eval = [
 # pydantic đã có sẵn nên FastAPI dùng thẳng KnowledgeCfg/ChunkCfg làm request body.
 api = [
     "fastapi>=0.115",
+    "gradio>=5.0",
     "uvicorn>=0.32",
     "python-multipart>=0.0.9",
 ]
@@ -66,18 +78,24 @@ rag_docs = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=8"]
+dev = [
+    "pytest>=8",
+    "ipykernel>=7.0",
+    "nbclient>=0.11",
+    "nbformat>=5.10",
+]
 
 # Chạy bằng `python -m src.<...>` từ gốc repo, không cài như package.
 [tool.uv]
 package = false
 
-# torch mặc định trên Windows/Linux kéo theo cả runtime CUDA (~2,5 GB).
-# Embedding chạy CPU là đủ với khối lượng này -> lấy wheel CPU-only.
+# Dense embedding và Vietnamese reranker chạy GPU. CUDA 12.8 tương thích với
+# driver NVIDIA của máy dev; wheel đã kèm CUDA runtime, không cần cài toolkit.
 [tool.uv.sources]
-torch = [{ index = "pytorch-cpu" }]
+torch = [{ index = "pytorch-cu128", marker = "sys_platform == 'win32' or sys_platform == 'linux'" }]
+torchvision = [{ index = "pytorch-cu128", marker = "sys_platform == 'win32' or sys_platform == 'linux'" }]
 
 [[tool.uv.index]]
-name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/cpu"
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
 explicit = true

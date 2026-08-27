@@ -32,6 +32,7 @@ build/
 # Cache model của HuggingFace nếu ai đó trỏ HF_HOME vào repo
 .cache/
 models/
+data/processed/sql_mvp/qdrant/
 
 # jsdom cho test giao diện (tests/test_api_ui.py), cài bằng `npm i --no-save jsdom`
 node_modules/

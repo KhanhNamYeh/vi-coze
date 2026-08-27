@@ -1,0 +1,724 @@
+{
+  "parameters": {
+    "knowledge_id": "p1",
+    "doc_id": "mo_ta_bang_bds_new__docx",
+    "split": "dev",
+    "chunk": {
+      "unit": "token",
+      "tokenizer_model": null,
+      "heading_level": 2,
+      "child_min": 40,
+      "child_max": 512,
+      "child_overlap": 32,
+      "parent_max": 3000,
+      "table_rows": 10,
+      "table_overlap_rows": 1,
+      "repeat_table_header": true,
+      "separators": [
+        "\n\n",
+        "\n",
+        ". ",
+        " ",
+        ""
+      ],
+      "on_overflow": "split",
+      "on_underflow": "merge",
+      "breadcrumb": true
+    },
+    "graph": {
+      "enabled": true,
+      "source_kinds": [
+        "docs",
+        "sql"
+      ],
+      "method": "llm",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "temperature": 0.0,
+      "output_retries": 1,
+      "entity_types": [
+        "table",
+        "column",
+        "metric",
+        "business_rule",
+        "filter_value",
+        "sql_function"
+      ],
+      "relationship_types": [
+        "table_has_column",
+        "foreign_key_to",
+        "joins_with",
+        "metric_uses_column",
+        "rule_applies_to",
+        "derived_from",
+        "uses",
+        "filters_by",
+        "aliases"
+      ],
+      "community_algorithm": "greedy_modularity",
+      "community_resolution": 1.0,
+      "random_seed": 42,
+      "generate_reports": true,
+      "max_reports": 30,
+      "max_chunks": 0,
+      "visualization_max_nodes": 120,
+      "agent_prompt": "You are a neutral SQL knowledge-graph agent. Extract only facts explicitly supported by the supplied chunk. Use only the allowed entity and relationship types, make every relationship endpoint exactly match an extracted entity name, and attach a short verbatim evidence span to every entity and relationship. Do not infer missing schema.",
+      "report_prompt": "You are the same neutral SQL knowledge-graph agent. Summarize only the supplied graph community for retrieval. Preserve table, column, join, metric and business-rule facts; do not add facts that are absent from the community."
+    },
+    "embedding": {
+      "dense_model": "AITeamVN/Vietnamese_Embedding",
+      "sparse_model": "Qdrant/bm25",
+      "rerank_model": "AITeamVN/Vietnamese_Reranker",
+      "device": "cuda",
+      "batch_size": 16,
+      "normalize": true,
+      "bm25_k": 1.2,
+      "bm25_b": 0.0,
+      "disable_stemmer": true
+    },
+    "retrieval": {
+      "mode": "hybrid",
+      "candidate_k": 20,
+      "docs_top_k": 5,
+      "sql_top_k": 3,
+      "graph_top_k": 3,
+      "semantic_weight": 0.1,
+      "keyword_weight": 0.9,
+      "rrf_k": 5,
+      "rerank_top_k": 8,
+      "min_score": null
+    },
+    "graph_run": {}
+  },
+  "graph_stats": {
+    "source_artifacts": 1,
+    "nodes": 195,
+    "edges": 196,
+    "communities": 60,
+    "isolated_nodes": 51
+  },
+  "metrics": {
+    "cases": 33,
+    "unique_relevant_tables": 15,
+    "matched_relevant_tables": 15,
+    "table_coverage": 1.0,
+    "macro_table_recall": 1.0,
+    "complete_case_rate": 1.0,
+    "connected_case_rate": 1.0,
+    "same_community_rate": 0.3939393939393939,
+    "mean_shortest_path": 2.4705882352941178
+  },
+  "per_case": [
+    {
+      "id": "SQL_001",
+      "query": "5 điểm bán hàng có số lượng thuê bao phát triển mới nhiều nhất trong tháng.",
+      "relevant": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_002",
+      "query": "Điểm bán nào phát triển thuê bao trong tháng nhưng chưa được chăm sóc?",
+      "relevant": [
+        "NHAN_VIEN_CHAM_SOC_LONG",
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "NHAN_VIEN_CHAM_SOC_LONG",
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_003",
+      "query": "So sánh phát triển thuê bao giữa các trung tâm kinh doanh trong tháng?",
+      "relevant": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_004",
+      "query": "Top 5 phường có số lượng phát triển thuê bao nhiều nhất trong ngày qua kênh cửa hàng/đại lý.",
+      "relevant": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_005",
+      "query": "Tỷ lệ cửa hàng/đại lý có phát triển thuê bao trong tháng so với tổng số cửa hàng/đại lý của từng trung tâm kinh doanh.",
+      "relevant": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_006",
+      "query": "Phường/xã nào có tổng thuê bao phát triển mới cao nhất trong ngày 06/07/2026?",
+      "relevant": [
+        "PCK_REPORT_CHATBOX.GET_NEW_SUB_DATA_BY_PRECINCT"
+      ],
+      "matched": [
+        "PCK_REPORT_CHATBOX.GET_NEW_SUB_DATA_BY_PRECINCT"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_007",
+      "query": "Danh sách các Bệnh viện tại trung tâm kinh doanh Sài Gòn.",
+      "relevant": [
+        "PRECINCT",
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PRECINCT",
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_008",
+      "query": "Thống kê số lượng Bệnh viện và Trụ sở công an theo từng trung tâm kinh doanh.",
+      "relevant": [
+        "PRECINCT",
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PRECINCT",
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_009",
+      "query": "Top 3 Hub có nhiều Trung tâm hành chính nhất.",
+      "relevant": [
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_010",
+      "query": "Tổng số thuê bao VLR 4G và 5G đang hoạt động trong ngày của các trạm trung tâm kinh doanh Gò Vấp.",
+      "relevant": [
+        "PRECINCT",
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PRECINCT",
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_011",
+      "query": "Top 10 trạm BTS có tổng thuê bao VLR cao nhất trong tháng này.",
+      "relevant": [
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_012",
+      "query": "Danh sách 5 phường có chỉ số chất lượng chênh lệch thu chi trung bình thấp nhất trong tháng.",
+      "relevant": [
+        "PRECINCT",
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PRECINCT",
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_013",
+      "query": "Số lượng VLR MobiFone và Saymee theo từng phường/xã hôm nay",
+      "relevant": [
+        "PCK_REPORT_CHATBOX.GET_VLR_DATA_BY_PRECINCT"
+      ],
+      "matched": [
+        "PCK_REPORT_CHATBOX.GET_VLR_DATA_BY_PRECINCT"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_014",
+      "query": "Phường/xã nào có số lượng VLR MobiFone cao nhất trong ngày 06/07/2026?",
+      "relevant": [
+        "PCK_REPORT_CHATBOX.GET_VLR_DATA_BY_PRECINCT"
+      ],
+      "matched": [
+        "PCK_REPORT_CHATBOX.GET_VLR_DATA_BY_PRECINCT"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_015",
+      "query": "Phường/xã nào có doanh thu tài khoản chính MobiFone cao nhất trong tháng 07/2026?",
+      "relevant": [
+        "PCK_REPORT_CHATBOX.GET_REV_DATA_BY_PRECINCT"
+      ],
+      "matched": [
+        "PCK_REPORT_CHATBOX.GET_REV_DATA_BY_PRECINCT"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_016",
+      "query": "Có bao nhiêu công việc đã hoàn thành trong dự án Triển khai hạ tầng CNTT 168 Xã tại UBND Phường Bình Phú?",
+      "relevant": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_017",
+      "query": "Thống kê công việc của dự án Triển khai hạ tầng CNTT 168 Xã theo Hub: số lượng đã hoàn thành, chưa hoàn thành, và tổng.",
+      "relevant": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_018",
+      "query": "Liệt kê các địa điểm thuộc Triển khai hạ tầng CNTT 168 Xã chưa có công việc hoàn thành?",
+      "relevant": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_019",
+      "query": "Top 5 phường có số lượng điểm bán hàng có phát triển thuê bao trong tuần nhiều nhất",
+      "relevant": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_020",
+      "query": "Vũng tàu có bao nhiêu điểm bán có phát triển thuê bao hôm nay, và số lượng thuê bao là bao nhiêu?",
+      "relevant": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_021",
+      "query": "Danh sách điểm bán đã được chăm sóc hôm qua nhưng chưa phát triển thuê bao trong tháng.",
+      "relevant": [
+        "NHAN_VIEN_CHAM_SOC_LONG",
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "NHAN_VIEN_CHAM_SOC_LONG",
+        "POINT_OF_SALE",
+        "V_BDS_NEW_SUB_SALE_POINT",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_022",
+      "query": "Thống kê tổng số lượng phát triển thuê bao trong tháng, phân loại theo nhóm Cửa hàng và Đại lý.",
+      "relevant": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_023",
+      "query": "Số lượng đại lý chuyên chưa phát triển được thuê bao nào trong tháng này.",
+      "relevant": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "V_BDS_NEW_SUB_SHOP",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_024",
+      "query": "Kênh bán hàng nào phát triển thuê bao nhiều nhất trong tháng 07/2026?",
+      "relevant": [
+        "PCK_REPORT_CHATBOX.GET_NEW_SUB_DATA_BY_PRECINCT"
+      ],
+      "matched": [
+        "PCK_REPORT_CHATBOX.GET_NEW_SUB_DATA_BY_PRECINCT"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_025",
+      "query": "Phường/xã nào có đồng thời Bệnh viện và Trụ sở công an?",
+      "relevant": [
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_026",
+      "query": "Trung tâm kinh doanh nào không có Bệnh viện?",
+      "relevant": [
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PUBLIC_LOCATION",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_027",
+      "query": "Có bao nhiêu trạm đang ở trạng thái ngưng hoạt động?",
+      "relevant": [
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_028",
+      "query": "Tại trung tâm kinh doanh Gò Vấp, có bao nhiêu trạm BTS có phát sinh thuê bao 3G trong ngày?",
+      "relevant": [
+        "PRECINCT",
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "PRECINCT",
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_029",
+      "query": "Danh sách các trạm BTS đang hoạt động nhưng không phát sinh VLR 4G và 5G trong ngày.",
+      "relevant": [
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "V_BDS_SITE",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_030",
+      "query": "Tổng doanh thu tài khoản chính theo ngày của từng phường/xã hôm nay",
+      "relevant": [
+        "PCK_REPORT_CHATBOX.GET_REV_DATA_BY_PRECINCT"
+      ],
+      "matched": [
+        "PCK_REPORT_CHATBOX.GET_REV_DATA_BY_PRECINCT"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_031",
+      "query": "Phường/xã nào có số lượng VLR Saymee trong tháng lớn hơn VLR MobiFone trong tháng?",
+      "relevant": [
+        "PCK_REPORT_CHATBOX.GET_VLR_DATA_BY_PRECINCT"
+      ],
+      "matched": [
+        "PCK_REPORT_CHATBOX.GET_VLR_DATA_BY_PRECINCT"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": true
+    },
+    {
+      "id": "SQL_032",
+      "query": "Công việc mới nhất của dự án Triển khai hạ tầng CNTT 168 Xã của UBND Xã Nhuận Đức là gì?",
+      "relevant": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    },
+    {
+      "id": "SQL_033",
+      "query": "Thống kê tỉ lệ hoàn thành công việc của từng trung tâm kinh doanh (dự án Triển khai hạ tầng CNTT 168 Xã)",
+      "relevant": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "matched": [
+        "LOCATION",
+        "PRECINCT",
+        "PROJECT",
+        "V_MAN_TASK",
+        "V_MAN_TASK_PROGRESS",
+        "V_USER_PRECINCT_PERMISSION"
+      ],
+      "missing": [],
+      "table_recall": 1.0,
+      "complete": true,
+      "connected": true,
+      "same_community": false
+    }
+  ]
+}
