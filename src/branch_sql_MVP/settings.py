@@ -3,20 +3,25 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parent
 SETTINGS_FILE = Path(__file__).with_name("settings.json")
 
 
 class Paths(BaseModel):
-    raw: str = "data/raw/sql"
-    markdown: str = "data/processed/sql_mvp/markdown"
-    artifacts: str = "data/processed/sql_mvp/offline"
-    eval: str = "data/eval/sql_mvp"
+    data: str = "data"
+    dev: str = "data/dev"
+    test: str = "data/test"
+    raw: str = "data/test"
+    runtime: str = ".runtime"
+    markdown: str = ".runtime/markdown"
+    artifacts: str = ".runtime/offline"
+    eval: str = ".runtime/eval"
 
 
 class PreprocessSettings(BaseModel):
@@ -43,6 +48,9 @@ class ChunkSettings(BaseModel):
     on_overflow: Literal["split", "truncate"] = "split"
     on_underflow: Literal["keep", "merge", "drop"] = "merge"
     breadcrumb: bool = True
+    business_semantic_chunks: bool = True
+    gold_sample_parent_child: bool = True
+    gold_query_marker: str = "-- Query:"
 
     @model_validator(mode="after")
     def validate_limits(self):
@@ -52,6 +60,8 @@ class ChunkSettings(BaseModel):
             raise ValueError("chunk.child_overlap phải nhỏ hơn child_max")
         if self.table_overlap_rows >= self.table_rows:
             raise ValueError("table_overlap_rows phải nhỏ hơn table_rows")
+        if self.gold_sample_parent_child and not self.gold_query_marker.strip():
+            raise ValueError("gold_query_marker không được rỗng khi bật gold_sample_parent_child")
         return self
 
 
@@ -75,13 +85,29 @@ class GraphSettings(BaseModel):
     model: str | None = None
     temperature: float = Field(0.0, ge=0, le=2)
     output_retries: int = Field(1, ge=0, le=3)
-    entity_types: list[str] = Field(default_factory=lambda: [
-        "table", "column", "metric", "business_rule", "filter_value", "sql_function",
-    ])
-    relationship_types: list[str] = Field(default_factory=lambda: [
-        "table_has_column", "foreign_key_to", "joins_with", "metric_uses_column",
-        "rule_applies_to", "derived_from", "uses", "filters_by", "aliases",
-    ])
+    entity_types: list[str] = Field(
+        default_factory=lambda: [
+            "table",
+            "column",
+            "metric",
+            "business_rule",
+            "filter_value",
+            "sql_function",
+        ]
+    )
+    relationship_types: list[str] = Field(
+        default_factory=lambda: [
+            "table_has_column",
+            "foreign_key_to",
+            "joins_with",
+            "metric_uses_column",
+            "rule_applies_to",
+            "derived_from",
+            "uses",
+            "filters_by",
+            "aliases",
+        ]
+    )
     community_algorithm: Literal["louvain", "greedy_modularity", "connected_components"] = "louvain"
     community_resolution: float = Field(1.0, gt=0)
     random_seed: int = 42
@@ -115,10 +141,12 @@ class IndexSettings(BaseModel):
     local_path: str | None = None
     api_key_env: str | None = "QDRANT_API_KEY"
     knowledge_id: str = "p1"
-    collections: dict[str, dict[str, str]] = Field(default_factory=lambda: {
-        "p1": {"docs": "sqlp1__docs", "sql": "sqlp1__sql", "graph": "sqlp1__graph"},
-        "p2": {"docs": "sqlp2__docs", "sql": "sqlp2__sql", "graph": "sqlp2__graph"},
-    })
+    collections: dict[str, dict[str, str]] = Field(
+        default_factory=lambda: {
+            "p1": {"docs": "sqlp1__docs", "sql": "sqlp1__sql", "graph": "sqlp1__graph"},
+            "p2": {"docs": "sqlp2__docs", "sql": "sqlp2__sql", "graph": "sqlp2__graph"},
+        }
+    )
     dense_vector: str = "dense"
     sparse_vector: str = "bm25"
     batch_size: int = Field(64, gt=0)
@@ -152,6 +180,9 @@ class RetrievalSettings(BaseModel):
     keyword_weight: float = Field(0.5, ge=0)
     rrf_k: int = Field(40, gt=0)
     rerank_top_k: int = Field(8, gt=0)
+    rerank_enabled: bool = True
+    rerank_max_length: int = Field(128, ge=32, le=2048)
+    rerank_batch_size: int = Field(8, gt=0)
     min_score: float | None = None
 
     @model_validator(mode="after")
@@ -224,11 +255,22 @@ class Settings(BaseModel):
 
 
 def load_settings(path: Path = SETTINGS_FILE) -> Settings:
-    return Settings.model_validate_json(path.read_text(encoding="utf-8"))
+    values = json.loads(path.read_text(encoding="utf-8"))
+    env_overrides = {
+        "KB_QDRANT_URL": ("index", "url"),
+        "KB_QDRANT_LOCAL_PATH": ("index", "local_path"),
+        "KB_EMBEDDING_DEVICE": ("embedding", "device"),
+    }
+    for variable, (section, key) in env_overrides.items():
+        if variable in os.environ:
+            value: str | None = os.environ[variable].strip() or None
+            values[section][key] = value
+    return Settings.model_validate(values)
 
 
 def update_settings(patch: dict[str, Any], path: Path = SETTINGS_FILE) -> Settings:
     """Merge patch rồi validate trước khi ghi; secret không thuộc schema này."""
+
     def merge(base: dict[str, Any], change: dict[str, Any]) -> dict[str, Any]:
         out = dict(base)
         for key, value in change.items():

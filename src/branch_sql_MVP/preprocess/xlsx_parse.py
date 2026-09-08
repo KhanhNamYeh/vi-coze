@@ -57,11 +57,13 @@ def to_markdown(source: str | Path, settings: PreprocessSettings) -> str:
             for index, feature in enumerate(headers):
                 if index == id_index or not feature or feature.casefold() in excluded:
                     continue
-                output.extend([
-                    "",
-                    _heading(settings.feature_heading_level, feature),
-                    _text(values[index]),
-                ])
+                output.extend(
+                    [
+                        "",
+                        _heading(settings.feature_heading_level, feature),
+                        _text(values[index]),
+                    ]
+                )
     workbook.close()
 
     markdown = "\n".join(output).strip()

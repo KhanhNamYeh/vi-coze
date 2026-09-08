@@ -1,0 +1,256 @@
+{
+  "source": "C:\\Users\\Khanh\\Documents\\kb-text2sql",
+  "files": [
+    {
+      "path": ".env",
+      "sha256": "0eb82a9037e3e272c5f2af197c84223e5a2d6be707b18205522b96b2be88f0b5"
+    },
+    {
+      "path": "cli.py",
+      "sha256": "99a2d83507dfc8c25a892555c1af7acbf8db67677ca105e3950e510834e08f64"
+    },
+    {
+      "path": "settings.json",
+      "sha256": "fcd471ce640ef76742f803ac7b3ee60b9d2c2b042994268318dd0b137fc5901c"
+    },
+    {
+      "path": "settings.py",
+      "sha256": "f2229c231139f62f2e3244a9804642dadc33616f664af0ddd78d28d0563a3850"
+    },
+    {
+      "path": "__init__.py",
+      "sha256": "b4a401f0f3e71c51535681170f53fe9f79be3969a670a9d30f66d574caa2f5c3"
+    },
+    {
+      "path": "app\\app.py",
+      "sha256": "ece1509ae5ed60868790a66bb0e1012f8e4e8a4ca51481661ad46db64943faaf"
+    },
+    {
+      "path": "app\\models.py",
+      "sha256": "cb679898ea07259c4968165fd577f519f1e1bb44b11f9a21fe82b631622b78bf"
+    },
+    {
+      "path": "app\\__init__.py",
+      "sha256": "84e69216bcde8b49db25ecd9c5ff6bd743498de032df0ce36b77b0ea1a74b67b"
+    },
+    {
+      "path": "data\\catalog.py",
+      "sha256": "daf438fd80fdb889ddf3941f456484821fbe9617b756e29e82f2fff559344d40"
+    },
+    {
+      "path": "data\\database.py",
+      "sha256": "ac6f589d3904f97bbd46e6d12a1b5ba81f320d589fca066a3747e9fa8dfa3b58"
+    },
+    {
+      "path": "data\\service.py",
+      "sha256": "88401ec4829da4082dd3cabf3476c2151d0ad32a4c01914a1af7c38fb9fc001b"
+    },
+    {
+      "path": "data\\__init__.py",
+      "sha256": "bb48766205691f1809d81c6d3aef2ef7c1071ab26df85669dbb9dae4b6649ae2"
+    },
+    {
+      "path": "eval\\benchmark.py",
+      "sha256": "7c39eed83797760ace0ef87d98e69061ec6715c64ef479067e0bac87b6d7d0d8"
+    },
+    {
+      "path": "eval\\dataset_split.json",
+      "sha256": "2e996710d8941319c9e29fdb137edc7eace2eaee58a1a3fb7ceb3fc26ca6b75f"
+    },
+    {
+      "path": "eval\\dataset_split.py",
+      "sha256": "68af23b34344ac512797abd9217b4ddb0c87b06876a183c55dad21a065aee61e"
+    },
+    {
+      "path": "eval\\graph.py",
+      "sha256": "c388766c4a5de09675451c367eaa0b46e3d5c30c7fa68063577f19d81cd1884c"
+    },
+    {
+      "path": "eval\\internal_holdout.ipynb",
+      "sha256": "6b1521afc6f7b4979582a3dd8c71076c2620ccd6c3d1d58287194c1cd8e68ee7"
+    },
+    {
+      "path": "eval\\luna_component_tuning.ipynb",
+      "sha256": "1209cf6a704d312f022f4905ee8721885e99cb7667adc54c17cfc0b06bd41360"
+    },
+    {
+      "path": "eval\\retrieval.py",
+      "sha256": "9227f5fdf6a1d0f01157af85a05a7a9143671cd6d5b1dae71ac22c18044fcf9e"
+    },
+    {
+      "path": "eval\\retrieval_graph_benchmark.ipynb",
+      "sha256": "1143daddfe934a5fb93db5c92c0a1fd9026d7f77c76bbd1f2d5f74dc63c607d3"
+    },
+    {
+      "path": "eval\\run_luna_component_tuning.py",
+      "sha256": "ba94bef0e09972137be96ec7f97ac2dd46e1d432423047a24e695f97e4160904"
+    },
+    {
+      "path": "eval\\run_test_optimization.py",
+      "sha256": "a0782e54316a1ae1545cc5b55427fb48e34634248246c05ec09da59750488e0b"
+    },
+    {
+      "path": "eval\\run_text2sql_benchmark.py",
+      "sha256": "938f4b3032ccaa382842bc0858c352acc3bfc896c6926324e58eb750849814bd"
+    },
+    {
+      "path": "eval\\test_optimization.ipynb",
+      "sha256": "a1ea10d37a92d694f155a1f7227593af89275131e83101e1d7ac15049fa81122"
+    },
+    {
+      "path": "eval\\text2sql.py",
+      "sha256": "4fc49bd2a1d59163e1e4022f99ab40c411c8629527ba71c17d1a9121dd177f8b"
+    },
+    {
+      "path": "eval\\text2sql_full_benchmark.ipynb",
+      "sha256": "56b49d3e24610f5cf7acbcb772c0ec3f4b4be25cab6b27f9f82e12f2de0fb871"
+    },
+    {
+      "path": "eval\\__init__.py",
+      "sha256": "569f99277de84864036de34fee3a8ee9a21fec25fc392d45bbc395ebf335a4e4"
+    },
+    {
+      "path": "offline\\chunk.py",
+      "sha256": "6408c9c5ce45b261eee655ec22fc2e2f5d46cd056ef5e7d2ff241246fb87061e"
+    },
+    {
+      "path": "offline\\embed.py",
+      "sha256": "4d28bed6dc9eece59a1f7bade926774c5de8b88c70a1cbf7b7a679ecb4bf284e"
+    },
+    {
+      "path": "offline\\event_index.py",
+      "sha256": "6d9de5192828780c4dcf3336fbb42f02a6d660ed8a630cf0f359d75466b9c805"
+    },
+    {
+      "path": "offline\\example_index.py",
+      "sha256": "d86d23847252515caf454edc8ae17c4fb4fc2744bbed6a445b2ee08e05415ca5"
+    },
+    {
+      "path": "offline\\extract.py",
+      "sha256": "cd30305005b108d4cc11b895e018577178ab167b43fe3d2afd694ef1ddbc6540"
+    },
+    {
+      "path": "offline\\graph.py",
+      "sha256": "10ec948ade043fb66745a545b4e1a2415e9afd75902f24dca1d754cefdf729c9"
+    },
+    {
+      "path": "offline\\index.py",
+      "sha256": "b1eba7996610dc844ec5c51143c44de3c8d6ebf6859a89c967383da5d281ecae"
+    },
+    {
+      "path": "offline\\link.py",
+      "sha256": "2762edb5be5d526440df2ce2fd40a4daa5ee10877b0f8ff3a3a2bd56daa27c42"
+    },
+    {
+      "path": "offline\\pipeline.py",
+      "sha256": "939abcc38d22e587a2176d0cbf32af0163507afcaeb4f07b1453a0e6abbf4431"
+    },
+    {
+      "path": "offline\\schema_catalog.py",
+      "sha256": "787915ff86f525a67ccd559885aed7ffb429f0b4d61e3eb9b0f75d77f9c6923e"
+    },
+    {
+      "path": "offline\\__init__.py",
+      "sha256": "64342eef590b3a9a21a5e20d9289e368b1c1351ec9f29e0fea0f877063e06984"
+    },
+    {
+      "path": "online\\api.py",
+      "sha256": "58657ce28c76c1da0be9ac8dd3ef77738df0ff63c60caadd7fac140d5e68f44c"
+    },
+    {
+      "path": "online\\candidate_selection.py",
+      "sha256": "1df4f4091989b64a62e3752e2b470d13ec02a4397e031e0e9bc1bd97f600cdee"
+    },
+    {
+      "path": "online\\context_builder.py",
+      "sha256": "b67e271751c81fe068ffa8bc86aecf9e10697beddb23873f6b270a38e1489e3e"
+    },
+    {
+      "path": "online\\llm.py",
+      "sha256": "8e7af817d4506d739d47c8dd3ef3412e737e3780491b8a99499108ba7e98b99d"
+    },
+    {
+      "path": "online\\retrieval.py",
+      "sha256": "17c55e1657e51b62e473fc46545cab261e592761ad0527d5894c650f5931a51c"
+    },
+    {
+      "path": "online\\sag_retrieval.py",
+      "sha256": "7ebacabf0d442d3e980369dd9eb8936d756fac1795bf3383e34704a3ffb25334"
+    },
+    {
+      "path": "online\\schema_linking.py",
+      "sha256": "9d2a2242efd86a2e88ca0a8d7f92ff2a4eb010f9b8f87fe5ab5d85f616c66ffd"
+    },
+    {
+      "path": "online\\sql_execution.py",
+      "sha256": "0ef9602b12e47a93881ede1d4c2bbb0ea80afecd43747abfc2a230633ea90f7b"
+    },
+    {
+      "path": "online\\token_budget.py",
+      "sha256": "e91ae2c6be0f08df9223a941360504762b4bc272412dee99eec20b106b10c948"
+    },
+    {
+      "path": "online\\__init__.py",
+      "sha256": "85610071cee9b9248a8e06556eb3f8ded31d188577110a7dd85631fa6813755c"
+    },
+    {
+      "path": "pipeline\\adaptive_workflow.py",
+      "sha256": "f58570a87627068e91a516d0619be355721014bde667288405863913e8e6edb1"
+    },
+    {
+      "path": "pipeline\\contracts.py",
+      "sha256": "4c5f8782207ac37be85db075b427466ef9a81f08179f42dec033d9a9a34db207"
+    },
+    {
+      "path": "pipeline\\execution_repair.py",
+      "sha256": "592b1e927f0ed18ef78a2e7bcfa99419e940ffe49f0a13d99f8b4e80d4e96db9"
+    },
+    {
+      "path": "pipeline\\hybrid_context.py",
+      "sha256": "fc5f4db79413e7bb43a59224506608697c8eb4686bb3ee35ab8afc6dc21e387f"
+    },
+    {
+      "path": "pipeline\\prompt_baseline.py",
+      "sha256": "541dadeff3db4d738682ac7b4b1efffaee6747f7c9ec5469a19138b87683af07"
+    },
+    {
+      "path": "pipeline\\registry.py",
+      "sha256": "921aa5cc7a0144cd69f40e8af190edd57ff2f6720baccfc3ae489affacc91c12"
+    },
+    {
+      "path": "pipeline\\sag_context.py",
+      "sha256": "526e75da259e4eddb0a8d3b9a75e1022ae4b1b0537b2c7209a7a03a931b4a6e8"
+    },
+    {
+      "path": "pipeline\\state.py",
+      "sha256": "2166eeeeff6d91ff7d4a89ba3e33c8a25fe26ff122bcefccfc9a6622cc5130ee"
+    },
+    {
+      "path": "pipeline\\__init__.py",
+      "sha256": "01e5ac2294f3a154c65e0b1f65babc92080dd7ba92149c91544f91db5c4590fd"
+    },
+    {
+      "path": "preprocess\\docx_parse.py",
+      "sha256": "7f6666b527f931cb922bc0d7f9e0aaa6b19542554b0af93c4737cb0ead45691a"
+    },
+    {
+      "path": "preprocess\\pdf_parse.py",
+      "sha256": "048506457da1d5dcfd343babfa41cd8dd2624c14deb6904ff30aa529c6f24be4"
+    },
+    {
+      "path": "preprocess\\sql_parse.py",
+      "sha256": "892ccc0694a63b3ad1c3ae5001f1c85385b5ae2996cceac5a59d4e5aa3183c93"
+    },
+    {
+      "path": "preprocess\\xlsx_parse.py",
+      "sha256": "c8c2ff24ddcbcda8c2ddf3ac9de963a7e66a1a577af7327e2d4e564ddc4d99b3"
+    },
+    {
+      "path": "preprocess\\__init__.py",
+      "sha256": "74ef3ce38ecd326a68c76b931bf18ce1177960746aa5bf776a8bc98c49e106e5"
+    }
+  ],
+  "data_policy": "Copied all source data and runtime optimization artifacts; local paths rebased.",
+  "settings_policy": "Source settings.json preserved byte-for-byte; source .env copied locally.",
+  "destination": "C:\\Users\\Khanh\\Documents\\vi-coze\\src\\branch_sql_MVP"
+}

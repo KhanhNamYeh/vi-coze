@@ -1,0 +1,150 @@
+{
+  "paths": {
+    "raw": "data/raw/sql",
+    "markdown": "data/processed/sql_mvp/markdown",
+    "artifacts": "data/processed/sql_mvp/offline",
+    "eval": "data/eval/sql_mvp"
+  },
+  "preprocess": {
+    "excel_sheets": [
+      "dev"
+    ],
+    "excel_id_column": 0,
+    "excel_exclude_features": ["Relevant Chunks"],
+    "record_heading_level": 2,
+    "feature_heading_level": 3,
+    "overwrite": true
+  },
+  "chunk": {
+    "unit": "token",
+    "tokenizer_model": null,
+    "heading_level": 2,
+    "child_min": 40,
+    "child_max": 512,
+    "child_overlap": 32,
+    "parent_max": 3000,
+    "table_rows": 10,
+    "table_overlap_rows": 1,
+    "repeat_table_header": true,
+    "separators": [
+      "\n\n",
+      "\n",
+      ". ",
+      " ",
+      ""
+    ],
+    "on_overflow": "split",
+    "on_underflow": "merge",
+    "breadcrumb": true
+  },
+  "embedding": {
+    "dense_model": "AITeamVN/Vietnamese_Embedding",
+    "sparse_model": "Qdrant/bm25",
+    "rerank_model": "AITeamVN/Vietnamese_Reranker",
+    "device": "cuda",
+    "batch_size": 16,
+    "normalize": true,
+    "bm25_k": 1.2,
+    "bm25_b": 0.0,
+    "disable_stemmer": true
+  },
+  "graph": {
+    "enabled": true,
+    "source_kinds": ["docs", "sql"],
+    "method": "llm",
+    "provider": "openai",
+    "model": "gpt-5.6-luna",
+    "temperature": 0.0,
+    "output_retries": 1,
+    "entity_types": ["table", "column", "metric", "business_rule", "filter_value", "sql_function"],
+    "relationship_types": ["table_has_column", "foreign_key_to", "joins_with", "metric_uses_column", "rule_applies_to", "derived_from", "uses", "filters_by", "aliases"],
+    "community_algorithm": "greedy_modularity",
+    "community_resolution": 1.0,
+    "random_seed": 42,
+    "generate_reports": true,
+    "max_reports": 30,
+    "max_chunks": 0,
+    "visualization_max_nodes": 120,
+    "agent_prompt": "You are a neutral SQL knowledge-graph agent. Extract only facts explicitly supported by the supplied chunk. Use only the allowed entity and relationship types, make every relationship endpoint exactly match an extracted entity name, and attach a short verbatim evidence span to every entity and relationship. Do not infer missing schema.",
+    "report_prompt": "You are the same neutral SQL knowledge-graph agent. Summarize only the supplied graph community for retrieval. Preserve table, column, join, metric and business-rule facts; do not add facts that are absent from the community."
+  },
+  "index": {
+    "url": "http://localhost:6333",
+    "local_path": "data/processed/sql_mvp/qdrant",
+    "api_key_env": "QDRANT_API_KEY",
+    "knowledge_id": "p1",
+    "collections": {
+      "p1": {"docs": "sqlp1__docs", "sql": "sqlp1__sql", "graph": "sqlp1__graph"},
+      "p2": {"docs": "sqlp2__docs", "sql": "sqlp2__sql", "graph": "sqlp2__graph"}
+    },
+    "dense_vector": "dense",
+    "sparse_vector": "bm25",
+    "batch_size": 64,
+    "recreate": false
+  },
+  "retrieval": {
+    "mode": "hybrid",
+    "candidate_k": 20,
+    "docs_top_k": 5,
+    "sql_top_k": 3,
+    "graph_top_k": 3,
+    "semantic_weight": 0.1,
+    "keyword_weight": 0.9,
+    "rrf_k": 5,
+    "rerank_top_k": 8,
+    "min_score": null
+  },
+  "api": {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "timeout": 60.0,
+    "retries": 2,
+    "providers": {
+      "openai": {
+        "binding": "openai",
+        "api_key_env": "OPENAI_API_KEY",
+        "base_url": null,
+        "base_url_env": null,
+        "headers": {}
+      },
+      "openrouter": {
+        "binding": "openai",
+        "api_key_env": "OPENROUTER_API_KEY",
+        "base_url": null,
+        "base_url_env": "OPENROUTER_BASE_URL",
+        "headers": {}
+      },
+      "google": {
+        "binding": "google",
+        "api_key_env": "GOOGLE_API_KEY",
+        "base_url": null,
+        "base_url_env": null,
+        "headers": {}
+      },
+      "nvidia": {
+        "binding": "nvidia",
+        "api_key_env": "NVIDIA_API_KEY",
+        "base_url": null,
+        "base_url_env": "NVIDIA_BASE_URL",
+        "headers": {}
+      }
+    }
+  },
+  "llm": {
+    "system_prompt": "Bạn là trợ lý Text-to-SQL. Chỉ dùng ngữ cảnh được cung cấp, không tự bịa bảng hoặc cột.",
+    "temperature": null,
+    "max_tokens": null,
+    "top_p": null,
+    "stop": [],
+    "structured_output": null,
+    "extra": {}
+  },
+  "eval": {
+    "source": "Text2SQL_testcase.xlsx",
+    "split": "dev",
+    "id_column": "Test Case ID",
+    "query_column": "Query",
+    "relevant_column": "Relevant Chunks",
+    "separator": "|"
+  }
+}

@@ -54,7 +54,9 @@ def ensure_collection(qdrant, name: str, dimension: int, settings: Settings, rec
         return False
     qdrant.create_collection(
         collection_name=name,
-        vectors_config={settings.index.dense_vector: models.VectorParams(size=dimension, distance=models.Distance.COSINE)},
+        vectors_config={
+            settings.index.dense_vector: models.VectorParams(size=dimension, distance=models.Distance.COSINE)
+        },
         sparse_vectors_config={settings.index.sparse_vector: models.SparseVectorParams(modifier=models.Modifier.IDF)},
     )
     return True
@@ -86,25 +88,29 @@ def run(
     dimension = len(next(iter(vectors.values()))["dense"])
     collection = app.index.collection(selected_knowledge, kind)
     qdrant = client(app)
-    created = ensure_collection(qdrant, collection, dimension, app, app.index.recreate if recreate is None else recreate)
+    created = ensure_collection(
+        qdrant, collection, dimension, app, app.index.recreate if recreate is None else recreate
+    )
 
     points = []
     for chunk in chunks:
         vector = vectors[chunk["id"]]
-        points.append(models.PointStruct(
-            id=str(uuid.uuid5(NAMESPACE, chunk["id"])),
-            vector={
-                app.index.dense_vector: vector["dense"],
-                app.index.sparse_vector: models.SparseVector(**vector["sparse"]),
-            },
-            payload={
-                **chunk,
-                "doc_id": doc_id,
-                "kind": kind,
-                "knowledge_id": selected_knowledge,
-                "parent_text": parents.get(chunk["parent_id"], ""),
-            },
-        ))
+        points.append(
+            models.PointStruct(
+                id=str(uuid.uuid5(NAMESPACE, chunk["id"])),
+                vector={
+                    app.index.dense_vector: vector["dense"],
+                    app.index.sparse_vector: models.SparseVector(**vector["sparse"]),
+                },
+                payload={
+                    **chunk,
+                    "doc_id": doc_id,
+                    "kind": kind,
+                    "knowledge_id": selected_knowledge,
+                    "parent_text": parents.get(chunk["parent_id"], ""),
+                },
+            )
+        )
     for start in range(0, len(points), app.index.batch_size):
         qdrant.upsert(collection, points=points[start : start + app.index.batch_size], wait=True)
 
@@ -126,21 +132,23 @@ def run(
             )
             for item_id, item in graph_items.items():
                 vector = graph_vectors[item_id]
-                graph_points.append(models.PointStruct(
-                    id=str(uuid.uuid5(NAMESPACE, f"graph:{doc_id}:{item_id}")),
-                    vector={
-                        app.index.dense_vector: vector["dense"],
-                        app.index.sparse_vector: models.SparseVector(**vector["sparse"]),
-                    },
-                    payload={
-                        **item["metadata"],
-                        "id": item_id,
-                        "text": item["text"],
-                        "kind": item["kind"],
-                        "doc_id": doc_id,
-                        "knowledge_id": selected_knowledge,
-                    },
-                ))
+                graph_points.append(
+                    models.PointStruct(
+                        id=str(uuid.uuid5(NAMESPACE, f"graph:{doc_id}:{item_id}")),
+                        vector={
+                            app.index.dense_vector: vector["dense"],
+                            app.index.sparse_vector: models.SparseVector(**vector["sparse"]),
+                        },
+                        payload={
+                            **item["metadata"],
+                            "id": item_id,
+                            "text": item["text"],
+                            "kind": item["kind"],
+                            "doc_id": doc_id,
+                            "knowledge_id": selected_knowledge,
+                        },
+                    )
+                )
             for start in range(0, len(graph_points), app.index.batch_size):
                 qdrant.upsert(
                     graph_collection,

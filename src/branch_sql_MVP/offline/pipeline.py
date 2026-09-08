@@ -6,8 +6,8 @@ import re
 import unicodedata
 from pathlib import Path
 
+from ..preprocess import docx_parse, pdf_parse, sql_parse, xlsx_parse
 from ..settings import Settings, load_settings
-from ..preprocess import docx_parse, pdf_parse, xlsx_parse
 from . import chunk, embed, extract, graph, index, link
 
 
@@ -20,7 +20,8 @@ def _slug(value: str) -> str:
 def resolve_source(source: str | Path, settings: Settings) -> Path:
     path = Path(source)
     if not path.is_absolute():
-        path = settings.path(settings.paths.raw) / path
+        project_relative = settings.path(str(path))
+        path = project_relative if project_relative.is_file() else settings.path(settings.paths.raw) / path
     path = path.resolve()
     if not path.is_file():
         raise FileNotFoundError(path)
@@ -42,12 +43,20 @@ def preprocess(source: str | Path, *, settings: Settings | None = None) -> dict:
         markdown = pdf_parse.to_markdown(path)
     elif suffix == ".xlsx":
         markdown = xlsx_parse.to_markdown(path, app.preprocess)
+    elif suffix == ".sql":
+        markdown = sql_parse.to_markdown(path)
     else:
         raise ValueError(f"chưa hỗ trợ định dạng '{suffix}'")
     if not markdown.strip():
         raise ValueError(f"{path.name}: Markdown rỗng")
 
-    doc_id = f"{_slug(path.stem)}__{suffix.removeprefix('.')}"
+    data_root = app.path(app.paths.data).resolve()
+    try:
+        relative = path.relative_to(data_root).with_suffix("")
+        identity = "__".join(relative.parts)
+    except ValueError:
+        identity = path.stem
+    doc_id = f"{_slug(identity)}__{suffix.removeprefix('.')}"
     output = app.path(app.paths.markdown) / f"{doc_id}.md"
     output.parent.mkdir(parents=True, exist_ok=True)
     if output.exists() and not app.preprocess.overwrite:

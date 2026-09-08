@@ -4,11 +4,20 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from functools import lru_cache
 from pathlib import Path
 
 from ..settings import ChunkSettings, Settings, load_settings
 from .link import load as load_linked
+
+GOLD_QUERY_LINE = re.compile(r"^--\s*Query:\s*(?P<query>.+?)\s*$", re.IGNORECASE | re.MULTILINE)
+BUSINESS_RULE_BLOCK = re.compile(
+    r"^-\s+\*\*(?P<qid>Q\d+)\*\*:\s*.*?(?=^-\s+\*\*Q\d+\*\*:|\Z)",
+    re.IGNORECASE | re.MULTILINE | re.DOTALL,
+)
+BUSINESS_DICTIONARY_HEADING = "từ điển dữ liệu"
+BUSINESS_RULES_HEADING = "bằng chứng và quy tắc nghiệp vụ từ mẫu chuẩn"
 
 
 @lru_cache(maxsize=4)
@@ -98,11 +107,7 @@ def _render(element: dict) -> str:
 
 
 def _units(elements: list[dict], heading_level: int) -> list[list[dict]]:
-    levels = sorted({
-        element["level"]
-        for element in elements
-        if element["type"] == "heading" and element.get("level")
-    })
+    levels = sorted({element["level"] for element in elements if element["type"] == "heading" and element.get("level")})
     if heading_level not in levels:
         available = ", ".join(f"H{level}" for level in levels) or "không có heading"
         raise ValueError(f"chunk yêu cầu H{heading_level}, tài liệu chỉ có: {available}")
@@ -160,10 +165,167 @@ def _id(*values: str) -> str:
     return hashlib.sha256("\0".join(values).encode("utf-8")).hexdigest()[:24]
 
 
+def _flush_prose(
+    prose: list[str],
+    raw_parts: list[tuple[str, str]],
+    body_limit: int,
+    cfg: ChunkSettings,
+    dense_model: str,
+) -> None:
+    if not prose:
+        return
+    raw = "\n\n".join(prose)
+    raw_parts.extend((part, "text") for part in split_text(raw, body_limit, cfg, dense_model))
+    prose.clear()
+
+
+def _gold_sample_parent_child(ir: dict, cfg: ChunkSettings) -> tuple[list[dict], list[dict]] | None:
+    """Query là retrieval child; nguyên block Query/Evidence/SQL là parent trả về."""
+    units = _units(ir["elements"], cfg.heading_level)
+    if not any(GOLD_QUERY_LINE.search("\n".join(_render(item) for item in unit)) for unit in units):
+        return None
+    parents: list[dict] = []
+    children: list[dict] = []
+    marker = cfg.gold_query_marker.strip().casefold()
+    for unit_number, unit in enumerate(units, 1):
+        first = unit[0]
+        body = "\n".join(_render(element) for element in unit[1:]).strip()
+        query_match = GOLD_QUERY_LINE.search(body)
+        if query_match is None:
+            raise ValueError(f"gold sample '{first['text']}' thiếu marker {cfg.gold_query_marker}")
+        lines = []
+        started = False
+        for line in body.splitlines():
+            normalized = line.strip().casefold()
+            if normalized.startswith(marker):
+                started = True
+            if started and not line.strip().startswith("```"):
+                lines.append(line.rstrip())
+        parent_text = "\n".join(lines).strip()
+        if not parent_text:
+            raise ValueError(f"gold sample '{first['text']}' có parent rỗng")
+        parent_id = _id(ir["doc_id"], "gold-parent", str(unit_number), parent_text)
+        query = query_match.group("query").strip()
+        parents.append(
+            {
+                "id": parent_id,
+                "text": parent_text,
+                "source": ir["source"],
+                "section_id": first["text"],
+                "type": "gold_sample",
+                "atomic": True,
+            }
+        )
+        children.append(
+            {
+                "id": _id(ir["doc_id"], parent_id, "gold-query", query),
+                "parent_id": parent_id,
+                "text": query,
+                "type": "gold_query",
+                "source": ir["source"],
+                "section_id": first["text"],
+                "chunk_role": "retrieval_child",
+                "query_marker": cfg.gold_query_marker,
+            }
+        )
+    return children, parents
+
+
+def _business_semantic_chunks(
+    ir: dict, cfg: ChunkSettings, dense_model: str
+) -> tuple[list[dict], list[dict]] | None:
+    """Mỗi bảng nghiệp vụ và mỗi quy tắc Qn là một chunk nguyên tử."""
+    elements = ir["elements"]
+    h2_names = {
+        element["text"].strip().casefold()
+        for element in elements
+        if element["type"] == "heading" and element.get("level") == 2
+    }
+    required = {BUSINESS_DICTIONARY_HEADING, BUSINESS_RULES_HEADING}
+    if not required.issubset(h2_names):
+        return None
+
+    parents: list[dict] = []
+    children: list[dict] = []
+    current_h2 = ""
+    current_h3 = ""
+
+    def add_atomic(text: str, kind: str, section_id: str) -> None:
+        value = text.strip()
+        if not value:
+            return
+        parent_id = _id(ir["doc_id"], f"{kind}-parent", section_id, value)
+        parents.append(
+            {
+                "id": parent_id,
+                "text": value,
+                "source": ir["source"],
+                "section_id": section_id,
+                "type": kind,
+                "atomic": True,
+            }
+        )
+        children.append(
+            {
+                "id": _id(ir["doc_id"], parent_id, kind, value),
+                "parent_id": parent_id,
+                "text": value,
+                "type": kind,
+                "source": ir["source"],
+                "section_id": section_id,
+                "chunk_role": "atomic_business_chunk",
+            }
+        )
+
+    for element in elements:
+        if element["type"] == "heading":
+            if element.get("level") == 2:
+                current_h2 = element["text"].strip()
+                current_h3 = ""
+            elif element.get("level") == 3:
+                current_h3 = element["text"].strip()
+            continue
+
+        h2_key = current_h2.casefold()
+        if h2_key == BUSINESS_DICTIONARY_HEADING and element["type"] == "table":
+            section_id = current_h3 or current_h2
+            prefix = f"### {current_h3}\n\n" if current_h3 else ""
+            add_atomic(f"{prefix}{element['text']}", "business_table", section_id)
+            continue
+
+        if h2_key == BUSINESS_RULES_HEADING and element["type"] == "text":
+            matches = list(BUSINESS_RULE_BLOCK.finditer(element["text"]))
+            for match in matches:
+                add_atomic(match.group(0), "business_rule", match.group("qid").upper())
+            if matches:
+                remainder = BUSINESS_RULE_BLOCK.sub("", element["text"]).strip()
+                for index, part in enumerate(split_text(remainder, cfg.child_max, cfg, dense_model), 1):
+                    add_atomic(part, "business_text", f"{current_h2} #{index}")
+                continue
+
+        # Giữ lại nội dung nghiệp vụ không thuộc hai mẫu semantic ở trên.
+        context = current_h3 or current_h2
+        rendered = _render(element)
+        for index, part in enumerate(split_text(rendered, cfg.child_max, cfg, dense_model), 1):
+            add_atomic(part, "business_text", f"{context} #{index}")
+
+    if not children:
+        raise ValueError("business semantic chunking tạo ra 0 chunk")
+    return children, parents
+
+
 def build(ir: dict, cfg: ChunkSettings, dense_model: str) -> tuple[list[dict], list[dict]]:
     elements = ir["elements"]
     if not elements:
         raise ValueError("chunk nhận danh sách element rỗng")
+    if cfg.gold_sample_parent_child:
+        gold_chunks = _gold_sample_parent_child(ir, cfg)
+        if gold_chunks is not None:
+            return gold_chunks
+    if cfg.business_semantic_chunks:
+        business_chunks = _business_semantic_chunks(ir, cfg, dense_model)
+        if business_chunks is not None:
+            return business_chunks
     by_id = {element["id"]: element for element in elements}
     parents: list[dict] = []
     children: list[dict] = []
@@ -183,24 +345,17 @@ def build(ir: dict, cfg: ChunkSettings, dense_model: str) -> tuple[list[dict], l
         raw_parts: list[tuple[str, str]] = []
         prose: list[str] = []
 
-        def flush_prose() -> None:
-            if not prose:
-                return
-            raw = "\n\n".join(prose)
-            raw_parts.extend((part, "text") for part in split_text(raw, body_limit, cfg, dense_model))
-            prose.clear()
-
         for position, element in enumerate(unit):
             # H2 hiện tại đã nằm trong breadcrumb; không chèn lại vào body.
             if position == 0 and element["type"] == "heading":
                 continue
             if element["type"] == "table":
-                flush_prose()
+                _flush_prose(prose, raw_parts, body_limit, cfg, dense_model)
                 for table in _table_parts(element["text"], cfg):
                     raw_parts.extend((part, "table") for part in split_text(table, body_limit, cfg, dense_model))
             else:
                 prose.append(_render(element))
-        flush_prose()
+        _flush_prose(prose, raw_parts, body_limit, cfg, dense_model)
 
         made: list[dict] = []
         for body, kind in raw_parts:
@@ -209,14 +364,16 @@ def build(ir: dict, cfg: ChunkSettings, dense_model: str) -> tuple[list[dict], l
                 continue
             if measure(text, cfg, dense_model) > cfg.child_max:
                 text = _cut(text, cfg.child_max, cfg, dense_model).strip()
-            made.append({
-                "id": _id(ir["doc_id"], parent_id, str(len(made) + 1), text),
-                "parent_id": parent_id,
-                "text": text,
-                "type": kind,
-                "source": ir["source"],
-                "section_id": section_id,
-            })
+            made.append(
+                {
+                    "id": _id(ir["doc_id"], parent_id, str(len(made) + 1), text),
+                    "parent_id": parent_id,
+                    "text": text,
+                    "type": kind,
+                    "source": ir["source"],
+                    "section_id": section_id,
+                }
+            )
 
         if cfg.on_underflow == "drop":
             made = [item for item in made if measure(item["text"], cfg, dense_model) >= cfg.child_min]
@@ -252,12 +409,14 @@ def build(ir: dict, cfg: ChunkSettings, dense_model: str) -> tuple[list[dict], l
             made = merged
         if not made:
             continue
-        parents.append({
-            "id": parent_id,
-            "text": parent_text,
-            "source": ir["source"],
-            "section_id": section_id,
-        })
+        parents.append(
+            {
+                "id": parent_id,
+                "text": parent_text,
+                "source": ir["source"],
+                "section_id": section_id,
+            }
+        )
         children.extend(made)
 
     if not children:
@@ -292,7 +451,13 @@ def run(doc_id: str, *, settings: Settings | None = None) -> dict:
     child_path, parent_path = base / f"{doc_id}.chunks.jsonl", base / f"{doc_id}.parents.jsonl"
     _write_jsonl(child_path, children)
     _write_jsonl(parent_path, parents)
-    return {"doc_id": doc_id, "chunks": len(children), "parents": len(parents), "path": str(child_path), "parent_path": str(parent_path)}
+    return {
+        "doc_id": doc_id,
+        "chunks": len(children),
+        "parents": len(parents),
+        "path": str(child_path),
+        "parent_path": str(parent_path),
+    }
 
 
 def load_chunks(doc_id: str, *, settings: Settings | None = None) -> list[dict]:

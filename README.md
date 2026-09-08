@@ -1,5 +1,8 @@
 # vi-coze
 
+SQL Studio mới: [hướng dẫn và dữ liệu kb-text2sql](src/branch_sql_MVP/README.md).
+Chạy `uv run --extra api --extra llm python -m src.branch_sql_MVP.app.app`, mở http://127.0.0.1:8000.
+
 Pipeline RAG tiếng Việt. Hai nhánh tài liệu, mỗi nhánh một bộ chặng xử lý riêng.
 
 ## Cấu trúc

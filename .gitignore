@@ -37,3 +37,9 @@ data/processed/sql_mvp/qdrant/
 # jsdom cho test giao diện (tests/test_api_ui.py), cài bằng `npm i --no-save jsdom`
 node_modules/
 package-lock.json
+
+# Local imported dataset, credentials and optimization runtime
+src/branch_sql_MVP/.env
+src/branch_sql_MVP/.runtime/
+src/branch_sql_MVP/data/dev/
+src/branch_sql_MVP/data/test/

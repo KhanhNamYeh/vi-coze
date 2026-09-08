@@ -3,10 +3,7 @@
 import re
 from pathlib import Path
 
-
-NUMBERED_BOLD_HEADING = re.compile(
-    r"^\s*[*+-]\s+\d+(?:\.\d+)*\.\s+\*\*(.+?)\*\*\s*$"
-)
+NUMBERED_BOLD_HEADING = re.compile(r"^\s*[*+-]\s+\d+(?:\.\d+)*\.\s+\*\*(.+?)\*\*\s*$")
 
 
 def _normalize_record_headings(markdown: str, heading_level: int) -> str:

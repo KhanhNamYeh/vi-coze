@@ -1,4 +1,4 @@
-"""FastAPI + Gradio UI cho MVP. Chạy: uv run --extra api --extra llm python -m src.branch_sql_MVP.app.app"""
+"""FastAPI + Gradio UI cho MVP. Chạy: python -m src.app.app"""
 
 from __future__ import annotations
 
@@ -9,74 +9,28 @@ from pathlib import Path
 from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
 
+from ..data import service as data_service
 from ..eval import graph as graph_eval
 from ..offline import chunk, embed, extract, graph, index, link, pipeline
 from ..online.llm import chat
 from ..online.retrieval import retrieve
 from ..settings import RetrievalSettings, Settings, load_settings, update_settings
+from .models import (
+    ChatRequest,
+    DatabaseBuildRequest,
+    DatabaseQueryRequest,
+    DocumentRequest,
+    ExtractRequest,
+    GraphEvalRequest,
+    GraphRequest,
+    IndexRequest,
+    PipelineRequest,
+    RetrievalRequest,
+    SourceRequest,
+)
 
 STAGES = ("preprocess", "extract", "link", "chunk", "graph", "embed", "index")
-
-
-class SourceRequest(BaseModel):
-    source: str
-
-
-class DocumentRequest(BaseModel):
-    doc_id: str
-
-
-class ExtractRequest(BaseModel):
-    markdown_path: str
-
-
-class IndexRequest(DocumentRequest):
-    knowledge_id: str
-    kind: str
-    recreate: bool | None = None
-
-
-class GraphRequest(DocumentRequest):
-    kind: Literal["docs", "sql"] = "docs"
-    provider: str | None = None
-    model: str | None = None
-    api_key: str | None = None
-
-
-class PipelineRequest(SourceRequest):
-    knowledge_id: str
-    kind: str
-    recreate: bool | None = None
-    graph_provider: str | None = None
-    graph_model: str | None = None
-    graph_api_key: str | None = None
-
-
-class RetrievalRequest(BaseModel):
-    query: str
-    knowledge_id: str
-    kind: Literal["docs", "sql", "graph"]
-    mode: Literal["semantic", "keyword", "hybrid"] | None = None
-    semantic_weight: float | None = Field(None, ge=0)
-    keyword_weight: float | None = Field(None, ge=0)
-
-
-class ChatRequest(BaseModel):
-    query: str
-    knowledge_id: str
-    provider: str | None = None
-    model: str | None = None
-    api_key: str | None = None
-    mode: Literal["semantic", "keyword", "hybrid"] | None = None
-    semantic_weight: float | None = Field(None, ge=0)
-    keyword_weight: float | None = Field(None, ge=0)
-
-
-class GraphEvalRequest(DocumentRequest):
-    knowledge_id: str
-    split: Literal["dev", "test"] = "dev"
 
 
 def _runtime_settings(mode=None, semantic_weight=None, keyword_weight=None) -> Settings:
@@ -151,7 +105,11 @@ def document_stats(doc_id: str, settings: Settings | None = None) -> dict:
         rows = [json.loads(line) for line in chunks.read_text(encoding="utf-8").splitlines() if line]
         parent_file = base / f"{doc_id}.parents.jsonl"
         parents = len(parent_file.read_text(encoding="utf-8").splitlines()) if parent_file.exists() else 0
-        stats["chunk"] = {"children": len(rows), "parents": parents, "types": dict(Counter(row["type"] for row in rows))}
+        stats["chunk"] = {
+            "children": len(rows),
+            "parents": parents,
+            "types": dict(Counter(row["type"] for row in rows)),
+        }
     vectors = base / f"{doc_id}.vectors.jsonl"
     if vectors.exists():
         rows = [json.loads(line) for line in vectors.read_text(encoding="utf-8").splitlines() if line]
@@ -180,6 +138,34 @@ def create_api() -> FastAPI:
     @api.patch("/settings")
     def patch_settings(patch: dict[str, Any]):
         return _call(update_settings, patch).model_dump(mode="json")
+
+    @api.get("/datasets")
+    def datasets(split: Literal["dev", "test"] | None = None):
+        return data_service.catalog(split=split).list()
+
+    @api.post("/datasets/{name}/prepare")
+    def prepare_dataset(name: str, split: Literal["dev", "test"] | None = None):
+        return _call(data_service.prepare_knowledge, name, split=split)
+
+    @api.post("/datasets/{name}/database")
+    def build_dataset_database(
+        name: str,
+        request: DatabaseBuildRequest,
+        split: Literal["dev", "test"] | None = None,
+    ):
+        return _call(data_service.build_database, name, overwrite=request.overwrite, split=split)
+
+    @api.get("/datasets/{name}/schema")
+    def dataset_schema(name: str, split: Literal["dev", "test"] | None = None):
+        return _call(data_service.schema, name, split=split)
+
+    @api.post("/datasets/{name}/query")
+    def query_dataset(
+        name: str,
+        request: DatabaseQueryRequest,
+        split: Literal["dev", "test"] | None = None,
+    ):
+        return _call(data_service.query, name, request.sql, limit=request.limit, split=split)
 
     @api.post("/offline/preprocess")
     def preprocess_stage(request: SourceRequest):
@@ -284,6 +270,8 @@ def create_api() -> FastAPI:
             split=request.split,
         )
 
+    from .studio import router
+    api.include_router(router)
     return api
 
 
@@ -357,23 +345,35 @@ def create_ui():
             ("extract", lambda: extract.run(last_result["path"])),
             ("link", lambda: link.run(doc_id)),
             ("chunk", lambda: chunk.run(doc_id)),
-            ("graph", lambda: graph.run(
-                doc_id,
-                kind=kind,
-                provider=graph_provider or None,
-                model=graph_model or None,
-                api_key=graph_api_key or None,
-            )),
+            (
+                "graph",
+                lambda: graph.run(
+                    doc_id,
+                    kind=kind,
+                    provider=graph_provider or None,
+                    model=graph_model or None,
+                    api_key=graph_api_key or None,
+                ),
+            ),
             ("embed", lambda: embed.run(doc_id)),
-            ("index", lambda: index.run(
-                doc_id,
-                kind=kind,
-                knowledge_id=knowledge_id,
-                recreate=recreate,
-            )),
+            (
+                "index",
+                lambda: index.run(
+                    doc_id,
+                    kind=kind,
+                    knowledge_id=knowledge_id,
+                    recreate=recreate,
+                ),
+            ),
         ]
         for stage, action in steps:
-            yield rows(stage, completed), doc_id, document_stats(doc_id) if doc_id else {}, "\n".join(logs), artifact_update()
+            yield (
+                rows(stage, completed),
+                doc_id,
+                document_stats(doc_id) if doc_id else {},
+                "\n".join(logs),
+                artifact_update(),
+            )
             started = time.perf_counter()
             try:
                 last_result = action()
@@ -384,13 +384,27 @@ def create_ui():
                 log(stage, f"OK · {compact(stage, last_result)} · {elapsed:.2f}s")
             except Exception as error:
                 log(stage, f"ERROR · {error}")
-                yield rows(stage, completed, str(error)), doc_id, document_stats(doc_id) if doc_id else {}, "\n".join(logs), artifact_update()
+                yield (
+                    rows(stage, completed, str(error)),
+                    doc_id,
+                    document_stats(doc_id) if doc_id else {},
+                    "\n".join(logs),
+                    artifact_update(),
+                )
                 return
             yield rows(done=completed), doc_id, document_stats(doc_id), "\n".join(logs), artifact_update()
 
     def run_one(
-        stage, file_path, source_path, doc_id, knowledge_id, kind, recreate,
-        graph_provider, graph_model, graph_api_key,
+        stage,
+        file_path,
+        source_path,
+        doc_id,
+        knowledge_id,
+        kind,
+        recreate,
+        graph_provider,
+        graph_model,
+        graph_api_key,
     ):
         source = file_path or source_path
         started = time.perf_counter()
@@ -399,8 +413,10 @@ def create_ui():
                 result = pipeline.preprocess(source)
                 doc_id = result["doc_id"]
             elif stage == "extract":
-                markdown = source if source and Path(source).suffix.lower() == ".md" else str(
-                    load_settings().path(load_settings().paths.markdown) / f"{doc_id}.md"
+                markdown = (
+                    source
+                    if source and Path(source).suffix.lower() == ".md"
+                    else str(load_settings().path(load_settings().paths.markdown) / f"{doc_id}.md")
                 )
                 result = extract.run(markdown)
             elif stage == "link":
@@ -430,12 +446,30 @@ def create_ui():
             return rows(done=done), doc_id, document_stats(doc_id), message, artifact_update()
         except Exception as error:
             message = f"{time.strftime('%H:%M:%S')}  {stage.upper():<10} ERROR · {error}"
-            return rows(stage, set(), str(error)), doc_id, document_stats(doc_id) if doc_id else {}, message, artifact_update()
+            return (
+                rows(stage, set(), str(error)),
+                doc_id,
+                document_stats(doc_id) if doc_id else {},
+                message,
+                artifact_update(),
+            )
 
     def stage_handler(stage: str):
-        return lambda file_path, source_path, doc_id, knowledge_id, kind, recreate, graph_provider, graph_model, graph_api_key: run_one(
-            stage, file_path, source_path, doc_id, knowledge_id, kind, recreate,
-            graph_provider, graph_model, graph_api_key,
+        return (
+            lambda file_path, source_path, doc_id, knowledge_id, kind, recreate, graph_provider, graph_model, graph_api_key: (
+                run_one(
+                    stage,
+                    file_path,
+                    source_path,
+                    doc_id,
+                    knowledge_id,
+                    kind,
+                    recreate,
+                    graph_provider,
+                    graph_model,
+                    graph_api_key,
+                )
+            )
         )
 
     def refresh_artifacts():
@@ -448,12 +482,34 @@ def create_ui():
         return read_artifact(name) if name else "Chưa có artifact."
 
     def save_offline_settings(
-        excel_sheets, excel_id, unit, heading_level, child_min, child_max,
-        overlap, table_rows, dense_model, sparse_model, rerank_model,
-        qdrant_url, qdrant_local_path, knowledge_id, docs_collection, sql_collection, graph_collection,
-        graph_enabled, graph_source_kinds, graph_provider, graph_model,
-        entity_types, relationship_types, community_algorithm, community_resolution,
-        generate_reports, max_reports, max_chunks,
+        excel_sheets,
+        excel_id,
+        unit,
+        heading_level,
+        child_min,
+        child_max,
+        overlap,
+        table_rows,
+        dense_model,
+        sparse_model,
+        rerank_model,
+        qdrant_url,
+        qdrant_local_path,
+        knowledge_id,
+        docs_collection,
+        sql_collection,
+        graph_collection,
+        graph_enabled,
+        graph_source_kinds,
+        graph_provider,
+        graph_model,
+        entity_types,
+        relationship_types,
+        community_algorithm,
+        community_resolution,
+        generate_reports,
+        max_reports,
+        max_chunks,
     ):
         id_column = int(excel_id) if str(excel_id).strip().isdigit() else str(excel_id).strip()
         patch = {
@@ -538,7 +594,14 @@ def create_ui():
     def run_graph_eval(doc_id, knowledge_id, split):
         result = graph_eval.evaluate(doc_id, knowledge_id=knowledge_id, split=split)
         rows = [
-            [case["id"], case["table_recall"], case["complete"], case["connected"], case["same_community"], ", ".join(case["missing"])]
+            [
+                case["id"],
+                case["table_recall"],
+                case["complete"],
+                case["connected"],
+                case["same_community"],
+                ", ".join(case["missing"]),
+            ]
             for case in result["per_case"]
         ]
         summary = {
@@ -552,8 +615,11 @@ def create_ui():
     def save_settings(raw: str):
         return update_settings(json.loads(raw)).model_dump(mode="json")
 
-    with gr.Blocks(title="Branch SQL MVP · Knowledge Studio") as ui:
-        gr.Markdown("# Knowledge Studio · branch_sql_MVP\nOffline indexing rõ từng stage, không queue và không lưu run log.")
+    theme = gr.themes.Soft(primary_hue="amber", neutral_hue="slate")
+    with gr.Blocks(title="kb-text2sql · Knowledge Studio", theme=theme) as ui:
+        gr.Markdown(
+            "# Knowledge Studio · kb-text2sql\nOffline indexing rõ từng stage, không queue và không lưu run log."
+        )
 
         with gr.Tab("Offline Studio"):
             with gr.Tab("Pipeline"):
@@ -561,7 +627,7 @@ def create_ui():
                     with gr.Column(scale=1, min_width=320):
                         gr.Markdown("### Knowledge source")
                         source_file = gr.File(type="filepath", label="Upload .md / .docx / .pdf / .xlsx")
-                        source_path = gr.Textbox(label="Hoặc đường dẫn / tên file trong data/raw/sql")
+                        source_path = gr.Textbox(label="Hoặc đường dẫn tương đối trong data/")
                         knowledge_id = gr.Dropdown(
                             list(settings.index.collections),
                             value=settings.index.knowledge_id,
@@ -595,7 +661,7 @@ def create_ui():
                             datatype=["str", "str", "str"],
                             interactive=False,
                             row_count=(len(STAGES), "fixed"),
-                            column_count=(3, "fixed"),
+                            col_count=(3, "fixed"),
                             wrap=True,
                         )
                         with gr.Row():
@@ -606,29 +672,50 @@ def create_ui():
                 artifact_select_hidden = gr.Dropdown(visible=False)
                 outputs.append(artifact_select_hidden)
                 pipeline_inputs = [
-                    source_file, source_path, knowledge_id, knowledge_kind, recreate_index,
-                    graph_run_provider, graph_run_model, graph_run_api_key,
+                    source_file,
+                    source_path,
+                    knowledge_id,
+                    knowledge_kind,
+                    recreate_index,
+                    graph_run_provider,
+                    graph_run_model,
+                    graph_run_api_key,
                 ]
                 run_all_button.click(run_all, pipeline_inputs, outputs)
                 single_inputs = [
-                    source_file, source_path, current_doc_id, knowledge_id, knowledge_kind, recreate_index,
-                    graph_run_provider, graph_run_model, graph_run_api_key,
+                    source_file,
+                    source_path,
+                    current_doc_id,
+                    knowledge_id,
+                    knowledge_kind,
+                    recreate_index,
+                    graph_run_provider,
+                    graph_run_model,
+                    graph_run_api_key,
                 ]
                 for stage, button in stage_buttons.items():
                     button.click(stage_handler(stage), single_inputs, outputs)
 
             with gr.Tab("Offline settings"):
-                gr.Markdown("### Cấu hình nhanh\nCác giá trị được validate rồi ghi vào `settings.json`; API key không nằm ở đây.")
+                gr.Markdown(
+                    "### Cấu hình nhanh\nCác giá trị được validate rồi ghi vào `settings.json`; API key không nằm ở đây."
+                )
                 with gr.Row():
                     with gr.Column():
-                        excel_sheets = gr.Textbox(value=",".join(settings.preprocess.excel_sheets), label="Excel sheets")
+                        excel_sheets = gr.Textbox(
+                            value=",".join(settings.preprocess.excel_sheets), label="Excel sheets"
+                        )
                         excel_id = gr.Textbox(value=str(settings.preprocess.excel_id_column), label="Excel ID column")
                         chunk_unit = gr.Radio(["token", "character"], value=settings.chunk.unit, label="Chunk unit")
-                        heading_level = gr.Number(value=settings.chunk.heading_level, precision=0, label="Unit heading level")
+                        heading_level = gr.Number(
+                            value=settings.chunk.heading_level, precision=0, label="Unit heading level"
+                        )
                         child_min = gr.Number(value=settings.chunk.child_min, precision=0, label="Child minimum")
                         child_max = gr.Number(value=settings.chunk.child_max, precision=0, label="Child maximum")
                         overlap = gr.Number(value=settings.chunk.child_overlap, precision=0, label="Child overlap")
-                        table_rows = gr.Number(value=settings.chunk.table_rows, precision=0, label="Rows per table chunk")
+                        table_rows = gr.Number(
+                            value=settings.chunk.table_rows, precision=0, label="Rows per table chunk"
+                        )
                     with gr.Column():
                         dense_model = gr.Textbox(value=settings.embedding.dense_model, label="Dense model")
                         sparse_model = gr.Textbox(value=settings.embedding.sparse_model, label="Sparse model")
@@ -680,19 +767,49 @@ def create_ui():
                             value=settings.graph.community_resolution,
                             label="Community resolution",
                         )
-                        generate_reports = gr.Checkbox(value=settings.graph.generate_reports, label="Generate community reports")
-                        max_reports = gr.Number(value=settings.graph.max_reports, precision=0, label="Max LLM reports (0 = none)")
-                        max_chunks = gr.Number(value=settings.graph.max_chunks, precision=0, label="Max chunks (0 = all)")
+                        generate_reports = gr.Checkbox(
+                            value=settings.graph.generate_reports, label="Generate community reports"
+                        )
+                        max_reports = gr.Number(
+                            value=settings.graph.max_reports, precision=0, label="Max LLM reports (0 = none)"
+                        )
+                        max_chunks = gr.Number(
+                            value=settings.graph.max_chunks, precision=0, label="Max chunks (0 = all)"
+                        )
                 save_offline = gr.Button("Validate và lưu offline settings", variant="primary")
                 offline_saved = gr.JSON(label="Settings đã lưu")
                 save_offline.click(
                     save_offline_settings,
-                    [excel_sheets, excel_id, chunk_unit, heading_level, child_min, child_max,
-                     overlap, table_rows, dense_model, sparse_model, rerank_model,
-                     qdrant_url, qdrant_local_path, settings_knowledge_id, docs_collection, sql_collection, graph_collection,
-                     graph_enabled, graph_source_kinds, graph_provider, graph_model,
-                     entity_types, relationship_types, community_algorithm, community_resolution,
-                     generate_reports, max_reports, max_chunks],
+                    [
+                        excel_sheets,
+                        excel_id,
+                        chunk_unit,
+                        heading_level,
+                        child_min,
+                        child_max,
+                        overlap,
+                        table_rows,
+                        dense_model,
+                        sparse_model,
+                        rerank_model,
+                        qdrant_url,
+                        qdrant_local_path,
+                        settings_knowledge_id,
+                        docs_collection,
+                        sql_collection,
+                        graph_collection,
+                        graph_enabled,
+                        graph_source_kinds,
+                        graph_provider,
+                        graph_model,
+                        entity_types,
+                        relationship_types,
+                        community_algorithm,
+                        community_resolution,
+                        generate_reports,
+                        max_reports,
+                        max_chunks,
+                    ],
                     offline_saved,
                 )
 
@@ -715,8 +832,10 @@ def create_ui():
 
         initial_graphs = graph_choices()
         initial_graph = initial_graphs[0] if initial_graphs else None
-        initial_view, initial_stats, initial_reports = show_graph(initial_graph) if initial_graph else (
-            "<p>Chưa có graph artifact. Chạy stage graph trong Offline Studio.</p>", {}, []
+        initial_view, initial_stats, initial_reports = (
+            show_graph(initial_graph)
+            if initial_graph
+            else ("<p>Chưa có graph artifact. Chạy stage graph trong Offline Studio.</p>", {}, [])
         )
         with gr.Tab("Graph"):
             with gr.Row():
@@ -770,6 +889,7 @@ def create_ui():
                 keyword_weight = gr.Slider(0, 1, value=settings.retrieval.keyword_weight, label="Keyword weight")
             gr.ChatInterface(
                 fn=chat_once,
+                type="messages",
                 additional_inputs=[
                     chat_knowledge_id,
                     provider,
@@ -796,8 +916,7 @@ def create_ui():
 def create_app() -> FastAPI:
     import gradio as gr
 
-    theme = gr.themes.Soft(primary_hue="amber", neutral_hue="slate")
-    return gr.mount_gradio_app(create_api(), create_ui(), path="/ui", theme=theme)
+    return gr.mount_gradio_app(create_api(), create_ui(), path="/ui")
 
 
 app = create_app()

@@ -43,6 +43,8 @@ kg = [
 # src/branch_sql/online/llm — binding LangChain cho 4 provider trong .env.
 # ChatOpenAI dùng chung cho cả OpenAI lẫn OpenRouter (endpoint OpenAI-compatible).
 llm = [
+    "langgraph>=1.2.11,<2",
+    "langchain>=1,<2",
     "langchain-openai>=1.6",
     "langchain-google-genai>=4.3",
     "langchain-nvidia-ai-endpoints>=1.4",
@@ -57,7 +59,7 @@ eval = [
 # pydantic đã có sẵn nên FastAPI dùng thẳng KnowledgeCfg/ChunkCfg làm request body.
 api = [
     "fastapi>=0.115",
-    "gradio>=5.0",
+    "gradio>=5.49,<6",
     "uvicorn>=0.32",
     "python-multipart>=0.0.9",
 ]

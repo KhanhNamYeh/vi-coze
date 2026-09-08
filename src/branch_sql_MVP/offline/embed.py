@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
-from pathlib import Path
+from threading import Lock
 
 from ..settings import EmbeddingSettings, Settings, load_settings
 from . import graph
 from .chunk import load_chunks
+
+_DENSE_LOCK = Lock()
 
 
 @lru_cache(maxsize=4)
@@ -26,13 +28,16 @@ def _sparse(model: str, k: float, b: float, disable_stemmer: bool):
 
 
 def dense_passages(texts: list[str], cfg: EmbeddingSettings) -> list[list[float]]:
-    vectors = _dense(cfg.dense_model, cfg.device).encode(
-        texts,
-        batch_size=cfg.batch_size,
-        normalize_embeddings=cfg.normalize,
-        convert_to_numpy=True,
-        show_progress_bar=False,
-    )
+    # SentenceTransformer/CUDA model được cache và dùng chung giữa các worker.
+    # Serialize inference để tránh illegal memory access từ nhiều thread.
+    with _DENSE_LOCK:
+        vectors = _dense(cfg.dense_model, cfg.device).encode(
+            texts,
+            batch_size=cfg.batch_size,
+            normalize_embeddings=cfg.normalize,
+            convert_to_numpy=True,
+            show_progress_bar=False,
+        )
     return vectors.astype("float32").tolist()
 
 
@@ -62,10 +67,7 @@ def encode(chunks: list[dict], cfg: EmbeddingSettings) -> list[dict]:
     dimension = len(dense[0])
     if not dimension or any(len(vector) != dimension for vector in dense):
         raise ValueError("dense model trả vector rỗng hoặc sai chiều")
-    return [
-        {"id": chunk["id"], "dense": dv, "sparse": sv}
-        for chunk, dv, sv in zip(chunks, dense, sparse)
-    ]
+    return [{"id": chunk["id"], "dense": dv, "sparse": sv} for chunk, dv, sv in zip(chunks, dense, sparse)]
 
 
 def run(doc_id: str, *, settings: Settings | None = None) -> dict:
@@ -79,10 +81,7 @@ def run(doc_id: str, *, settings: Settings | None = None) -> dict:
     if app.graph.enabled and graph_artifact.exists():
         graph_items = graph.embedding_items(doc_id, settings=app)
         encoded = encode(graph_items, app.embedding) if graph_items else []
-        graph_vectors = [
-            {**vector, "kind": item["kind"]}
-            for item, vector in zip(graph_items, encoded)
-        ]
+        graph_vectors = [{**vector, "kind": item["kind"]} for item, vector in zip(graph_items, encoded)]
         graph_output.write_text(
             "".join(json.dumps(row) + "\n" for row in graph_vectors),
             encoding="utf-8",

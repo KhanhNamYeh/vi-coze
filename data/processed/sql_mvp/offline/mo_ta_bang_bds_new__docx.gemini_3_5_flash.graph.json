@@ -1,0 +1,4590 @@
+{
+  "doc_id": "mo_ta_bang_bds_new__docx",
+  "kind": "docs",
+  "agent": "sql_graph_agent",
+  "method": "llm",
+  "parameters": {
+    "enabled": true,
+    "source_kinds": [
+      "docs",
+      "sql"
+    ],
+    "method": "llm",
+    "provider": "google",
+    "model": "gemini-3.5-flash",
+    "temperature": 0.0,
+    "output_retries": 1,
+    "entity_types": [
+      "table",
+      "column",
+      "metric",
+      "business_rule",
+      "filter_value",
+      "sql_function"
+    ],
+    "relationship_types": [
+      "table_has_column",
+      "foreign_key_to",
+      "joins_with",
+      "metric_uses_column",
+      "rule_applies_to",
+      "derived_from",
+      "uses",
+      "filters_by",
+      "aliases"
+    ],
+    "community_algorithm": "greedy_modularity",
+    "community_resolution": 1.0,
+    "random_seed": 42,
+    "generate_reports": true,
+    "max_reports": 30,
+    "max_chunks": 0,
+    "visualization_max_nodes": 120,
+    "agent_prompt": "You are a neutral SQL knowledge-graph agent. Extract only facts explicitly supported by the supplied chunk. Use only the allowed entity and relationship types, make every relationship endpoint exactly match an extracted entity name, and attach a short verbatim evidence span to every entity and relationship. Do not infer missing schema.",
+    "report_prompt": "You are the same neutral SQL knowledge-graph agent. Summarize only the supplied graph community for retrieval. Preserve table, column, join, metric and business-rule facts; do not add facts that are absent from the community."
+  },
+  "stats": {
+    "raw_entities": 126,
+    "duplicate_entities_merged": 30,
+    "raw_relationships": 104,
+    "invalid_relationships": 0,
+    "chunks": 61,
+    "failed_chunks": 38,
+    "nodes": 96,
+    "edges": 95,
+    "isolated_nodes": 0,
+    "communities": 9,
+    "reports": 0,
+    "failed_reports": 9,
+    "llm_calls": 117
+  },
+  "nodes": [
+    {
+      "id": "8fcdec97c75574004054c836",
+      "name": "V_USER_PRECINCT_PERMISSION",
+      "type": "table",
+      "description": "Lưu trữ quyền truy cập của user theo phường/xã (user được xem thông tin của các phường/xã nào) | Danh mục dùng chung - Bảng chứa thông tin quyền truy cập phường/xã của user | Bảng danh mục dùng chung chứa thông tin quyền truy cập của user theo địa bàn",
+      "source_chunk_ids": [
+        "ea0a21a03032f8c5035e00f1",
+        "2719baab8f66827a599d6d1d",
+        "2efc400416457c7be420928f"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ea0a21a03032f8c5035e00f1",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION * Ý nghĩa của bảng: Lưu trữ quyền truy cập của user theo phường/xã (user được xem thông tin của các phường/xã nào)"
+        },
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Danh mục dùng chung > Bảng V_USER_PRECINCT_PERMISSION"
+        },
+        {
+          "chunk_id": "2efc400416457c7be420928f",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "58a6fbb1810e3eec9a64be5a",
+      "name": "USER_NAME",
+      "type": "column",
+      "description": "Mã user (ví dụ: HUY.NGUYEN)",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "USER_NAME | VARCHAR2 | Mã user (ví dụ: HUY.NGUYEN)"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "635b1c280c72f9248c952c1b",
+      "name": "USER_ID",
+      "type": "column",
+      "description": "Mã định danh user",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "USER_ID | NUMBER | Mã định danh user"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "b3230c168fad2eaaaf34d0e7",
+      "name": "PRECINCT_CODE",
+      "type": "column",
+      "description": "Mã phường/xã mà user được truy cập (ví dụ: VTAU) | Cột dùng để liên kết bảng V_USER_PRECINCT_PERMISSION với các bảng khác | Mã phường/xã (ví dụ: VTAU) | Cột dùng để liên kết bảng POINT_OF_SALE với các bảng khác | Cột dùng để liên kết bảng V_BDS_NEW_SUB_SHOP với các bảng khác",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d",
+        "2efc400416457c7be420928f",
+        "1568608002e4da41bacc80b6",
+        "d7720eb76d04daad8dca1d59",
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "PRECINCT_CODE | VARCHAR2 | Mã phường/xã mà user được truy cập (ví dụ: VTAU)"
+        },
+        {
+          "chunk_id": "2efc400416457c7be420928f",
+          "kind": "docs",
+          "text": "cột PRECINCT_CODE"
+        },
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "PRECINCT_CODE | VARCHAR2 | Mã phường/xã (ví dụ: VTAU)"
+        },
+        {
+          "chunk_id": "d7720eb76d04daad8dca1d59",
+          "kind": "docs",
+          "text": "cột PRECINCT_CODE"
+        },
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "cột PRECINCT_CODE"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "d92db814096ae75fd4d95ae3",
+      "name": "PRECINCT_NAME",
+      "type": "column",
+      "description": "Tên phường/xã mà user được truy cập (ví dụ: Phường Vũng Tàu) | Tên phường/xã (ví dụ: Phường Diên Hồng)",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d",
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "PRECINCT_NAME | VARCHAR2 | Tên phường/xã mà user được truy cập (ví dụ: Phường Vũng Tàu)"
+        },
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "PRECINCT_NAME | VARCHAR2 | Tên phường/xã (ví dụ: Phường Diên Hồng)"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "764635d9f6a38b65e3c8d22c",
+      "name": "HUB_CODE",
+      "type": "column",
+      "description": "Hub quản lý (mã hub) của phường/xã mà user được truy cập (ví dụ: VT.1)",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "HUB_CODE | VARCHAR2 | Hub quản lý (mã hub) của phường/xã mà user được truy cập (ví dụ: VT.1)"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "21c9e9b206d9f0531dabd9b3",
+      "name": "BRANCH_CODE",
+      "type": "column",
+      "description": "Mã TTKD/chi nhánh của phường/xã mà user được truy cập (gồm 7 giá trị tương ứng với 7 TTKD)",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "BRANCH_CODE | VARCHAR2 | Mã TTKD/chi nhánh của phường/xã mà user được truy cập (gồm Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): HCM010000, HCM020000, HCM030000, HCM040000, HCM050000, HCM060000, HCM070000)"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "0397e0a042f8e75a9ef504f8",
+      "name": "BRANCH_NAME",
+      "type": "column",
+      "description": "Tên TTKD/chi nhánh (gồm 7 giá trị tương ứng với 7 TTKD) | Tên TTKD/chi nhánh gồm 7 giá trị tương ứng với 7 TTKD",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d",
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu)"
+        },
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu)"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "dc333d74ca89e49f53ef41db",
+      "name": "Quy tắc giới hạn quyền truy cập theo địa bàn",
+      "type": "business_rule",
+      "description": "Nếu user hỏi về các dữ liệu liên quan tới PTM, VLR, TKC, trạm, ... thì luôn luôn map với bảng V_USER_PRECINCT_PERMISSION để chỉ trả về dữ liệu trong phạm vi quyền truy cập của user",
+      "source_chunk_ids": [
+        "2efc400416457c7be420928f"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2efc400416457c7be420928f",
+          "kind": "docs",
+          "text": "Nếu user hỏi về các dữ liệu liên quan tới PTM, VLR, TKC, trạm, ... thì luôn luôn map với bảng này để chỉ trả về dữ liệu trong phạm vi quyền truy cập của user"
+        }
+      ],
+      "community_id": "community_006"
+    },
+    {
+      "id": "cc7cb3853016e2cbec84c244",
+      "name": "PRECINCT",
+      "type": "table",
+      "description": "Lưu trữ thông tin của của các phường/xã | Bảng danh mục dùng chung chứa thông tin của phường/xã, tổng cộng có 168 dòng",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab",
+        "e3a981e7149118f5e5083d59"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "Bảng PRECINCT * Ý nghĩa của bảng: Lưu trữ thông tin của của các phường/xã"
+        },
+        {
+          "chunk_id": "e3a981e7149118f5e5083d59",
+          "kind": "docs",
+          "text": "Bảng PRECINCT"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "0a9fb0e02a18dd9c49f91bbe",
+      "name": "PRECINCT.ID",
+      "type": "column",
+      "description": "Khóa chính",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "ID | NUMBER | Khóa chính"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "f3195924a2f22eaabf3556e8",
+      "name": "PRECINCT.CODE",
+      "type": "column",
+      "description": "Mã phường xã",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "CODE | VARCHAR2 | Mã phường xã"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "d28e114371f55850b555d616",
+      "name": "PRECINCT.NAME",
+      "type": "column",
+      "description": "Tên phường xã",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "NAME | VARCHAR2 | Tên phường xã"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "83c48e8794108bba38debcc8",
+      "name": "PRECINCT.BRANCH_NAME",
+      "type": "column",
+      "description": "Tên TTKD",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "b858ff5007265529fddda339",
+      "name": "PRECINCT.HUB",
+      "type": "column",
+      "description": "Tên Hub",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "HUB | VARCHAR2 | Tên Hub"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "cb70cbf07961705c68dc838c",
+      "name": "PRECINCT.BRANCH_CODE",
+      "type": "column",
+      "description": "Mã TTKD",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "BRANCH_CODE | VARCHAR2 | Mã TTKD"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "52f815aa1fc83b45aad45d32",
+      "name": "CODE",
+      "type": "column",
+      "description": "Cột dùng để liên kết bảng PRECINCT với các bảng khác",
+      "source_chunk_ids": [
+        "e3a981e7149118f5e5083d59"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "e3a981e7149118f5e5083d59",
+          "kind": "docs",
+          "text": "cột CODE"
+        }
+      ],
+      "community_id": "community_004"
+    },
+    {
+      "id": "b6ffa833abd0b028bbdd116a",
+      "name": "POINT_OF_SALE",
+      "type": "table",
+      "description": "Lưu trữ thông tin của các điểm bán | Bảng dữ liệu điểm bán | Bảng lưu trữ dữ liệu điểm bán | Bảng chứa dữ liệu điểm bán, tổng khoảng 2000 dòng tương ứng với khoảng 2000 điểm bán, thường dùng để lấy thêm thông tin của điểm bán như phường/xã thuộc hub gì, TTKD gì, loại gì",
+      "source_chunk_ids": [
+        "8df992bbfd349d22c5242799",
+        "2ebd0fa01db3916f5d4714d4",
+        "1568608002e4da41bacc80b6",
+        "d7720eb76d04daad8dca1d59"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "8df992bbfd349d22c5242799",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE * Ý nghĩa của bảng: Lưu trữ thông tin của các điểm bán"
+        },
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE"
+        },
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE"
+        },
+        {
+          "chunk_id": "d7720eb76d04daad8dca1d59",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "5dca13cc335f0be3c4c51159",
+      "name": "ID",
+      "type": "column",
+      "description": "Mã định danh điểm bán (ví dụ: 17) | Cột khóa dùng để liên kết bảng V_CAT_STAFF với các bảng khác",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4",
+        "e70ad40fe42f7c9529b59141"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "ID | NUMBER | Mã định danh điểm bán (ví dụ: 17)"
+        },
+        {
+          "chunk_id": "e70ad40fe42f7c9529b59141",
+          "kind": "docs",
+          "text": "cột ID"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "e4cc25b51ec3023a3d4b6e5e",
+      "name": "ADDRESS",
+      "type": "column",
+      "description": "Địa chỉ điểm bán",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "ADDRESS | VARCHAR2 | Địa chỉ điểm bán"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "92428a5aeb1f7925632334c2",
+      "name": "EMP_NAME",
+      "type": "column",
+      "description": "Tên nhân viên phụ trách",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "EMP_NAME | VARCHAR2 | Tên nhân viên phụ trách"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "f778bbb85b6bd5c1da3e5962",
+      "name": "HUB",
+      "type": "column",
+      "description": "Hub quản lý (mã hub) (ví dụ: VT.1)",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "HUB | VARCHAR2 | Hub quản lý (mã hub) (ví dụ: VT.1)"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "230122c5727e83f66879c2bc",
+      "name": "HUB_LEADER",
+      "type": "column",
+      "description": "Tên trưởng Hub",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "HUB_LEADER | VARCHAR2 | Tên trưởng Hub"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "fed588f6c3b92a035ad224ff",
+      "name": "LAT",
+      "type": "column",
+      "description": "Vĩ độ (ví dụ: 10.765590)",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "LAT | VARCHAR2 | Vĩ độ (ví dụ: 10.765590)"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "944f46644a4ed4c249d58692",
+      "name": "LON",
+      "type": "column",
+      "description": "Kinh độ (ví dụ: 106.662547)",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "LON | VARCHAR2 | Kinh độ (ví dụ: 106.662547)"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "191a66a768b4e519977e913b",
+      "name": "NVBH_CODE",
+      "type": "column",
+      "description": "Mã nhân viên bán hàng",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "NVBH_CODE | VARCHAR2 | Mã nhân viên bán hàng"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "1f6da5a62896ebf2e7275b10",
+      "name": "PARENT_SALE_CODE",
+      "type": "column",
+      "description": "Mã nhân viên/quản lý cấp trên",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4",
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "PARENT_SALE_CODE | VARCHAR2 | Mã nhân viên/quản lý cấp trên"
+        },
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "PARENT_SALE_CODE | VARCHAR2 | Mã nhân viên/quản lý cấp trên"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "e221322a4fcc3b3c2947298e",
+      "name": "Trung Tâm Kinh Doanh Sài Gòn",
+      "type": "filter_value",
+      "description": "Giá trị chi nhánh Trung Tâm Kinh Doanh Sài Gòn",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Trung Tâm Kinh Doanh Sài Gòn"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "ddab3f6962b698a2860d498d",
+      "name": "Trung Tâm Kinh Doanh Gia Định",
+      "type": "filter_value",
+      "description": "Giá trị chi nhánh Trung Tâm Kinh Doanh Gia Định",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Trung Tâm Kinh Doanh Gia Định"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "7941b5951bb20671fa437374",
+      "name": "Trung Tâm Kinh Doanh Bến Thành",
+      "type": "filter_value",
+      "description": "Giá trị chi nhánh Trung Tâm Kinh Doanh Bến Thành",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Trung Tâm Kinh Doanh Bến Thành"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "75140dad8c90a4e67ab0a4c1",
+      "name": "Trung Tâm Kinh Doanh Gò Vấp",
+      "type": "filter_value",
+      "description": "Giá trị chi nhánh Trung Tâm Kinh Doanh Gò Vấp",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Trung Tâm Kinh Doanh Gò Vấp"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "c2aa68c57371a5613822fed6",
+      "name": "Trung Tâm Kinh Doanh Thủ Đức",
+      "type": "filter_value",
+      "description": "Giá trị chi nhánh Trung Tâm Kinh Doanh Thủ Đức",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Trung Tâm Kinh Doanh Thủ Đức"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "1b20641beb8c175d1d1d265a",
+      "name": "Trung Tâm Kinh Doanh Bình Dương",
+      "type": "filter_value",
+      "description": "Giá trị chi nhánh Trung Tâm Kinh Doanh Bình Dương",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Trung Tâm Kinh Doanh Bình Dương"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "bac67b0c4fb9e55dbf822e5e",
+      "name": "Trung Tâm Kinh Doanh Vũng Tàu",
+      "type": "filter_value",
+      "description": "Giá trị chi nhánh Trung Tâm Kinh Doanh Vũng Tàu",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Trung Tâm Kinh Doanh Vũng Tàu"
+        }
+      ],
+      "community_id": "community_003"
+    },
+    {
+      "id": "fc4de4a2b377cdadd68fd4b0",
+      "name": "PARENT_SALE_NAME",
+      "type": "column",
+      "description": "Tên nhân viên/quản lý cấp trên",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "PARENT_SALE_NAME | VARCHAR2 | Tên nhân viên/quản lý cấp trên"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "26b84d31036c9e9eb9c45968",
+      "name": "PHONE_NUMBER",
+      "type": "column",
+      "description": "Số điện thoại điểm bán",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "PHONE_NUMBER | VARCHAR2 | Số điện thoại điểm bán"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "64c6489d65769b7a40d08846",
+      "name": "SALE_CODE",
+      "type": "column",
+      "description": "Mã điểm bán | Cột dùng để liên kết bảng POINT_OF_SALE với các bảng khác | Mã điểm bán (ví dụ: HCM01DHON_0009) | Cột dùng để liên kết bảng V_BDS_NEW_SUB_SALE_POINT với các bảng khác",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6",
+        "d7720eb76d04daad8dca1d59",
+        "ca1b19023bfec786f36b98e1",
+        "6ae6b0da788429aed0bf9da4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "SALE_CODE | VARCHAR2 | Mã điểm bán"
+        },
+        {
+          "chunk_id": "d7720eb76d04daad8dca1d59",
+          "kind": "docs",
+          "text": "cột SALE_CODE"
+        },
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "SALE_CODE | VARCHAR2 | Mã điểm bán (ví dụ: HCM01DHON_0009)"
+        },
+        {
+          "chunk_id": "6ae6b0da788429aed0bf9da4",
+          "kind": "docs",
+          "text": "cột SALE_CODE"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "9e9c5021f8c91a1cfe43a58a",
+      "name": "SALE_NAME",
+      "type": "column",
+      "description": "Tên điểm bán (ví dụ: ĐBH Minh Quang)",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "SALE_NAME | VARCHAR2 | Tên điểm bán (ví dụ: ĐBH Minh Quang)"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "d5da5924966749dd639f9bbf",
+      "name": "SALE_TYPE",
+      "type": "column",
+      "description": "Loại điểm bán (ví dụ: Loại 2)",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "SALE_TYPE | VARCHAR2 | Loại điểm bán (ví dụ: Loại 2)"
+        }
+      ],
+      "community_id": "community_002"
+    },
+    {
+      "id": "e6a23cec046d4a217f014e3a",
+      "name": "V_BDS_NEW_SUB_SALE_POINT",
+      "type": "table",
+      "description": "Lưu trữ thông tin phát triển mới thuê bao của kênh điểm bán | Bảng dữ liệu điểm bán | Bảng dữ liệu điểm bán V_BDS_NEW_SUB_SALE_POINT | Bảng dữ liệu điểm bán mới phát triển thuê bao | Bảng dữ liệu điểm bán, chứa thông tin về số lượng PTM TB của kênh điểm bán (phường/xã thuộc hub gì, TTKD gì, loại gì, ...)",
+      "source_chunk_ids": [
+        "be22895a7fa89928a10ed347",
+        "ca1b19023bfec786f36b98e1",
+        "9be1e56b348e0347d4a8a193",
+        "3446fda6e1c6a61971447c54",
+        "bd4a61645d2e0b77c717cf86",
+        "6ae6b0da788429aed0bf9da4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "be22895a7fa89928a10ed347",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT\\n* Ý nghĩa của bảng: Lưu trữ thông tin phát triển mới thuê bao của kênh điểm bán"
+        },
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+        },
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+        },
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+        },
+        {
+          "chunk_id": "bd4a61645d2e0b77c717cf86",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+        },
+        {
+          "chunk_id": "6ae6b0da788429aed0bf9da4",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "8ccc91ee7e9f9dd462c26c38",
+      "name": "SUM_DATE",
+      "type": "column",
+      "description": "Ngày tổng hợp dữ liệu (luôn luôn là ngày hiện tại) (ví dụ: 17/06/2026)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "SUM_DATE | VARCHAR2 | Ngày tổng hợp dữ liệu (luôn luôn là ngày hiện tại) (ví dụ: 17/06/2026)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "a629e077a512af398f90ffcd",
+      "name": "MC_QUANTITY_DAY",
+      "type": "column",
+      "description": "Số lượng thuê bao trả trước trong ngày hiện tại (ví dụ: 1)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "MC_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả trước trong ngày hiện tại (ví dụ: 1)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "38341eb7871fa4d7db59b625",
+      "name": "MF_QUANTITY_DAY",
+      "type": "column",
+      "description": "Số lượng thuê bao trả sau trong ngày hiện tại (ví dụ: 0)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "MF_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả sau trong ngày hiện tại (ví dụ: 0)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "a73b9efe01fc1ef50b93ce6a",
+      "name": "ALL_QUANTITY_DAY",
+      "type": "column",
+      "description": "Tổng số thuê bao trong ngày hiện tại (ví dụ: 1)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "ALL_QUANTITY_DAY | NUMBER | Tổng số thuê bao trong ngày hiện tại (ví dụ: 1)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "1faa0cfaf48933d942427d5e",
+      "name": "SUM_MONTH",
+      "type": "column",
+      "description": "Tháng tổng hợp dữ liệu (luôn luôn là tháng hiện tại) (ví dụ: 06/2026)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "SUM_MONTH | VARCHAR2 | Tháng tổng hợp dữ liệu (luôn luôn là tháng hiện tại) (ví dụ: 06/2026)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "a62a4562af8b516ee44abd25",
+      "name": "MC_QUANTITY_MONTH",
+      "type": "column",
+      "description": "Số lượng thuê bao trả trước trong tháng hiện tại (ví dụ: 15)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "MC_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả trước trong tháng hiện tại (ví dụ: 15)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "16104d7f3c68356e4c67d034",
+      "name": "MF_QUANTITY_MONTH",
+      "type": "column",
+      "description": "Số lượng thuê bao trả sau trong tháng hiện tại (ví dụ: 0)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "MF_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả sau trong tháng hiện tại (ví dụ: 0)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "259d55bbf3e2e8884d7837ee",
+      "name": "ALL_QUANTITY_MONTH",
+      "type": "column",
+      "description": "Tổng số thuê bao trong tháng hiện tại (ví dụ: 15)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "ALL_QUANTITY_MONTH | NUMBER | Tổng số thuê bao trong tháng hiện tại (ví dụ: 15)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "026c3070c3631ff276eb0717",
+      "name": "SUM_YEAR",
+      "type": "column",
+      "description": "Năm tổng hợp dữ liệu (năm hiện tại) (ví dụ: 2026)",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1",
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "SUM_YEAR | VARCHAR2 | Năm tổng hợp dữ liệu (năm hiện tại) (ví dụ: 2026)"
+        },
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "SUM_YEAR | VARCHAR2 | Năm tổng hợp dữ liệu (năm hiện tại) (ví dụ: 2026)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "55ae96ce3c150668fede75db",
+      "name": "MC_QUANTITY_YEAR",
+      "type": "column",
+      "description": "Số lượng thuê bao trả trước trong năm hiện tại (ví dụ: 30)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "MC_QUANTITY_YEAR | NUMBER | Số lượng thuê bao trả trước trong năm hiện tại (ví dụ: 30)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "62a7353fbc8545c8574ccddc",
+      "name": "MF_QUANTITY_YEAR",
+      "type": "column",
+      "description": "Số lượng thuê bao trả sau trong năm hiện tại (ví dụ: 0)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "MF_QUANTITY_YEAR | NUMBER | Số lượng thuê bao trả sau trong năm hiện tại (ví dụ: 0)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "6564bf656775bb3cbb07e523",
+      "name": "ALL_QUANTITY_YEAR",
+      "type": "column",
+      "description": "Tổng số thuê bao trong năm hiện tại (ví dụ: 30)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "ALL_QUANTITY_YEAR | NUMBER | Tổng số thuê bao trong năm hiện tại (ví dụ: 30)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "77460de50207bb1339e932c7",
+      "name": "MC_QUANTITY_ALL_YEAR",
+      "type": "column",
+      "description": "Tổng số thuê bao trả trước trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 39)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "MC_QUANTITY_ALL_YEAR | NUMBER | Tổng số thuê bao trả trước trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 39)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "1d41388c9faf5c3ce46a93d2",
+      "name": "MF_QUANTITY_ALL_YEAR",
+      "type": "column",
+      "description": "Lũy kế thuê bao trả sau trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 1)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "MF_QUANTITY_ALL_YEAR | NUMBER | Lũy kế thuê bao trả sau trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 1)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "900073f32c6fd645f3228fc7",
+      "name": "ALL_QUANTITY_ALL_YEAR",
+      "type": "column",
+      "description": "Tổng lũy kế thuê bao trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 40)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "ALL_QUANTITY_ALL_YEAR | NUMBER | Tổng lũy kế thuê bao trong tất cả các năm (trong toàn bộ lịch sử được ghi nhận) (ví dụ: 40)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "604835b50178407cb92b5c39",
+      "name": "START_DATE_LAST_WEEK",
+      "type": "column",
+      "description": "Ngày bắt đầu tuần trước (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 04/06/2026)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "START_DATE_LAST_WEEK | VARCHAR2 | Ngày bắt đầu tuần trước (lấy thứ 5 là ngày bắt đầu tuần) (ví dụ: 04/06/2026)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "445aa468e0b95cc31deeb386",
+      "name": "LAST_DATE_LAST_WEEK",
+      "type": "column",
+      "description": "Ngày kết thúc tuần trước (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 10/06/2026)",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "LAST_DATE_LAST_WEEK | VARCHAR2 | Ngày kết thúc tuần trước (lấy thứ 4 là ngày kết thúc tuần) (ví dụ: 10/06/2026)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "42ac94a9c80b623098debd23",
+      "name": "MC_QUANTITY_LAST_WEEK",
+      "type": "column",
+      "description": "Số lượng thuê bao trả trước trong tuần trước (ví dụ: 2) | Số lượng thuê bao trả trước trong tuần trước",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193",
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "MC_QUANTITY_LAST_WEEK | NUMBER | Số lượng thuê bao trả trước trong tuần trước (ví dụ: 2)"
+        },
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "MC_QUANTITY_LAST_WEEK | NUMBER | Số lượng thuê bao trả trước trong tuần trước"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "86cb58608c11f7d0a56cd1bd",
+      "name": "MF_QUANTITY_LAST_WEEK",
+      "type": "column",
+      "description": "Số lượng thuê bao trả sau trong tuần trước",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "MF_QUANTITY_LAST_WEEK | NUMBER | Số lượng thuê bao trả sau trong tuần trước"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "1fa952524c963b3ecbe1773f",
+      "name": "ALL_QUANTITY_LAST_WEEK",
+      "type": "column",
+      "description": "Tổng số thuê bao trong tuần trước",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "ALL_QUANTITY_LAST_WEEK | NUMBER | Tổng số thuê bao trong tuần trước"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "03e1cdc4a1e6870b46351346",
+      "name": "START_DATE_THIS_WEEK",
+      "type": "column",
+      "description": "Ngày bắt đầu tuần hiện tại (lấy thứ 5 là ngày bắt đầu tuần)",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "START_DATE_THIS_WEEK | VARCHAR2 | Ngày bắt đầu tuần hiện tại (lấy thứ 5 là ngày bắt đầu tuần)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "9655fbadb579bf34cae86d4a",
+      "name": "LAST_DATE_THIS_WEEK",
+      "type": "column",
+      "description": "Ngày kết thúc tuần hiện tại (lấy thứ 4 là ngày kết thúc tuần)",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "LAST_DATE_THIS_WEEK | VARCHAR2 | Ngày kết thúc tuần hiện tại (lấy thứ 4 là ngày kết thúc tuần)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "fce0b3cf8f39c677b07ba34b",
+      "name": "MC_QUANTITY_THIS_WEEK",
+      "type": "column",
+      "description": "Số lượng thuê bao trả trước trong tuần hiện tại",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "MC_QUANTITY_THIS_WEEK | NUMBER | Số lượng thuê bao trả trước trong tuần hiện tại"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "36170ad8c0942c6d5d9ffe62",
+      "name": "MF_QUANTITY_THIS_WEEK",
+      "type": "column",
+      "description": "Số lượng thuê bao trả sau trong tuần hiện tại",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "MF_QUANTITY_THIS_WEEK | NUMBER | Số lượng thuê bao trả sau trong tuần hiện tại"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "703fce2170f589db091260e4",
+      "name": "ALL_QUANTITY_THIS_WEEK",
+      "type": "column",
+      "description": "Tổng số thuê bao trong tuần hiện tại",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "ALL_QUANTITY_THIS_WEEK | NUMBER | Tổng số thuê bao trong tuần hiện tại"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "eb8588f80bdc413927627758",
+      "name": "SALE_POINT_QUANTITY_LAST_WEEK",
+      "type": "column",
+      "description": "Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần trước (START_DATE_LAST_WEEK)",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "SALE_POINT_QUANTITY_LAST_WEEK | NUMBER | Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần trước (START_DATE_LAST_WEEK)"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "7db3e60f9335ad9f6c2897b1",
+      "name": "Rule_Start_Date_This_Week",
+      "type": "business_rule",
+      "description": "Lấy thứ 5 là ngày bắt đầu tuần cho START_DATE_THIS_WEEK",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "lấy thứ 5 là ngày bắt đầu tuần"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "dbe7e6fbb1dbd9a5f2e09df1",
+      "name": "Rule_Last_Date_This_Week",
+      "type": "business_rule",
+      "description": "Lấy thứ 4 là ngày kết thúc tuần cho LAST_DATE_THIS_WEEK",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "lấy thứ 4 là ngày kết thúc tuần"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "63461c17971c52cca239304d",
+      "name": "Rule_Sale_Point_Quantity_Last_Week",
+      "type": "business_rule",
+      "description": "Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "8fd29b7e84f1ba417bdc9dce",
+      "name": "SALE_POINT_QUANTITY_THIS_WEEK",
+      "type": "column",
+      "description": "Cột xác định điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần hiện tại (START_DATE_THIS_WEEK). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao",
+      "source_chunk_ids": [
+        "bd4a61645d2e0b77c717cf86"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "bd4a61645d2e0b77c717cf86",
+          "kind": "docs",
+          "text": "SALE_POINT_QUANTITY_THIS_WEEK | NUMBER | Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần hiện tại (START_DATE_THIS_WEEK). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao"
+        }
+      ],
+      "community_id": "community_001"
+    },
+    {
+      "id": "9fc7158fd3d2778fcc12602d",
+      "name": "số lượng PTM TB",
+      "type": "metric",
+      "description": "Số lượng PTM TB của kênh điểm bán | Số lượng PTM TB của kênh cửa hàng và đại lý",
+      "source_chunk_ids": [
+        "6ae6b0da788429aed0bf9da4",
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "6ae6b0da788429aed0bf9da4",
+          "kind": "docs",
+          "text": "số lượng PTM TB"
+        },
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "số lượng PTM TB của kênh cửa hàng và đại lý"
+        }
+      ],
+      "community_id": "community_008"
+    },
+    {
+      "id": "904ad43c2f141fefe86ac7bb",
+      "name": "NHAN_VIEN_CHAM_SOC_LONG",
+      "type": "table",
+      "description": "Lưu trữ lịch sử chăm sóc điểm bán của nhân viên chăm sóc | Bảng lưu trữ thông tin nhân viên chăm sóc điểm bán | Bảng chứa dữ liệu điểm bán và nhân viên chăm sóc, hỗ trợ truy xuất thông tin bổ sung như phường/xã thuộc hub, TTKD, loại điểm bán",
+      "source_chunk_ids": [
+        "797f5a530a0d8b1d78ad9b9a",
+        "ba50b7b1b8b7a8e153392301",
+        "429f44b6dec66d3512c3cdf8"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "797f5a530a0d8b1d78ad9b9a",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG * Ý nghĩa của bảng: Lưu trữ lịch sử chăm sóc điểm bán của nhân viên chăm sóc"
+        },
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG"
+        },
+        {
+          "chunk_id": "429f44b6dec66d3512c3cdf8",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "a7178ca69744d36314c498b1",
+      "name": "INSERT_DATE",
+      "type": "column",
+      "description": "Ngày ghi nhận dữ liệu (ví dụ: 08/06/2026 14:30:12)",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "INSERT_DATE | DATE | Ngày ghi nhận dữ liệu (ví dụ: 08/06/2026 14:30:12)"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "40f2d7985e15ab2dd84af16f",
+      "name": "NGAY_CHAM_SOC",
+      "type": "column",
+      "description": "Ngày chăm sóc điểm bán (ví dụ: 01/06/2026 00:00:00)",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "NGAY_CHAM_SOC | DATE | Ngày chăm sóc điểm bán (ví dụ: 01/06/2026 00:00:00)"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "6ab92e6d1700e84bf5286c35",
+      "name": "MA_DIEM_BAN",
+      "type": "column",
+      "description": "Mã điểm bán | Cột mã điểm bán dùng để liên kết bảng NHAN_VIEN_CHAM_SOC_LONG với các bảng khác",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301",
+        "429f44b6dec66d3512c3cdf8"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "MA_DIEM_BAN | VARCHAR2 | Mã điểm bán"
+        },
+        {
+          "chunk_id": "429f44b6dec66d3512c3cdf8",
+          "kind": "docs",
+          "text": "MA_DIEM_BAN"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "aa9a512e9a9fb7920f3ba1b3",
+      "name": "TEN_DIEM_BAN",
+      "type": "column",
+      "description": "Tên điểm bán (ví dụ: ĐBH Minh Quang)",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "TEN_DIEM_BAN | VARCHAR2 | Tên điểm bán (ví dụ: ĐBH Minh Quang)"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "7805bb10ee2ea18f91261656",
+      "name": "NGUOI_GIAO_KE_HOACH",
+      "type": "column",
+      "description": "Người giao kế hoạch chăm sóc",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "NGUOI_GIAO_KE_HOACH | VARCHAR2 | Người giao kế hoạch chăm sóc"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "b00c1656fea2e77ab6879379",
+      "name": "NHAN_VIEN_CHAM_SOC",
+      "type": "column",
+      "description": "Họ tên nhân viên chăm sóc điểm bán",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "NHAN_VIEN_CHAM_SOC | VARCHAR2 | Họ tên nhân viên chăm sóc điểm bán"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "3e6720860df717e60b9adeb6",
+      "name": "MA_NHAN_VIEN_CHAM_SOC",
+      "type": "column",
+      "description": "Mã nhân viên chăm sóc điểm bán | Cột mã nhân viên chăm sóc dùng để liên kết bảng NHAN_VIEN_CHAM_SOC_LONG với các bảng khác",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301",
+        "429f44b6dec66d3512c3cdf8"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "MA_NHAN_VIEN_CHAM_SOC | VARCHAR2 | Mã nhân viên chăm sóc điểm bán"
+        },
+        {
+          "chunk_id": "429f44b6dec66d3512c3cdf8",
+          "kind": "docs",
+          "text": "MA_NHAN_VIEN_CHAM_SOC"
+        }
+      ],
+      "community_id": "community_007"
+    },
+    {
+      "id": "76d1d5fc06e980b4615380ec",
+      "name": "EMPLOYEE_SALES",
+      "type": "table",
+      "description": "Lưu trữ thông tin của các nhân viên chăm sóc | Bảng lưu trữ dữ liệu điểm bán và thông tin nhân viên bán hàng",
+      "source_chunk_ids": [
+        "94516abdc0c2041ecc1057b7",
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "94516abdc0c2041ecc1057b7",
+          "kind": "docs",
+          "text": "Bảng EMPLOYEE_SALES * Ý nghĩa của bảng: Lưu trữ thông tin của các nhân viên chăm sóc"
+        },
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "Bảng EMPLOYEE_SALES"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "848d1cf520a8deda65542ef2",
+      "name": "EMPLOYEE_SALES.ID",
+      "type": "column",
+      "description": "Khóa chính, định danh duy nhất của bản ghi",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "ID | NUMBER | Khóa chính, định danh duy nhất của bản ghi"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "3fe5139f7dfe86ff5e454495",
+      "name": "EMPLOYEE_SALES.BRANCH_NAME",
+      "type": "column",
+      "description": "Tên trung tâm kinh doanh / chi nhánh",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên trung tâm kinh doanh / chi nhánh"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "98a5eb1775d41fcff9e770da",
+      "name": "EMPLOYEE_SALES.EMP_CODE",
+      "type": "column",
+      "description": "Mã nhân viên",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "EMP_CODE | VARCHAR2 | Mã nhân viên"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "7718facc54525608ebbdb001",
+      "name": "EMPLOYEE_SALES.HUB",
+      "type": "column",
+      "description": "Tên Hub / khu vực quản lý",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "HUB | VARCHAR2 | Tên Hub / khu vực quản lý"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "c361d028ba2b6cba5006fd61",
+      "name": "EMPLOYEE_SALES.HUB_LEADER",
+      "type": "column",
+      "description": "Tên hoặc mã trưởng Hub",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "HUB_LEADER | VARCHAR2 | Tên hoặc mã trưởng Hub"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "13f7042d003e2501722d5ecf",
+      "name": "EMPLOYEE_SALES.SALES_CODE",
+      "type": "column",
+      "description": "Mã Điểm Bán",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "SALES_CODE | VARCHAR2 | Mã Điểm Bán"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "fb6c13d5cabbc40582f9e539",
+      "name": "EMPLOYEE_SALES.SALES_NAME",
+      "type": "column",
+      "description": "Tên nhân viên bán hàng",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "SALES_NAME | VARCHAR2 | Tên nhân viên bán hàng"
+        }
+      ],
+      "community_id": "community_005"
+    },
+    {
+      "id": "57a2bcb275f3a29faa1ef666",
+      "name": "V_BDS_NEW_SUB_SHOP",
+      "type": "table",
+      "description": "Bảng dữ liệu kinh doanh chứa thông tin về số lượng PTM TB của kênh cửa hàng và đại lý",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SHOP"
+        }
+      ],
+      "community_id": "community_008"
+    },
+    {
+      "id": "bc4a03f47b22346e3cef3854",
+      "name": "SHOP_TYPE",
+      "type": "column",
+      "description": "Cột phân loại cửa hàng trong bảng V_BDS_NEW_SUB_SHOP",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "SHOP_TYPE"
+        }
+      ],
+      "community_id": "community_008"
+    },
+    {
+      "id": "34d11887dbe8231bbf93d731",
+      "name": "'101', '201', '202'",
+      "type": "filter_value",
+      "description": "Các giá trị SHOP_TYPE được phép SELECT",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "SHOP_TYPE in ('101', '201', '202')"
+        }
+      ],
+      "community_id": "community_008"
+    },
+    {
+      "id": "c87381de4c93172747fe2440",
+      "name": "Quy tắc lọc SHOP_TYPE",
+      "type": "business_rule",
+      "description": "Chỉ được sử dụng SHOP_TYPE in ('101', '201', '202'), các giá trị khác không được SELECT",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "Chỉ được sử dụng SHOP_TYPE in ('101', '201', '202'), các giá trị khác không được SELECT"
+        }
+      ],
+      "community_id": "community_008"
+    },
+    {
+      "id": "b8a381e0223dd073dd8785f7",
+      "name": "TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))",
+      "type": "table",
+      "description": "Lưu trữ thông tin phát triển mới thuê bao của các kênh kinh doanh (kênh cửa hàng, kênh chuỗi, kênh đại lý chuyên, kênh đại lý ủy quyền, kênh online, kênh quản lý, kênh Khách hàng cá nhân, kênh Khách hàng doanh nghiệp)",
+      "source_chunk_ids": [
+        "42492bc4c643df74295e691c"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "42492bc4c643df74295e691c",
+          "kind": "docs",
+          "text": "Bảng TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name))) * Ý nghĩa của bảng: Lưu trữ thông tin phát triển mới thuê bao của các kênh kinh doanh (kênh cửa hàng, kênh chuỗi, kênh đại lý chuyên, kênh đại lý ủy quyền, kênh online, kênh quản lý, kênh Khách hàng cá nhân, kênh Khách hàng doanh nghiệp)"
+        }
+      ],
+      "community_id": "community_009"
+    },
+    {
+      "id": "ed82452993ade4f752b03c7c",
+      "name": "TO_DATE",
+      "type": "sql_function",
+      "description": "Hàm chuyển đổi kiểu dữ liệu sang DATE",
+      "source_chunk_ids": [
+        "42492bc4c643df74295e691c"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "42492bc4c643df74295e691c",
+          "kind": "docs",
+          "text": "TO_DATE"
+        }
+      ],
+      "community_id": "community_009"
+    },
+    {
+      "id": "8fb6cb70b7fa5ddc2fa8b805",
+      "name": "TO_CHAR",
+      "type": "sql_function",
+      "description": "Hàm chuyển đổi kiểu dữ liệu sang CHAR",
+      "source_chunk_ids": [
+        "42492bc4c643df74295e691c"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "42492bc4c643df74295e691c",
+          "kind": "docs",
+          "text": "TO_CHAR"
+        }
+      ],
+      "community_id": "community_009"
+    },
+    {
+      "id": "e2b22f1aba17dd9844c1e8c2",
+      "name": "UPPER",
+      "type": "sql_function",
+      "description": "Hàm chuyển đổi chuỗi thành chữ hoa",
+      "source_chunk_ids": [
+        "42492bc4c643df74295e691c"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "42492bc4c643df74295e691c",
+          "kind": "docs",
+          "text": "UPPER"
+        }
+      ],
+      "community_id": "community_009"
+    },
+    {
+      "id": "f0f61b1dc6105e0bb33e23e6",
+      "name": "V_CAT_STAFF",
+      "type": "table",
+      "description": "Bảng lưu trữ thông tin nhân viên của công việc trong phân hệ Quản lý công việc và dự án",
+      "source_chunk_ids": [
+        "e70ad40fe42f7c9529b59141"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "e70ad40fe42f7c9529b59141",
+          "kind": "docs",
+          "text": "Bảng V_CAT_STAFF"
+        }
+      ],
+      "community_id": "community_002"
+    }
+  ],
+  "edges": [
+    {
+      "id": "c3d541e169393cafec27ffd7",
+      "source": "8fcdec97c75574004054c836",
+      "target": "58a6fbb1810e3eec9a64be5a",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | USER_NAME"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_USER_PRECINCT_PERMISSION chứa cột USER_NAME"
+    },
+    {
+      "id": "44115ac385f1e908d61cda25",
+      "source": "8fcdec97c75574004054c836",
+      "target": "635b1c280c72f9248c952c1b",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | USER_ID"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_USER_PRECINCT_PERMISSION chứa cột USER_ID"
+    },
+    {
+      "id": "19c1c29464b845c632bdc67e",
+      "source": "8fcdec97c75574004054c836",
+      "target": "b3230c168fad2eaaaf34d0e7",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d",
+        "2efc400416457c7be420928f"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PRECINCT_CODE"
+        },
+        {
+          "chunk_id": "2efc400416457c7be420928f",
+          "kind": "docs",
+          "text": "Liên kết với các bảng khác qua cột PRECINCT_CODE"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng V_USER_PRECINCT_PERMISSION chứa cột PRECINCT_CODE | Bảng V_USER_PRECINCT_PERMISSION liên kết với các bảng khác qua cột PRECINCT_CODE"
+    },
+    {
+      "id": "154b6b0e327a2c0d31759b68",
+      "source": "8fcdec97c75574004054c836",
+      "target": "d92db814096ae75fd4d95ae3",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PRECINCT_NAME"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_USER_PRECINCT_PERMISSION chứa cột PRECINCT_NAME"
+    },
+    {
+      "id": "7cfe3b9df1a635b006564ee8",
+      "source": "8fcdec97c75574004054c836",
+      "target": "764635d9f6a38b65e3c8d22c",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | HUB_CODE"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_USER_PRECINCT_PERMISSION chứa cột HUB_CODE"
+    },
+    {
+      "id": "f0d5c17684c8371b200fd5a0",
+      "source": "8fcdec97c75574004054c836",
+      "target": "21c9e9b206d9f0531dabd9b3",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | BRANCH_CODE"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_USER_PRECINCT_PERMISSION chứa cột BRANCH_CODE"
+    },
+    {
+      "id": "8b6e00dcc605573b424db328",
+      "source": "8fcdec97c75574004054c836",
+      "target": "0397e0a042f8e75a9ef504f8",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2719baab8f66827a599d6d1d"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2719baab8f66827a599d6d1d",
+          "kind": "docs",
+          "text": "Bảng V_USER_PRECINCT_PERMISSION | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | BRANCH_NAME"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_USER_PRECINCT_PERMISSION chứa cột BRANCH_NAME"
+    },
+    {
+      "id": "a928ab090718558e15af63c8",
+      "source": "dc333d74ca89e49f53ef41db",
+      "target": "8fcdec97c75574004054c836",
+      "type": "rule_applies_to",
+      "source_chunk_ids": [
+        "2efc400416457c7be420928f"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2efc400416457c7be420928f",
+          "kind": "docs",
+          "text": "Nếu user hỏi về các dữ liệu liên quan tới PTM, VLR, TKC, trạm, ... thì luôn luôn map với bảng này để chỉ trả về dữ liệu trong phạm vi quyền truy cập của user"
+        }
+      ],
+      "weight": 1,
+      "description": "Quy tắc giới hạn quyền truy cập áp dụng cho bảng V_USER_PRECINCT_PERMISSION"
+    },
+    {
+      "id": "11de66f915e1ac5a883f9f10",
+      "source": "cc7cb3853016e2cbec84c244",
+      "target": "0a9fb0e02a18dd9c49f91bbe",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "ID | NUMBER | Khóa chính"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng PRECINCT có cột ID"
+    },
+    {
+      "id": "7e1ee79331e75e228fd36820",
+      "source": "cc7cb3853016e2cbec84c244",
+      "target": "f3195924a2f22eaabf3556e8",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "CODE | VARCHAR2 | Mã phường xã"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng PRECINCT có cột CODE"
+    },
+    {
+      "id": "94ae6f5d80ea97443c69aa74",
+      "source": "cc7cb3853016e2cbec84c244",
+      "target": "d28e114371f55850b555d616",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "NAME | VARCHAR2 | Tên phường xã"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng PRECINCT có cột NAME"
+    },
+    {
+      "id": "766b87e85d1d13b6e45c1b18",
+      "source": "cc7cb3853016e2cbec84c244",
+      "target": "83c48e8794108bba38debcc8",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng PRECINCT có cột BRANCH_NAME"
+    },
+    {
+      "id": "e358c7681b5086f2c94bdb4c",
+      "source": "cc7cb3853016e2cbec84c244",
+      "target": "b858ff5007265529fddda339",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "HUB | VARCHAR2 | Tên Hub"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng PRECINCT có cột HUB"
+    },
+    {
+      "id": "a15f7b9a227bfc930d07f42e",
+      "source": "cc7cb3853016e2cbec84c244",
+      "target": "cb70cbf07961705c68dc838c",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "0a2a7af7d9ef949e10b97cab"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "0a2a7af7d9ef949e10b97cab",
+          "kind": "docs",
+          "text": "BRANCH_CODE | VARCHAR2 | Mã TTKD"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng PRECINCT có cột BRANCH_CODE"
+    },
+    {
+      "id": "d736c486050ae8bf50b6a4b1",
+      "source": "cc7cb3853016e2cbec84c244",
+      "target": "52f815aa1fc83b45aad45d32",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "e3a981e7149118f5e5083d59"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "e3a981e7149118f5e5083d59",
+          "kind": "docs",
+          "text": "Bảng PRECINCT * Mối liên kết: * Liên kết với các bảng khác qua cột CODE"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng PRECINCT chứa cột CODE dùng để liên kết với các bảng khác"
+    },
+    {
+      "id": "67047a3ee1188fcf9fd8f5a5",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "5dca13cc335f0be3c4c51159",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | ID | NUMBER | Mã định danh điểm bán (ví dụ: 17)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột ID"
+    },
+    {
+      "id": "44a51c980d8e99e8eb3f7f8e",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "e4cc25b51ec3023a3d4b6e5e",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | ADDRESS | VARCHAR2 | Địa chỉ điểm bán"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột ADDRESS"
+    },
+    {
+      "id": "07ea266bd2abb3c25d413dca",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "0397e0a042f8e75a9ef504f8",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột BRANCH_NAME"
+    },
+    {
+      "id": "a5b84f8852eeaa4fc6830517",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "92428a5aeb1f7925632334c2",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | EMP_NAME | VARCHAR2 | Tên nhân viên phụ trách"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột EMP_NAME"
+    },
+    {
+      "id": "fb41d0e6fd28a099ae02745e",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "f778bbb85b6bd5c1da3e5962",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | HUB | VARCHAR2 | Hub quản lý (mã hub) (ví dụ: VT.1)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột HUB"
+    },
+    {
+      "id": "4d823351463692a2baa67915",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "230122c5727e83f66879c2bc",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | HUB_LEADER | VARCHAR2 | Tên trưởng Hub"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột HUB_LEADER"
+    },
+    {
+      "id": "3807346889337ea9b9d47e6b",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "fed588f6c3b92a035ad224ff",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | LAT | VARCHAR2 | Vĩ độ (ví dụ: 10.765590)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột LAT"
+    },
+    {
+      "id": "edcb5d5bed7528972e670c38",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "944f46644a4ed4c249d58692",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | LON | VARCHAR2 | Kinh độ (ví dụ: 106.662547)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột LON"
+    },
+    {
+      "id": "b376722b71bd13debaf4c6c2",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "191a66a768b4e519977e913b",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | NVBH_CODE | VARCHAR2 | Mã nhân viên bán hàng"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE có cột NVBH_CODE"
+    },
+    {
+      "id": "768807d5f3ea5f275441de3e",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "1f6da5a62896ebf2e7275b10",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4",
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PARENT_SALE_CODE | VARCHAR2 | Mã nhân viên/quản lý cấp trên"
+        },
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PARENT_SALE_CODE"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng POINT_OF_SALE có cột PARENT_SALE_CODE | Bảng POINT_OF_SALE chứa cột PARENT_SALE_CODE"
+    },
+    {
+      "id": "8d55c377ac68263125047e9c",
+      "source": "0397e0a042f8e75a9ef504f8",
+      "target": "e221322a4fcc3b3c2947298e",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột BRANCH_NAME có thể lọc theo giá trị Trung Tâm Kinh Doanh Sài Gòn"
+    },
+    {
+      "id": "f1bae7fd24b119418bf1c036",
+      "source": "0397e0a042f8e75a9ef504f8",
+      "target": "ddab3f6962b698a2860d498d",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột BRANCH_NAME có thể lọc theo giá trị Trung Tâm Kinh Doanh Gia Định"
+    },
+    {
+      "id": "11a00dc2627a875e42c62a25",
+      "source": "0397e0a042f8e75a9ef504f8",
+      "target": "7941b5951bb20671fa437374",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột BRANCH_NAME có thể lọc theo giá trị Trung Tâm Kinh Doanh Bến Thành"
+    },
+    {
+      "id": "162a298b745083759b72d3d7",
+      "source": "0397e0a042f8e75a9ef504f8",
+      "target": "75140dad8c90a4e67ab0a4c1",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột BRANCH_NAME có thể lọc theo giá trị Trung Tâm Kinh Doanh Gò Vấp"
+    },
+    {
+      "id": "e46c237cbfc55c87aaf92f39",
+      "source": "0397e0a042f8e75a9ef504f8",
+      "target": "c2aa68c57371a5613822fed6",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột BRANCH_NAME có thể lọc theo giá trị Trung Tâm Kinh Doanh Thủ Đức"
+    },
+    {
+      "id": "8ebc981a6f6605c753368a7d",
+      "source": "0397e0a042f8e75a9ef504f8",
+      "target": "1b20641beb8c175d1d1d265a",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột BRANCH_NAME có thể lọc theo giá trị Trung Tâm Kinh Doanh Bình Dương"
+    },
+    {
+      "id": "c646705557ca3cab07cdcb8c",
+      "source": "0397e0a042f8e75a9ef504f8",
+      "target": "bac67b0c4fb9e55dbf822e5e",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "2ebd0fa01db3916f5d4714d4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "2ebd0fa01db3916f5d4714d4",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên TTKD/chi nhánh (gồm 7 giá trị (tương ứng với 7 TTKD): Trung Tâm Kinh Doanh Sài Gòn, Trung Tâm Kinh Doanh Gia Định, Trung Tâm Kinh Doanh Bến Thành, Trung Tâm Kinh Doanh Gò Vấp, Trung Tâm Kinh Doanh Thủ Đức, Trung Tâm Kinh Doanh Bình Dương, Trung Tâm Kinh Doanh Vũng Tàu"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột BRANCH_NAME có thể lọc theo giá trị Trung Tâm Kinh Doanh Vũng Tàu"
+    },
+    {
+      "id": "6f6a82492bbfa7ea2399ab11",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "fc4de4a2b377cdadd68fd4b0",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PARENT_SALE_NAME"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE chứa cột PARENT_SALE_NAME"
+    },
+    {
+      "id": "dd83794d5370c734bf72e082",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "26b84d31036c9e9eb9c45968",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PHONE_NUMBER"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE chứa cột PHONE_NUMBER"
+    },
+    {
+      "id": "4ea5a6a98e9deae280d18fc2",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "d92db814096ae75fd4d95ae3",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PRECINCT_NAME"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE chứa cột PRECINCT_NAME"
+    },
+    {
+      "id": "6032c74fa995b32092e04659",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "64c6489d65769b7a40d08846",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6",
+        "d7720eb76d04daad8dca1d59"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SALE_CODE"
+        },
+        {
+          "chunk_id": "d7720eb76d04daad8dca1d59",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE * Mối liên kết: * Liên kết với các bảng khác qua cột SALE_CODE"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng POINT_OF_SALE chứa cột SALE_CODE"
+    },
+    {
+      "id": "c0130c137221f985475a856d",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "9e9c5021f8c91a1cfe43a58a",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SALE_NAME"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE chứa cột SALE_NAME"
+    },
+    {
+      "id": "e1eef0815d6417c1b0cfd61e",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "d5da5924966749dd639f9bbf",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SALE_TYPE"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng POINT_OF_SALE chứa cột SALE_TYPE"
+    },
+    {
+      "id": "c469e9936875be7eadd54f94",
+      "source": "b6ffa833abd0b028bbdd116a",
+      "target": "b3230c168fad2eaaaf34d0e7",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "1568608002e4da41bacc80b6",
+        "d7720eb76d04daad8dca1d59"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "1568608002e4da41bacc80b6",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | PRECINCT_CODE"
+        },
+        {
+          "chunk_id": "d7720eb76d04daad8dca1d59",
+          "kind": "docs",
+          "text": "Bảng POINT_OF_SALE * Mối liên kết: * Liên kết với các bảng khác qua cột SALE_CODE và PRECINCT_CODE"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng POINT_OF_SALE chứa cột PRECINCT_CODE"
+    },
+    {
+      "id": "183c6178a58919793a47f3ff",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "64c6489d65769b7a40d08846",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1",
+        "6ae6b0da788429aed0bf9da4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SALE_CODE | VARCHAR2 | Mã điểm bán (ví dụ: HCM01DHON_0009)"
+        },
+        {
+          "chunk_id": "6ae6b0da788429aed0bf9da4",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT * Mối liên kết: * Liên kết với các bảng khác qua cột SALE_CODE"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột SALE_CODE | Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột SALE_CODE dùng để liên kết với các bảng khác"
+    },
+    {
+      "id": "0bc5f70e805ee9ae48862218",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "8ccc91ee7e9f9dd462c26c38",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_DATE | VARCHAR2 | Ngày tổng hợp dữ liệu (luôn luôn là ngày hiện tại) (ví dụ: 17/06/2026)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột SUM_DATE"
+    },
+    {
+      "id": "f5f75b8a436c4583c09df9ea",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "a629e077a512af398f90ffcd",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MC_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả trước trong ngày hiện tại (ví dụ: 1)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MC_QUANTITY_DAY"
+    },
+    {
+      "id": "16c231f064fb9c1be69aab75",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "38341eb7871fa4d7db59b625",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MF_QUANTITY_DAY | NUMBER | Số lượng thuê bao trả sau trong ngày hiện tại (ví dụ: 0)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MF_QUANTITY_DAY"
+    },
+    {
+      "id": "e0137d99643ec0e4c9bc1541",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "a73b9efe01fc1ef50b93ce6a",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | ALL_QUANTITY_DAY | NUMBER | Tổng số thuê bao trong ngày hiện tại (ví dụ: 1)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột ALL_QUANTITY_DAY"
+    },
+    {
+      "id": "e1736d40a24bad091deb61b4",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "1faa0cfaf48933d942427d5e",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_MONTH | VARCHAR2 | Tháng tổng hợp dữ liệu (luôn luôn là tháng hiện tại) (ví dụ: 06/2026)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột SUM_MONTH"
+    },
+    {
+      "id": "3751f562c678171eaa3e9fce",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "a62a4562af8b516ee44abd25",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MC_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả trước trong tháng hiện tại (ví dụ: 15)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MC_QUANTITY_MONTH"
+    },
+    {
+      "id": "e1d12f4995d360a0f5de98ba",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "16104d7f3c68356e4c67d034",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MF_QUANTITY_MONTH | NUMBER | Số lượng thuê bao trả sau trong tháng hiện tại (ví dụ: 0)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MF_QUANTITY_MONTH"
+    },
+    {
+      "id": "eaf742c3df9e59f56da66688",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "259d55bbf3e2e8884d7837ee",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | ALL_QUANTITY_MONTH | NUMBER | Tổng số thuê bao trong tháng hiện tại (ví dụ: 15)"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột ALL_QUANTITY_MONTH"
+    },
+    {
+      "id": "a0cb196d188ed90d0e388fce",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "026c3070c3631ff276eb0717",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ca1b19023bfec786f36b98e1",
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ca1b19023bfec786f36b98e1",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | VARCHAR2 | Năm tổng hợp dữ liệu (năm hiện tại) (ví dụ: 2026)"
+        },
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột SUM_YEAR"
+    },
+    {
+      "id": "40989cfc2feeef2f64798414",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "55ae96ce3c150668fede75db",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | MC_QUANTITY_YEAR"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MC_QUANTITY_YEAR"
+    },
+    {
+      "id": "40ca9a4d17cd61e342d8868d",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "62a7353fbc8545c8574ccddc",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | MF_QUANTITY_YEAR"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MF_QUANTITY_YEAR"
+    },
+    {
+      "id": "17c7ddd0f10433896504a9e0",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "6564bf656775bb3cbb07e523",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | ALL_QUANTITY_YEAR"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột ALL_QUANTITY_YEAR"
+    },
+    {
+      "id": "b49a42627c259d9c1c06e94c",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "77460de50207bb1339e932c7",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | MC_QUANTITY_ALL_YEAR"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MC_QUANTITY_ALL_YEAR"
+    },
+    {
+      "id": "5b840abfcd7805a3c196e31a",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "1d41388c9faf5c3ce46a93d2",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | MF_QUANTITY_ALL_YEAR"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MF_QUANTITY_ALL_YEAR"
+    },
+    {
+      "id": "4625b1699c908a7620e69e7c",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "900073f32c6fd645f3228fc7",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | ALL_QUANTITY_ALL_YEAR"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột ALL_QUANTITY_ALL_YEAR"
+    },
+    {
+      "id": "575db34b24f9d7c278f7cbb9",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "604835b50178407cb92b5c39",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | START_DATE_LAST_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột START_DATE_LAST_WEEK"
+    },
+    {
+      "id": "bf05e226f2a57329e8b84a2d",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "445aa468e0b95cc31deeb386",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | LAST_DATE_LAST_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột LAST_DATE_LAST_WEEK"
+    },
+    {
+      "id": "3aec536ab62c55e5d3a9fee0",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "42ac94a9c80b623098debd23",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "9be1e56b348e0347d4a8a193",
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "9be1e56b348e0347d4a8a193",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SUM_YEAR | ... | MC_QUANTITY_LAST_WEEK"
+        },
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MC_QUANTITY_LAST_WEEK"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MC_QUANTITY_LAST_WEEK"
+    },
+    {
+      "id": "4ce615237ad866a22536e70e",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "86cb58608c11f7d0a56cd1bd",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MF_QUANTITY_LAST_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MF_QUANTITY_LAST_WEEK"
+    },
+    {
+      "id": "9b16be73e3dfb56250ce5b4d",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "1fa952524c963b3ecbe1773f",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | ALL_QUANTITY_LAST_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột ALL_QUANTITY_LAST_WEEK"
+    },
+    {
+      "id": "c88ca4af0593ec4a0869a07e",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "03e1cdc4a1e6870b46351346",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | START_DATE_THIS_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột START_DATE_THIS_WEEK"
+    },
+    {
+      "id": "6b721de9e2b1eec5fa4ce249",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "9655fbadb579bf34cae86d4a",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | LAST_DATE_THIS_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột LAST_DATE_THIS_WEEK"
+    },
+    {
+      "id": "4da998fb70135347c97720fd",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "fce0b3cf8f39c677b07ba34b",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MC_QUANTITY_THIS_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MC_QUANTITY_THIS_WEEK"
+    },
+    {
+      "id": "e25ead2163a33846b82c9984",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "36170ad8c0942c6d5d9ffe62",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | MF_QUANTITY_THIS_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột MF_QUANTITY_THIS_WEEK"
+    },
+    {
+      "id": "49538d90931ad3265cc68dd0",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "703fce2170f589db091260e4",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | ALL_QUANTITY_THIS_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột ALL_QUANTITY_THIS_WEEK"
+    },
+    {
+      "id": "947566aa24e373832a2942b0",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "eb8588f80bdc413927627758",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT | Tên cột | Kiểu dữ liệu | Mô tả | | --- | --- | --- | | SALE_POINT_QUANTITY_LAST_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột SALE_POINT_QUANTITY_LAST_WEEK"
+    },
+    {
+      "id": "1ba39c8428859590e43f6629",
+      "source": "7db3e60f9335ad9f6c2897b1",
+      "target": "03e1cdc4a1e6870b46351346",
+      "type": "rule_applies_to",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "START_DATE_THIS_WEEK | VARCHAR2 | Ngày bắt đầu tuần hiện tại (lấy thứ 5 là ngày bắt đầu tuần)"
+        }
+      ],
+      "weight": 1,
+      "description": "Quy tắc xác định ngày bắt đầu tuần áp dụng cho cột START_DATE_THIS_WEEK"
+    },
+    {
+      "id": "3042e00da5000ad36920ba99",
+      "source": "dbe7e6fbb1dbd9a5f2e09df1",
+      "target": "9655fbadb579bf34cae86d4a",
+      "type": "rule_applies_to",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "LAST_DATE_THIS_WEEK | VARCHAR2 | Ngày kết thúc tuần hiện tại (lấy thứ 4 là ngày kết thúc tuần)"
+        }
+      ],
+      "weight": 1,
+      "description": "Quy tắc xác định ngày kết thúc tuần áp dụng cho cột LAST_DATE_THIS_WEEK"
+    },
+    {
+      "id": "b26f515314dda6f58d0bd4dd",
+      "source": "63461c17971c52cca239304d",
+      "target": "eb8588f80bdc413927627758",
+      "type": "rule_applies_to",
+      "source_chunk_ids": [
+        "3446fda6e1c6a61971447c54"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3446fda6e1c6a61971447c54",
+          "kind": "docs",
+          "text": "SALE_POINT_QUANTITY_LAST_WEEK | NUMBER | Điểm bán này có phát triển thuê bao hay chưa, tính từ ngày đầu tháng hiện tại đến ngày bắt đầu tuần trước (START_DATE_LAST_WEEK). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao"
+        }
+      ],
+      "weight": 1,
+      "description": "Quy tắc xác định giá trị 0 hoặc 1 áp dụng cho cột SALE_POINT_QUANTITY_LAST_WEEK"
+    },
+    {
+      "id": "c7bb820d003685f24bf86236",
+      "source": "e6a23cec046d4a217f014e3a",
+      "target": "8fd29b7e84f1ba417bdc9dce",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "bd4a61645d2e0b77c717cf86"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "bd4a61645d2e0b77c717cf86",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SALE_POINT _DATE_LAST_WEEK). Giá trị: 0: chưa phát triển thuê bao nào, 1: đã có phát triển thuê bao | | SALE_POINT_QUANTITY_THIS_WEEK"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SALE_POINT chứa cột SALE_POINT_QUANTITY_THIS_WEEK"
+    },
+    {
+      "id": "f4782a3e94f515826a2a2e4c",
+      "source": "9fc7158fd3d2778fcc12602d",
+      "target": "e6a23cec046d4a217f014e3a",
+      "type": "derived_from",
+      "source_chunk_ids": [
+        "6ae6b0da788429aed0bf9da4"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "6ae6b0da788429aed0bf9da4",
+          "kind": "docs",
+          "text": "Truy xuất vào bảng này để lấy các thông tin về số lượng PTM TB"
+        }
+      ],
+      "weight": 1,
+      "description": "Chỉ số số lượng PTM TB được truy xuất từ bảng V_BDS_NEW_SUB_SALE_POINT"
+    },
+    {
+      "id": "895809ebb5a2154734ed5daa",
+      "source": "904ad43c2f141fefe86ac7bb",
+      "target": "a7178ca69744d36314c498b1",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG | INSERT_DATE | DATE | Ngày ghi nhận dữ liệu"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng NHAN_VIEN_CHAM_SOC_LONG chứa cột INSERT_DATE"
+    },
+    {
+      "id": "d866a6d07cf6989e96a73b60",
+      "source": "904ad43c2f141fefe86ac7bb",
+      "target": "40f2d7985e15ab2dd84af16f",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG | NGAY_CHAM_SOC | DATE | Ngày chăm sóc điểm bán"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng NHAN_VIEN_CHAM_SOC_LONG chứa cột NGAY_CHAM_SOC"
+    },
+    {
+      "id": "2ce666b300e50488eca346d4",
+      "source": "904ad43c2f141fefe86ac7bb",
+      "target": "6ab92e6d1700e84bf5286c35",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301",
+        "429f44b6dec66d3512c3cdf8"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG | MA_DIEM_BAN | VARCHAR2 | Mã điểm bán"
+        },
+        {
+          "chunk_id": "429f44b6dec66d3512c3cdf8",
+          "kind": "docs",
+          "text": "Liên kết với các bảng khác qua cột MA_DIEM_BAN"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng NHAN_VIEN_CHAM_SOC_LONG chứa cột MA_DIEM_BAN"
+    },
+    {
+      "id": "01efbd1bdc8ae1d59236280c",
+      "source": "904ad43c2f141fefe86ac7bb",
+      "target": "aa9a512e9a9fb7920f3ba1b3",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG | TEN_DIEM_BAN | VARCHAR2 | Tên điểm bán"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng NHAN_VIEN_CHAM_SOC_LONG chứa cột TEN_DIEM_BAN"
+    },
+    {
+      "id": "510a69a76763550b1614881c",
+      "source": "904ad43c2f141fefe86ac7bb",
+      "target": "7805bb10ee2ea18f91261656",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG | NGUOI_GIAO_KE_HOACH | VARCHAR2 | Người giao kế hoạch chăm sóc"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng NHAN_VIEN_CHAM_SOC_LONG chứa cột NGUOI_GIAO_KE_HOACH"
+    },
+    {
+      "id": "8132af82408583e3efe0bcf1",
+      "source": "904ad43c2f141fefe86ac7bb",
+      "target": "b00c1656fea2e77ab6879379",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG | NHAN_VIEN_CHAM_SOC | VARCHAR2 | Họ tên nhân viên chăm sóc điểm bán"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng NHAN_VIEN_CHAM_SOC_LONG chứa cột NHAN_VIEN_CHAM_SOC"
+    },
+    {
+      "id": "7cc58e3dba4e8a1eda64b43d",
+      "source": "904ad43c2f141fefe86ac7bb",
+      "target": "3e6720860df717e60b9adeb6",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "ba50b7b1b8b7a8e153392301",
+        "429f44b6dec66d3512c3cdf8"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "ba50b7b1b8b7a8e153392301",
+          "kind": "docs",
+          "text": "Bảng NHAN_VIEN_CHAM_SOC_LONG | MA_NHAN_VIEN_CHAM_SOC | VARCHAR2 | Mã nhân viên chăm sóc điểm bán"
+        },
+        {
+          "chunk_id": "429f44b6dec66d3512c3cdf8",
+          "kind": "docs",
+          "text": "Liên kết với các bảng khác qua cột MA_DIEM_BAN và MA_NHAN_VIEN_CHAM_SOC"
+        }
+      ],
+      "weight": 2,
+      "description": "Bảng NHAN_VIEN_CHAM_SOC_LONG chứa cột MA_NHAN_VIEN_CHAM_SOC"
+    },
+    {
+      "id": "39678a036695027856b92ef2",
+      "source": "76d1d5fc06e980b4615380ec",
+      "target": "848d1cf520a8deda65542ef2",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "ID | NUMBER | Khóa chính, định danh duy nhất của bản ghi"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng EMPLOYEE_SALES có cột ID"
+    },
+    {
+      "id": "48152ed8e6a49de13e6f1c71",
+      "source": "76d1d5fc06e980b4615380ec",
+      "target": "3fe5139f7dfe86ff5e454495",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "BRANCH_NAME | VARCHAR2 | Tên trung tâm kinh doanh / chi nhánh"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng EMPLOYEE_SALES có cột BRANCH_NAME"
+    },
+    {
+      "id": "bfe1d3e1116daf178b3e143b",
+      "source": "76d1d5fc06e980b4615380ec",
+      "target": "98a5eb1775d41fcff9e770da",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "EMP_CODE | VARCHAR2 | Mã nhân viên"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng EMPLOYEE_SALES có cột EMP_CODE"
+    },
+    {
+      "id": "493cd2761359335a484eaf23",
+      "source": "76d1d5fc06e980b4615380ec",
+      "target": "7718facc54525608ebbdb001",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "HUB | VARCHAR2 | Tên Hub / khu vực quản lý"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng EMPLOYEE_SALES có cột HUB"
+    },
+    {
+      "id": "ece57e9bc281fcc3cea381db",
+      "source": "76d1d5fc06e980b4615380ec",
+      "target": "c361d028ba2b6cba5006fd61",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "HUB_LEADER | VARCHAR2 | Tên hoặc mã trưởng Hub"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng EMPLOYEE_SALES có cột HUB_LEADER"
+    },
+    {
+      "id": "0efce0befa78fd59ed95370c",
+      "source": "76d1d5fc06e980b4615380ec",
+      "target": "13f7042d003e2501722d5ecf",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "SALES_CODE | VARCHAR2 | Mã Điểm Bán"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng EMPLOYEE_SALES có cột SALES_CODE"
+    },
+    {
+      "id": "f7f3371eebe600d06e207239",
+      "source": "76d1d5fc06e980b4615380ec",
+      "target": "fb6c13d5cabbc40582f9e539",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "c5b4b4ab4a94304eeb164318"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "c5b4b4ab4a94304eeb164318",
+          "kind": "docs",
+          "text": "SALES_NAME | VARCHAR2 | Tên nhân viên bán hàng"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng EMPLOYEE_SALES có cột SALES_NAME"
+    },
+    {
+      "id": "c60976a711a27ec672795ebc",
+      "source": "57a2bcb275f3a29faa1ef666",
+      "target": "b3230c168fad2eaaaf34d0e7",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SHOP * Mối liên kết: * Liên kết với các bảng khác qua cột PRECINCT_CODE"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SHOP chứa cột PRECINCT_CODE"
+    },
+    {
+      "id": "f31e7c21a3cd1c7b60da7039",
+      "source": "57a2bcb275f3a29faa1ef666",
+      "target": "bc4a03f47b22346e3cef3854",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SHOP ... SHOP_TYPE"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_BDS_NEW_SUB_SHOP chứa cột SHOP_TYPE"
+    },
+    {
+      "id": "d6bee34438673f79aa5b7b83",
+      "source": "9fc7158fd3d2778fcc12602d",
+      "target": "57a2bcb275f3a29faa1ef666",
+      "type": "derived_from",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "Truy xuất vào bảng này để lấy số lượng PTM TB của kênh cửa hàng và đại lý"
+        }
+      ],
+      "weight": 1,
+      "description": "Số lượng PTM TB được lấy từ bảng V_BDS_NEW_SUB_SHOP"
+    },
+    {
+      "id": "6889a8c3afc96fbadaabb6f9",
+      "source": "bc4a03f47b22346e3cef3854",
+      "target": "34d11887dbe8231bbf93d731",
+      "type": "filters_by",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "SHOP_TYPE in ('101', '201', '202')"
+        }
+      ],
+      "weight": 1,
+      "description": "Cột SHOP_TYPE được lọc theo các giá trị '101', '201', '202'"
+    },
+    {
+      "id": "26e4647751159eb1c0d6f3ed",
+      "source": "c87381de4c93172747fe2440",
+      "target": "57a2bcb275f3a29faa1ef666",
+      "type": "rule_applies_to",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "Bảng V_BDS_NEW_SUB_SHOP ... Chỉ được sử dụng SHOP_TYPE in ('101', '201', '202'), các giá trị khác không được SELECT"
+        }
+      ],
+      "weight": 1,
+      "description": "Quy tắc lọc SHOP_TYPE áp dụng cho bảng V_BDS_NEW_SUB_SHOP"
+    },
+    {
+      "id": "4076c430dd843620f6458323",
+      "source": "c87381de4c93172747fe2440",
+      "target": "bc4a03f47b22346e3cef3854",
+      "type": "rule_applies_to",
+      "source_chunk_ids": [
+        "3fa1814d61c6f64cb44d741a"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "3fa1814d61c6f64cb44d741a",
+          "kind": "docs",
+          "text": "Chỉ được sử dụng SHOP_TYPE in ('101', '201', '202')"
+        }
+      ],
+      "weight": 1,
+      "description": "Quy tắc lọc áp dụng cho cột SHOP_TYPE"
+    },
+    {
+      "id": "7a78eea5352a88f878e28292",
+      "source": "b8a381e0223dd073dd8785f7",
+      "target": "ed82452993ade4f752b03c7c",
+      "type": "uses",
+      "source_chunk_ids": [
+        "42492bc4c643df74295e691c"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "42492bc4c643df74295e691c",
+          "kind": "docs",
+          "text": "TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng sử dụng hàm TO_DATE trong tham số đầu vào"
+    },
+    {
+      "id": "a644d569706b5ec4edd9e946",
+      "source": "b8a381e0223dd073dd8785f7",
+      "target": "8fb6cb70b7fa5ddc2fa8b805",
+      "type": "uses",
+      "source_chunk_ids": [
+        "42492bc4c643df74295e691c"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "42492bc4c643df74295e691c",
+          "kind": "docs",
+          "text": "TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng sử dụng hàm TO_CHAR trong tham số đầu vào"
+    },
+    {
+      "id": "072358531f2e636713a4db71",
+      "source": "b8a381e0223dd073dd8785f7",
+      "target": "e2b22f1aba17dd9844c1e8c2",
+      "type": "uses",
+      "source_chunk_ids": [
+        "42492bc4c643df74295e691c"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "42492bc4c643df74295e691c",
+          "kind": "docs",
+          "text": "TABLE(pck_report_chatbox.get_new_sub_data_by_precinct (TO_DATE(TO_CHAR(:date), 'dd/mm/yyyy'), UPPER(:user_name)))"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng sử dụng hàm UPPER trong tham số đầu vào"
+    },
+    {
+      "id": "8b1f64bd7a55607c3499a7a4",
+      "source": "f0f61b1dc6105e0bb33e23e6",
+      "target": "5dca13cc335f0be3c4c51159",
+      "type": "table_has_column",
+      "source_chunk_ids": [
+        "e70ad40fe42f7c9529b59141"
+      ],
+      "source_kinds": [
+        "docs"
+      ],
+      "evidence": [
+        {
+          "chunk_id": "e70ad40fe42f7c9529b59141",
+          "kind": "docs",
+          "text": "Bảng V_CAT_STAFF * Mối liên kết: * Liên kết với các bảng khác qua cột ID"
+        }
+      ],
+      "weight": 1,
+      "description": "Bảng V_CAT_STAFF có cột ID dùng để liên kết với các bảng khác"
+    }
+  ],
+  "communities": [
+    {
+      "id": "community_001",
+      "node_ids": [
+        "026c3070c3631ff276eb0717",
+        "03e1cdc4a1e6870b46351346",
+        "16104d7f3c68356e4c67d034",
+        "1d41388c9faf5c3ce46a93d2",
+        "1fa952524c963b3ecbe1773f",
+        "1faa0cfaf48933d942427d5e",
+        "259d55bbf3e2e8884d7837ee",
+        "36170ad8c0942c6d5d9ffe62",
+        "38341eb7871fa4d7db59b625",
+        "42ac94a9c80b623098debd23",
+        "445aa468e0b95cc31deeb386",
+        "55ae96ce3c150668fede75db",
+        "604835b50178407cb92b5c39",
+        "62a7353fbc8545c8574ccddc",
+        "63461c17971c52cca239304d",
+        "6564bf656775bb3cbb07e523",
+        "703fce2170f589db091260e4",
+        "77460de50207bb1339e932c7",
+        "7db3e60f9335ad9f6c2897b1",
+        "86cb58608c11f7d0a56cd1bd",
+        "8ccc91ee7e9f9dd462c26c38",
+        "8fd29b7e84f1ba417bdc9dce",
+        "900073f32c6fd645f3228fc7",
+        "9655fbadb579bf34cae86d4a",
+        "a629e077a512af398f90ffcd",
+        "a62a4562af8b516ee44abd25",
+        "a73b9efe01fc1ef50b93ce6a",
+        "dbe7e6fbb1dbd9a5f2e09df1",
+        "e6a23cec046d4a217f014e3a",
+        "eb8588f80bdc413927627758",
+        "fce0b3cf8f39c677b07ba34b"
+      ]
+    },
+    {
+      "id": "community_002",
+      "node_ids": [
+        "191a66a768b4e519977e913b",
+        "1f6da5a62896ebf2e7275b10",
+        "230122c5727e83f66879c2bc",
+        "26b84d31036c9e9eb9c45968",
+        "5dca13cc335f0be3c4c51159",
+        "64c6489d65769b7a40d08846",
+        "92428a5aeb1f7925632334c2",
+        "944f46644a4ed4c249d58692",
+        "9e9c5021f8c91a1cfe43a58a",
+        "b6ffa833abd0b028bbdd116a",
+        "d5da5924966749dd639f9bbf",
+        "e4cc25b51ec3023a3d4b6e5e",
+        "f0f61b1dc6105e0bb33e23e6",
+        "f778bbb85b6bd5c1da3e5962",
+        "fc4de4a2b377cdadd68fd4b0",
+        "fed588f6c3b92a035ad224ff"
+      ]
+    },
+    {
+      "id": "community_003",
+      "node_ids": [
+        "0397e0a042f8e75a9ef504f8",
+        "1b20641beb8c175d1d1d265a",
+        "75140dad8c90a4e67ab0a4c1",
+        "7941b5951bb20671fa437374",
+        "bac67b0c4fb9e55dbf822e5e",
+        "c2aa68c57371a5613822fed6",
+        "ddab3f6962b698a2860d498d",
+        "e221322a4fcc3b3c2947298e"
+      ]
+    },
+    {
+      "id": "community_004",
+      "node_ids": [
+        "0a9fb0e02a18dd9c49f91bbe",
+        "52f815aa1fc83b45aad45d32",
+        "83c48e8794108bba38debcc8",
+        "b858ff5007265529fddda339",
+        "cb70cbf07961705c68dc838c",
+        "cc7cb3853016e2cbec84c244",
+        "d28e114371f55850b555d616",
+        "f3195924a2f22eaabf3556e8"
+      ]
+    },
+    {
+      "id": "community_005",
+      "node_ids": [
+        "13f7042d003e2501722d5ecf",
+        "3fe5139f7dfe86ff5e454495",
+        "76d1d5fc06e980b4615380ec",
+        "7718facc54525608ebbdb001",
+        "848d1cf520a8deda65542ef2",
+        "98a5eb1775d41fcff9e770da",
+        "c361d028ba2b6cba5006fd61",
+        "fb6c13d5cabbc40582f9e539"
+      ]
+    },
+    {
+      "id": "community_006",
+      "node_ids": [
+        "21c9e9b206d9f0531dabd9b3",
+        "58a6fbb1810e3eec9a64be5a",
+        "635b1c280c72f9248c952c1b",
+        "764635d9f6a38b65e3c8d22c",
+        "8fcdec97c75574004054c836",
+        "b3230c168fad2eaaaf34d0e7",
+        "d92db814096ae75fd4d95ae3",
+        "dc333d74ca89e49f53ef41db"
+      ]
+    },
+    {
+      "id": "community_007",
+      "node_ids": [
+        "3e6720860df717e60b9adeb6",
+        "40f2d7985e15ab2dd84af16f",
+        "6ab92e6d1700e84bf5286c35",
+        "7805bb10ee2ea18f91261656",
+        "904ad43c2f141fefe86ac7bb",
+        "a7178ca69744d36314c498b1",
+        "aa9a512e9a9fb7920f3ba1b3",
+        "b00c1656fea2e77ab6879379"
+      ]
+    },
+    {
+      "id": "community_008",
+      "node_ids": [
+        "34d11887dbe8231bbf93d731",
+        "57a2bcb275f3a29faa1ef666",
+        "9fc7158fd3d2778fcc12602d",
+        "bc4a03f47b22346e3cef3854",
+        "c87381de4c93172747fe2440"
+      ]
+    },
+    {
+      "id": "community_009",
+      "node_ids": [
+        "8fb6cb70b7fa5ddc2fa8b805",
+        "b8a381e0223dd073dd8785f7",
+        "e2b22f1aba17dd9844c1e8c2",
+        "ed82452993ade4f752b03c7c"
+      ]
+    }
+  ],
+  "reports": [],
+  "errors": {
+    "chunks": [
+      {
+        "chunk_id": "33ea5fc43516241d93e4b914",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 32.882117039s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '32s'}]}}"
+      },
+      {
+        "chunk_id": "e69d63a8bd8edc5bc8c16753",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 20.843352101s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '20s'}]}}"
+      },
+      {
+        "chunk_id": "5ace0818473e09bf2ab1cb9c",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 11.165133411s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '11s'}]}}"
+      },
+      {
+        "chunk_id": "c6b62b6ac3948b5beaf0d4d9",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 1.635004353s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '1s'}]}}"
+      },
+      {
+        "chunk_id": "0a00e9d1a3724eb887330853",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 57.797092422s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '57s'}]}}"
+      },
+      {
+        "chunk_id": "593e963fd4fd87931b3bb6dc",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 53.679975068s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '53s'}]}}"
+      },
+      {
+        "chunk_id": "f83a9059868799145323ac2c",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 43.206940984s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '43s'}]}}"
+      },
+      {
+        "chunk_id": "7276c6936af9e4e94fed0b7e",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 32.864963758s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '32s'}]}}"
+      },
+      {
+        "chunk_id": "6cefa5d6bf4d6740ec41336a",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 22.987382749s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '22s'}]}}"
+      },
+      {
+        "chunk_id": "0803ddffa55295d7d9fad361",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 12.083801049s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '12s'}]}}"
+      },
+      {
+        "chunk_id": "5baa206e458f22f195b18f9a",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 2.902563053s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '2s'}]}}"
+      },
+      {
+        "chunk_id": "08df94f3357d6ab80abc3673",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 52.886093148s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '52s'}]}}"
+      },
+      {
+        "chunk_id": "02189a163df8fe3b8358cdc5",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 41.121966276s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '41s'}]}}"
+      },
+      {
+        "chunk_id": "bfc11c7f9f8969a4893f6b07",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 30.596967416s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '30s'}]}}"
+      },
+      {
+        "chunk_id": "3b14d04ae707d0ee3d55014e",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 18.327447266s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '18s'}]}}"
+      },
+      {
+        "chunk_id": "8d17ba641c20d98d8d6560a6",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 7.413063244s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '7s'}]}}"
+      },
+      {
+        "chunk_id": "421777aa50a10c922e70d13f",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 57.624039744s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '57s'}]}}"
+      },
+      {
+        "chunk_id": "fc637761795580b4aaeb5279",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 48.198354006s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '48s'}]}}"
+      },
+      {
+        "chunk_id": "b31869b48df6b528972ccc98",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 36.987974422s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '36s'}]}}"
+      },
+      {
+        "chunk_id": "bc2907cedbf0b028e38ee71b",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 25.58966917s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '25s'}]}}"
+      },
+      {
+        "chunk_id": "057fd6f07d6088632de6e990",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 15.43936996s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '15s'}]}}"
+      },
+      {
+        "chunk_id": "340289ccd4df2d40fcf2b82c",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 4.896473326s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '4s'}]}}"
+      },
+      {
+        "chunk_id": "334d3e0feccb2fb89bbfc392",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 54.151098359s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '54s'}]}}"
+      },
+      {
+        "chunk_id": "ccedb421abcf0ca3ab44cbf9",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 44.867264198s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '44s'}]}}"
+      },
+      {
+        "chunk_id": "0a2e9a88be118c7715783329",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 34.821043246s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '34s'}]}}"
+      },
+      {
+        "chunk_id": "794a4dcc7849a4cf4b4bb0d9",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 25.588758896s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '25s'}]}}"
+      },
+      {
+        "chunk_id": "ffb84cd4a0155b68bba0050a",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 15.335232995s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '15s'}]}}"
+      },
+      {
+        "chunk_id": "8d125f94d2bc77e83da8f963",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 5.335356566s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '5s'}]}}"
+      },
+      {
+        "chunk_id": "3c18b73ab54331108f2a0952",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 56.021287238s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '56s'}]}}"
+      },
+      {
+        "chunk_id": "1f936a70b04646a6a9bfb7ce",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 45.513500051s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '45s'}]}}"
+      },
+      {
+        "chunk_id": "fa9d74c26e52c42214d0d92b",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 36.705550629s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '36s'}]}}"
+      },
+      {
+        "chunk_id": "62022718210afec43d1b2cf2",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 26.899084126s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '26s'}]}}"
+      },
+      {
+        "chunk_id": "e4505293e8cd934f769bc1f0",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 17.052182491s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '17s'}]}}"
+      },
+      {
+        "chunk_id": "1d0c199d85cb51f09dc9accd",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 5.660460713s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '5s'}]}}"
+      },
+      {
+        "chunk_id": "3f218b628df64616c0dabe57",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 55.115953979s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55s'}]}}"
+      },
+      {
+        "chunk_id": "52f41e7ec2f6d4575c379bea",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 43.075173228s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '43s'}]}}"
+      },
+      {
+        "chunk_id": "24fdf2dfeda5dd6d66c07c9c",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: [Errno 11001] getaddrinfo failed"
+      },
+      {
+        "chunk_id": "5f18e4c9067481e52f6a4937",
+        "kind": "docs",
+        "error": "LLM structured output không hợp lệ: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}"
+      }
+    ],
+    "reports": [
+      {
+        "community_id": "community_001",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 13.0632675s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '13s'}]}}"
+      },
+      {
+        "community_id": "community_002",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 4.222001516s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '4s'}]}}"
+      },
+      {
+        "community_id": "community_003",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 51.780841643s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '51s'}]}}"
+      },
+      {
+        "community_id": "community_004",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 40.93459467s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '40s'}]}}"
+      },
+      {
+        "community_id": "community_005",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 31.195675567s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-3.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '31s'}]}}"
+      },
+      {
+        "community_id": "community_006",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 21.085355958s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '21s'}]}}"
+      },
+      {
+        "community_id": "community_007",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 11.35618104s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '11s'}]}}"
+      },
+      {
+        "community_id": "community_008",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 672.311624ms.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '0s'}]}}"
+      },
+      {
+        "community_id": "community_009",
+        "error": "LLM structured output không hợp lệ: Error calling model 'gemini-3.5-flash' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.5-flash\\nPlease retry in 49.569262513s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '49s'}]}}"
+      }
+    ]
+  }
+}

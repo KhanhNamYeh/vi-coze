@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 from ..settings import Settings, load_settings
 from .extract import load as load_extract

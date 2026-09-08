@@ -8,7 +8,7 @@ from typing import Any
 
 from ..settings import Settings, load_settings
 
-ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
+ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
 
 
 def load_env(path: Path = ENV_FILE) -> None:
@@ -39,15 +39,15 @@ def build_model(
     secret = api_key or os.getenv(provider_cfg.api_key_env)
     if not secret:
         raise RuntimeError(f"thiếu API key: nhập trên UI hoặc đặt {provider_cfg.api_key_env}")
-    base_url = provider_cfg.base_url or (
-        os.getenv(provider_cfg.base_url_env) if provider_cfg.base_url_env else None
-    )
+    base_url = provider_cfg.base_url or (os.getenv(provider_cfg.base_url_env) if provider_cfg.base_url_env else None)
     options = {**(model_options or {})}
     model_name = model or app.api.model
 
     if provider_cfg.binding == "google":
         from langchain_google_genai import ChatGoogleGenerativeAI
 
+        options.setdefault("request_timeout", app.api.timeout)
+        options.setdefault("retries", app.api.retries)
         return ChatGoogleGenerativeAI(model=model_name, google_api_key=secret, **options)
     if provider_cfg.binding == "nvidia":
         from langchain_nvidia_ai_endpoints import ChatNVIDIA

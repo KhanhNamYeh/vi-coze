@@ -125,23 +125,29 @@ def _resolve(
                 continue
             raw_entities += 1
             key = (entity_type, _key(name))
-            row = merged.setdefault(key, {
-                "id": _id("entity", entity_type, _key(name)),
-                "name": name,
-                "type": entity_type,
-                "descriptions": [],
-                "source_chunk_ids": [],
-                "source_kinds": [],
-                "evidence": [],
-            })
+            row = merged.setdefault(
+                key,
+                {
+                    "id": _id("entity", entity_type, _key(name)),
+                    "name": name,
+                    "type": entity_type,
+                    "descriptions": [],
+                    "source_chunk_ids": [],
+                    "source_kinds": [],
+                    "evidence": [],
+                },
+            )
             _append_unique(row["descriptions"], _clean(item.description))
             _append_unique(row["source_chunk_ids"], chunk_id)
             _append_unique(row["source_kinds"], source_kind)
-            _append_unique(row["evidence"], {
-                "chunk_id": chunk_id,
-                "kind": source_kind,
-                "text": _clean(item.evidence),
-            })
+            _append_unique(
+                row["evidence"],
+                {
+                    "chunk_id": chunk_id,
+                    "kind": source_kind,
+                    "text": _clean(item.evidence),
+                },
+            )
         raw_relationships.extend((chunk_id, source_kind, item) for item in extraction.relationships)
 
     entities: list[dict] = []
@@ -173,37 +179,50 @@ def _resolve(
             continue
         source, target = sources[0], targets[0]
         key = (source["id"], target["id"], relation_type)
-        row = relationships.setdefault(key, {
-            "id": _id("relationship", *key),
-            "source": source["id"],
-            "target": target["id"],
-            "type": relation_type,
-            "descriptions": [],
-            "source_chunk_ids": [],
-            "source_kinds": [],
-            "evidence": [],
-            "weight": 0,
-        })
+        row = relationships.setdefault(
+            key,
+            {
+                "id": _id("relationship", *key),
+                "source": source["id"],
+                "target": target["id"],
+                "type": relation_type,
+                "descriptions": [],
+                "source_chunk_ids": [],
+                "source_kinds": [],
+                "evidence": [],
+                "weight": 0,
+            },
+        )
         _append_unique(row["descriptions"], _clean(item.description))
         _append_unique(row["source_chunk_ids"], chunk_id)
         _append_unique(row["source_kinds"], source_kind)
-        _append_unique(row["evidence"], {
-            "chunk_id": chunk_id,
-            "kind": source_kind,
-            "text": _clean(item.evidence),
-        })
+        _append_unique(
+            row["evidence"],
+            {
+                "chunk_id": chunk_id,
+                "kind": source_kind,
+                "text": _clean(item.evidence),
+            },
+        )
         row["weight"] += 1
 
-    edges = [{
-        **{key: value for key, value in row.items() if key != "descriptions"},
-        "description": " | ".join(row["descriptions"]),
-    } for row in relationships.values()]
-    return entities, edges, {
-        "raw_entities": raw_entities,
-        "duplicate_entities_merged": raw_entities - len(entities),
-        "raw_relationships": len(raw_relationships),
-        "invalid_relationships": invalid,
-    }
+    edges = [
+        {
+            **{key: value for key, value in row.items() if key != "descriptions"},
+            "description": " | ".join(row["descriptions"]),
+        }
+        for row in relationships.values()
+    ]
+    return (
+        entities,
+        edges,
+        {
+            "raw_entities": raw_entities,
+            "duplicate_entities_merged": raw_entities - len(entities),
+            "raw_relationships": len(raw_relationships),
+            "invalid_relationships": invalid,
+        },
+    )
 
 
 def _communities(nodes: list[dict], edges: list[dict], cfg: GraphSettings):
@@ -220,12 +239,14 @@ def _communities(nodes: list[dict], edges: list[dict], cfg: GraphSettings):
     elif cfg.community_algorithm == "greedy_modularity":
         groups = list(nx.community.greedy_modularity_communities(graph, weight="weight"))
     else:
-        groups = list(nx.community.louvain_communities(
-            graph,
-            weight="weight",
-            resolution=cfg.community_resolution,
-            seed=cfg.random_seed,
-        ))
+        groups = list(
+            nx.community.louvain_communities(
+                graph,
+                weight="weight",
+                resolution=cfg.community_resolution,
+                seed=cfg.random_seed,
+            )
+        )
     ordered = sorted((sorted(group) for group in groups), key=lambda group: (-len(group), group[0]))
     communities = [{"id": f"community_{index:03d}", "node_ids": group} for index, group in enumerate(ordered, 1)]
     membership = {node_id: community["id"] for community in communities for node_id in community["node_ids"]}
@@ -270,19 +291,21 @@ def _reports(
             errors.append({"community_id": community["id"], "error": str(error)})
             continue
         member_nodes = [by_id[node_id] for node_id in community["node_ids"]]
-        reports.append({
-            "id": _id("report", doc_id, community["id"]),
-            "community_id": community["id"],
-            "title": _clean(summary.title),
-            "text": summary.summary.strip(),
-            "node_ids": community["node_ids"],
-            "source_chunk_ids": list(dict.fromkeys(
-                chunk_id for node in member_nodes for chunk_id in node["source_chunk_ids"]
-            )),
-            "source_kinds": list(dict.fromkeys(
-                source_kind for node in member_nodes for source_kind in node["source_kinds"]
-            )),
-        })
+        reports.append(
+            {
+                "id": _id("report", doc_id, community["id"]),
+                "community_id": community["id"],
+                "title": _clean(summary.title),
+                "text": summary.summary.strip(),
+                "node_ids": community["node_ids"],
+                "source_chunk_ids": list(
+                    dict.fromkeys(chunk_id for node in member_nodes for chunk_id in node["source_chunk_ids"])
+                ),
+                "source_kinds": list(
+                    dict.fromkeys(source_kind for node in member_nodes for source_kind in node["source_kinds"])
+                ),
+            }
+        )
     return reports, errors
 
 
@@ -301,7 +324,12 @@ def run(
     if not cfg.enabled:
         return {"doc_id": doc_id, "enabled": False, "skipped": True, "reason": "graph.enabled=false"}
     if kind not in cfg.source_kinds:
-        return {"doc_id": doc_id, "enabled": True, "skipped": True, "reason": f"kind '{kind}' không thuộc graph.source_kinds"}
+        return {
+            "doc_id": doc_id,
+            "enabled": True,
+            "skipped": True,
+            "reason": f"kind '{kind}' không thuộc graph.source_kinds",
+        }
 
     from ..online.api import build_model
 
@@ -387,18 +415,25 @@ def load(
 
 def embedding_items(doc_id: str, *, settings: Settings | None = None) -> list[dict]:
     data = load(doc_id, settings=settings)
-    items = [{
-        "id": node["id"],
-        "kind": "graph_entity",
-        "text": f"{node['type']}: {node['name']}\n{node['description']}".strip(),
-        "metadata": node,
-    } for node in data["nodes"]]
-    items.extend({
-        "id": report["id"],
-        "kind": "graph_report",
-        "text": report["text"],
-        "metadata": report,
-    } for report in data["reports"] if report["text"].strip())
+    items = [
+        {
+            "id": node["id"],
+            "kind": "graph_entity",
+            "text": f"{node['type']}: {node['name']}\n{node['description']}".strip(),
+            "metadata": node,
+        }
+        for node in data["nodes"]
+    ]
+    items.extend(
+        {
+            "id": report["id"],
+            "kind": "graph_report",
+            "text": report["text"],
+            "metadata": report,
+        }
+        for report in data["reports"]
+        if report["text"].strip()
+    )
     return items
 
 

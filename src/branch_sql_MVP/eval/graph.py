@@ -18,10 +18,7 @@ def combine(
 ) -> dict:
     """Gộp graph đã extract của docs và SQL sample; không gọi lại LLM."""
     app = settings or load_settings()
-    artifacts = [
-        load_graph(doc_id, artifact_tag=artifact_tag, settings=app)
-        for doc_id in doc_ids
-    ]
+    artifacts = [load_graph(doc_id, artifact_tag=artifact_tag, settings=app) for doc_id in doc_ids]
     nodes: dict[str, dict] = {}
     edges: dict[str, dict] = {}
 
@@ -37,7 +34,11 @@ def combine(
                 nodes[source["id"]].pop("community_id", None)
                 continue
             node = nodes[source["id"]]
-            descriptions = [item.strip() for item in (node.get("description", "") + " | " + source.get("description", "")).split("|") if item.strip()]
+            descriptions = [
+                item.strip()
+                for item in (node.get("description", "") + " | " + source.get("description", "")).split("|")
+                if item.strip()
+            ]
             node["description"] = " | ".join(dict.fromkeys(descriptions))
             for field in ("source_chunk_ids", "source_kinds", "evidence"):
                 extend_unique(node.setdefault(field, []), source.get(field, []))
@@ -46,7 +47,11 @@ def combine(
                 edges[source["id"]] = copy.deepcopy(source)
                 continue
             edge = edges[source["id"]]
-            descriptions = [item.strip() for item in (edge.get("description", "") + " | " + source.get("description", "")).split("|") if item.strip()]
+            descriptions = [
+                item.strip()
+                for item in (edge.get("description", "") + " | " + source.get("description", "")).split("|")
+                if item.strip()
+            ]
             edge["description"] = " | ".join(dict.fromkeys(descriptions))
             for field in ("source_chunk_ids", "source_kinds", "evidence"):
                 extend_unique(edge.setdefault(field, []), source.get(field, []))
@@ -100,11 +105,13 @@ def load_cases(split: str, *, settings: Settings | None = None) -> list[dict]:
         relevant = str(row[positions[cfg.relevant_column]] or "").strip()
         if not case_id or not query:
             continue
-        cases.append({
-            "id": case_id,
-            "query": query,
-            "relevant": [item.strip() for item in relevant.split(cfg.separator) if item.strip()],
-        })
+        cases.append(
+            {
+                "id": case_id,
+                "query": query,
+                "relevant": [item.strip() for item in relevant.split(cfg.separator) if item.strip()],
+            }
+        )
     if not cases:
         raise ValueError(f"sheet '{split}' không có testcase hợp lệ")
     return cases
@@ -147,24 +154,26 @@ def evaluate(
         distances = []
         if connected and len(node_ids) > 1:
             for index, source in enumerate(node_ids):
-                for target in node_ids[index + 1:]:
+                for target in node_ids[index + 1 :]:
                     if nx.has_path(graph, source, target):
                         distances.append(nx.shortest_path_length(graph, source, target))
                     else:
                         connected = False
         path_lengths.extend(distances)
         communities = {community_of.get(node_id) for node_id in node_ids if community_of.get(node_id)}
-        per_case.append({
-            "id": case["id"],
-            "query": case["query"],
-            "relevant": sorted(relevant),
-            "matched": sorted(matched),
-            "missing": sorted(relevant - matched),
-            "table_recall": len(matched) / len(relevant) if relevant else 1.0,
-            "complete": matched == relevant,
-            "connected": connected,
-            "same_community": bool(node_ids) and len(node_ids) == len(relevant) and len(communities) == 1,
-        })
+        per_case.append(
+            {
+                "id": case["id"],
+                "query": case["query"],
+                "relevant": sorted(relevant),
+                "matched": sorted(matched),
+                "missing": sorted(relevant - matched),
+                "table_recall": len(matched) / len(relevant) if relevant else 1.0,
+                "complete": matched == relevant,
+                "connected": connected,
+                "same_community": bool(node_ids) and len(node_ids) == len(relevant) and len(communities) == 1,
+            }
+        )
 
     count = len(per_case)
     metrics = {

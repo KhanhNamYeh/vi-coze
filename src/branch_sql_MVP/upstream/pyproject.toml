@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kb-text2sql"
+version = "0.2.0"
+description = "Vietnamese Text-to-SQL knowledge retrieval MVP"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "fastapi>=0.116,<1",
+  "fastembed>=0.7,<1",
+  "gradio>=5.49,<6",
+  "langchain>=1,<2",
+  "langchain-core>=1,<2",
+  "langchain-openai>=1,<2",
+  "langgraph>=1,<2",
+  "markdown-it-py>=3,<5",
+  "networkx>=3.4,<4",
+  "pydantic>=2.11,<3",
+  "qdrant-client>=1.15,<2",
+  "sentencepiece>=0.2,<1",
+  "sentence-transformers>=5,<6",
+  "torch>=2.7,<3",
+  "transformers>=4.55,<5",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+google = ["langchain-google-genai>=2,<5"]
+nvidia = ["langchain-nvidia-ai-endpoints>=0.3,<2"]
+documents = ["docling>=2.50,<3", "markitdown[docx]>=0.1,<1", "openpyxl>=3.1,<4"]
+translation = ["google-genai>=1.33,<2"]
+dev = [
+  "ipykernel>=7,<8",
+  "nbclient>=0.10,<1",
+  "nbformat>=5.10,<6",
+  "pytest>=8,<10",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+kb-text2sql = "src.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+extend-exclude = ["*.ipynb"]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+ignore = ["BLE001", "ISC004"]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }
