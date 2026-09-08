@@ -41,6 +41,9 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     arguments = parser().parse_args()
     if arguments.action == "datasets":
         result = service.catalog(split=arguments.split).list()

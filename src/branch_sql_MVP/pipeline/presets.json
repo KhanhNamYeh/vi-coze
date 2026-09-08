@@ -1,0 +1,307 @@
+[
+  {
+    "id": "P1-full",
+    "scenario": "P1",
+    "parameters": {
+      "context": {
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {},
+      "max_repairs": 0
+    }
+  },
+  {
+    "id": "B4-hybrid",
+    "scenario": "B4",
+    "parameters": {
+      "context": {
+        "mode": "hybrid",
+        "candidate_k": 16,
+        "docs_top_k": 5,
+        "semantic_weight": 0.7,
+        "keyword_weight": 0.3,
+        "rrf_k": 40,
+        "rerank_top_k": 8,
+        "rerank_enabled": true,
+        "rerank_max_length": 256,
+        "rerank_batch_size": 8,
+        "table_k": 8,
+        "column_k": 20,
+        "schema_min_score": 0.12,
+        "value_k": 8,
+        "value_fuzzy_threshold": 0.84,
+        "token_budget": 5000,
+        "event_top_k": 8,
+        "event_hops": 1,
+        "event_node_budget": 24,
+        "event_token_budget": 1800,
+        "selector_max_items": 24,
+        "example_k": 0,
+        "use_events": true,
+        "expand_events": true,
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {},
+      "max_repairs": 0
+    }
+  },
+  {
+    "id": "B4-event-seeds",
+    "scenario": "B5",
+    "parameters": {
+      "context": {
+        "mode": "hybrid",
+        "candidate_k": 16,
+        "docs_top_k": 5,
+        "semantic_weight": 0.7,
+        "keyword_weight": 0.3,
+        "rrf_k": 40,
+        "rerank_top_k": 8,
+        "rerank_enabled": true,
+        "rerank_max_length": 256,
+        "rerank_batch_size": 8,
+        "table_k": 8,
+        "column_k": 20,
+        "schema_min_score": 0.12,
+        "value_k": 8,
+        "value_fuzzy_threshold": 0.84,
+        "token_budget": 5000,
+        "event_top_k": 4,
+        "event_hops": 1,
+        "event_node_budget": 24,
+        "event_token_budget": 1800,
+        "selector_max_items": 24,
+        "example_k": 0,
+        "use_events": true,
+        "expand_events": false,
+        "contextual_selector": false,
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {},
+      "max_repairs": 0
+    }
+  },
+  {
+    "id": "B4-event-expansion",
+    "scenario": "B5",
+    "parameters": {
+      "context": {
+        "mode": "hybrid",
+        "candidate_k": 16,
+        "docs_top_k": 5,
+        "semantic_weight": 0.7,
+        "keyword_weight": 0.3,
+        "rrf_k": 40,
+        "rerank_top_k": 8,
+        "rerank_enabled": true,
+        "rerank_max_length": 256,
+        "rerank_batch_size": 8,
+        "table_k": 8,
+        "column_k": 20,
+        "schema_min_score": 0.12,
+        "value_k": 8,
+        "value_fuzzy_threshold": 0.84,
+        "token_budget": 5000,
+        "event_top_k": 8,
+        "event_hops": 1,
+        "event_node_budget": 24,
+        "event_token_budget": 1800,
+        "selector_max_items": 24,
+        "example_k": 0,
+        "use_events": true,
+        "expand_events": true,
+        "contextual_selector": false,
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {},
+      "max_repairs": 0
+    }
+  },
+  {
+    "id": "B5-selector",
+    "scenario": "B5",
+    "parameters": {
+      "context": {
+        "mode": "hybrid",
+        "candidate_k": 16,
+        "docs_top_k": 5,
+        "semantic_weight": 0.7,
+        "keyword_weight": 0.3,
+        "rrf_k": 40,
+        "rerank_top_k": 8,
+        "rerank_enabled": true,
+        "rerank_max_length": 256,
+        "rerank_batch_size": 8,
+        "table_k": 8,
+        "column_k": 20,
+        "schema_min_score": 0.12,
+        "value_k": 8,
+        "value_fuzzy_threshold": 0.84,
+        "token_budget": 5000,
+        "event_top_k": 8,
+        "event_hops": 1,
+        "event_node_budget": 24,
+        "event_token_budget": 1800,
+        "selector_max_items": 12,
+        "example_k": 0,
+        "use_events": true,
+        "expand_events": true,
+        "contextual_selector": true,
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {},
+      "max_repairs": 0
+    }
+  },
+  {
+    "id": "B6-relational",
+    "scenario": "B6",
+    "parameters": {
+      "context": {
+        "mode": "hybrid",
+        "candidate_k": 16,
+        "docs_top_k": 5,
+        "semantic_weight": 0.7,
+        "keyword_weight": 0.3,
+        "rrf_k": 40,
+        "rerank_top_k": 8,
+        "rerank_enabled": true,
+        "rerank_max_length": 256,
+        "rerank_batch_size": 8,
+        "table_k": 8,
+        "column_k": 20,
+        "schema_min_score": 0.12,
+        "value_k": 8,
+        "value_fuzzy_threshold": 0.84,
+        "token_budget": 5000,
+        "event_top_k": 8,
+        "event_hops": 1,
+        "event_node_budget": 24,
+        "event_token_budget": 1800,
+        "selector_max_items": 24,
+        "example_k": 0,
+        "use_events": true,
+        "expand_events": true,
+        "contextual_selector": true,
+        "use_relational_context": true,
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {},
+      "max_repairs": 2
+    }
+  },
+  {
+    "id": "B6-hybrid",
+    "scenario": "B6",
+    "parameters": {
+      "context": {
+        "mode": "hybrid",
+        "candidate_k": 16,
+        "docs_top_k": 5,
+        "semantic_weight": 0.7,
+        "keyword_weight": 0.3,
+        "rrf_k": 40,
+        "rerank_top_k": 8,
+        "rerank_enabled": true,
+        "rerank_max_length": 256,
+        "rerank_batch_size": 8,
+        "table_k": 8,
+        "column_k": 20,
+        "schema_min_score": 0.12,
+        "value_k": 8,
+        "value_fuzzy_threshold": 0.84,
+        "token_budget": 5000,
+        "event_top_k": 8,
+        "event_hops": 1,
+        "event_node_budget": 24,
+        "event_token_budget": 1800,
+        "selector_max_items": 24,
+        "example_k": 0,
+        "use_events": true,
+        "expand_events": true,
+        "use_relational_context": false,
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {},
+      "max_repairs": 2
+    }
+  },
+  {
+    "id": "G1-adaptive",
+    "scenario": "G1",
+    "parameters": {
+      "context": {
+        "mode": "hybrid",
+        "candidate_k": 16,
+        "docs_top_k": 5,
+        "semantic_weight": 0.7,
+        "keyword_weight": 0.3,
+        "rrf_k": 40,
+        "rerank_top_k": 8,
+        "rerank_enabled": true,
+        "rerank_max_length": 256,
+        "rerank_batch_size": 8,
+        "table_k": 8,
+        "column_k": 20,
+        "schema_min_score": 0.12,
+        "value_k": 8,
+        "value_fuzzy_threshold": 0.84,
+        "token_budget": 5000,
+        "event_top_k": 8,
+        "event_hops": 1,
+        "event_node_budget": 24,
+        "event_token_budget": 1800,
+        "selector_max_items": 24,
+        "example_k": 0,
+        "use_events": true,
+        "expand_events": true,
+        "contextual_selector": false,
+        "evaluation_role": "test_tuned_in_sample"
+      },
+      "execution": {
+        "timeout_seconds": 5.0,
+        "max_rows": 500,
+        "eval_timeout_seconds": 10.0
+      },
+      "route": {
+        "max_candidates": 1
+      },
+      "max_repairs": 0
+    }
+  }
+]

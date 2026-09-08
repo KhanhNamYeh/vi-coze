@@ -14,7 +14,9 @@
       "dev"
     ],
     "excel_id_column": 0,
-    "excel_exclude_features": ["Relevant Chunks"],
+    "excel_exclude_features": [
+      "Relevant Chunks"
+    ],
     "record_heading_level": 2,
     "feature_heading_level": 3,
     "overwrite": true
@@ -57,14 +59,34 @@
   },
   "graph": {
     "enabled": true,
-    "source_kinds": ["docs", "sql"],
+    "source_kinds": [
+      "docs",
+      "sql"
+    ],
     "method": "llm",
-    "provider": "openai",
-    "model": "gpt-5.6-luna",
+    "provider": "google",
+    "model": "gemini-3.5-flash-lite",
     "temperature": 0.0,
     "output_retries": 1,
-    "entity_types": ["table", "column", "metric", "business_rule", "filter_value", "sql_function"],
-    "relationship_types": ["table_has_column", "foreign_key_to", "joins_with", "metric_uses_column", "rule_applies_to", "derived_from", "uses", "filters_by", "aliases"],
+    "entity_types": [
+      "table",
+      "column",
+      "metric",
+      "business_rule",
+      "filter_value",
+      "sql_function"
+    ],
+    "relationship_types": [
+      "table_has_column",
+      "foreign_key_to",
+      "joins_with",
+      "metric_uses_column",
+      "rule_applies_to",
+      "derived_from",
+      "uses",
+      "filters_by",
+      "aliases"
+    ],
     "community_algorithm": "greedy_modularity",
     "community_resolution": 1.0,
     "random_seed": 42,
@@ -81,8 +103,16 @@
     "api_key_env": "QDRANT_API_KEY",
     "knowledge_id": "p1",
     "collections": {
-      "p1": {"docs": "sqlp1__docs", "sql": "sqlp1__sql", "graph": "sqlp1__graph"},
-      "p2": {"docs": "sqlp2__docs", "sql": "sqlp2__sql", "graph": "sqlp2__graph"}
+      "p1": {
+        "docs": "sqlp1__docs",
+        "sql": "sqlp1__sql",
+        "graph": "sqlp1__graph"
+      },
+      "p2": {
+        "docs": "sqlp2__docs",
+        "sql": "sqlp2__sql",
+        "graph": "sqlp2__graph"
+      }
     },
     "dense_vector": "dense",
     "sparse_vector": "bm25",
@@ -102,8 +132,8 @@
     "min_score": null
   },
   "api": {
-    "provider": "openai",
-    "model": "gpt-5.4",
+    "provider": "google",
+    "model": "gemini-3.5-flash-lite",
     "timeout": 60.0,
     "retries": 2,
     "providers": {

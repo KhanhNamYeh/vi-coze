@@ -68,3 +68,26 @@ def test_stream_reports_errors_without_secret(client, monkeypatch):
     last = json.loads(response.text.splitlines()[-1])
     assert last['type'] == 'error'
     assert 'smoke-secret' not in last['message']
+
+
+@pytest.mark.parametrize('override,expected', [
+    ({}, ('google', 'gemini-3.5-flash-lite')),
+    ({'provider': 'openai', 'model': 'custom-model'}, ('openai', 'custom-model')),
+])
+def test_live_model_selection_reaches_generation(client, monkeypatch, override, expected):
+    received = []
+
+    class Prediction:
+        def model_dump(self, **kwargs):
+            return {'sql': 'SELECT 1'}
+
+    def generate(*args, **kwargs):
+        received.append(kwargs)
+        return Prediction()
+
+    monkeypatch.setattr(prompt_baseline, 'generate_sql_candidate', generate)
+    case = client.get('/studio/cases').json()[0]
+    response = client.post('/studio/run', json={'pipeline_id':'P1-full', 'case_id':case['id'], **override})
+    assert json.loads(response.text.splitlines()[-1])['type'] == 'complete'
+    assert (received[0]['provider'], received[0]['model']) == expected
+    assert 'reasoning_effort' not in received[0]['settings'].llm.extra

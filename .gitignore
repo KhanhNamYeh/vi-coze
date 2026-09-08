@@ -43,3 +43,7 @@ src/branch_sql_MVP/.env
 src/branch_sql_MVP/.runtime/
 src/branch_sql_MVP/data/dev/
 src/branch_sql_MVP/data/test/
+
+# Local verification and dependency caches
+.test-tmp/
+.test-cache/
