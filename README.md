@@ -4,6 +4,11 @@
 Không cần dataset BIRD hoặc lịch sử eval. Hướng dẫn có đủ cài dependency, API key,
 CPU/CUDA, tạo SQLite demo, import có/không index và khởi động/dừng app.
 
+**Lưu ý về data mới:** `sales.sqlite` và `business.md` ở đường dẫn minh họa không
+có sẵn trong repo. Bạn cung cấp SQLite và tài liệu nghiệp vụ tương ứng; không cần
+chép vào `data/`. Xem [hướng dẫn import dataset thật](src/branch_sql_MVP/README.md#5-import-dataset-thật)
+hoặc chạy demo có sẵn theo mục 4 của hướng dẫn.
+
 Pipeline RAG tiếng Việt. Hai nhánh tài liệu, mỗi nhánh một bộ chặng xử lý riêng.
 
 ## Cấu trúc
