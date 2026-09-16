@@ -42,7 +42,8 @@ def test_import_and_run_without_eval_history(tmp_path, monkeypatch):
         def model_dump(self, **kwargs):
             return {'sql': 'SELECT SUM(amount) FROM orders'}
 
-    monkeypatch.setattr(prompt_baseline, 'generate_sql_candidate', lambda *args, **kwargs: Prediction())
+    from src.branch_sql_MVP.tests.test_studio import install_model
+    install_model(monkeypatch, lambda *args, **kwargs: Prediction())
     response = client.post('/studio/run', json={'pipeline_id': 'P1-full', 'case_id': 'dataset:shop'})
     assert json.loads(response.text.splitlines()[-1])['type'] == 'complete', response.text
     assert client.post('/studio/run', json={'pipeline_id': 'B4-hybrid', 'case_id': 'dataset:shop'}).status_code == 422

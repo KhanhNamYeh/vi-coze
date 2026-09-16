@@ -1,5 +1,7 @@
 # SQL Studio: cài mới từ GitHub và import dataset
 
+Tài liệu phát triển: [Hướng dẫn agent triển khai node dùng chung và UI offline/online](../../docs/AGENT_WORKFLOW_IMPLEMENTATION.md). Tiêu chí nghiệm thu và phần còn thiếu được ghi riêng trong [báo cáo kiểm tra](../../docs/WORKFLOW_MILESTONE_STATUS.md); hướng dẫn bên dưới dùng editor hiện tại.
+
 Hướng dẫn này dùng cho người vừa clone/pull repo. **Không cần đọc lịch sử eval,
 không cần BIRD, không cần `.runtime` từ máy tác giả.** App có sẵn 8 cấu hình pipeline
 trong `pipeline/presets.json`. Dữ liệu do bạn import và index được tạo tại máy bạn.
@@ -69,9 +71,10 @@ kiểm tra với:
 uv run --extra api --extra llm python -c "import torch; print(torch.cuda.is_available())"
 ```
 
-Studio đọc key từ `.env` ngay cạnh `settings.json`. Bạn cũng có thể nhập key tạm
-trong màn hình chạy. Provider/model mặc định nằm ở `api.provider` và `api.model`.
-Chọn provider và nhập model ID khác trong “Model & cấu hình chạy” để override lần chạy.
+Studio đọc key từ `.env` ngay cạnh `settings.json`. Provider/model mặc định nằm ở
+`api.provider` và `api.model` trong **Settings → api**. Mỗi node **LLM** có ô
+Provider/Model riêng; để trống để kế thừa. API chạy cũng hỗ trợ key tạm trong bộ nhớ,
+nhưng editor hiện dùng key môi trường, không có ô lưu API key.
 
 ## Phân biệt file ví dụ và dữ liệu của bạn
 
@@ -103,8 +106,10 @@ uv run --extra api --extra llm python -m src.branch_sql_MVP.data.import_dataset 
 uv run --extra api --extra llm python -m src.branch_sql_MVP.app.app
 ```
 
-Mở http://127.0.0.1:8000. Chọn **P1-full**, chọn dataset **shop_demo**,
-kiểm tra `google / gemini-3.5-flash-lite`, rồi bấm **Chạy thử**.
+Mở http://127.0.0.1:8000. Chọn thẻ **Prompt cơ bản** (`P1-full`), chọn dataset
+**shop_demo**, chọn chế độ **SQL, dữ liệu & câu trả lời**, rồi bấm
+**Chạy toàn pipeline**. App tự lưu cấu hình dưới id của pipeline trước khi chạy;
+kết quả gồm SQL, bảng dữ liệu và câu trả lời ở ba tab dưới sơ đồ.
 
 P1 đọc schema + tài liệu nghiệp vụ để sinh SQL nên **không cần embedding/index**.
 SQL dự kiến có dạng `SELECT SUM(amount) FROM orders`.
@@ -221,12 +226,15 @@ uv run --extra api --extra llm python -m src.branch_sql_MVP.app.app
 
 Mở http://127.0.0.1:8000, rồi:
 
-1. Chọn **P1-full** nếu import cách A; cách B cho phép chọn cả 8 pipeline.
-2. Trong **Câu hỏi / Database**, chọn `sales_v1` hoặc `sales_v2` vừa import.
-3. Nhập câu hỏi về dữ liệu của bạn.
-4. Kiểm tra **Provider = google**, **Model = gemini-3.5-flash-lite** và API key.
-5. Bấm **Chạy thử**, xem SQL và đầu ra từng node. Không bấm “Xem lần chạy đã lưu”
-   để chạy dataset mới vì nút đó dành cho archive benchmark.
+1. Chọn thẻ **Prompt cơ bản** (`P1-full`) nếu import cách A; cách B cho phép chọn
+   cả 8 pipeline.
+2. Trong dropdown **Dữ liệu** trên thanh công cụ, chọn `sales_v1` hoặc `sales_v2`.
+3. Nhập câu hỏi về dữ liệu của bạn ở panel bên phải.
+4. Chọn node **Generate** để xem prompt và model hiệu lực; API key lấy từ `.env`.
+   Bấm **✕ Về câu hỏi** để quay lại ô nhập câu hỏi.
+5. Chọn chế độ **SQL, dữ liệu & câu trả lời**, bấm **Chạy toàn pipeline**. Xem
+   câu trả lời, SQL và bảng dữ liệu ở ba tab ngay dưới sơ đồ, nhật ký thật nằm
+   trong mục **Nhật ký**. **SQL only** giữ chế độ phục vụ benchmark.
 
 Nếu đã mở trang trước khi import thì reload trang. Sau này dữ liệu thay đổi, import
 lại với tên phiên bản mới; sửa file nguồn không tự cập nhật bản sao/index trong app.
@@ -256,8 +264,10 @@ Mỗi dataset được lưu tại `src/branch_sql_MVP/.runtime/studio/datasets/<
 Khi có `--index`, importer chạy thêm extract → link → chunk → embed → Qdrant.
 Các collection có tiền tố `studio_<name>`, nằm tại `.runtime/studio/qdrant`.
 Việc tạo index này không cần gọi LLM; có thể tải embedding/reranker từ Hugging Face.
-Metadata/manifest được ghi sau khi import thành công. Nếu import lỗi giữa chừng,
-folder chưa hoàn tất được giữ để kiểm tra; chạy lại với tên mới sau khi sửa nguyên nhân.
+Manifest ready được ghi sau khi import thành công. `offline-status.json` giữ lỗi
+kể cả trước khi có manifest. Với workflow offline đã lưu trên UI, sửa nguyên nhân
+rồi chạy lại cùng workflow để resume; cache kiểm tra fingerprint và checksum. CLI
+import vẫn từ chối tên đã tồn tại: dùng tên mới khi chạy lại bằng CLI.
 
 Các pipeline B4/B5/B6/G1 yêu cầu `indexed=true`; app trả thông báo rõ nếu bạn chọn
 chúng trên dataset chỉ import cho P1. Graph/community của công cụ nâng cao là tính
@@ -269,14 +279,14 @@ năng riêng; không cần bật để tạo event index và chạy các pipelin
 uv run --extra api --extra llm python -m src.branch_sql_MVP.app.app
 ```
 
-- `/`: Studio, chọn pipeline → dataset → câu hỏi → LLM → Chạy thử.
-- `/ui`: công cụ tài liệu, offline, graph và toàn bộ settings nâng cao.
+- `/`: Studio, chọn thẻ pipeline → dataset + model → câu hỏi → **Chạy toàn pipeline**.
+- Settings cơ bản và toàn bộ JSON nâng cao đều ở trang **Settings** của Studio. `/ui` chỉ còn là giao diện tương thích cho các công cụ cũ, không cần trong luồng import/chạy pipeline.
 - `/docs`: tài liệu API FastAPI.
 - `/health`: kiểm tra server sống.
 
-Nhấn node để xem output; trace cập nhật khi chạy. Settings chung không sửa các bản
-benchmark lịch sử. Chức năng “Xem lần chạy đã lưu” chỉ khả dụng khi máy có archive
-benchmark cũ; **không phải bước trong quy trình setup hoặc import mới**.
+Nhấn node và chọn invocation để xem output từng lần. **Lịch sử chạy** đọc run mới
+được lưu bền vững bằng SQLite, không cần archive benchmark. Khi restart, run chưa
+xong được đánh dấu interrupted khi dịch vụ job khởi tạo; app không tự gọi lại LLM.
 
 ## 8. Lỗi thường gặp
 
@@ -311,3 +321,114 @@ Cần commit code nhánh MVP, `pipeline/presets.json`, `examples/`, `.env.exampl
 README này, `pyproject.toml`, `uv.lock` và test fresh setup cùng nhau.
 Không commit `.env`, `.runtime`, dữ liệu riêng hoặc cache model. Người clone tự
 cài dependency, nhập key và import dữ liệu; không sao chép đường dẫn máy tác giả.
+
+
+## 11. Làm toàn bộ từ editor offline/online
+
+1. Tạo database demo bằng lệnh `examples.create_demo` ở mục 4, rồi chạy app.
+   Không cần chạy lệnh importer nếu muốn dùng form upload.
+2. Mở **Dữ liệu & Offline**. Nhập tên mới, chọn file
+   `src/branch_sql_MVP/.runtime/demo.sqlite` và
+   `src/branch_sql_MVP/examples/business.md` bằng nút chọn file.
+3. Lần đầu để **Tạo index truy hồi** và **GraphRAG** tắt. Bấm **Import**:
+   thao tác này chỉ upload và mở workflow, chưa công bố dataset ready.
+4. Trong editor offline, chọn từng node để xem config/input, rồi bấm
+   **Chạy toàn pipeline**. Cấu hình được lưu tự động khi chạy. Các bước
+   validate, preprocess, schema, event, register chạy thật.
+5. Sau trạng thái completed, mở **Dữ liệu & Offline**, chọn thẻ dataset, mở
+   **P1-full**, nhập câu hỏi và chọn chế độ answer. P1 không cần index.
+6. Để dùng B4/B5/B6/G1, upload cùng nguồn với tên phiên bản mới và bật index.
+   Chỉ khi bước index và register thành công, dataset mới có capability index.
+   GraphRAG là tùy chọn riêng có gọi LLM; event index không gọi LLM.
+7. Lịch sử và event có sequence sống qua reload. Nút dừng yêu cầu hủy tại ranh
+   giới node, không hứa ngắt tức thì API/GPU call đang chạy.
+
+### Chạy demo và debug pipeline có sẵn
+
+UI sử dụng tám pipeline có sẵn; không cần tạo node, nối cạnh hoặc dựng workflow.
+
+1. Trang đầu hiển thị tám thẻ pipeline kèm tên, mô tả ngắn và nhãn cho biết
+   pipeline đó có cần index hay không. Bấm một thẻ để mở toàn bộ sơ đồ.
+2. Thanh trên chọn pipeline, dataset, Provider và Model, rồi bấm
+   **Chạy toàn pipeline**. Provider và Model là hai ô riêng; đổi ô nào cũng ghi
+   thẳng vào Settings của workspace.
+3. Panel bên phải mặc định là ô nhập câu hỏi. Bấm một node trên sơ đồ để chuyển
+   sang **Cấu hình · Input · Output** của node đó; bấm **✕ Về câu hỏi** để quay lại.
+4. Node LLM có System/User prompt, Provider, Model, Temperature và Max tokens ở
+   dạng ô nhập riêng; để trống provider/model để kế thừa workspace. JSON thô nằm
+   trong mục **Nâng cao**, không chiếm màn hình mặc định.
+5. Cấu hình được lưu tự động dưới chính id của pipeline mẫu khi bạn chạy hoặc
+   debug; template gốc trên đĩa không bị sửa. Khi đang dùng bản đã tùy chỉnh,
+   thanh trên hiện nhãn **Đã tùy chỉnh** và nút **Khôi phục mặc định**.
+6. Kết quả nằm dưới sơ đồ với ba tab **Câu trả lời · SQL · Bảng dữ liệu**, kèm
+   **Nhật ký** thu gọn được. Node lỗi được tô đỏ và gắn dấu `!` trên sơ đồ.
+7. Chọn node → **Output**, chọn invocation để xem input/output hoặc lỗi. Loop có
+   nhiều invocation riêng; danh sách chỉ hiện invocation đúng luồng đang xem.
+8. Nút **Lấy input từ lần chạy trước** điền input thật của invocation đã chọn;
+   hoặc tự nhập JSON trong mục **Nâng cao**. **Preview prompt** chỉ xem prompt.
+   **Chạy node** chạy đúng node được chọn, không tự chạy upstream. Nếu có run đã
+   chọn, debug dùng snapshot settings và output của run đó. LLM debug có thể phát
+   sinh phí; offline debug có thể ghi artifact và vẫn tuân theo bảo vệ dataset ready.
+9. Với loop/fan-out, node có dấu `⧉`; bấm **Mở luồng con** để chọn node bên trong
+   và debug. Không debug lại cả composite nếu chỉ muốn kiểm tra một LLM con.
+
+### Dữ liệu và cache khi resume
+
+Workflow của người dùng nằm trong `.runtime/studio/workflows`; lịch sử job trong
+`.runtime/studio/runs/runs.sqlite`. Dataset chứa thêm `cache/`, `markdown/` và
+`artifacts/`, tách riêng theo tên. Không chép những thư mục này lên GitHub.
+
+Resume kiểm tra nguồn, config liên quan và checksum của artifact từng stage.
+Thay chunk làm downstream stale; đổi prompt trả lời không làm index stale.
+Không sửa nguồn trong một tên dataset đang import: tạo tên phiên bản mới nếu SQLite
+hoặc tài liệu thay đổi. Dataset đã ready không được ghi đè qua offline workflow.
+Chỉ chạy một tiến trình app dùng cùng Qdrant local; job cùng dataset bị từ chối
+khi một job khác đang queued/running.
+
+GraphRAG đã có các LLM node hiển thị, nhưng cache/resume từng LLM extraction/report
+và kiểm thử tích hợp GraphRAG vẫn chưa được nghiệm thu đầy đủ. Xem báo cáo mốc trước
+khi dùng khả năng này làm tiêu chí hoàn thành M4.
+
+
+### Tài liệu mới có cấu trúc khác bộ cũ
+
+Preset chunk giữ `heading_level=2`, `child_min=40`, đơn vị token. Với Markdown,
+đặt nội dung dưới heading `## ...`, hoặc sửa riêng node **Chunk**:
+
+```json
+{"settings":{"chunk":{"heading_level":1,"child_min":1}}}
+```
+
+Ví dụ trên phù hợp demo chỉ có H1 và vài dòng. Với tài liệu thực, chọn ngưỡng theo
+độ dài nội dung của bạn; không cần đổi setting toàn workspace. Lỗi “yêu cầu H2”
+hoặc “0 child chunk” nghĩa là cấu trúc/ngưỡng chunk chưa phù hợp, chưa phải lỗi LLM.
+Index dùng collection theo fingerprint: thay cấu hình tạo collection mới và chỉ
+công bố tên collection trong manifest khi kiểm tra thành công. Collection cũ không
+bị xóa hoặc tạo lại trong quá trình resume.
+
+
+### Thao tác MVP nhanh
+
+1. Mở **Settings → Cấu hình cơ bản**: chọn provider, nhập model ID và chọn CPU/CUDA.
+   Bấm **Lưu cấu hình cơ bản**. Provider và Model cũng đổi được ngay trên thanh
+   công cụ của màn hình pipeline. Các setting khác nằm trong nhóm JSON nâng cao.
+2. Mở **Dữ liệu & Offline**. Với dữ liệu của bạn: upload SQLite và tài liệu, rồi
+   bấm **Chạy toàn pipeline** trong workflow được mở. Với dữ liệu có sẵn trong
+   repo: bấm **Schema only** (đủ cho P1) hoặc **Có index** (cho B4/B5/B6/G1).
+   Khi completed, chọn dataset ở nhóm **Dữ liệu đã import**.
+3. Mở thẻ **Prompt cơ bản**, chọn dataset, nhập câu hỏi. Muốn sửa prompt/model
+   riêng, chọn node **Generate → Cấu hình**. Chọn chế độ
+   **SQL, dữ liệu & câu trả lời** rồi bấm **Chạy toàn pipeline**; app tự lưu
+   cấu hình trước khi chạy.
+4. Xem câu trả lời, SQL và bảng kết quả ở ba tab dưới sơ đồ. **Lịch sử chạy**
+   mở lại run khi chuyển pipeline hoặc reload. Đổi pipeline không hủy job cũ và
+   không trộn kết quả job cũ vào pipeline mới.
+5. Dừng terminal bằng Ctrl+C khi dùng xong. Không cần mở giao diện `/ui`.
+
+
+### Chọn pipeline trước, chạy trong màn hình sơ đồ
+
+Mở `http://127.0.0.1:8000/`, chọn một thẻ pipeline. Màn hình tiếp theo hiển thị
+đầy đủ sơ đồ và thanh **Chọn dữ liệu → Câu hỏi → Chạy toàn pipeline**.
+Chọn node để sửa cấu hình/prompt, debug và xem input/output. Trang đầu không có
+form chạy nhanh. Nếu chưa có dataset, import trong **Dữ liệu & Offline** trước.

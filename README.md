@@ -1,5 +1,8 @@
 # vi-coze
 
+**Dành cho agent triển khai:** [Đặc tả node dùng chung và UI offline/online](docs/AGENT_WORKFLOW_IMPLEMENTATION.md). Đây là kế hoạch giao việc có tiêu chí nghiệm thu, không phải danh sách tính năng đã hoàn thành.
+Tiến độ có bằng chứng: [WORKFLOW_MILESTONE_STATUS.md](docs/WORKFLOW_MILESTONE_STATUS.md).
+
 **Bắt đầu với SQL Studio:** [Cài mới từ GitHub, chạy demo và import dataset riêng](src/branch_sql_MVP/README.md).
 Không cần dataset BIRD hoặc lịch sử eval. Hướng dẫn có đủ cài dependency, API key,
 CPU/CUDA, tạo SQLite demo, import có/không index và khởi động/dừng app.

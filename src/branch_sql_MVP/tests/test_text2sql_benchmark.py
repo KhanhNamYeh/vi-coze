@@ -65,163 +65,59 @@ def test_schema_and_event_artifacts_have_provenance_and_bounds(tmp_path: Path) -
     assert 1 <= len(expanded) <= 2
 
 
-def test_prompt_langgraph_has_checkpointed_unique_thread(monkeypatch, tmp_path: Path) -> None:
+def test_prompt_langgraph_has_checkpointed_unique_thread(monkeypatch, tmp_path):
+    from src.branch_sql_MVP.tests.test_studio import install_model
     database = _database(tmp_path)
     business = tmp_path / "tiny.md"
-    business.write_text("Bảng parent lưu cha mẹ.", encoding="utf-8")
+    business.write_text("parent table", encoding="utf-8")
     schema = write_schema_catalog(build_schema_catalog(database), tmp_path / "schema.json")
-
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.prompt_baseline.generate_sql_candidate",
-        lambda *args, **kwargs: SQLPrediction(sql="SELECT COUNT(*) FROM parent", confidence=0.9),
-    )
+    install_model(monkeypatch, lambda *a, **k: SQLPrediction(sql="SELECT COUNT(*) FROM parent", confidence=.9))
     graph = build_prompt_workflow(load_settings())
-    result = graph.invoke(
-        {
-            "stable_id": "case-1",
-            "question": "Có bao nhiêu?",
-            "database_path": str(database),
-            "schema_catalog_path": str(schema),
-            "business_path": str(business),
-            "candidates": [],
-            "trajectory": [],
-        },
-        {"configurable": {"thread_id": "test:case-1"}},
-    )
+    config={"configurable":{"thread_id":"case-1"}}
+    result=graph.invoke({"question":"count?","database_path":str(database),"schema_catalog_path":str(schema),"business_path":str(business)},config)
     assert result["final_prediction"]["sql"] == "SELECT COUNT(*) FROM parent;"
-    assert [step["node"] for step in result["trajectory"]] == [
-        "assemble_full_context",
-        "generate_one_candidate",
-    ]
+    assert graph.get_state(config).values == result
+    assert len(result["candidates"]) == 1
+    assert any(row["node"] == "generate" for row in result["trajectory"])
 
 
-def test_repair_langgraph_stops_after_success(monkeypatch, tmp_path: Path) -> None:
-    database = _database(tmp_path)
-    calls = iter(
-        [
-            SQLPrediction(sql="SELECT missing FROM parent", confidence=0.2),
-            SQLPrediction(sql="SELECT COUNT(*) FROM parent", confidence=0.9),
-        ]
-    )
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.execution_repair.build_linked_context",
-        lambda *args, **kwargs: ("context", [], []),
-    )
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.execution_repair.generate_sql_candidate",
-        lambda *args, **kwargs: next(calls),
-    )
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.execution_repair.repair_sql_candidate",
-        lambda *args, **kwargs: next(calls),
-    )
-    graph = build_repair_workflow(load_settings())
-    result = graph.invoke(
-        {
-            "stable_id": "case-2",
-            "question": "Có bao nhiêu?",
-            "database_path": str(database),
-            "schema_catalog_path": str(tmp_path / "unused.json"),
-            "event_index_path": str(tmp_path / "unused-events.json"),
-            "context_parameters": {
-                "knowledge_id": "test",
-                "doc_id": "test",
-                "use_relational_context": False,
-            },
-            "max_repairs": 2,
-            "candidates": [],
-            "observations": [],
-            "trajectory": [],
-        },
-        {"configurable": {"thread_id": "test:case-2"}},
-    )
+def test_repair_langgraph_stops_after_success(monkeypatch, tmp_path):
+    from src.branch_sql_MVP.tests.test_studio import install_model
+    database=_database(tmp_path)
+    schema=tmp_path/"schema.json"
+    write_schema_catalog(build_schema_catalog(database),schema)
+    monkeypatch.setattr("src.branch_sql_MVP.online.context_builder.retrieve_hybrid_evidence",lambda *a,**k:[])
+    calls=iter([SQLPrediction(sql="SELECT missing FROM parent",confidence=.2),SQLPrediction(sql="SELECT COUNT(*) FROM parent",confidence=.9)])
+    install_model(monkeypatch,lambda *a,**k:next(calls))
+    result=build_repair_workflow(load_settings()).invoke({"question":"count?","database_path":str(database),"schema_catalog_path":str(schema), "context_parameters":{"knowledge_id":"test","doc_id":"test","use_relational_context":False},"max_repairs":2})
     assert result["repair_count"] == 1
     assert result["final_prediction"]["sql"] == "SELECT COUNT(*) FROM parent;"
-    assert [item["status"] for item in result["observations"]] == ["missing_object", "success"]
+    assert [o["status"] for o in result["observations"]] == ["missing_object","success"]
 
 
-def test_repair_langgraph_honors_disabled_contextual_selector(monkeypatch, tmp_path: Path) -> None:
-    database = _database(tmp_path)
-    item = {"id": "schema:parent", "kind": "schema", "text": "parent(id)", "source": "test"}
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.execution_repair.build_linked_context",
-        lambda *args, **kwargs: ("context", [item], []),
-    )
-    monkeypatch.setattr("src.branch_sql_MVP.pipeline.execution_repair.load_event_index", lambda *args: {})
-    monkeypatch.setattr("src.branch_sql_MVP.pipeline.execution_repair.retrieve_seed_events", lambda *args, **kwargs: [])
-    monkeypatch.setattr("src.branch_sql_MVP.pipeline.execution_repair.expand_event_neighborhood", lambda *args, **kwargs: [])
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.execution_repair.select_contextual_evidence",
-        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("selector must be skipped")),
-    )
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.execution_repair.generate_sql_candidate",
-        lambda *args, **kwargs: SQLPrediction(sql="SELECT COUNT(*) FROM parent", confidence=0.9),
-    )
-    graph = build_repair_workflow(load_settings())
-    result = graph.invoke(
-        {
-            "stable_id": "case-selector-off",
-            "question": "Có bao nhiêu?",
-            "database_path": str(database),
-            "schema_catalog_path": str(tmp_path / "unused.json"),
-            "event_index_path": str(tmp_path / "unused-events.json"),
-            "context_parameters": {
-                "knowledge_id": "test",
-                "doc_id": "test",
-                "contextual_selector": False,
-                "token_budget": 100,
-            },
-            "max_repairs": 0,
-            "candidates": [],
-            "observations": [],
-            "trajectory": [],
-        },
-        {"configurable": {"thread_id": "test:selector-off"}},
-    )
+def test_repair_langgraph_honors_disabled_contextual_selector(monkeypatch,tmp_path):
+    from src.branch_sql_MVP.tests.test_studio import install_model
+    database=_database(tmp_path)
+    item={"id":"schema:parent","kind":"schema","text":"parent(id)","source":"test"}
+    schema=tmp_path/"schema.json"
+    write_schema_catalog(build_schema_catalog(database),schema)
+    monkeypatch.setattr("src.branch_sql_MVP.online.context_builder.retrieve_hybrid_evidence",lambda *a,**k:[])
+    monkeypatch.setattr("src.branch_sql_MVP.workflow.nodes.domain.load_event_index",lambda *a:{})
+    monkeypatch.setattr("src.branch_sql_MVP.workflow.nodes.domain.retrieve_seed_events",lambda *a,**k:[])
+    monkeypatch.setattr("src.branch_sql_MVP.workflow.nodes.domain.expand_event_neighborhood",lambda *a,**k:[])
+    calls=[]
+    def generate(*a,**k):
+        calls.append(a)
+        return SQLPrediction(sql="SELECT COUNT(*) FROM parent",confidence=.9)
+    install_model(monkeypatch,generate)
+    result=build_repair_workflow(load_settings()).invoke({"question":"count?","database_path":str(database),"schema_catalog_path":str(schema),"event_index_path":"unused", "context_parameters":{"knowledge_id":"test","doc_id":"test","contextual_selector":False,"token_budget":100},"max_repairs":0})
     assert result["final_prediction"]["sql"] == "SELECT COUNT(*) FROM parent;"
-    assert result["trajectory"][0]["selector"]["mode"] == "deterministic_budget"
+    assert len(calls)==1
+    assert "selector" not in result["node_outputs"]
 
 
-def test_adaptive_langgraph_fans_out_and_fans_in(monkeypatch, tmp_path: Path) -> None:
-    from src.branch_sql_MVP.pipeline.adaptive_workflow import build_adaptive_workflow
+def test_adaptive_langgraph_fans_out_and_fans_in(monkeypatch,tmp_path):
+    # Exercise the same compiler used by both the Studio and compatibility wrapper.
+    from src.branch_sql_MVP.tests.test_workflow_templates import test_adaptive_three_candidates_and_invalid_choice
+    test_adaptive_three_candidates_and_invalid_choice(tmp_path)
 
-    database = _database(tmp_path)
-    business = tmp_path / "tiny.md"
-    business.write_text("Bảng parent lưu cha mẹ.", encoding="utf-8")
-    schema = write_schema_catalog(build_schema_catalog(database), tmp_path / "schema.json")
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.adaptive_workflow.decide_workflow_route",
-        lambda *args, **kwargs: (
-            RouteDecisionOutput(route="full", candidate_count=2, reason="test"),
-            {"input_tokens": 0, "output_tokens": 0},
-        ),
-    )
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.adaptive_workflow.generate_sql_candidate",
-        lambda *args, **kwargs: SQLPrediction(sql="SELECT COUNT(*) FROM parent", confidence=0.9),
-    )
-    monkeypatch.setattr(
-        "src.branch_sql_MVP.pipeline.adaptive_workflow.select_candidate_with_model",
-        lambda *args, **kwargs: ("candidate_1", {"reason": "test"}),
-    )
-    graph = build_adaptive_workflow(load_settings())
-    result = graph.invoke(
-        {
-            "stable_id": "case-3",
-            "question": "Có bao nhiêu?",
-            "difficulty": "simple",
-            "database_path": str(database),
-            "schema_catalog_path": str(schema),
-            "business_path": str(business),
-            "route_parameters": {"max_candidates": 2},
-            "candidates": [],
-            "observations": [],
-            "trajectory": [],
-        },
-        {"configurable": {"thread_id": "test:case-3"}},
-    )
-    assert result["route"] == "full"
-    assert len(result["candidates"]) == 2
-    assert len(result["observations"]) == 2
-    assert result["final_prediction"]["sql"] == "SELECT COUNT(*) FROM parent;"

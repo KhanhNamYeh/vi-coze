@@ -31,6 +31,7 @@ class WorkflowState(TypedDict, total=False):
     candidates: Annotated[list[dict[str, Any]], add]
     observations: list[dict[str, Any]]
     final_prediction: dict[str, Any]
+    selected_candidate_id: str
     repair_count: int
     max_repairs: int
     trajectory: Annotated[list[dict[str, Any]], add]

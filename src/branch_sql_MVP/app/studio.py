@@ -3,18 +3,109 @@
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 from time import perf_counter
 from uuid import uuid4
+from typing import Literal
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from ..settings import ROOT, LLMSettings, RetrievalSettings, load_settings
 
 router = APIRouter()
+from .workflow_api import router as workflow_router
+router.include_router(workflow_router)
 BUNDLE = ROOT / ".runtime/luna_test_optimization_20260908/bundle.json"
+WORKFLOW_ROOT = ROOT / ".runtime/studio/workflows"
+
+
+@router.get("/studio/node-types")
+def node_types():
+    """Return the reusable node library used by the workflow editor."""
+    from ..workflow.registry import node_type_metadata
+    return node_type_metadata()
+
+
+@router.get("/studio/workflow-templates")
+def workflow_templates():
+    from ..workflow.templates import templates
+    return [item.model_dump(mode="json") for item in templates()]
+
+
+@router.post("/studio/llm/preview")
+def llm_preview(request: dict):
+    from ..workflow.nodes.llm import preview_prompt
+    try:
+        return preview_prompt(request.get("inputs", {}), request.get("config", {}))
+    except (KeyError, ValueError) as error:
+        raise HTTPException(422, str(error)) from error
+
+
+@router.get("/studio/workflows")
+def workflows():
+    from ..workflow.store import list_workflows
+    return [item.model_dump(mode="json") for item in list_workflows(WORKFLOW_ROOT)]
+
+
+@router.post("/studio/workflows")
+def create_workflow(definition: dict):
+    from ..workflow.contracts import WorkflowDefinition
+    from ..workflow.store import save_workflow
+    from ..workflow.compiler import compile_workflow
+    try:
+        item = WorkflowDefinition.model_validate(definition)
+        compile_workflow(item)
+        return save_workflow(WORKFLOW_ROOT, item).model_dump(mode="json")
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+
+
+@router.get("/studio/workflows/{workflow_id}")
+def get_workflow(workflow_id: str):
+    from ..workflow.store import load_workflow
+    try:
+        return load_workflow(WORKFLOW_ROOT, workflow_id).model_dump(mode="json")
+    except FileNotFoundError as error:
+        raise HTTPException(404, "Không tìm thấy workflow") from error
+
+
+@router.put("/studio/workflows/{workflow_id}")
+def update_workflow(workflow_id: str, definition: dict):
+    from ..workflow.contracts import WorkflowDefinition
+    from ..workflow.store import save_workflow
+    if definition.get("id") != workflow_id:
+        raise HTTPException(422, "workflow id không khớp URL")
+    try:
+        item = WorkflowDefinition.model_validate(definition)
+        from ..workflow.compiler import compile_workflow
+        compile_workflow(item)
+        return save_workflow(WORKFLOW_ROOT, item, expected_revision=item.revision).model_dump(mode="json")
+    except FileNotFoundError as error:
+        raise HTTPException(404, "Không tìm thấy workflow") from error
+    except ValueError as error:
+        raise HTTPException(409, str(error)) from error
+
+
+@router.post("/studio/workflows/{workflow_id}/run")
+def run_saved_workflow(workflow_id: str, request: dict | None = None):
+    """Execute the saved definition through the shared LangGraph compiler."""
+    from ..workflow.compiler import compile_workflow, resolve_workflow_outputs
+    from ..workflow.store import load_workflow
+    try:
+        definition = load_workflow(WORKFLOW_ROOT, workflow_id)
+    except FileNotFoundError as error:
+        raise HTTPException(404, "Không tìm thấy workflow") from error
+    try:
+        result = compile_workflow(definition).invoke({"inputs": (request or {}).get("inputs", {}), "node_outputs": {}})
+        node_outputs = result.get("node_outputs", {})
+        return {"workflow_id": workflow_id, "revision": definition.revision,
+                "node_outputs": node_outputs,
+                "outputs": resolve_workflow_outputs(definition, node_outputs)}
+    except (ValueError, RuntimeError, KeyError) as error:
+        raise HTTPException(422, str(error)) from error
 
 
 def bundle():
@@ -26,7 +117,9 @@ def selected(pipeline_id: str):
     presets = json.loads((ROOT / "pipeline/presets.json").read_text(encoding="utf-8"))
     for row in presets:
         if row["id"] == pipeline_id:
-            return {"scenario": row["scenario"], "manifest": {
+            return {"scenario": row["scenario"],
+                    "requires_index": row.get("requires_index", row["scenario"] != "P1"),
+                    "manifest": {
                 "model_provider": app.api.provider, "model": app.api.model,
                 "parameters": {**row["parameters"], "generation": app.llm.model_dump()}}}
     raise HTTPException(404, "Không tìm thấy pipeline")
@@ -52,7 +145,41 @@ def runtime(item, *, provider=None, model=None):
 
 @router.get("/", include_in_schema=False)
 def studio():
-    return FileResponse(Path(__file__).with_name("static") / "studio.html")
+    return FileResponse(Path(__file__).with_name("static") / "workspace.html")
+
+
+@router.get("/studio/assets/{name}", include_in_schema=False)
+def workspace_asset(name: str):
+    if name not in {"workspace.js", "workspace.css"}:
+        raise HTTPException(404, "Unknown asset")
+    return FileResponse(Path(__file__).with_name("static") / name)
+
+
+@router.post("/studio/datasets/import")
+async def import_studio_dataset(name: str = Form(...), question: str = Form("Liệt kê dữ liệu."), database: UploadFile = File(...), business: UploadFile = File(...), index: bool = Form(False)):
+    """Import a user SQLite + business document into the shared dataset registry."""
+    from ..data.import_dataset import import_dataset
+    if Path(database.filename or "").suffix.lower() not in {".sqlite", ".db"}:
+        raise HTTPException(422, "database phải là file SQLite .sqlite hoặc .db")
+    suffix = Path(business.filename or "").suffix.lower()
+    if suffix not in {".md", ".docx", ".pdf", ".xlsx"}:
+        raise HTTPException(422, "business hỗ trợ .md, .docx, .pdf hoặc .xlsx")
+    staging = ROOT / ".runtime/studio/staging" / uuid4().hex
+    staging.mkdir(parents=True, exist_ok=False)
+    db_path = staging / ("source" + Path(database.filename or "database.sqlite").suffix.lower())
+    business_path = staging / ("business" + suffix)
+    try:
+        with db_path.open("wb") as target:
+            shutil.copyfileobj(database.file, target)
+        with business_path.open("wb") as target:
+            shutil.copyfileobj(business.file, target)
+        return import_dataset(name, db_path, business_path, question=question, build_index=index)
+    except FileExistsError as error:
+        raise HTTPException(409, str(error)) from error
+    except (ValueError, FileNotFoundError) as error:
+        raise HTTPException(422, str(error)) from error
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
 
 
 @router.get("/studio/pipelines")
@@ -114,6 +241,7 @@ class RunRequest(BaseModel):
     provider: str | None = None
     model: str | None = None
     api_key: str | None = None
+    mode: Literal["sql_only", "answer"] = "sql_only"
 
 
 @router.post("/studio/run")
@@ -130,7 +258,7 @@ def run(request: RunRequest):
         record = next((row for row in datasets() if row["id"] == name), None)
         if record is None:
             raise HTTPException(404, "Dataset chưa được import")
-        if item["scenario"] != "P1" and not record["indexed"]:
+        if item["requires_index"] and not record["indexed"]:
             raise HTTPException(422, "Dataset chưa có vector index. Import tên mới với --index để chạy pipeline này.")
         app = dataset_settings(record, app)
         folder = workspace() / name
@@ -167,6 +295,7 @@ def run(request: RunRequest):
             **app.index.model_dump(), "local_path": str(ROOT / ".runtime/luna_internal_holdout_v1/qdrant"),
             "knowledge_id": knowledge, "collections": {**app.index.collections, knowledge: {
                 "docs": knowledge + "__docs", "sql": knowledge + "__train_examples", "graph": knowledge + "__legacy_graph"}}})})
+    state["mode"] = request.mode
     graph = build_workflow(item["scenario"], app, provider=app.api.provider,
                            model=app.api.model, api_key=request.api_key)
     config = {"configurable": {"thread_id": str(uuid4())}, "recursion_limit": 40}
@@ -178,8 +307,9 @@ def run(request: RunRequest):
                 yield json.dumps({"type": mode, "data": chunk, "elapsed": perf_counter() - started},
                                  ensure_ascii=False, default=str) + "\n"
             result = graph.get_state(config).values
-            yield json.dumps({"type": "complete", "data": {k: result.get(k) for k in
-                              ["final_prediction", "trajectory", "candidates", "observations", "route"]}},
+            payload = {k: result.get(k) for k in ["final_prediction", "trajectory", "candidates", "observations", "route", "selected_candidate_id"]}
+            payload["answer"] = result.get("answer")
+            yield json.dumps({"type": "complete", "data": payload},
                              ensure_ascii=False, default=str) + "\n"
         except Exception as error:
             message = str(error)

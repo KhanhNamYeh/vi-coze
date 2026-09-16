@@ -1,0 +1,86 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SQL Studio</title><link rel="stylesheet" href="/studio/assets/workspace.css?v=20260915-apikey"></head><body>
+<aside><h2>◈ SQL Studio</h2><button data-page="pipelines">Pipelines</button><button data-page="datasets">Dữ liệu & Offline</button><button data-page="history">Lịch sử chạy</button><button data-page="settings">Settings</button><button data-page="tools">Công cụ nâng cao</button><p>Local workspace<br>LangGraph</p></aside>
+<main><header><strong id="title">Pipelines</strong><span id="notice" role="status"></span></header>
+<section id="pipelines"><h1>Chọn pipeline</h1><p>Bấm vào pipeline để mở toàn bộ sơ đồ, chọn dữ liệu, chỉnh cấu hình và chạy hoặc debug từng node.</p><div id="templates" class="cards"></div></section>
+<section id="editor" hidden>
+<div class="toolbar">
+<button id="back">← Pipeline</button>
+<select id="pipeline-select" class="toolbar-select" aria-label="Đổi pipeline"></select>
+<span id="saved-chip" class="chip" hidden>Đã tùy chỉnh</span>
+<button id="revert" class="toolbar-link" title="Khôi phục cấu hình mặc định của pipeline" hidden>↺ Mặc định</button>
+<label id="dataset-control">Dữ liệu<select id="dataset" aria-label="Dataset"></select></label>
+<label id="llm-control">Provider<select id="run-provider" aria-label="Provider"></select></label>
+<label id="model-control">Model<input id="run-model" aria-label="Model" placeholder="gpt-5.4"></label>
+<label id="mode-control">Chế độ<select id="mode"><option value="answer">Câu trả lời</option><option value="sql_only">SQL only</option></select></label>
+<button id="run" class="primary">▶ Chạy toàn pipeline</button>
+<button id="cancel" disabled title="Dừng tại ranh giới node kế tiếp">■ Dừng</button>
+</div>
+<div class="workspace">
+<div class="left">
+<div class="canvas-shell">
+<div id="viewport"><div id="stage"><div id="canvas"></div></div></div>
+<div class="zoombar"><button id="zoom-out" title="Thu nhỏ">−</button><button id="zoom-reset" title="100%">100%</button><button id="zoom-in" title="Phóng to">+</button><button id="zoom-fit" title="Vừa màn hình">⤢ Vừa màn hình</button></div>
+<div id="minimap" class="minimap" title="Bấm để di chuyển tới vùng này"></div>
+<div class="canvas-hint">Kéo nền để di chuyển · Ctrl + cuộn để zoom</div>
+</div>
+<div id="results">
+<nav class="result-tabs"><button data-result-tab="answer">Câu trả lời</button><button data-result-tab="sql">SQL</button><button data-result-tab="table">Bảng dữ liệu</button></nav>
+<div class="result-body">
+<pre id="run-error" hidden></pre>
+<div data-result-panel="answer"><pre id="answer"></pre></div>
+<div data-result-panel="sql" hidden><pre id="sql"></pre></div>
+<div data-result-panel="table" hidden><div id="table"></div></div>
+<details id="events-log"><summary>Nhật ký</summary><div id="events"></div></details>
+</div>
+</div>
+</div>
+<div id="inspector">
+<div id="question-panel"><h2>Câu hỏi</h2>
+<div id="dataset-status" class="dataset-status" hidden><p id="dataset-status-text"></p><div class="card-actions" id="dataset-prepare-actions"></div></div>
+<label>Câu hỏi<textarea id="question" placeholder="Nhập câu hỏi về dataset"></textarea></label>
+<details id="run-settings" open><summary>Cài đặt chạy</summary>
+<label>API key cho lần chạy <span id="api-key-provider"></span><input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="Để trống: dùng key trong .env"></label>
+<p id="api-key-hint" class="hint"></p>
+<label class="inline"><input id="api-key-remember" type="checkbox"> Nhớ trong tab này (mất khi đóng tab)</label>
+</details>
+<p>Chọn dữ liệu và model ở thanh trên, sau đó bấm Chạy toàn pipeline. Bấm một node trên sơ đồ để cấu hình hoặc debug riêng node đó.</p></div>
+<div id="offline-panel" hidden><h2>Chuẩn bị dữ liệu</h2><p>Pipeline này nạp SQLite và tài liệu nghiệp vụ, tách schema, sự kiện và (nếu bật) tạo index. Không cần câu hỏi.</p><p>Bấm <b>▶ Chạy toàn pipeline</b>. Khi hoàn tất, dataset xuất hiện ở nhóm <b>Dữ liệu đã import</b> và có thể chọn trong các pipeline hỏi đáp.</p><button id="return-pipeline" class="primary" hidden></button></div>
+<div id="node-panel" hidden>
+<h2 id="node-title">Node</h2>
+<p id="node-scope" class="node-scope"></p>
+<button id="close-node">✕ Về câu hỏi</button>
+<nav class="inspector-tabs"><button data-inspector-tab="config">Cấu hình</button><button data-inspector-tab="input">Input</button><button data-inspector-tab="output">Output</button></nav>
+<div data-inspector-panel="config">
+<label>Nhãn<input id="node-label"></label>
+<div id="llm-fields" hidden>
+<label>System prompt<textarea id="system-prompt"></textarea></label>
+<label>User prompt<textarea id="user-prompt"></textarea></label>
+<div class="field-row"><label>Provider (trống: kế thừa)<select id="llm-provider"><option value="">Kế thừa workspace</option></select></label><label>Model (trống: kế thừa)<input id="llm-model" placeholder="kế thừa"></label></div>
+<div class="field-row"><label>Temperature<input id="llm-temperature" type="number" step="0.1" min="0" max="2" placeholder="kế thừa"></label><label>Max tokens<input id="llm-max-tokens" type="number" min="1" placeholder="kế thừa"></label></div>
+<label>Response format<select id="llm-response-format"><option value="text">text</option><option value="json">json</option></select></label>
+<p id="inheritance"></p>
+</div>
+<details id="config-advanced"><summary>Nâng cao — Cấu hình JSON</summary><label>Cấu hình JSON<textarea id="config" spellcheck="false"></textarea></label></details>
+</div>
+<div data-inspector-panel="input" hidden>
+<div id="input-summary"></div>
+<details><summary>Nâng cao — Input JSON</summary><label>Input mapping JSON<textarea id="inputs" spellcheck="false" readonly></textarea></label></details>
+</div>
+<div data-inspector-panel="output" hidden><h3>Input / Output từng invocation</h3><select id="invocation"></select><pre id="node-output"></pre></div>
+<div id="node-run-actions">
+<button id="use-run-input">Lấy input từ lần chạy trước</button>
+<button id="preview">Preview prompt</button>
+<button id="test" class="primary">Chạy node</button>
+<details><summary>Nâng cao — Input debug JSON</summary><textarea id="test-input">{}</textarea></details>
+</div>
+</div>
+</div>
+</section>
+<section id="datasets" hidden><h1>Dữ liệu & Offline</h1><p>Upload SQLite và tài liệu mô tả đúng database. Không cần lịch sử eval.</p><form id="upload"><label>Tên dataset<input name="name" pattern="[a-z][a-z0-9_]{0,63}" required></label><label>Câu hỏi ban đầu<input name="question" value="Tổng doanh thu là bao nhiêu?"></label><label>SQLite<input name="database" type="file" accept=".sqlite,.db" required></label><label>Nghiệp vụ<input name="business" type="file" accept=".md,.docx,.pdf,.xlsx" required></label><label><input name="index" type="checkbox">Tạo index truy hồi</label><label><input name="graph" type="checkbox">GraphRAG (gọi LLM; tách biệt event index)</label><button class="primary">Import</button></form>
+<div class="status-group"><h2>Dữ liệu có sẵn</h2><p>Nguồn từ repository benchmark, chưa được chuẩn bị cho pipeline nào.</p><div id="dataset-available" class="cards"></div></div>
+<div class="status-group"><h2>Dữ liệu đã import</h2><p>Đã đăng ký trong workspace và sẵn sàng để hỏi.</p><div id="dataset-imported" class="cards"></div></div>
+</section>
+<section id="history" hidden><h1>Lịch sử chạy</h1><button id="refresh-history">Tải lại</button><div id="run-list"></div></section>
+<section id="settings" hidden><h1>Settings</h1><p>Cấu hình workspace được chụp lại khi bắt đầu run. API key lấy từ môi trường; không lưu key vào workflow.</p><form id="basic-settings"><h2>Cấu hình cơ bản</h2><label>Provider<select id="basic-provider" required></select></label><label>Model mặc định<input id="basic-model" placeholder="gpt-5.4" required></label><label>Thiết bị embedding<select id="basic-device"><option value="cpu">CPU</option><option value="cuda">NVIDIA CUDA</option><option value="mps">Apple MPS</option></select></label><button class="primary">Lưu cấu hình cơ bản</button></form><h2>Toàn bộ setting nâng cao</h2><form id="settings-form"><div id="setting-groups"></div><button class="primary">Lưu toàn bộ setting</button></form></section>
+<section id="tools" hidden><h1>Công cụ nâng cao</h1><p>Truy cập API tài liệu, graph, eval, chat và artifacts trong cùng workspace. Chỉ chạy khi bấm nút; các tác vụ model có thể dùng API key trong môi trường.</p><select id="tool-endpoint"></select><label>Đường dẫn (thay tham số trong ngoặc nhọn nếu có)<input id="tool-path"></label><label>Request JSON<textarea id="tool-body">{}</textarea></label><pre id="tool-schema"></pre><button id="tool-run">Thực hiện</button><pre id="tool-result"></pre></section>
+</main><script src="/studio/assets/workspace.js?v=20260915-apikey"></script></body></html>

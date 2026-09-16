@@ -125,7 +125,17 @@ def document_stats(doc_id: str, settings: Settings | None = None) -> dict:
 
 
 def create_api() -> FastAPI:
-    api = FastAPI(title="Branch SQL MVP", version="0.1.0")
+    from contextlib import asynccontextmanager
+    @asynccontextmanager
+    async def lifespan(api):
+        from .workflow_api import manager
+        jobs=manager()
+        try:
+            yield
+        finally:
+            jobs.close()
+            manager.cache_clear()
+    api = FastAPI(title="Branch SQL MVP", version="0.1.0", lifespan=lifespan)
 
     @api.get("/health")
     def health():

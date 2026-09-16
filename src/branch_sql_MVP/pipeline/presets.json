@@ -2,6 +2,9 @@
   {
     "id": "P1-full",
     "scenario": "P1",
+    "name": "Prompt cơ bản",
+    "description": "Đưa thẳng schema và tài liệu nghiệp vụ vào prompt. Không cần index.",
+    "requires_index": false,
     "parameters": {
       "context": {
         "evaluation_role": "test_tuned_in_sample"
@@ -18,6 +21,9 @@
   {
     "id": "B4-hybrid",
     "scenario": "B4",
+    "name": "Truy hồi lai",
+    "description": "Kết hợp truy hồi ngữ nghĩa và từ khóa để dựng context trước khi sinh SQL.",
+    "requires_index": true,
     "parameters": {
       "context": {
         "mode": "hybrid",
@@ -58,6 +64,9 @@
   {
     "id": "B4-event-seeds",
     "scenario": "B5",
+    "name": "Sự kiện — hạt giống",
+    "description": "Truy hồi lai kèm hạt giống sự kiện, không mở rộng quan hệ.",
+    "requires_index": true,
     "parameters": {
       "context": {
         "mode": "hybrid",
@@ -99,6 +108,9 @@
   {
     "id": "B4-event-expansion",
     "scenario": "B5",
+    "name": "Sự kiện — mở rộng",
+    "description": "Truy hồi lai kèm mở rộng đồ thị sự kiện quanh câu hỏi.",
+    "requires_index": true,
     "parameters": {
       "context": {
         "mode": "hybrid",
@@ -140,6 +152,9 @@
   {
     "id": "B5-selector",
     "scenario": "B5",
+    "name": "Chọn bằng chứng bằng LLM",
+    "description": "Thêm bước LLM chọn lọc evidence liên quan trước khi sinh SQL.",
+    "requires_index": true,
     "parameters": {
       "context": {
         "mode": "hybrid",
@@ -181,6 +196,9 @@
   {
     "id": "B6-relational",
     "scenario": "B6",
+    "name": "Ngữ cảnh quan hệ + sửa lỗi",
+    "description": "Dùng ngữ cảnh quan hệ đầy đủ và tự sửa SQL khi thực thi lỗi.",
+    "requires_index": true,
     "parameters": {
       "context": {
         "mode": "hybrid",
@@ -223,6 +241,9 @@
   {
     "id": "B6-hybrid",
     "scenario": "B6",
+    "name": "Truy hồi lai + sửa lỗi",
+    "description": "Truy hồi lai kết hợp vòng lặp tự sửa SQL khi thực thi lỗi.",
+    "requires_index": true,
     "parameters": {
       "context": {
         "mode": "hybrid",
@@ -264,6 +285,9 @@
   {
     "id": "G1-adaptive",
     "scenario": "G1",
+    "name": "Định tuyến thích ứng",
+    "description": "LLM chọn chiến lược full/hybrid/quan hệ theo độ khó câu hỏi rồi chọn ứng viên tốt nhất.",
+    "requires_index": true,
     "parameters": {
       "context": {
         "mode": "hybrid",
